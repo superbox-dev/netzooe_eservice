@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/netzooe_eservice.iml" filepath="$PROJECT_DIR$/.idea/netzooe_eservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/NetzOOE-eService.iml" filepath="$PROJECT_DIR$/.idea/NetzOOE-eService.iml" />
     </modules>
   </component>
 </project>
