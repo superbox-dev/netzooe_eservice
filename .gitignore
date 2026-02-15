@@ -1,0 +1,28 @@
+# OS generated files
+.DS_Store
+._*
+*.swp
+
+# cache
+*.pyc
+
+# virtualenv
+.venv/
+
+# checks
+.ruff_cache
+.mypy_cache
+.pytest_cache
+.rumdl_cache
+
+# reports
+reports/
+.coverage
+
+# build package
+*.egg-info
+dist/
+
+# Home Assistant configuration
+config/*
+!config/configuration.yaml

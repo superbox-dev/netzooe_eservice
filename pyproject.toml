@@ -1,0 +1,149 @@
+[build-system]
+requires = [
+    "setuptools~=80.10.2",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "netzooe_eservice"
+description = "A Home Assistant integration to read energy data from the Netz OÖ eService portal"
+readme = "README.md"
+authors = [
+    { name = "Michael Hacker", email = "mh@superbox.one" },
+]
+maintainers = [
+    { name = "Michael Hacker", email = "mh@superbox.one" },
+]
+license-files = [
+    "LICENSE"
+]
+keywords = [
+    "component",
+    "custom component",
+    "custom integration",
+    "hacs-component",
+    "hacs-integration",
+    "hacs-repository",
+    "hacs",
+    "hass",
+    "home assistant",
+    "home-assistant",
+    "homeassistant",
+    "integration",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: OS Independent",
+]
+requires-python = ">= 3.13.2"
+dependencies = [
+    "netzooe_eservice_api==1.0.0b1",
+    "homeassistant>=2025.8.2",
+    "requests>=2.32.5"
+]
+version = "1.0.0b1"
+
+[project.urls]
+"Repository" = "https://github.com/superbox-dev/netzooe_eservice"
+"Issues" = "https://github.com/superbox-dev/netzooe_eservice/issues"
+
+[dependency-groups]
+dev = [
+    { include-group = "audit" },
+    { include-group = "lint" },
+    { include-group = "test" },
+]
+audit = [
+    "pip-audit>=2.9.0",
+]
+lint = [
+    "black>=25.1.0",
+    "mypy>=1.17.1",
+    "pre-commit>=4.5.1",
+    "ruff>=0.12.9",
+    "rumdl>=0.0.120",
+    "types-PyYAML>=6.0.12.20250809",
+    "yamllint>=1.37.1",
+]
+test = [
+    "coverage>=7.10.0",
+    "genbadge[coverage]>=1.1.2",
+    "pytest>=8.4.1",
+    "pytest-homeassistant-custom-component>=0.13.272",
+]
+
+[tool.setuptools]
+packages = []
+
+[tool.black]
+line-length = 120
+
+[tool.mypy]
+strict = true
+junit_xml = "reports/mypy.xml"
+disable_error_code = [
+    "import-untyped"
+]
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "ANN401",  # any-type
+    "D104",    # undocumented-public-package
+    "D203",    # one-blank-line-before-class
+    "D213",    # multi-line-summary-second-line
+    "ERA001",
+    "I001",    # unsorted-imports
+    "PLR0913", # too-many-arguments
+    "S101",    # assert
+    "TRY003",  # raise-vanilla-args
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = [
+    "D",
+    "PLR0913", # too-many-arguments
+    "PLR0915", # too-many-statements
+    "PLR2004", # magic-value-comparison
+    "SLF001",  # private-member-access
+]
+
+[tool.rumdl]
+line-length = 120
+disable = [
+    "MD052",   # Fix broken reference links and images
+]
+respect-gitignore = true
+
+[tool.rumdl.MD024]
+siblings_only = true
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests"
+]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(levelname)-8s | %(asctime)s | [%(name)s] %(message)s"
+# https://docs.pytest.org/en/latest/reference/reference.html#ini-options-ref
+addopts = "--cov=custom_components --cov-report=term-missing --cov-report=xml:reports/coverage.xml --color=yes --exitfirst --failed-first --strict-config --strict-markers --junitxml=reports/pytest.xml"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+  "no_fail_on_eservice_errors: Disable the fail_on_eservice_errors autouse fixture",
+]
+
+[tool.coverage.run] # https://coverage.readthedocs.io/en/latest/config.html#run
+branch = false
+
+[tool.coverage.report] # https://coverage.readthedocs.io/en/latest/config.html#report
+show_missing = true
+skip_covered = true
+exclude_also = [
+    "if TYPE_CHECKING:",
+]

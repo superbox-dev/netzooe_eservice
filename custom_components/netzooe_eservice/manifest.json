@@ -1,0 +1,13 @@
+{
+  "domain": "netzooe_eservice",
+  "name": "Netz OÖ eService",
+  "codeowners": ["@mh-superbox"],
+  "config_flow": true,
+  "documentation": "https://github.com/superbox-dev/netzooe_eservice",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/superbox-dev/netzooe_eservice/issues",
+  "loggers": ["netzooe_eservice_api"],
+  "requirements": ["netzooe_eservice_api==1.0.0b1"],
+  "version": "1.0.0b1"
+}
