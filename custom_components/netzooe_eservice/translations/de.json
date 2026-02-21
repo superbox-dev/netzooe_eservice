@@ -1,0 +1,86 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Das Netz OÖ eService-Portal ist bereits konfiguriert",
+            "already_in_progress": "Konfigurationsvorgang läuft bereits"
+        },
+        "error": {
+            "cannot_connect": "Verbindung fehlgeschlagen",
+            "invalid_auth": "Ungültige Authentifizierung",
+            "unknown": "Unerwarteter Fehler"
+        },
+        "flow_title": "{name}",
+        "step": {
+            "user": {
+                "data": {
+                    "password": "Passwort",
+                    "username": "Benutzername"
+                },
+                "description": "Bitte gib den Benutzernamen und das Passwort ein."
+            }
+        }
+    },
+    "device": {
+
+    },
+    "entity": {
+        "sensor": {
+            "daily_import_l2": {
+                "name": "täglicher Netzbezug L2 (vor 16 Tagen)"
+            },
+            "daily_import_l2_eeg": {
+                "name": "täglicher Netzbezug EEG L2 (vor 16 Tagen)"
+            },
+            "daily_export_l2": {
+                "name": "tägliche Einspeisung L2 (vor 16 Tagen)"
+            },
+            "daily_export_l2_eeg": {
+                "name": "tägliche Einspeisung EEG L2 (vor 16 Tagen)"
+            },
+            "energy_community": {
+                "name": "Energygemeinschaft"
+            },
+            "meter_reading": {
+                "name": "Zählerstand"
+            },
+            "scale_type": {
+                "name": "Typ"
+            },
+            "supplier": {
+                "name": "Energielieferant"
+            },
+            "synth_profile": {
+                "name": "Lastprofil"
+            },
+            "monthly_trend_export_new": {
+                "name": "Einspeisung neu (30-Tage-Trend)"
+            },
+            "monthly_trend_export_old": {
+                "name": "Einspeisung alt (30-Tage-Trend)"
+            },
+            "yearly_trend_export_new": {
+                "name": "Einspeisung neu (Jahres-Trend)"
+            },
+            "yearly_trend_export_old": {
+                "name": "Einspeisung alt (Jahres-Trend)"
+            },
+            "monthly_trend_import_new": {
+                "name": "Netzbezug neu (30-Tage-Trend)"
+            },
+            "monthly_trend_import_old": {
+                "name": "Netzbezug alt (30-Tage-Trend)"
+            },
+            "yearly_trend_import_new": {
+                "name": "Netzbezug neu (Jahres-Trend)"
+            },
+            "yearly_trend_import_old": {
+                "name": "Netzbezug alt (Jahres-Trend)"
+            }
+        }
+    },
+    "exceptions": {
+        "communication_error": {
+            "message": "Bei der Kommunikation mit der API ist ein Fehler aufgetreten: {error}"
+        }
+    }
+}

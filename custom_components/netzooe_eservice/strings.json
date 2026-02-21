@@ -1,0 +1,86 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Failed to connect to the Netz OÖ eService portal",
+            "already_in_progress": "Configuration flow is already in progress"
+        },
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "Unexpected error"
+        },
+        "flow_title": "{name}",
+        "step": {
+            "user": {
+                "data": {
+                    "password": "Password",
+                    "username": "Username"
+                },
+                "description": "Please enter the username and password."
+            }
+        }
+    },
+    "device": {
+
+    },
+    "entity": {
+        "sensor": {
+            "daily_import_l2": {
+                "name": "Daily electricity import L2 (16 days ago)"
+            },
+            "daily_import_l2_eeg": {
+                "name": "Daily electricity import EEG L2 (16 days ago)"
+            },
+            "daily_export_l2": {
+                "name": "Daily electricity export L2 (16 days ago)"
+            },
+            "daily_export_l2_eeg": {
+                "name": "Daily electricity export EEG L2 (16 days ago)"
+            },
+            "energy_community": {
+                "name": "Energy community"
+            },
+            "meter_reading": {
+                "name": "Meter readings"
+            },
+            "scale_type": {
+                "name": "Type"
+            },
+            "supplier": {
+                "name": "Supplier"
+            },
+            "synth_profile": {
+                "name": "Load profile"
+            },
+            "monthly_trend_export_new": {
+                "name": "Electricity export new (monthly trend)"
+            },
+            "monthly_trend_export_old": {
+                "name": "Electricity export old (monthly trend)"
+            },
+            "yearly_trend_export_new": {
+                "name": "Electricity export new (yearly trend)"
+            },
+            "yearly_trend_export_old": {
+                "name": "Electricity export old (yearly trend)"
+            },
+            "monthly_trend_import_new": {
+                "name": "Electricity import new (monthly trend)"
+            },
+            "monthly_trend_import_old": {
+                "name": "Electricity import old (monthly trend)"
+            },
+            "yearly_trend_import_new": {
+                "name": "Electricity import new (yearly trend)"
+            },
+            "yearly_trend_import_old": {
+                "name": "Electricity import old (yearly trend)"
+            }
+        }
+    },
+    "exceptions": {
+        "communication_error": {
+            "message": "An error occurred while communicate with the API: {error}"
+        }
+    }
+}
