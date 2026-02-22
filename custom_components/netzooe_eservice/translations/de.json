@@ -25,23 +25,23 @@
     },
     "entity": {
         "sensor": {
-            "daily_import_l2": {
-                "name": "täglicher Netzbezug L2 (vor 16 Tagen)"
-            },
-            "daily_import_l2_eeg": {
-                "name": "täglicher Netzbezug EEG L2 (vor 16 Tagen)"
-            },
-            "daily_export_l2": {
-                "name": "tägliche Einspeisung L2 (vor 16 Tagen)"
-            },
-            "daily_export_l2_eeg": {
-                "name": "tägliche Einspeisung EEG L2 (vor 16 Tagen)"
-            },
             "energy_community": {
                 "name": "Energygemeinschaft"
             },
             "meter_reading": {
                 "name": "Zählerstand"
+            },
+            "monthly_trend_export_new": {
+                "name": "Einspeisung neu (30-Tage-Trend)"
+            },
+            "monthly_trend_export_old": {
+                "name": "Einspeisung alt (30-Tage-Trend)"
+            },
+            "monthly_trend_import_new": {
+                "name": "Netzbezug neu (30-Tage-Trend)"
+            },
+            "monthly_trend_import_old": {
+                "name": "Netzbezug alt (30-Tage-Trend)"
             },
             "scale_type": {
                 "name": "Typ"
@@ -52,23 +52,17 @@
             "synth_profile": {
                 "name": "Lastprofil"
             },
-            "monthly_trend_export_new": {
-                "name": "Einspeisung neu (30-Tage-Trend)"
+            "total_eeg_import_l2": {
+                "name": "Gesamter Netzbezug L2 {position} (vor 16 Tagen)"
             },
-            "monthly_trend_export_old": {
-                "name": "Einspeisung alt (30-Tage-Trend)"
+            "total_eeg_export_l2": {
+                "name": "Gesamte Einspeisung L2 {position} (vor 16 Tagen)"
             },
             "yearly_trend_export_new": {
                 "name": "Einspeisung neu (Jahres-Trend)"
             },
             "yearly_trend_export_old": {
                 "name": "Einspeisung alt (Jahres-Trend)"
-            },
-            "monthly_trend_import_new": {
-                "name": "Netzbezug neu (30-Tage-Trend)"
-            },
-            "monthly_trend_import_old": {
-                "name": "Netzbezug alt (30-Tage-Trend)"
             },
             "yearly_trend_import_new": {
                 "name": "Netzbezug neu (Jahres-Trend)"

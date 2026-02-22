@@ -3,8 +3,6 @@
 import logging
 import re
 from collections.abc import Mapping
-from datetime import date
-from datetime import datetime
 from datetime import timedelta
 from typing import Any
 
@@ -49,7 +47,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             session=session,
         )
 
-        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=timedelta(seconds=SCAN_INTERVAL))
+        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Read all values from API to update coordinator data."""
@@ -80,7 +78,6 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     continue
 
                 point_of_delivery: dict[str, Any] = contract["pointOfDelivery"]
-                energy_community: Mapping[str, Any] = self._get_energy_community_data(contract)
 
                 data[self._camel_to_snake(point_of_delivery["meterPointAdministrationNumber"])] = (
                     self._convert_recursive(
@@ -90,7 +87,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                             "yearlyTrend": point_of_delivery["yearlyTrend"],
                             "supplier": contract["supplier"],
                             "synthProfile": contract["synthProfile"],
-                            "energyCommunity": energy_community,
+                            "energyCommunity": contract["energyCommunityData"]["timeslices"],
                             "meterReading": {
                                 "meterNumber": point_of_delivery["meter"]["meterNumber"],
                                 "values": self._get_meter_readings_data(
@@ -100,9 +97,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                             },
                             "consumptionsProfileL2": await self._get_consumptions_profile(
                                 contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
-                                energy_community=energy_community,
+                                energy_community=contract["energyCommunityData"]["timeslices"][-1],
                                 meter_point_administration_number=point_of_delivery["meterPointAdministrationNumber"],
-                                days=16,
                             ),
                         },
                     )
@@ -115,9 +111,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         contract_account_number: str,
         energy_community: Mapping[str, Any],
         meter_point_administration_number: str,
-        days: int,
     ) -> list[dict[str, Any]]:
-        day = dt_util.now() - timedelta(days=days)
+        day = dt_util.now() - timedelta(days=16)
 
         consumptions_profile: list[dict[str, Any]] = await self.api.consumptions_profile(
             pods=[
@@ -127,7 +122,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     best_available_granularity=profile["granularity"],
                     energy_community_id=energy_community["energyCommunityId"],
                     meter_point_administration_number=meter_point_administration_number,
-                    date_from=day.strftime("%Y-%m-%d"),
+                    date_from=profile["from"],
                     date_to=day.strftime("%Y-%m-%d"),
                 )
                 for profile in energy_community["profiles"]
@@ -135,17 +130,6 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         )
 
         return consumptions_profile
-
-    @staticmethod
-    def _get_energy_community_data(contract: Mapping[str, Any]) -> Mapping[str, Any]:
-        energy_community_data: Mapping[str, Any] = {}
-
-        for energy_community in contract["energyCommunityData"]["timeslices"]:
-            if datetime.strptime(energy_community["to"], "%Y-%m-%d").date() >= date.today():  # noqa: DTZ007, DTZ011
-                energy_community_data = energy_community
-                break
-
-        return energy_community_data
 
     @staticmethod
     def _get_meter_readings_data(last_readings_values: list[Mapping[str, Any]], meter_number: str) -> Mapping[str, Any]:

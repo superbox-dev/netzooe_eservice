@@ -25,23 +25,23 @@
     },
     "entity": {
         "sensor": {
-            "daily_import_l2": {
-                "name": "Daily electricity import L2 (16 days ago)"
-            },
-            "daily_import_l2_eeg": {
-                "name": "Daily electricity import EEG L2 (16 days ago)"
-            },
-            "daily_export_l2": {
-                "name": "Daily electricity export L2 (16 days ago)"
-            },
-            "daily_export_l2_eeg": {
-                "name": "Daily electricity export EEG L2 (16 days ago)"
-            },
             "energy_community": {
                 "name": "Energy community"
             },
             "meter_reading": {
                 "name": "Meter readings"
+            },
+            "monthly_trend_export_new": {
+                "name": "Electricity export new (monthly trend)"
+            },
+            "monthly_trend_export_old": {
+                "name": "Electricity export old (monthly trend)"
+            },
+            "monthly_trend_import_new": {
+                "name": "Electricity import new (monthly trend)"
+            },
+            "monthly_trend_import_old": {
+                "name": "Electricity import old (monthly trend)"
             },
             "scale_type": {
                 "name": "Type"
@@ -52,23 +52,17 @@
             "synth_profile": {
                 "name": "Load profile"
             },
-            "monthly_trend_export_new": {
-                "name": "Electricity export new (monthly trend)"
+            "total_eeg_import_l2": {
+                "name": "Total electricity import EEG L2 {position} (16 days ago)"
             },
-            "monthly_trend_export_old": {
-                "name": "Electricity export old (monthly trend)"
+            "total_eeg_export_l2": {
+                "name": "Total electricity export EEG L2 {position} (16 days ago)"
             },
             "yearly_trend_export_new": {
                 "name": "Electricity export new (yearly trend)"
             },
             "yearly_trend_export_old": {
                 "name": "Electricity export old (yearly trend)"
-            },
-            "monthly_trend_import_new": {
-                "name": "Electricity import new (monthly trend)"
-            },
-            "monthly_trend_import_old": {
-                "name": "Electricity import old (monthly trend)"
             },
             "yearly_trend_import_new": {
                 "name": "Electricity import new (yearly trend)"

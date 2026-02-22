@@ -59,13 +59,17 @@ class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
             device_identifier=device_identifier,
         )
 
-        self.data: Mapping[str, Any] = self.coordinator.data[self.device_identifier]
-
         self._attr_unique_id = (
             f"{self.device_identifier}_{self.entity_description.alt_key or self.entity_description.key}"
         )
 
         self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
+
+    @property
+    def data(self) -> Mapping[str, Any]:
+        """Return sensor data from the coordinator."""
+        data: Mapping[str, Any] = self.coordinator.data[self.device_identifier]
+        return data
 
     @property
     def device_name(self) -> str | None:
@@ -95,6 +99,8 @@ class NetzOOEeMultipleSensorEntity(NetzOOEeServiceSensorEntity, SensorEntity):
         index: int,
     ) -> None:
         """Initialize the entity."""
+        self.index: int = index
+
         self.entity_description: NetzOOEeServiceSensorEntityDescription[StateType] = description
 
         super().__init__(
@@ -104,39 +110,18 @@ class NetzOOEeMultipleSensorEntity(NetzOOEeServiceSensorEntity, SensorEntity):
             device_identifier=device_identifier,
         )
 
-        self.data: Mapping[str, Any] = self.coordinator.data[self.device_identifier][self.entity_description.key][index]
+        self._attr_translation_placeholders = {
+            "position": str(index + 1),
+        }
 
-        if index is not None:
-            self._attr_unique_id = f"{self._attr_unique_id}_{index + 1}"
-
+        self._attr_unique_id = f"{self._attr_unique_id}_{index + 1}"
         self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
-
-class NetzOOEeServiceConsumptionsProfileSensorEntity(NetzOOEeMultipleSensorEntity, SensorEntity):
-    """Netz OÖ eService consumptions profile sensor entity."""
-
-    def __init__(
-        self,
-        coordinator: NetzOOEeServiceDataUpdateCoordinator,
-        description: NetzOOEeServiceSensorEntityDescription[StateType],
-        entry: NetzOOEeServiceConfigEntry,
-        device_identifier: str,
-        index: int,
-    ) -> None:
-        """Initialize the entity."""
-        super().__init__(
-            coordinator,
-            description=description,
-            entry=entry,
-            device_identifier=device_identifier,
-            index=index,
-        )
-
-        if self.data["type"] in [
-            "ENERGY_COMMUNITY_OWN_COVERAGE",
-            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-        ]:
-            self._attr_translation_key = f"{self.entity_description.translation_key}_eeg"
+    @property
+    def data(self) -> Mapping[str, Any]:
+        """Return sensor data from the coordinator."""
+        data: Mapping[str, Any] = self.coordinator.data[self.device_identifier][self.entity_description.key][self.index]
+        return data
 
 
 SENSOR_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
@@ -181,8 +166,18 @@ SENSOR_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         entity_class=NetzOOEeServiceSensorEntity,
         key="energy_community",
         translation_key="energy_community",
-        value_fn=lambda data: data["energy_community"]["energy_community_name"],
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+        value_fn=lambda data: data["energy_community"][-1]["energy_community_name"],
+        extra_state_attributes_fn=lambda data: {
+            "history": [
+                {
+                    "name": item["energy_community_name"],
+                    "id": item["energy_community_id"],
+                    "from": item["from"],
+                    "to": item["to"],
+                }
+                for item in data["energy_community"]
+            ],
+        },
     ),
 ]
 
@@ -257,16 +252,18 @@ SENSOR_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         },
     ),
     NetzOOEeServiceSensorEntityDescription[str](
-        alt_key="daily_export_l2",
-        entity_class=NetzOOEeServiceConsumptionsProfileSensorEntity,
+        alt_key="total_eeg_export_l2",
+        entity_class=NetzOOEeMultipleSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
         key="consumptions_profile_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="daily_export_l2",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        translation_key="total_eeg_export_l2",
         icon="mdi:transmission-tower-import",
         value_fn=lambda data: data["sum"]["value"],
         extra_state_attributes_fn=lambda data: {
+            "name": data["energy_community_name"],
+            "id": data["energy_community_id"],
             "average": data["average"]["value"],
             "from": data["from"],
             "to": data["to"],
@@ -346,16 +343,18 @@ SENSOR_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         },
     ),
     NetzOOEeServiceSensorEntityDescription[str](
-        alt_key="daily_import_l2",
-        entity_class=NetzOOEeServiceConsumptionsProfileSensorEntity,
+        alt_key="total_eeg_import_l2",
+        entity_class=NetzOOEeMultipleSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
         key="consumptions_profile_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="daily_import_l2",
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        translation_key="total_eeg_import_l2",
         icon="mdi:transmission-tower-export",
         value_fn=lambda data: data["sum"]["value"],
         extra_state_attributes_fn=lambda data: {
+            "name": data["energy_community_name"],
+            "id": data["energy_community_id"],
             "average": data["average"]["value"],
             "from": data["from"],
             "to": data["to"],
