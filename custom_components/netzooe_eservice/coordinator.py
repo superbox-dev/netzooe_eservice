@@ -37,7 +37,7 @@ type NetzOOEeServiceConfigEntry = ConfigEntry[NetzOOEeServiceDataUpdateCoordinat
 class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Class to manage fetching Netz OÖ eService data API."""
 
-    _attr_has_entity_name = True
+    _attr_has_entity_name: bool = True
 
     def __init__(
         self,
@@ -166,6 +166,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 for profile in energy_community["profiles"]
             ],
         )
+
+        _LOGGER.debug(consumptions_profile)
 
         return consumptions_profile
 

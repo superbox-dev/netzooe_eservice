@@ -1,0 +1,165 @@
+from typing import Any
+
+import pytest
+from _pytest.fixtures import SubRequest
+from homeassistant.const import CONF_PASSWORD
+from homeassistant.const import CONF_USERNAME
+from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
+from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
+from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
+from syrupy.assertion import SnapshotAssertion
+from yarl import URL
+
+from custom_components.netzooe_eservice.const import DOMAIN
+from tests.api_data import CONTRACT_ACCOUNT_DATA_1
+from tests.api_data import CONTRACT_ACCOUNT_DATA_2
+from tests.api_data import DASHBOARD_DATA
+from tests.api_data import PROFILE_DATA_1
+from tests.api_data import PROFILE_DATA_2
+from tests.api_data import PROFILE_DATA_3
+from tests.api_data import PROFILE_DATA_4
+from tests.api_data import PROFILE_DATA_5
+from tests.api_data import PROFILE_DATA_6
+
+
+@pytest.fixture
+def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
+    """Return snapshot assertion fixture with the Home Assistant extension."""
+    return snapshot.use_extension(HomeAssistantSnapshotExtension)
+
+
+@pytest.fixture(autouse=True)
+def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:  # noqa: ARG001
+    return
+
+
+class FakeNetzOOEeServiceAPI:
+    def __init__(self, aioclient_mock: AiohttpClientMocker) -> None:
+        self.aioclient_mock: AiohttpClientMocker = aioclient_mock
+
+        self.profile_data: list[list[dict[str, Any]]] = [
+            PROFILE_DATA_1,
+            PROFILE_DATA_2,
+            PROFILE_DATA_3,
+            PROFILE_DATA_4,
+            PROFILE_DATA_5,
+            PROFILE_DATA_6,
+        ]
+
+    def register_auth_request(self, /, *, status: int = 200, exc: Exception | None = None) -> None:
+        self.aioclient_mock.post(
+            "https://eservice.netzooe.at/service/j_security_check",
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept": "application/json, text/plain, */*",
+                "client-id": "netzonline",
+                "Content-Type": "application/json",
+            },
+            status=status,
+            exc=exc,
+        )
+
+    def register_requests(self) -> None:
+        self.aioclient_mock.get(
+            "https://eservice.netzooe.at/service/v1.0/session",
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept": "application/json, text/plain, */*",
+                "client-id": "netzonline",
+            },
+            status=200,
+        )
+
+        self.aioclient_mock.get(
+            "https://eservice.netzooe.at/service/v1.0/dashboard",
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept": "application/json, text/plain, */*",
+                "client-id": "netzonline",
+                "Content-Type": "application/json",
+                "x-xsrf-token": "mocked-token",
+            },
+            status=200,
+            json=DASHBOARD_DATA,
+        )
+
+        self.aioclient_mock.get(
+            "https://eservice.netzooe.at/service/v1.0/contract-accounts/2222222222/111111111111",
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept": "application/json, text/plain, */*",
+                "client-id": "netzonline",
+                "Content-Type": "application/json",
+                "x-xsrf-token": "mocked-token",
+            },
+            status=200,
+            json=CONTRACT_ACCOUNT_DATA_1,
+        )
+
+        self.aioclient_mock.get(
+            "https://eservice.netzooe.at/service/v1.0/contract-accounts/2222222222/111111111112",
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept": "application/json, text/plain, */*",
+                "client-id": "netzonline",
+                "Content-Type": "application/json",
+                "x-xsrf-token": "mocked-token",
+            },
+            status=200,
+            json=CONTRACT_ACCOUNT_DATA_2,
+        )
+
+        self.aioclient_mock.post(
+            "https://eservice.netzooe.at/service/v1.0/consumptions/profile/active",
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept": "application/json, text/plain, */*",
+                "client-id": "netzonline",
+                "Content-Type": "application/json",
+            },
+            status=200,
+            side_effect=self.profile_data_side_effect,
+        )
+
+    async def profile_data_side_effect(
+        self,
+        method: str,
+        url: URL,
+        *args: Any,  # noqa: ARG002
+    ) -> AiohttpClientMockResponse:
+        response = self.profile_data.pop(0)
+
+        return AiohttpClientMockResponse(
+            method,
+            url=url,
+            json=response,
+            headers={"Content-Type": "application/json"},
+        )
+
+
+@pytest.fixture(autouse=True)
+async def fake_api(
+    aioclient_mock: AiohttpClientMocker,
+) -> FakeNetzOOEeServiceAPI:
+    return FakeNetzOOEeServiceAPI(aioclient_mock)
+
+
+@pytest.fixture
+def config_entry(request: SubRequest) -> MockConfigEntry:
+    mock_config_entry_data: dict[str, Any] = {
+        "title": "Netz OÖ eService (test)",
+        "data": {
+            CONF_USERNAME: "test",
+            CONF_PASSWORD: "test",
+        },
+        "unique_id": "test",
+    }
+
+    if hasattr(request, "param"):
+        mock_config_entry_data.update(request.param)
+
+    return MockConfigEntry(
+        domain=DOMAIN,
+        **mock_config_entry_data,
+    )

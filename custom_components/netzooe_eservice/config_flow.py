@@ -113,6 +113,20 @@ class NetzOOEeServiceConfigFlow(ConfigFlow, domain=DOMAIN):
 
     async def _async_complete_entry(self, user_input: dict[str, Any]) -> ConfigFlowResult:
         await self.async_set_unique_id(user_input[CONF_USERNAME])
+
+        if self._entry is not None:
+            self._abort_if_unique_id_mismatch(
+                reason="wrong_account",
+                description_placeholders={
+                    "name": f"{MANUFACTURER} {NAME}",
+                },
+            )
+
+            return self.async_update_reload_and_abort(
+                self._entry,
+                data_updates=user_input,
+            )
+
         self._abort_if_unique_id_configured()
 
         return self.async_create_entry(title=f"{MANUFACTURER} {NAME} ({user_input[CONF_USERNAME]})", data=user_input)
