@@ -31,6 +31,18 @@
             "meter_reading": {
                 "name": "Meter readings"
             },
+            "monthly_export_eeg_l2": {
+                "name": "Electricity export EEG L2 (last month)"
+            },
+            "monthly_export_supplier_l2": {
+                "name": "Electricity export supplier L2 (last month)"
+            },
+            "monthly_import_eeg_l2": {
+                "name": "Electricity import EEG L2 (last month)"
+            },
+            "monthly_import_supplier_l2": {
+                "name": "Electricity import supplier L2 (last month)"
+            },
             "monthly_trend_export_new": {
                 "name": "Electricity export new (monthly trend)"
             },
@@ -52,11 +64,29 @@
             "synth_profile": {
                 "name": "Load profile"
             },
-            "total_eeg_import_l2": {
-                "name": "Total electricity import EEG L2 {position} (16 days ago)"
+            "total_export_eeg_l2": {
+                "name": "Total electricity export EGG L2 (16 days ago)"
             },
-            "total_eeg_export_l2": {
-                "name": "Total electricity export EEG L2 {position} (16 days ago)"
+            "total_export_eeg_l3": {
+                "name": "Total electricity export EEG L2/L3"
+            },
+            "total_export_supplier_l2": {
+                "name": "Total electricity export supplier L2 (16 days ago)"
+            },
+            "total_export_supplier_l3": {
+                "name": "Total electricity export supplier L2/L3"
+            },
+            "total_import_eeg_l2": {
+                "name": "Total electricity import EEG L2 (16 days ago)"
+            },
+            "total_import_eeg_l3": {
+                "name": "Total electricity import EEG L2/L3"
+            },
+            "total_import_supplier_l2": {
+                "name": "Total electricity import supplier L2 (16 days ago)"
+            },
+            "total_import_supplier_l3": {
+                "name": "Total electricity import supplier EEG L2/L3"
             },
             "yearly_trend_export_new": {
                 "name": "Electricity export new (yearly trend)"

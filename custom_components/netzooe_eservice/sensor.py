@@ -74,7 +74,7 @@ class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
     @property
     def device_name(self) -> str | None:
         """Return the name of the current device."""
-        return f"{self.coordinator.data[self.device_identifier]["synth_profile"]} - {self.device_identifier.upper()}"
+        return f"{self.coordinator.data[self.device_identifier]['synth_profile']} - {self.device_identifier.upper()}"
 
     @property
     def native_value(self) -> StateType:
@@ -85,43 +85,6 @@ class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
     def extra_state_attributes(self) -> Mapping[str, Any] | None:
         """Return extra state attributes."""
         return self.entity_description.extra_state_attributes_fn(self.data)
-
-
-class NetzOOEeMultipleSensorEntity(NetzOOEeServiceSensorEntity, SensorEntity):
-    """Netz OÖ eService sensor entity."""
-
-    def __init__(
-        self,
-        coordinator: NetzOOEeServiceDataUpdateCoordinator,
-        description: NetzOOEeServiceSensorEntityDescription[StateType],
-        entry: NetzOOEeServiceConfigEntry,
-        device_identifier: str,
-        index: int,
-    ) -> None:
-        """Initialize the entity."""
-        self.index: int = index
-
-        self.entity_description: NetzOOEeServiceSensorEntityDescription[StateType] = description
-
-        super().__init__(
-            coordinator,
-            description=description,
-            entry=entry,
-            device_identifier=device_identifier,
-        )
-
-        self._attr_translation_placeholders = {
-            "position": str(index + 1),
-        }
-
-        self._attr_unique_id = f"{self._attr_unique_id}_{index + 1}"
-        self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
-
-    @property
-    def data(self) -> Mapping[str, Any]:
-        """Return sensor data from the coordinator."""
-        data: Mapping[str, Any] = self.coordinator.data[self.device_identifier][self.entity_description.key][self.index]
-        return data
 
 
 SENSOR_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
@@ -251,24 +214,133 @@ SENSOR_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             "to": data["yearly_trend"]["timerange_old"]["to"],
         },
     ),
-    NetzOOEeServiceSensorEntityDescription[str](
-        alt_key="total_eeg_export_l2",
-        entity_class=NetzOOEeMultipleSensorEntity,
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_export_eeg_l2",
+        entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="consumptions_profile_l2",
+        key="total_consumptions_profile_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL_INCREASING,
-        translation_key="total_eeg_export_l2",
+        translation_key="total_export_eeg_l2",
         icon="mdi:transmission-tower-import",
-        value_fn=lambda data: data["sum"]["value"],
+        value_fn=lambda data: (
+            data["total_consumptions_profile_eeg_l2"][0]["sum"]["value"]
+            - data["total_consumptions_profile_eeg_l2"][1]["sum"]["value"]
+            if len(data.get("total_consumptions_profile_eeg_l2", [])) == 2  # noqa: PLR2004
+            else None
+        ),
         extra_state_attributes_fn=lambda data: {
-            "name": data["energy_community_name"],
-            "id": data["energy_community_id"],
-            "average": data["average"]["value"],
-            "from": data["from"],
-            "to": data["to"],
-            "type": data["type"],
-            "granularity": data["granularity"],
+            "from": data["total_consumptions_profile_eeg_l2"][0]["from"],
+            "to": data["total_consumptions_profile_eeg_l2"][0]["to"],
+            "granularity": data["total_consumptions_profile_eeg_l2"][0]["granularity"],
+        },
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_export_supplier_l2",
+        entity_class=NetzOOEeServiceSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_consumptions_profile_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        translation_key="total_export_supplier_l2",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda data: (
+            data["total_consumptions_profile_eeg_l2"][1]["sum"]["value"]
+            if len(data.get("total_consumptions_profile_eeg_l2", [])) == 2  # noqa: PLR2004
+            else None
+        ),
+        extra_state_attributes_fn=lambda data: {
+            "name": data["total_consumptions_profile_eeg_l2"][1]["energy_community_name"],
+            "id": data["total_consumptions_profile_eeg_l2"][1]["energy_community_id"],
+            "from": data["total_consumptions_profile_eeg_l2"][1]["from"],
+            "to": data["total_consumptions_profile_eeg_l2"][1]["to"],
+            "granularity": data["total_consumptions_profile_eeg_l2"][1]["granularity"],
+        },
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_export_eeg_l3",
+        entity_class=NetzOOEeServiceSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_consumptions_profile_eeg_l3",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_export_eeg_l3",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda data: (
+            data["total_consumptions_profile_eeg_l3"][0]["sum"]["value"]
+            - data["total_consumptions_profile_eeg_l3"][1]["sum"]["value"]
+            if len(data.get("total_consumptions_profile_eeg_l3", [])) == 2  # noqa: PLR2004
+            else None
+        ),
+        extra_state_attributes_fn=lambda data: {
+            "from": data["total_consumptions_profile_eeg_l3"][0]["from"],
+            "to": data["total_consumptions_profile_eeg_l3"][0]["to"],
+            "granularity": data["total_consumptions_profile_eeg_l3"][0]["granularity"],
+        },
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_export_supplier_l3",
+        entity_class=NetzOOEeServiceSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_consumptions_profile_eeg_l3",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_export_supplier_l3",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda data: (
+            data["total_consumptions_profile_eeg_l3"][1]["sum"]["value"]
+            if len(data.get("total_consumptions_profile_eeg_l3", [])) == 2  # noqa: PLR2004
+            else None
+        ),
+        extra_state_attributes_fn=lambda data: {
+            "name": data["total_consumptions_profile_eeg_l3"][1]["energy_community_name"],
+            "id": data["total_consumptions_profile_eeg_l3"][1]["energy_community_id"],
+            "from": data["total_consumptions_profile_eeg_l3"][1]["from"],
+            "to": data["total_consumptions_profile_eeg_l3"][1]["to"],
+            "granularity": data["total_consumptions_profile_eeg_l3"][1]["granularity"],
+        },
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="monthly_export_eeg_l2",
+        entity_class=NetzOOEeServiceSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="monthly_consumptions_profile_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        translation_key="monthly_export_eeg_l2",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda data: (
+            data["monthly_consumptions_profile_eeg_l2"][0]["sum"]["value"]
+            - data["monthly_consumptions_profile_eeg_l2"][1]["sum"]["value"]
+            if len(data.get("total_consumptions_profile_eeg_l2", [])) == 2  # noqa: PLR2004
+            else None
+        ),
+        extra_state_attributes_fn=lambda data: {
+            "from": data["monthly_consumptions_profile_eeg_l2"][0]["from"],
+            "to": data["monthly_consumptions_profile_eeg_l2"][0]["to"],
+            "granularity": data["monthly_consumptions_profile_eeg_l2"][0]["granularity"],
+        },
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="monthly_export_supplier_l2",
+        entity_class=NetzOOEeServiceSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="monthly_consumptions_profile_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        translation_key="monthly_export_supplier_l2",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda data: (
+            data["monthly_consumptions_profile_eeg_l2"][1]["sum"]["value"]
+            if len(data.get("total_consumptions_profile_eeg_l2", [])) == 2  # noqa: PLR2004
+            else None
+        ),
+        extra_state_attributes_fn=lambda data: {
+            "name": data["monthly_consumptions_profile_eeg_l2"][1]["energy_community_name"],
+            "id": data["monthly_consumptions_profile_eeg_l2"][1]["energy_community_id"],
+            "from": data["monthly_consumptions_profile_eeg_l2"][1]["from"],
+            "to": data["monthly_consumptions_profile_eeg_l2"][1]["to"],
+            "granularity": data["monthly_consumptions_profile_eeg_l2"][1]["granularity"],
         },
     ),
 ]
@@ -342,24 +414,133 @@ SENSOR_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             "to": data["yearly_trend"]["timerange_old"]["to"],
         },
     ),
-    NetzOOEeServiceSensorEntityDescription[str](
-        alt_key="total_eeg_import_l2",
-        entity_class=NetzOOEeMultipleSensorEntity,
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_import_eeg_l2",
+        entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="consumptions_profile_l2",
+        key="total_consumptions_profile_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL_INCREASING,
-        translation_key="total_eeg_import_l2",
+        translation_key="total_import_eeg_l2",
         icon="mdi:transmission-tower-export",
-        value_fn=lambda data: data["sum"]["value"],
+        value_fn=lambda data: (
+            data["total_consumptions_profile_eeg_l2"][1]["sum"]["value"]
+            if len(data.get("total_consumptions_profile_eeg_l2", [])) == 2  # noqa: PLR2004
+            else None
+        ),
         extra_state_attributes_fn=lambda data: {
-            "name": data["energy_community_name"],
-            "id": data["energy_community_id"],
-            "average": data["average"]["value"],
-            "from": data["from"],
-            "to": data["to"],
-            "type": data["type"],
-            "granularity": data["granularity"],
+            "name": data["total_consumptions_profile_eeg_l2"][1]["energy_community_name"],
+            "id": data["total_consumptions_profile_eeg_l2"][1]["energy_community_id"],
+            "from": data["total_consumptions_profile_eeg_l2"][1]["from"],
+            "to": data["total_consumptions_profile_eeg_l2"][1]["to"],
+            "granularity": data["total_consumptions_profile_eeg_l2"][1]["granularity"],
+        },
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_import_supplier_l2",
+        entity_class=NetzOOEeServiceSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_consumptions_profile_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        translation_key="total_import_supplier_l2",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda data: (
+            data["total_consumptions_profile_eeg_l2"][0]["sum"]["value"]
+            - data["total_consumptions_profile_eeg_l2"][1]["sum"]["value"]
+            if len(data.get("total_consumptions_profile_eeg_l2", [])) == 2  # noqa: PLR2004
+            else None
+        ),
+        extra_state_attributes_fn=lambda data: {
+            "from": data["total_consumptions_profile_eeg_l2"][0]["from"],
+            "to": data["total_consumptions_profile_eeg_l2"][0]["to"],
+            "granularity": data["total_consumptions_profile_eeg_l2"][0]["granularity"],
+        },
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_import_eeg_l3",
+        entity_class=NetzOOEeServiceSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_consumptions_profile_eeg_l3",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_import_eeg_l3",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda data: (
+            data["total_consumptions_profile_eeg_l3"][1]["sum"]["value"]
+            if len(data.get("total_consumptions_profile_eeg_l3", [])) == 2  # noqa: PLR2004
+            else None
+        ),
+        extra_state_attributes_fn=lambda data: {
+            "name": data["total_consumptions_profile_eeg_l3"][1]["energy_community_name"],
+            "id": data["total_consumptions_profile_eeg_l3"][1]["energy_community_id"],
+            "from": data["total_consumptions_profile_eeg_l3"][1]["from"],
+            "to": data["total_consumptions_profile_eeg_l3"][1]["to"],
+            "granularity": data["total_consumptions_profile_eeg_l3"][1]["granularity"],
+        },
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_import_supplier_l3",
+        entity_class=NetzOOEeServiceSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_consumptions_profile_eeg_l3",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_import_supplier_l3",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda data: (
+            data["total_consumptions_profile_eeg_l3"][0]["sum"]["value"]
+            - data["total_consumptions_profile_eeg_l3"][1]["sum"]["value"]
+            if len(data.get("total_consumptions_profile_eeg_l3", [])) == 2  # noqa: PLR2004
+            else None
+        ),
+        extra_state_attributes_fn=lambda data: {
+            "from": data["total_consumptions_profile_eeg_l3"][0]["from"],
+            "to": data["total_consumptions_profile_eeg_l3"][0]["to"],
+            "granularity": data["total_consumptions_profile_eeg_l3"][0]["granularity"],
+        },
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="monthly_import_eeg_l2",
+        entity_class=NetzOOEeServiceSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="monthly_consumptions_profile_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        translation_key="monthly_import_eeg_l2",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda data: (
+            data["monthly_consumptions_profile_eeg_l2"][1]["sum"]["value"]
+            if len(data.get("monthly_consumptions_profile_eeg_l2", [])) == 2  # noqa: PLR2004
+            else None
+        ),
+        extra_state_attributes_fn=lambda data: {
+            "name": data["monthly_consumptions_profile_eeg_l2"][1]["energy_community_name"],
+            "id": data["monthly_consumptions_profile_eeg_l2"][1]["energy_community_id"],
+            "from": data["monthly_consumptions_profile_eeg_l2"][1]["from"],
+            "to": data["monthly_consumptions_profile_eeg_l2"][1]["to"],
+            "granularity": data["monthly_consumptions_profile_eeg_l2"][1]["granularity"],
+        },
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="monthly_import_supplier_l2",
+        entity_class=NetzOOEeServiceSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="monthly_consumptions_profile_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        translation_key="monthly_import_supplier_l2",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda data: (
+            data["monthly_consumptions_profile_eeg_l2"][0]["sum"]["value"]
+            - data["monthly_consumptions_profile_eeg_l2"][1]["sum"]["value"]
+            if len(data.get("monthly_consumptions_profile_eeg_l2", [])) == 2  # noqa: PLR2004
+            else None
+        ),
+        extra_state_attributes_fn=lambda data: {
+            "from": data["monthly_consumptions_profile_eeg_l2"][0]["from"],
+            "to": data["monthly_consumptions_profile_eeg_l2"][0]["to"],
+            "granularity": data["monthly_consumptions_profile_eeg_l2"][0]["granularity"],
         },
     ),
 ]
@@ -395,18 +576,16 @@ async def async_setup_entry(
             continue
 
         for description in profile_sensor_types:
-            raw_data = data[description.key]
-            data_list: list[Mapping[str, Any]] = raw_data if isinstance(raw_data, list) else [raw_data]
+            value: StateType = description.value_fn(data)
 
-            for index, _ in enumerate(data_list):
-                sensors.append(
+            if value is not None:
+                sensors += [
                     description.entity_class(
                         coordinator,
                         description=description,
                         entry=entry,
                         device_identifier=meter_point_administration_number,
-                        **({"index": index} if len(data_list) > 1 else {}),
                     ),
-                )
+                ]
 
     async_add_entities(sensors)

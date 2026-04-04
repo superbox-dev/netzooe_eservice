@@ -1,8 +1,10 @@
 """DataUpdateCoordinator for the Netz OÖ eService integration."""
 
+import calendar
 import logging
 import re
 from collections.abc import Mapping
+from datetime import datetime
 from datetime import timedelta
 from typing import Any
 
@@ -12,6 +14,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util import dt as dt_util
+from homeassistant.util.dt import DEFAULT_TIME_ZONE
 from netzooe_eservice_api.api import NetzOOEeServiceAPI
 from netzooe_eservice_api.api import Pod
 from netzooe_eservice_api.constants import ConsumptionsProfilesBranch
@@ -78,6 +81,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     continue
 
                 point_of_delivery: dict[str, Any] = contract["pointOfDelivery"]
+                first_day, last_day = self._get_last_l2_month()
 
                 data[self._camel_to_snake(point_of_delivery["meterPointAdministrationNumber"])] = (
                     self._convert_recursive(
@@ -95,10 +99,26 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                                     point_of_delivery["meter"]["meterNumber"],
                                 ),
                             },
-                            "consumptionsProfileL2": await self._get_consumptions_profile(
+                            "totalConsumptionsProfileEegL2": await self._get_consumptions_profile(
                                 contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
                                 energy_community=contract["energyCommunityData"]["timeslices"][-1],
                                 meter_point_administration_number=point_of_delivery["meterPointAdministrationNumber"],
+                                date_from=None,
+                                date_to=dt_util.now() - timedelta(days=16),
+                            ),
+                            "totalConsumptionsProfileEegL3": await self._get_consumptions_profile(
+                                contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
+                                energy_community=contract["energyCommunityData"]["timeslices"][-1],
+                                meter_point_administration_number=point_of_delivery["meterPointAdministrationNumber"],
+                                date_from=None,
+                                date_to=dt_util.now(),
+                            ),
+                            "monthlyConsumptionsProfileEegL2": await self._get_consumptions_profile(
+                                contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
+                                energy_community=contract["energyCommunityData"]["timeslices"][-1],
+                                meter_point_administration_number=point_of_delivery["meterPointAdministrationNumber"],
+                                date_from=first_day,
+                                date_to=last_day,
                             ),
                         },
                     )
@@ -111,9 +131,9 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         contract_account_number: str,
         energy_community: Mapping[str, Any],
         meter_point_administration_number: str,
+        date_from: datetime | None,
+        date_to: datetime,
     ) -> list[dict[str, Any]]:
-        day = dt_util.now() - timedelta(days=16)
-
         consumptions_profile: list[dict[str, Any]] = await self.api.consumptions_profile(
             pods=[
                 Pod(
@@ -122,8 +142,21 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     best_available_granularity=profile["granularity"],
                     energy_community_id=energy_community["energyCommunityId"],
                     meter_point_administration_number=meter_point_administration_number,
-                    date_from=profile["from"],
-                    date_to=day.strftime("%Y-%m-%d"),
+                    date_from=(
+                        max(
+                            date_from,
+                            dt_util.as_local(
+                                datetime.strptime(profile["from"], "%Y-%m-%d").replace(
+                                    tzinfo=dt_util.DEFAULT_TIME_ZONE,
+                                ),
+                            ),
+                        ).strftime(
+                            "%Y-%m-%d",
+                        )
+                        if date_from
+                        else profile["from"]
+                    ),
+                    date_to=date_to.strftime("%Y-%m-%d"),
                 )
                 for profile in energy_community["profiles"]
             ],
@@ -156,3 +189,19 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         if isinstance(obj, list):
             return [self._convert_recursive(i) for i in obj]
         return obj
+
+    @staticmethod
+    def _get_last_l2_month() -> tuple[datetime, datetime]:
+        today: datetime = dt_util.now()
+        year: int = today.year - 1 if today.month == 1 else today.year
+        month: int = 12 if today.month == 1 else today.month - 1
+
+        first_day: datetime = dt_util.as_local(datetime(year, month, 1, tzinfo=DEFAULT_TIME_ZONE))
+        last_day_of_month: datetime = dt_util.as_local(
+            datetime(year, month, calendar.monthrange(year, month)[1], tzinfo=DEFAULT_TIME_ZONE),
+        )
+
+        cutoff: datetime = today - timedelta(days=16)
+        last_day: datetime = min(last_day_of_month, cutoff)
+
+        return first_day, last_day
