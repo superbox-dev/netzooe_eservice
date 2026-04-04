@@ -1,16 +1,16 @@
 """DataUpdateCoordinator for the Netz OÖ eService integration."""
 
+from __future__ import annotations
+
 import calendar
 import logging
 import re
-from collections.abc import Mapping
 from datetime import datetime
 from datetime import timedelta
 from typing import Any
+from typing import TYPE_CHECKING
 
-from aiohttp import ClientSession
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util import dt as dt_util
@@ -23,6 +23,11 @@ from netzooe_eservice_api.error import APIError
 
 from .const import DOMAIN
 from .const import SCAN_INTERVAL
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+    from aiohttp import ClientSession
+    from homeassistant.core import HomeAssistant
 
 _LOGGER = logging.getLogger(__name__)
 

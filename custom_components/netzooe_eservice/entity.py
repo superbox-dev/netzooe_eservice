@@ -1,5 +1,7 @@
 """Entity classes for the KEBA KeEnergy integration."""
 
+from __future__ import annotations
+
 import logging
 from typing import TypeVar
 

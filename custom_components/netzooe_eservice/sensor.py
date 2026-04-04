@@ -1,11 +1,12 @@
 """Support for the Netz OÖ eService sensors."""
 
+from __future__ import annotations
+
 import logging
-from collections.abc import Callable
-from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
 from typing import Final
+from typing import TYPE_CHECKING
 
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.components.sensor import SensorDeviceClass
@@ -13,15 +14,19 @@ from homeassistant.components.sensor import SensorEntity
 from homeassistant.components.sensor import SensorEntityDescription
 from homeassistant.components.sensor import SensorStateClass
 from homeassistant.const import UnitOfEnergy
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import StateType
 from netzooe_eservice_api.constants import SynthProfile
 
 from .const import DOMAIN
-from .coordinator import NetzOOEeServiceConfigEntry
-from .coordinator import NetzOOEeServiceDataUpdateCoordinator
 from .entity import NetzOOEeServiceEntity
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from collections.abc import Mapping
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.typing import StateType
+    from .coordinator import NetzOOEeServiceConfigEntry
+    from .coordinator import NetzOOEeServiceDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -34,7 +39,7 @@ class NetzOOEeServiceSensorEntityDescription[T](
 ):
     """Class describing NetzOOEeService sensor entities."""
 
-    entity_class: type["NetzOOEeServiceSensorEntity"]
+    entity_class: type[NetzOOEeServiceSensorEntity]
     value_fn: Callable[[Mapping[str, Any]], StateType]
     extra_state_attributes_fn: Callable[[Mapping[str, Any]], Mapping[str, Any] | None]
     alt_key: str | None = None

@@ -1,5 +1,7 @@
 """Config flow for Netz OÖ eService."""
 
+from __future__ import annotations
+
 import logging
 from http import HTTPStatus
 from typing import Any
@@ -10,7 +12,6 @@ from homeassistant.config_entries import ConfigFlow
 from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_USERNAME
-from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from netzooe_eservice_api.api import NetzOOEeServiceAPI
@@ -23,13 +24,8 @@ from .const import NAME
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
-
-STEP_USER_DATA_SCHEMA: vol.Schema = vol.Schema(
-    {
-        vol.Required(CONF_USERNAME): str,
-        vol.Required(CONF_PASSWORD): str,
-    },
-)
+    from homeassistant.core import HomeAssistant
+    from .coordinator import NetzOOEeServiceConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -62,6 +58,11 @@ class NetzOOEeServiceConfigFlow(ConfigFlow, domain=DOMAIN):
 
     VERSION: int = CONFIG_ENTRY_VERSION
 
+    def __init__(self) -> None:
+        """Initialize flow."""
+        self._username: str = ""
+        self._entry: NetzOOEeServiceConfigEntry | None = None
+
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle a flow initialized by the user."""
         errors: dict[str, str] = {}
@@ -74,12 +75,25 @@ class NetzOOEeServiceConfigFlow(ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="user",
-            data_schema=STEP_USER_DATA_SCHEMA,
+            data_schema=vol.Schema(
+                {
+                    vol.Required(CONF_USERNAME, default=self._username): str,
+                    vol.Required(CONF_PASSWORD): str,
+                },
+            ),
             errors=errors,
             description_placeholders={
                 "name": f"{MANUFACTURER} {NAME}",
             },
         )
+
+    async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        """Handle reconfiguration of the integration."""
+        self._entry = self._get_reconfigure_entry()
+
+        self._username = self._entry.data[CONF_USERNAME]
+
+        return await self.async_step_user(user_input)
 
     async def _async_validate_or_error(self, user_input: dict[str, Any]) -> dict[str, Any]:
         """Validate or error."""

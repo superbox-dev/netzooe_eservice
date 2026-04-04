@@ -1,12 +1,13 @@
 """The Netz OÖ eService integration."""
 
+from __future__ import annotations
+
 import logging
 from typing import TYPE_CHECKING
 
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_USERNAME
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
 from .coordinator import NetzOOEeServiceConfigEntry
@@ -14,6 +15,7 @@ from .coordinator import NetzOOEeServiceDataUpdateCoordinator
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
+    from homeassistant.core import HomeAssistant
 
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
