@@ -1557,7 +1557,7 @@ wheels = [
 
 [[package]]
 name = "homeassistant"
-version = "2026.4.0"
+version = "2026.4.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version >= '3.14.2'",
@@ -1614,9 +1614,9 @@ dependencies = [
     { name = "yarl", version = "1.23.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14.2'" },
     { name = "zeroconf", marker = "python_full_version >= '3.14.2'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/29/c3/463010f528a6ac17262fc6d5e824b4fc4605fe6d572b96284a44822b4007/homeassistant-2026.4.0.tar.gz", hash = "sha256:ad27243988446199e664d09f6a3196ddbe7648c3275efbd23fe3bfde3c3f1ae5", size = 32301866, upload-time = "2026-04-01T12:55:14.373Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/79/ae/7263c0ba555e8be33f3bd275e67359d880742ee1b079013ad507d9fa6cfb/homeassistant-2026.4.1.tar.gz", hash = "sha256:e671216d7159a78bbccd3c34d1f7765b73c169f3e1ca73f3a6617a0e3f86ecca", size = 32296399, upload-time = "2026-04-03T21:15:26.509Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fc/a4/77c262fa088c26dbb44705fd1e35b2699437d6529925538a4dc2df7c8a0f/homeassistant-2026.4.0-py3-none-any.whl", hash = "sha256:221a859583af46b5c158c641954906c3edab2cdf6c847a6edc828c3d625a9ac1", size = 53443006, upload-time = "2026-04-01T12:55:08.944Z" },
+    { url = "https://files.pythonhosted.org/packages/27/58/d28deeda60e0b1f34ba98f6216e929bac515530ab8d9d7a8214394358b68/homeassistant-2026.4.1-py3-none-any.whl", hash = "sha256:135957c636cecf71420a0161b101ad3c26ddfdbc5c44dcb5c7bb34278e630339", size = 53436377, upload-time = "2026-04-03T21:15:20.827Z" },
 ]
 
 [[package]]
@@ -2048,7 +2048,7 @@ version = "1.0.0b1"
 source = { editable = "." }
 dependencies = [
     { name = "homeassistant", version = "2026.2.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.14.2'" },
-    { name = "homeassistant", version = "2026.4.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14.2'" },
+    { name = "homeassistant", version = "2026.4.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14.2'" },
     { name = "netzooe-eservice-api" },
     { name = "requests", version = "2.32.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.14.2'" },
     { name = "requests", version = "2.33.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14.2'" },
@@ -2067,7 +2067,7 @@ dev = [
     { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-homeassistant-custom-component", version = "0.13.316", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.14.2'" },
-    { name = "pytest-homeassistant-custom-component", version = "0.13.321", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14.2'" },
+    { name = "pytest-homeassistant-custom-component", version = "0.13.322", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14.2'" },
     { name = "ruff" },
     { name = "rumdl" },
     { name = "types-pyyaml" },
@@ -2087,13 +2087,13 @@ test = [
     { name = "genbadge", extra = ["coverage"] },
     { name = "pytest" },
     { name = "pytest-homeassistant-custom-component", version = "0.13.316", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.14.2'" },
-    { name = "pytest-homeassistant-custom-component", version = "0.13.321", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14.2'" },
+    { name = "pytest-homeassistant-custom-component", version = "0.13.322", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14.2'" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "homeassistant", specifier = ">=2025.8.2" },
-    { name = "netzooe-eservice-api", specifier = "~=1.0.1" },
+    { name = "netzooe-eservice-api", specifier = "~=1.0.2" },
     { name = "requests", specifier = ">=2.32.5" },
 ]
 
@@ -2131,15 +2131,15 @@ test = [
 
 [[package]]
 name = "netzooe-eservice-api"
-version = "1.0.1"
+version = "1.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp", version = "3.13.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.14.2'" },
     { name = "aiohttp", version = "3.13.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14.2'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/68/e0/4ed36a887b7dd36efc603ea1af14e0998e645de25638db87cdbd820c7b12/netzooe_eservice_api-1.0.1.tar.gz", hash = "sha256:a308df89a2344e18876efbb004241b00a46f712ac32b8224128fa6a3d9872de0", size = 104719, upload-time = "2026-04-03T05:30:58.982Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0d/15/1e290d450fc1127cf5f069a9184364fce7d757904ecf2d4ec30e7d16c67d/netzooe_eservice_api-1.0.2.tar.gz", hash = "sha256:85b2541821a04b807e26a8b8565a2f88a30e85e4dfdd5e6761b5f78aa00f1b05", size = 105433, upload-time = "2026-04-04T23:01:41.66Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d6/be/99da9b237ef721adbd1a37b67a24955060af4f637f6a2f94be6267852775/netzooe_eservice_api-1.0.1-py3-none-any.whl", hash = "sha256:746098cb893db7e6bacfecab95f72756c051cddaf8bf311c891451e024f6149e", size = 10321, upload-time = "2026-04-03T05:30:57.925Z" },
+    { url = "https://files.pythonhosted.org/packages/d6/07/350176cb94f21be41eab3b881f77e737f7087e45006afcd205d47ba4007d/netzooe_eservice_api-1.0.2-py3-none-any.whl", hash = "sha256:af9fa7c2a49a16824288e20ea478ccfa73163708aeb2cc7875924158026425b5", size = 10590, upload-time = "2026-04-04T23:01:40.503Z" },
 ]
 
 [[package]]
@@ -3112,7 +3112,7 @@ wheels = [
 
 [[package]]
 name = "pytest-homeassistant-custom-component"
-version = "0.13.321"
+version = "0.13.322"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version >= '3.14.2'",
@@ -3121,7 +3121,7 @@ dependencies = [
     { name = "aiohasupervisor", version = "0.4.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14.2'" },
     { name = "coverage", marker = "python_full_version >= '3.14.2'" },
     { name = "freezegun", marker = "python_full_version >= '3.14.2'" },
-    { name = "homeassistant", version = "2026.4.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14.2'" },
+    { name = "homeassistant", version = "2026.4.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14.2'" },
     { name = "license-expression", marker = "python_full_version >= '3.14.2'" },
     { name = "mock-open", marker = "python_full_version >= '3.14.2'" },
     { name = "numpy", marker = "python_full_version >= '3.14.2'" },
@@ -3146,9 +3146,9 @@ dependencies = [
     { name = "syrupy", marker = "python_full_version >= '3.14.2'" },
     { name = "tqdm", marker = "python_full_version >= '3.14.2'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/02/41/9f02c2b3b08c55aba96ffbc0ebfeb75b8afada2b7dd5cb06c07c9c415ac7/pytest_homeassistant_custom_component-0.13.321.tar.gz", hash = "sha256:051a9e891c688012a9f2b2217e15c611387465a455075a9dac5a6a99df43848a", size = 69939, upload-time = "2026-04-02T19:25:08.475Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c0/68/829a0b0974af0a5afef74b8a3ee6a90d3c0b5dc3e8cb383c88d533959f60/pytest_homeassistant_custom_component-0.13.322.tar.gz", hash = "sha256:b316fb98ad45ab7854cc9509e03936dc206b0b232980f390879de3c7cc4a48ef", size = 69939, upload-time = "2026-04-04T05:29:25.77Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/13/dd/0785b40d7922066cb144446b277098b809c215d0beb1349c9c3250c8930f/pytest_homeassistant_custom_component-0.13.321-py3-none-any.whl", hash = "sha256:37ac3ed2ee32f5b5ed4f9c4dc0f8a35e22944e2a50efcc73dc87564953b39eab", size = 75779, upload-time = "2026-04-02T19:25:06.656Z" },
+    { url = "https://files.pythonhosted.org/packages/13/a3/319939ad1b925d65367fb9ca7a0e184ff717acc74da224c69b3f0e7d294c/pytest_homeassistant_custom_component-0.13.322-py3-none-any.whl", hash = "sha256:9163e7713759547e1c28da0f36f3a2fff998c7a5c5cfdd12f6c9c250942eec96", size = 75780, upload-time = "2026-04-04T05:29:24.304Z" },
 ]
 
 [[package]]
@@ -3506,17 +3506,17 @@ wheels = [
 
 [[package]]
 name = "rumdl"
-version = "0.1.66"
+version = "0.1.67"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/3a/3d/0a30ac2f9522603a2f4046bf84305469461164b55b5d2fb8cbbfacaef9bb/rumdl-0.1.66.tar.gz", hash = "sha256:8c6113ff3a6fabaa95512f478422905022e44e7436377b8294c113758f2faedf", size = 2330229, upload-time = "2026-04-02T22:24:34.78Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/86/e6/26165f732bb32256f92c6243d826fa190085de494d112dcb5fc103f05a39/rumdl-0.1.67.tar.gz", hash = "sha256:071f601b894833c3bd22a923f792c0d8ba982ff96ae07a3de83d488199d5cdbd", size = 2336125, upload-time = "2026-04-04T19:50:50.252Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9c/5c/4296111ec4e02d7222837f278eef26ca3c036fa106a09cbd8ddd187ff745/rumdl-0.1.66-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:29043da23c50b46d41faa8e0d8d3f5de557a0f3b4c01a6f06bc42d13ba32bf3b", size = 5314169, upload-time = "2026-04-02T22:24:28.363Z" },
-    { url = "https://files.pythonhosted.org/packages/ab/56/c802972ad882db5dac43c13e26a512403cd5ab7089eb9a99f10e59f9c24b/rumdl-0.1.66-py3-none-macosx_11_0_arm64.whl", hash = "sha256:c873c266ccc659f7e9f20eab1cb7a920ac429e8175ed1ad01052c441f443a6e3", size = 4928633, upload-time = "2026-04-02T22:24:23.241Z" },
-    { url = "https://files.pythonhosted.org/packages/4b/c2/e32c0fc9facecef103b832b206d1fd4d6b117c9ef350ebe9ce4a03d9c953/rumdl-0.1.66-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:9a6c0eac4038f635957c101e3f9b24c54fd969c169a37f67e6baddc1a2416ffa", size = 5141451, upload-time = "2026-04-02T22:24:24.895Z" },
-    { url = "https://files.pythonhosted.org/packages/e7/47/5e5cc52b2c4f197215937d430a33793a1726843b540af0b90768eb2edead/rumdl-0.1.66-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:2569dbd83b1e1b3dcbe91847afd39568e800f94902a93e6d4d497c38d8845f1b", size = 5546122, upload-time = "2026-04-02T22:24:31.547Z" },
-    { url = "https://files.pythonhosted.org/packages/e3/a8/5e9c97f258aa26dbe0d9b1b1e1adce4e3be3334827b1569d9016786543a4/rumdl-0.1.66-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:12eef7570891b5e4b872e5782ebf04b01c143c2676436741df0d6da18783b586", size = 5142538, upload-time = "2026-04-02T22:24:26.473Z" },
-    { url = "https://files.pythonhosted.org/packages/3c/1b/3842733401c68c78a24f76fb19688b1f49eb2bf4fce26e7e5453ac02dd12/rumdl-0.1.66-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:7b4bc16f29e9b9a67fe88eff8ec07683df042189f098acbf17bc1d1851415a31", size = 5539523, upload-time = "2026-04-02T22:24:32.992Z" },
-    { url = "https://files.pythonhosted.org/packages/c5/ae/f1cbf3b178c4ba986e9829fbb5b24c5375d5728e4713846e382fbe9d47f7/rumdl-0.1.66-py3-none-win_amd64.whl", hash = "sha256:a78b5faeea82b28349c6f273839615bcad119a96ecc5f314d52526237566a783", size = 5604473, upload-time = "2026-04-02T22:24:29.831Z" },
+    { url = "https://files.pythonhosted.org/packages/89/99/3002d4ca825de53569be24c419909ff692b1fc14dc2828e2cc13c179ee13/rumdl-0.1.67-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:6755ac5e0bcca29acfeb24e4cca6124c8299d0e18e82f18fb459560d1d0393e6", size = 5317383, upload-time = "2026-04-04T19:50:43.582Z" },
+    { url = "https://files.pythonhosted.org/packages/73/9b/0b4eefdc26af4f8c435ffa8b43c4c211d07922dd1ed4baa9d848fbe0db40/rumdl-0.1.67-py3-none-macosx_11_0_arm64.whl", hash = "sha256:6b489a1ac95f81ebf608f5ad8b3c6e2002d117ff20fd0cb61f3bb23bc97f3423", size = 4929151, upload-time = "2026-04-04T19:50:37.66Z" },
+    { url = "https://files.pythonhosted.org/packages/17/35/c277c344fc94e2020fad34b2e7c9d68c94008533ef7c138ecbae4c28d419/rumdl-0.1.67-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:ff6c9141ea6094d12356f5463b14d5a2af59100aa72c96ee028a172f69c50cd9", size = 5140408, upload-time = "2026-04-04T19:50:39.681Z" },
+    { url = "https://files.pythonhosted.org/packages/0f/56/0c5952d4cda528bbc0f1cf405ce90375de3df7defff309dde1e059d4bb3e/rumdl-0.1.67-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:b07a607dd74c7073897e94d5c4ce7d8d1bd1c87f0afd91108869d3c14c962e12", size = 5543652, upload-time = "2026-04-04T19:50:46.938Z" },
+    { url = "https://files.pythonhosted.org/packages/48/ee/1d5108ebd55a06b112f8747e749f2e5e100f0ff778dda42493d66ab54109/rumdl-0.1.67-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:ce398563e72adc40672e3f8582dd2ea2db3dc229fd2924c5c53a06d65218420c", size = 5144294, upload-time = "2026-04-04T19:50:41.748Z" },
+    { url = "https://files.pythonhosted.org/packages/ea/22/c46cc583b674474010a5981769cc6b3f42713acd62b0dec75a51a35fe19b/rumdl-0.1.67-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:a6684a367c06ab2daa7f47d308cce5959b0f6664121f31e6fb30c17de651ac18", size = 5534025, upload-time = "2026-04-04T19:50:48.862Z" },
+    { url = "https://files.pythonhosted.org/packages/2b/ff/e3edd6a2afb473014cae8ca6fb796db8f0a0557d050a7519354cd01adc22/rumdl-0.1.67-py3-none-win_amd64.whl", hash = "sha256:1775b8deef0aba7ca92545d9f12b5648374d1a83ea04cb5913b42efd6bbdd977", size = 5603241, upload-time = "2026-04-04T19:50:45.085Z" },
 ]
 
 [[package]]
