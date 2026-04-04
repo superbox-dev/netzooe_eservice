@@ -2,7 +2,8 @@
     "config": {
         "abort": {
             "already_configured": "Failed to connect to the Netz OÖ eService portal",
-            "already_in_progress": "Configuration flow is already in progress"
+            "already_in_progress": "Configuration flow is already in progress",
+            "reconfigure_successful": "Re-configuration was successful"
         },
         "error": {
             "cannot_connect": "Failed to connect",
@@ -16,12 +17,15 @@
                     "password": "Password",
                     "username": "Username"
                 },
+                "data_description": {
+                    "password": "The password to log in to your {name} device.",
+                    "username": "The username to log in to your {name} device."
+                },
                 "description": "Please enter the username and password."
             }
         }
     },
     "device": {
-
     },
     "entity": {
         "sensor": {

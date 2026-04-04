@@ -2,7 +2,8 @@
     "config": {
         "abort": {
             "already_configured": "Das Netz OÖ eService-Portal ist bereits konfiguriert",
-            "already_in_progress": "Konfigurationsvorgang läuft bereits"
+            "already_in_progress": "Konfigurationsvorgang läuft bereits",
+            "reconfigure_successful": "Die Neukonfiguration war erfolgreich"
         },
         "error": {
             "cannot_connect": "Verbindung fehlgeschlagen",
@@ -16,12 +17,15 @@
                     "password": "Passwort",
                     "username": "Benutzername"
                 },
+                "data_description": {
+                    "password": "Das Passwort zur Anmeldung bei deinem {name}-Gerät.",
+                    "username": "Der Benutzername zur Anmeldung bei deinem {name}-Gerät."
+                },
                 "description": "Bitte gib den Benutzernamen und das Passwort ein."
             }
         }
     },
     "device": {
-
     },
     "entity": {
         "sensor": {
