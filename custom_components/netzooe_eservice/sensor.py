@@ -571,14 +571,12 @@ async def async_setup_entry(
                 ),
             ]
 
-        profile_sensor_types: list[NetzOOEeServiceSensorEntityDescription[Any]]
+        profile_sensor_types: list[NetzOOEeServiceSensorEntityDescription[Any]] = []
 
         if data["synth_profile"] == SynthProfile.PHOTOVOLTAICS.value:
             profile_sensor_types = SENSOR_EXPORT_TYPES
         elif data["synth_profile"] == SynthProfile.HOUSEHOLD.value:
             profile_sensor_types = SENSOR_IMPORT_TYPES
-        else:
-            continue
 
         for description in profile_sensor_types:
             value: StateType = description.value_fn(data)

@@ -1,0 +1,1189 @@
+# serializer version: 1
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Energygemeinschaft',
+      'history': list([
+        dict({
+          'from': '2020-01-01',
+          'id': 'AT0000000000000000000000011111115',
+          'name': 'wseg 07614 0523 UW Partenstein',
+          'to': '2025-09-30',
+        }),
+        dict({
+          'from': '2026-01-01',
+          'id': 'AT0000000000000000000000011111116',
+          'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+          'to': '2026-04-04',
+        }),
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Zählerstand',
+      'meter_number': '12345678',
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'timestamp': '2026-04-04T00:15:00',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '9490.152',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_export_eeg_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Einspeisung EEG L2 (letztes Monat)',
+      'from': '2026-03-01T00:00:00',
+      'granularity': 'DAY',
+      'icon': 'mdi:transmission-tower-import',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_export_eeg_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '78.63703',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_export_supplier_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Einspeisung Energielieferant EEG L2 (letztes Monat)',
+      'from': '2026-03-01T00:00:00',
+      'granularity': 'DAY',
+      'icon': 'mdi:transmission-tower-import',
+      'id': 'ATCC9999DYNAMCC100087000000000002',
+      'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_export_supplier_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '123.25697',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_export_new]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 30,
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Einspeisung neu (30-Tage-Trend)',
+      'from': '2026-03-05T00:00:00',
+      'icon': 'mdi:transmission-tower-import',
+      'per_day': 9.6,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-04-04T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_export_new',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '288.0',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_export_old]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 30,
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Einspeisung alt (30-Tage-Trend)',
+      'from': '2026-02-03T00:00:00',
+      'icon': 'mdi:transmission-tower-import',
+      'per_day': 2.6,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-03-04T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_export_old',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '78.0',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_scale_type]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Typ',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_scale_type',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'Gem.Erz. / Erzeugung',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_supplier]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Energielieferant',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'OeMAG Abwicklungsstelle für Ökostrom AG',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_synth_profile]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Lastprofil',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_synth_profile',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'Photovoltaik',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_eeg_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Gesamte Einspeisung EEG L2 (vor 16 Tagen)',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-import',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_eeg_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '105.550991',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_eeg_l3]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Gesamte Einspeisung EEG L2/L3',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-import',
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-04-03T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_eeg_l3',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '198.805221',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_supplier_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Gesamte Einspeisung Energielieferant L2 (vor 16 Tagen)',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-import',
+      'id': 'ATCC9999DYNAMCC100087000000000002',
+      'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_supplier_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '148.454009',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_supplier_l3]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Gesamte Einspeisung Energielieferant L2/L3',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-import',
+      'id': 'ATCC9999DYNAMCC100087000000000002',
+      'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-04-03T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_supplier_l3',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '172.371779',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_export_new]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 365,
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Einspeisung neu (Jahres-Trend)',
+      'from': '2025-03-31T00:00:00',
+      'icon': 'mdi:transmission-tower-import',
+      'per_day': 12.34278904109589,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-03-31T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_export_new',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '4505.118',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_export_old]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 365,
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Einspeisung alt (Jahres-Trend)',
+      'from': '2024-03-31T00:00:00',
+      'icon': 'mdi:transmission-tower-import',
+      'per_day': 12.12066575342466,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2025-03-30T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_export_old',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '4424.043',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Energygemeinschaft',
+      'history': list([
+        dict({
+          'from': '2024-05-06',
+          'id': 'AT00300000000RC100930000000965743',
+          'name': 'wseg 07614 0523 UW Partenstein',
+          'to': '2024-05-07',
+        }),
+        dict({
+          'from': '2024-09-10',
+          'id': 'AT00300000000RC100930000000965743',
+          'name': 'wseg 07614 0523 UW Partenstein',
+          'to': '2025-09-30',
+        }),
+        dict({
+          'from': '2026-01-26',
+          'id': 'ATCC9999DYNAMCC100087000000000002',
+          'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+          'to': '2026-04-04',
+        }),
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Zählerstand',
+      'meter_number': '9876543',
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'timestamp': '2023-02-04T00:15:00',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '43698.215',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_import_eeg_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Netzbezug EEG L2 (letztes Monat)',
+      'from': '2026-03-01T00:00:00',
+      'granularity': 'DAY',
+      'icon': 'mdi:transmission-tower-export',
+      'id': 'ATCC9999DYNAMCC100087000000000002',
+      'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_import_eeg_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '82.232184',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_import_supplier_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Netzbezug Energielieferant L2 (letztes Monat)',
+      'from': '2026-03-01T00:00:00',
+      'granularity': 'DAY',
+      'icon': 'mdi:transmission-tower-export',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_import_supplier_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '133.823816',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_import_new]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 30,
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Netzbezug neu (30-Tage-Trend)',
+      'from': '2026-03-05T00:00:00',
+      'icon': 'mdi:transmission-tower-export',
+      'per_day': 10.5,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-04-04T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_import_new',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '315.0',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_import_old]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 30,
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Netzbezug alt (30-Tage-Trend)',
+      'from': '2026-02-03T00:00:00',
+      'icon': 'mdi:transmission-tower-export',
+      'per_day': 19.86666666666667,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-03-04T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_import_old',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '596.0',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_scale_type]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Typ',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_scale_type',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'EEG 7ngem',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_supplier]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Energielieferant',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'easy green energy GmbH & Co KG',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_synth_profile]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Lastprofil',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_synth_profile',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'Haushalt',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_eeg_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Gesamter Netzbezug EEG L2 (vor 16 Tagen)',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-export',
+      'id': 'ATCC9999DYNAMCC100087000000000002',
+      'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_eeg_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '286.329492',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_eeg_l3]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Gesamter Netzbezug EEG L2/L3',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-export',
+      'id': 'ATCC9999DYNAMCC100087000000000002',
+      'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-04-03T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_eeg_l3',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '299.285515',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_supplier_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Gesamter Netzbezug Energielieferant L2 (vor 16 Tagen)',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-export',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_supplier_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '658.438508',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_supplier_l3]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Gesamter Netzbezug Energielieferant L2/L3',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-export',
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-04-03T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_supplier_l3',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '795.080485',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_import_new]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 365,
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Netzbezug neu (Jahres-Trend)',
+      'from': '2025-03-31T00:00:00',
+      'icon': 'mdi:transmission-tower-export',
+      'per_day': 11.458,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-03-31T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_import_new',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '4182.17',
+  })
+# ---
+# name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_import_old]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 365,
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Netzbezug alt (Jahres-Trend)',
+      'from': '2024-03-31T00:00:00',
+      'icon': 'mdi:transmission-tower-export',
+      'per_day': 10.37962739726027,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2025-03-30T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_import_old',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '3788.564',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Energy community',
+      'history': list([
+        dict({
+          'from': '2020-01-01',
+          'id': 'AT0000000000000000000000011111115',
+          'name': 'wseg 07614 0523 UW Partenstein',
+          'to': '2025-09-30',
+        }),
+        dict({
+          'from': '2026-01-01',
+          'id': 'AT0000000000000000000000011111116',
+          'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+          'to': '2026-04-04',
+        }),
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Meter readings',
+      'meter_number': '12345678',
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'timestamp': '2026-04-04T00:15:00',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '9490.152',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_export_eeg_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Electricity export EEG L2 (last month)',
+      'from': '2026-03-01T00:00:00',
+      'granularity': 'DAY',
+      'icon': 'mdi:transmission-tower-import',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_export_eeg_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '78.63703',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_export_supplier_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Electricity export supplier L2 (last month)',
+      'from': '2026-03-01T00:00:00',
+      'granularity': 'DAY',
+      'icon': 'mdi:transmission-tower-import',
+      'id': 'ATCC9999DYNAMCC100087000000000002',
+      'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_export_supplier_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '123.25697',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_export_new]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 30,
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Electricity export new (monthly trend)',
+      'from': '2026-03-05T00:00:00',
+      'icon': 'mdi:transmission-tower-import',
+      'per_day': 9.6,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-04-04T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_export_new',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '288.0',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_export_old]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 30,
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Electricity export old (monthly trend)',
+      'from': '2026-02-03T00:00:00',
+      'icon': 'mdi:transmission-tower-import',
+      'per_day': 2.6,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-03-04T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_export_old',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '78.0',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_scale_type]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Type',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_scale_type',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'Gem.Erz. / Erzeugung',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_supplier]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Supplier',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'OeMAG Abwicklungsstelle für Ökostrom AG',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_synth_profile]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Load profile',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_synth_profile',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'Photovoltaik',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_eeg_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Total electricity export EGG L2 (16 days ago)',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-import',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_eeg_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '105.550991',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_eeg_l3]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Total electricity export EEG L2/L3',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-import',
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-04-03T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_eeg_l3',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '198.805221',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_supplier_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Total electricity export supplier L2 (16 days ago)',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-import',
+      'id': 'ATCC9999DYNAMCC100087000000000002',
+      'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_supplier_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '148.454009',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_supplier_l3]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Total electricity export supplier L2/L3',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-import',
+      'id': 'ATCC9999DYNAMCC100087000000000002',
+      'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-04-03T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_total_export_supplier_l3',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '172.371779',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_export_new]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 365,
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Electricity export new (yearly trend)',
+      'from': '2025-03-31T00:00:00',
+      'icon': 'mdi:transmission-tower-import',
+      'per_day': 12.34278904109589,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-03-31T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_export_new',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '4505.118',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_export_old]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 365,
+      'device_class': 'energy',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Electricity export old (yearly trend)',
+      'from': '2024-03-31T00:00:00',
+      'icon': 'mdi:transmission-tower-import',
+      'per_day': 12.12066575342466,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2025-03-30T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_export_old',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '4424.043',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Energy community',
+      'history': list([
+        dict({
+          'from': '2024-05-06',
+          'id': 'AT00300000000RC100930000000965743',
+          'name': 'wseg 07614 0523 UW Partenstein',
+          'to': '2024-05-07',
+        }),
+        dict({
+          'from': '2024-09-10',
+          'id': 'AT00300000000RC100930000000965743',
+          'name': 'wseg 07614 0523 UW Partenstein',
+          'to': '2025-09-30',
+        }),
+        dict({
+          'from': '2026-01-26',
+          'id': 'ATCC9999DYNAMCC100087000000000002',
+          'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+          'to': '2026-04-04',
+        }),
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Meter readings',
+      'meter_number': '9876543',
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'timestamp': '2023-02-04T00:15:00',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '43698.215',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_import_eeg_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Electricity import EEG L2 (last month)',
+      'from': '2026-03-01T00:00:00',
+      'granularity': 'DAY',
+      'icon': 'mdi:transmission-tower-export',
+      'id': 'ATCC9999DYNAMCC100087000000000002',
+      'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_import_eeg_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '82.232184',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_import_supplier_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Electricity import supplier L2 (last month)',
+      'from': '2026-03-01T00:00:00',
+      'granularity': 'DAY',
+      'icon': 'mdi:transmission-tower-export',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_import_supplier_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '133.823816',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_import_new]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 30,
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Electricity import new (monthly trend)',
+      'from': '2026-03-05T00:00:00',
+      'icon': 'mdi:transmission-tower-export',
+      'per_day': 10.5,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-04-04T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_import_new',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '315.0',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_import_old]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 30,
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Electricity import old (monthly trend)',
+      'from': '2026-02-03T00:00:00',
+      'icon': 'mdi:transmission-tower-export',
+      'per_day': 19.86666666666667,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-03-04T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_import_old',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '596.0',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_scale_type]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Type',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_scale_type',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'EEG 7ngem',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_supplier]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Supplier',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'easy green energy GmbH & Co KG',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_synth_profile]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Load profile',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_synth_profile',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'Haushalt',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_eeg_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Total electricity import EEG L2 (16 days ago)',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-export',
+      'id': 'ATCC9999DYNAMCC100087000000000002',
+      'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_eeg_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '286.329492',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_eeg_l3]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Total electricity import EEG L2/L3',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-export',
+      'id': 'ATCC9999DYNAMCC100087000000000002',
+      'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-04-03T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_eeg_l3',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '299.285515',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_supplier_l2]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Total electricity import supplier L2 (16 days ago)',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-export',
+      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      'to': '2026-03-19T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_supplier_l2',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '658.438508',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_supplier_l3]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Total electricity import supplier EEG L2/L3',
+      'from': '2026-01-26T00:00:00',
+      'granularity': 'MONTH',
+      'icon': 'mdi:transmission-tower-export',
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-04-03T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_total_import_supplier_l3',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '795.080485',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_import_new]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 365,
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Electricity import new (yearly trend)',
+      'from': '2025-03-31T00:00:00',
+      'icon': 'mdi:transmission-tower-export',
+      'per_day': 11.458,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2026-03-31T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_import_new',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '4182.17',
+  })
+# ---
+# name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_import_old]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'days': 365,
+      'device_class': 'energy',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Electricity import old (yearly trend)',
+      'from': '2024-03-31T00:00:00',
+      'icon': 'mdi:transmission-tower-export',
+      'per_day': 10.37962739726027,
+      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      'to': '2025-03-30T23:59:59',
+      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_import_old',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '3788.564',
+  })
+# ---

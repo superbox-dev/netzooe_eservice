@@ -36,7 +36,7 @@ class NetzOOEeServiceEntity(CoordinatorEntity[NetzOOEeServiceDataUpdateCoordinat
         self.device_identifier: str = device_identifier
 
     @property
-    def device_name(self) -> str | None:
+    def device_name(self) -> str | None:  # pragma: no cover
         """Return the name of the current device."""
         return None
 
