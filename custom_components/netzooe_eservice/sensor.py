@@ -105,7 +105,7 @@ SENSOR_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         device_class=SensorDeviceClass.ENERGY,
         key="meter_reading",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
+        state_class=SensorStateClass.TOTAL_INCREASING,
         translation_key="meter_reading",
         value_fn=(
             lambda data: data["meter_reading"]["values"]["new_result"]["integer_places"]
