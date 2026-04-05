@@ -171,8 +171,6 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             ],
         )
 
-        _LOGGER.debug(consumptions_profile)
-
         return consumptions_profile
 
     @staticmethod
