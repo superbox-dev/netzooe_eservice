@@ -79,55 +79,59 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             )
 
             for contract in contract_accounts["contracts"]:
-                if contract["branch"] != ConsumptionsProfilesBranch.ELECTRICITY.value:
-                    continue
+                if contract["branch"] == ConsumptionsProfilesBranch.ELECTRICITY.value and contract["synthProfile"] in [
+                    SynthProfile.HOUSEHOLD.value,
+                    SynthProfile.PHOTOVOLTAICS.value,
+                ]:
+                    point_of_delivery: dict[str, Any] = contract["pointOfDelivery"]
+                    first_day, last_day = self._get_last_l2_month()
 
-                if contract["synthProfile"] not in [SynthProfile.HOUSEHOLD.value, SynthProfile.PHOTOVOLTAICS.value]:
-                    continue
-
-                point_of_delivery: dict[str, Any] = contract["pointOfDelivery"]
-                first_day, last_day = self._get_last_l2_month()
-
-                data[self._camel_to_snake(point_of_delivery["meterPointAdministrationNumber"])] = (
-                    self._convert_recursive(
-                        {
-                            "scaleType": contract["scaleType"],
-                            "monthlyTrend": point_of_delivery["monthlyTrend"],
-                            "yearlyTrend": point_of_delivery["yearlyTrend"],
-                            "supplier": contract["supplier"],
-                            "synthProfile": contract["synthProfile"],
-                            "energyCommunity": contract["energyCommunityData"]["timeslices"],
-                            "meterReading": {
-                                "meterNumber": point_of_delivery["meter"]["meterNumber"],
-                                "values": self._get_meter_readings_data(
-                                    point_of_delivery["lastReadings"]["values"],
-                                    point_of_delivery["meter"]["meterNumber"],
+                    data[self._camel_to_snake(point_of_delivery["meterPointAdministrationNumber"])] = (
+                        self._convert_recursive(
+                            {
+                                "scaleType": contract["scaleType"],
+                                "monthlyTrend": point_of_delivery["monthlyTrend"],
+                                "yearlyTrend": point_of_delivery["yearlyTrend"],
+                                "supplier": contract["supplier"],
+                                "synthProfile": contract["synthProfile"],
+                                "energyCommunity": contract["energyCommunityData"]["timeslices"],
+                                "meterReading": {
+                                    "meterNumber": point_of_delivery["meter"]["meterNumber"],
+                                    "values": self._get_meter_readings_data(
+                                        point_of_delivery["lastReadings"]["values"],
+                                        point_of_delivery["meter"]["meterNumber"],
+                                    ),
+                                },
+                                "totalConsumptionsProfileEegL2": await self._get_consumptions_profile(
+                                    contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
+                                    energy_community=contract["energyCommunityData"]["timeslices"][-1],
+                                    meter_point_administration_number=point_of_delivery[
+                                        "meterPointAdministrationNumber"
+                                    ],
+                                    date_from=None,
+                                    date_to=dt_util.now() - timedelta(days=16),
+                                ),
+                                "totalConsumptionsProfileEegL3": await self._get_consumptions_profile(
+                                    contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
+                                    energy_community=contract["energyCommunityData"]["timeslices"][-1],
+                                    meter_point_administration_number=point_of_delivery[
+                                        "meterPointAdministrationNumber"
+                                    ],
+                                    date_from=None,
+                                    date_to=dt_util.now(),
+                                ),
+                                "monthlyConsumptionsProfileEegL2": await self._get_consumptions_profile(
+                                    contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
+                                    energy_community=contract["energyCommunityData"]["timeslices"][-1],
+                                    meter_point_administration_number=point_of_delivery[
+                                        "meterPointAdministrationNumber"
+                                    ],
+                                    date_from=first_day,
+                                    date_to=last_day,
                                 ),
                             },
-                            "totalConsumptionsProfileEegL2": await self._get_consumptions_profile(
-                                contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
-                                energy_community=contract["energyCommunityData"]["timeslices"][-1],
-                                meter_point_administration_number=point_of_delivery["meterPointAdministrationNumber"],
-                                date_from=None,
-                                date_to=dt_util.now() - timedelta(days=16),
-                            ),
-                            "totalConsumptionsProfileEegL3": await self._get_consumptions_profile(
-                                contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
-                                energy_community=contract["energyCommunityData"]["timeslices"][-1],
-                                meter_point_administration_number=point_of_delivery["meterPointAdministrationNumber"],
-                                date_from=None,
-                                date_to=dt_util.now(),
-                            ),
-                            "monthlyConsumptionsProfileEegL2": await self._get_consumptions_profile(
-                                contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
-                                energy_community=contract["energyCommunityData"]["timeslices"][-1],
-                                meter_point_administration_number=point_of_delivery["meterPointAdministrationNumber"],
-                                date_from=first_day,
-                                date_to=last_day,
-                            ),
-                        },
+                        )
                     )
-                )
 
         return data
 
@@ -186,9 +190,6 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
     def _camel_to_snake(name: str) -> str:
         s1 = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", name)
         return re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
-
-    def _convert_dict_keys(self, d: dict[str, Any]) -> dict[str, Any]:
-        return {self._camel_to_snake(k): v for k, v in d.items()}
 
     def _convert_recursive(self, obj: dict[str, Any] | list[Any] | str) -> dict[str, Any] | list[Any] | str:
         if isinstance(obj, dict):
