@@ -48,7 +48,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Einspeisung EEG L2 (letztes Monat)',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Einspeisung EEG L2 (aktuelles Profil, letztes Monat)',
       'from': '2026-03-01T00:00:00',
       'granularity': 'DAY',
       'icon': 'mdi:transmission-tower-import',
@@ -68,7 +68,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Einspeisung Energielieferant EEG L2 (letztes Monat)',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Einspeisung Energielieferant EEG L2 (aktuelles Profil, letztes Monat)',
       'from': '2026-03-01T00:00:00',
       'granularity': 'DAY',
       'icon': 'mdi:transmission-tower-import',
@@ -171,7 +171,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Gesamte Einspeisung EEG L2 (vor 16 Tagen)',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Gesamte Einspeisung EEG L2 (aktuelles Profil, vor 16 Tagen)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-import',
@@ -191,7 +191,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Gesamte Einspeisung EEG L2/L3',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Gesamte Einspeisung EEG L2/L3 (aktuelles Profil)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-import',
@@ -211,7 +211,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Gesamte Einspeisung Energielieferant L2 (vor 16 Tagen)',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Gesamte Einspeisung Energielieferant L2 (aktuelles Profil, vor 16 Tagen)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-import',
@@ -348,7 +348,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Netzbezug EEG L2 (letztes Monat)',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Netzbezug EEG L2 (aktuelles Profil, letztes Monat)',
       'from': '2026-03-01T00:00:00',
       'granularity': 'DAY',
       'icon': 'mdi:transmission-tower-export',
@@ -370,7 +370,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Netzbezug Energielieferant L2 (letztes Monat)',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Netzbezug Energielieferant L2 (aktuelles Profil, letztes Monat)',
       'from': '2026-03-01T00:00:00',
       'granularity': 'DAY',
       'icon': 'mdi:transmission-tower-export',
@@ -471,7 +471,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Gesamter Netzbezug EEG L2 (vor 16 Tagen)',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Gesamter Netzbezug EEG L2 (aktuelles Profil, vor 16 Tagen)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-export',
@@ -493,7 +493,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Gesamter Netzbezug EEG L2/L3',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Gesamter Netzbezug EEG L2/L3 (aktuelles Profil)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-export',
@@ -515,7 +515,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Gesamter Netzbezug Energielieferant L2 (vor 16 Tagen)',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Gesamter Netzbezug Energielieferant L2 (aktuelles Profil, vor 16 Tagen)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-export',
@@ -535,7 +535,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Gesamter Netzbezug Energielieferant L2/L3',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Gesamter Netzbezug Energielieferant L2/L3 (aktuelles Profil)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-export',
@@ -642,7 +642,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Electricity export EEG L2 (last month)',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Electricity export EEG L2 (current profile, last month)',
       'from': '2026-03-01T00:00:00',
       'granularity': 'DAY',
       'icon': 'mdi:transmission-tower-import',
@@ -662,7 +662,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Electricity export supplier L2 (last month)',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Electricity export supplier L2 (current profile, last month)',
       'from': '2026-03-01T00:00:00',
       'granularity': 'DAY',
       'icon': 'mdi:transmission-tower-import',
@@ -765,7 +765,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Total electricity export EGG L2 (16 days ago)',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Total electricity export EGG L2 (current profile, 16 days ago)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-import',
@@ -785,7 +785,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Total electricity export EEG L2/L3',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Total electricity export EEG L2/L3 (current profile)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-import',
@@ -805,7 +805,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Total electricity export supplier L2 (16 days ago)',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Total electricity export supplier L2 (current profile, 16 days ago)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-import',
@@ -827,7 +827,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Total electricity export supplier L2/L3',
+      'friendly_name': 'Photovoltaik - AT0000000000000000000000011111111 Total electricity export supplier L2/L3 (current profile)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-import',
@@ -942,7 +942,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Electricity import EEG L2 (last month)',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Electricity import EEG L2 (current profile, last month)',
       'from': '2026-03-01T00:00:00',
       'granularity': 'DAY',
       'icon': 'mdi:transmission-tower-export',
@@ -964,7 +964,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Electricity import supplier L2 (last month)',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Electricity import supplier L2 (current profile, last month)',
       'from': '2026-03-01T00:00:00',
       'granularity': 'DAY',
       'icon': 'mdi:transmission-tower-export',
@@ -1065,7 +1065,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Total electricity import EEG L2 (16 days ago)',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Total electricity import EEG L2 (current profile, 16 days ago)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-export',
@@ -1087,7 +1087,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Total electricity import EEG L2/L3',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Total electricity import EEG L2/L3 (current profile)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-export',
@@ -1109,7 +1109,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Total electricity import supplier L2 (16 days ago)',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Total electricity import supplier L2 (current profile, 16 days ago)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-export',
@@ -1129,7 +1129,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Total electricity import supplier EEG L2/L3',
+      'friendly_name': 'Haushalt - AT0000000000000000000000011111112 Total electricity import supplier L2/L3 (current profile)',
       'from': '2026-01-26T00:00:00',
       'granularity': 'MONTH',
       'icon': 'mdi:transmission-tower-export',
