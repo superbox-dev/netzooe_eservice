@@ -142,7 +142,7 @@ jobs:
           cd ${{ github.workspace }}/custom_components/netzooe_eservice
           zip -r ${{ github.workspace }}/netzooe_eservice.zip ./
       - name: Release on GitHub
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           prerelease: ${{ steps.check_prerelease.outputs.prerelease }}
           files: ${{ github.workspace }}/netzooe_eservice.zip
