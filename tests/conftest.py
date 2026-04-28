@@ -1,15 +1,15 @@
+from __future__ import annotations
+
 from typing import Any
+from typing import TYPE_CHECKING
 
 import pytest
-from _pytest.fixtures import SubRequest
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_USERNAME
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
-from syrupy.assertion import SnapshotAssertion
-from yarl import URL
 
 from custom_components.netzooe_eservice.const import DOMAIN
 from tests.api_data import CONTRACT_ACCOUNT_DATA_1
@@ -21,6 +21,11 @@ from tests.api_data import PROFILE_DATA_3
 from tests.api_data import PROFILE_DATA_4
 from tests.api_data import PROFILE_DATA_5
 from tests.api_data import PROFILE_DATA_6
+
+if TYPE_CHECKING:
+    from _pytest.fixtures import SubRequest
+    from syrupy.assertion import SnapshotAssertion
+    from yarl import URL
 
 
 @pytest.fixture
