@@ -59,8 +59,73 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Read all values from API to update coordinator data."""
+        data: dict[str, Any] = {}
+
         try:
             dashboard: dict[str, Any] = await self.api.dashboard()
+
+            for dashboard_contract_accounts in dashboard["contractAccounts"]:
+                contract_accounts: dict[str, Any] = await self.api.contract_accounts(
+                    business_partner_number=dashboard_contract_accounts["businessPartnerNumber"],
+                    contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
+                )
+
+                for contract in contract_accounts["contracts"]:
+                    if contract["branch"] == ConsumptionsProfilesBranch.ELECTRICITY.value and contract[
+                        "synthProfile"
+                    ] in [
+                        SynthProfile.HOUSEHOLD.value,
+                        SynthProfile.PHOTOVOLTAICS.value,
+                    ]:
+                        point_of_delivery: dict[str, Any] = contract["pointOfDelivery"]
+                        first_day, last_day = self._get_last_l2_month()
+
+                        data[self._camel_to_snake(point_of_delivery["meterPointAdministrationNumber"])] = (
+                            self._convert_recursive(
+                                {
+                                    "scaleType": contract["scaleType"],
+                                    "monthlyTrend": point_of_delivery["monthlyTrend"],
+                                    "yearlyTrend": point_of_delivery["yearlyTrend"],
+                                    "supplier": contract["supplier"],
+                                    "synthProfile": contract["synthProfile"],
+                                    "energyCommunity": contract["energyCommunityData"]["timeslices"],
+                                    "meterReading": {
+                                        "meterNumber": point_of_delivery["meter"]["meterNumber"],
+                                        "values": self._get_meter_readings_data(
+                                            point_of_delivery["lastReadings"]["values"],
+                                            point_of_delivery["meter"]["meterNumber"],
+                                        ),
+                                    },
+                                    "totalConsumptionsProfileEegL2": await self._get_consumptions_profile(
+                                        contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
+                                        energy_community=contract["energyCommunityData"]["timeslices"][-1],
+                                        meter_point_administration_number=point_of_delivery[
+                                            "meterPointAdministrationNumber"
+                                        ],
+                                        date_from=None,
+                                        date_to=dt_util.now() - timedelta(days=16),
+                                    ),
+                                    "totalConsumptionsProfileEegL3": await self._get_consumptions_profile(
+                                        contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
+                                        energy_community=contract["energyCommunityData"]["timeslices"][-1],
+                                        meter_point_administration_number=point_of_delivery[
+                                            "meterPointAdministrationNumber"
+                                        ],
+                                        date_from=None,
+                                        date_to=dt_util.now(),
+                                    ),
+                                    "monthlyConsumptionsProfileEegL2": await self._get_consumptions_profile(
+                                        contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
+                                        energy_community=contract["energyCommunityData"]["timeslices"][-1],
+                                        meter_point_administration_number=point_of_delivery[
+                                            "meterPointAdministrationNumber"
+                                        ],
+                                        date_from=first_day,
+                                        date_to=last_day,
+                                    ),
+                                },
+                            )
+                        )
         except APIError as error:
             raise UpdateFailed(
                 translation_domain=DOMAIN,
@@ -69,69 +134,6 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     "error": str(error),
                 },
             ) from error
-
-        data: dict[str, Any] = {}
-
-        for dashboard_contract_accounts in dashboard["contractAccounts"]:
-            contract_accounts: dict[str, Any] = await self.api.contract_accounts(
-                business_partner_number=dashboard_contract_accounts["businessPartnerNumber"],
-                contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
-            )
-
-            for contract in contract_accounts["contracts"]:
-                if contract["branch"] == ConsumptionsProfilesBranch.ELECTRICITY.value and contract["synthProfile"] in [
-                    SynthProfile.HOUSEHOLD.value,
-                    SynthProfile.PHOTOVOLTAICS.value,
-                ]:
-                    point_of_delivery: dict[str, Any] = contract["pointOfDelivery"]
-                    first_day, last_day = self._get_last_l2_month()
-
-                    data[self._camel_to_snake(point_of_delivery["meterPointAdministrationNumber"])] = (
-                        self._convert_recursive(
-                            {
-                                "scaleType": contract["scaleType"],
-                                "monthlyTrend": point_of_delivery["monthlyTrend"],
-                                "yearlyTrend": point_of_delivery["yearlyTrend"],
-                                "supplier": contract["supplier"],
-                                "synthProfile": contract["synthProfile"],
-                                "energyCommunity": contract["energyCommunityData"]["timeslices"],
-                                "meterReading": {
-                                    "meterNumber": point_of_delivery["meter"]["meterNumber"],
-                                    "values": self._get_meter_readings_data(
-                                        point_of_delivery["lastReadings"]["values"],
-                                        point_of_delivery["meter"]["meterNumber"],
-                                    ),
-                                },
-                                "totalConsumptionsProfileEegL2": await self._get_consumptions_profile(
-                                    contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
-                                    energy_community=contract["energyCommunityData"]["timeslices"][-1],
-                                    meter_point_administration_number=point_of_delivery[
-                                        "meterPointAdministrationNumber"
-                                    ],
-                                    date_from=None,
-                                    date_to=dt_util.now() - timedelta(days=16),
-                                ),
-                                "totalConsumptionsProfileEegL3": await self._get_consumptions_profile(
-                                    contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
-                                    energy_community=contract["energyCommunityData"]["timeslices"][-1],
-                                    meter_point_administration_number=point_of_delivery[
-                                        "meterPointAdministrationNumber"
-                                    ],
-                                    date_from=None,
-                                    date_to=dt_util.now(),
-                                ),
-                                "monthlyConsumptionsProfileEegL2": await self._get_consumptions_profile(
-                                    contract_account_number=dashboard_contract_accounts["contractAccountNumber"],
-                                    energy_community=contract["energyCommunityData"]["timeslices"][-1],
-                                    meter_point_administration_number=point_of_delivery[
-                                        "meterPointAdministrationNumber"
-                                    ],
-                                    date_from=first_day,
-                                    date_to=last_day,
-                                ),
-                            },
-                        )
-                    )
 
         return data
 
