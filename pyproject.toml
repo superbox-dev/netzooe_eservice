@@ -71,7 +71,7 @@ lint = [
 test = [
     "coverage>=7.10.0",
     "genbadge[coverage]>=1.1.2",
-    "pytest>=9.0.0",
+    "pytest>=9.0.3",
     "pytest-homeassistant-custom-component>=0.13.325",
 ]
 
