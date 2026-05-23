@@ -80,19 +80,24 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         try:
             dashboard: dict[str, Any] = await self.api.dashboard()
 
-            for dashboard_contract_account in dashboard["contractAccounts"]:
-                contract_accounts: dict[str, Any] = await self.api.contract_accounts(
-                    business_partner_number=dashboard_contract_account["businessPartnerNumber"],
-                    contract_account_number=dashboard_contract_account["contractAccountNumber"],
-                )
+            contract_accounts_results: list[dict[str, Any]] = await asyncio.gather(
+                *[
+                    self.api.contract_accounts(
+                        business_partner_number=account["businessPartnerNumber"],
+                        contract_account_number=account["contractAccountNumber"],
+                    )
+                    for account in dashboard["contractAccounts"]
+                ],
+            )
 
+            for contract_accounts in contract_accounts_results:
                 for contract in contract_accounts["contracts"]:
                     if contract["branch"] == ConsumptionsProfilesBranch.ELECTRICITY.value and contract[
                         "synthProfile"
-                    ] in [
+                    ] in {
                         SynthProfile.HOUSEHOLD.value,
                         SynthProfile.PHOTOVOLTAICS.value,
-                    ]:
+                    }:
                         self._append_mpan_data(data, contract=contract)
 
                         await self._append_energy_community_data(
@@ -274,13 +279,15 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
     @staticmethod
     def _get_meter_readings_data(last_readings_values: list[Mapping[str, Any]], meter_number: str) -> Mapping[str, Any]:
-        return next((item for item in last_readings_values if item["meternumber"] == meter_number), {})
+        readings_map: Mapping[str, Any] = {item["meternumber"]: item for item in last_readings_values}
+        data: Mapping[str, Any] = readings_map.get(meter_number, {})
+        return data
 
     def _camel_to_snake(self, name: str) -> str:
         s1 = self.FIRST_CAP_RE.sub(r"\1_\2", name)
         return self.ALL_CAP_RE.sub(r"\1_\2", s1).lower()
 
-    def _convert_recursive(self, obj: dict[str, Any] | list[Any] | str) -> dict[str, Any] | list[Any] | str:
+    def _convert_recursive(self, obj: dict[str, Any] | list[Any] | str) -> Any:
         if isinstance(obj, dict):
             return {self._camel_to_snake(k): self._convert_recursive(v) for k, v in obj.items()}
         if isinstance(obj, list):
