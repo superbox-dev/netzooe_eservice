@@ -27,23 +27,20 @@
     },
     "entity": {
         "sensor": {
-            "energy_community": {
-                "name": "Energygemeinschaft"
-            },
             "meter_reading": {
                 "name": "Zählerstand"
             },
             "monthly_export_eeg_l2": {
-                "name": "Einspeisung EEG L2 (aktuelles Profil, letztes Monat)"
+                "name": "Einspeisung EEG L2 (letztes Monat)"
             },
             "monthly_export_supplier_l2": {
-                "name": "Einspeisung Energielieferant EEG L2 (aktuelles Profil, letztes Monat)"
+                "name": "Einspeisung Energielieferant EEG L2 (letztes Monat)"
             },
             "monthly_import_eeg_l2": {
-                "name": "Netzbezug EEG L2 (aktuelles Profil, letztes Monat)"
+                "name": "Netzbezug EEG L2 (letztes Monat)"
             },
             "monthly_import_supplier_l2": {
-                "name": "Netzbezug Energielieferant L2 (aktuelles Profil, letztes Monat)"
+                "name": "Netzbezug Energielieferant L2 (letztes Monat)"
             },
             "monthly_trend_export_new": {
                 "name": "Einspeisung neu (30-Tage-Trend)"
@@ -63,32 +60,29 @@
             "supplier": {
                 "name": "Energielieferant"
             },
-            "synth_profile": {
-                "name": "Lastprofil"
-            },
             "total_export_eeg_l2": {
-                "name": "Gesamte Einspeisung EEG L2 (aktuelles Profil, vor 16 Tagen)"
+                "name": "Gesamte Einspeisung EEG L2 (vor 16 Tagen)"
             },
             "total_export_eeg_l3": {
-                "name": "Gesamte Einspeisung EEG L2/L3 (aktuelles Profil)"
+                "name": "Gesamte Einspeisung EEG L2/L3"
             },
             "total_export_supplier_l2": {
-                "name": "Gesamte Einspeisung Energielieferant L2 (aktuelles Profil, vor 16 Tagen)"
+                "name": "Gesamte Einspeisung Energielieferant L2 (vor 16 Tagen)"
             },
             "total_export_supplier_l3": {
                 "name": "Gesamte Einspeisung Energielieferant L2/L3"
             },
             "total_import_eeg_l2": {
-                "name": "Gesamter Netzbezug EEG L2 (aktuelles Profil, vor 16 Tagen)"
+                "name": "Gesamter Netzbezug EEG L2 (vor 16 Tagen)"
             },
             "total_import_eeg_l3": {
-                "name": "Gesamter Netzbezug EEG L2/L3 (aktuelles Profil)"
+                "name": "Gesamter Netzbezug EEG L2/L3"
             },
             "total_import_supplier_l2": {
-                "name": "Gesamter Netzbezug Energielieferant L2 (aktuelles Profil, vor 16 Tagen)"
+                "name": "Gesamter Netzbezug Energielieferant L2 (vor 16 Tagen)"
             },
             "total_import_supplier_l3": {
-                "name": "Gesamter Netzbezug Energielieferant L2/L3 (aktuelles Profil)"
+                "name": "Gesamter Netzbezug Energielieferant L2/L3"
             },
             "yearly_trend_export_new": {
                 "name": "Einspeisung neu (Jahres-Trend)"

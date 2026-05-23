@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import logging
+import re
+from typing import Any
 from typing import TypeVar
 
 from homeassistant.helpers.device_registry import DeviceInfo
@@ -49,3 +51,8 @@ class NetzOOEeServiceEntity(CoordinatorEntity[NetzOOEeServiceDataUpdateCoordinat
             model=NAME,
             manufacturer=MANUFACTURER,
         )
+
+    @staticmethod
+    def _short_device_id(device_id: str) -> str:
+        match: re.Match[Any] | None = re.search(r"^[A-Z]{2}\d{4}0*([1-9][0-9]*)$", device_id)
+        return match.group(1) if match else device_id
