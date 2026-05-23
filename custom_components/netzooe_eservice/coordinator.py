@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import asyncio
 import calendar
 import logging
 import re
 from datetime import datetime
 from datetime import timedelta
 from typing import Any
+from typing import ClassVar
 from typing import TYPE_CHECKING
 
 from homeassistant.config_entries import ConfigEntry
@@ -26,6 +28,7 @@ from .const import DeviceType
 from .const import SCAN_INTERVAL
 
 if TYPE_CHECKING:
+    from collections.abc import Awaitable
     from collections.abc import Mapping
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
@@ -37,6 +40,18 @@ type NetzOOEeServiceConfigEntry = ConfigEntry[NetzOOEeServiceDataUpdateCoordinat
 
 class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Class to manage fetching Netz OÖ eService data API."""
+
+    FIRST_CAP_RE: re.Pattern[str] = re.compile(r"(.)([A-Z][a-z]+)")
+    ALL_CAP_RE: re.Pattern[str] = re.compile(r"([a-z0-9])([A-Z])")
+
+    PROFILE_DEVICE_TYPES: ClassVar[dict[str, str]] = {
+        SynthProfile.HOUSEHOLD.value: DeviceType.HOUSEHOLD.value,
+        SynthProfile.PHOTOVOLTAICS.value: DeviceType.PHOTOVOLTAICS.value,
+    }
+    EEG_DEVICE_TYPES: ClassVar[dict[str, str]] = {
+        SynthProfile.HOUSEHOLD.value: DeviceType.EEG_IMPORT.value,
+        SynthProfile.PHOTOVOLTAICS.value: DeviceType.EEG_EXPORT.value,
+    }
 
     _attr_has_entity_name: bool = True
 
@@ -72,15 +87,14 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 )
 
                 for contract in contract_accounts["contracts"]:
-                    _LOGGER.debug("contract: %s", contract)
-
                     if contract["branch"] == ConsumptionsProfilesBranch.ELECTRICITY.value and contract[
                         "synthProfile"
                     ] in [
                         SynthProfile.HOUSEHOLD.value,
                         SynthProfile.PHOTOVOLTAICS.value,
                     ]:
-                        await self._append_mpan_data(data, contract=contract)
+                        self._append_mpan_data(data, contract=contract)
+
                         await self._append_energy_community_data(
                             data,
                             contract=contract,
@@ -96,19 +110,11 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 },
             ) from error
 
-        _LOGGER.debug("data: %s", data)
-
         return data
 
-    async def _append_mpan_data(self, data: dict[str, Any], /, *, contract: dict[str, Any]) -> None:
+    def _append_mpan_data(self, data: dict[str, Any], /, *, contract: dict[str, Any]) -> None:
         point_of_delivery: dict[str, Any] = contract["pointOfDelivery"]
-
-        device_type: str = ""
-
-        if contract["synthProfile"] == SynthProfile.HOUSEHOLD.value:
-            device_type = DeviceType.HOUSEHOLD.value
-        elif contract["synthProfile"] == SynthProfile.PHOTOVOLTAICS.value:
-            device_type = DeviceType.PHOTOVOLTAICS.value
+        device_type: str = self.PROFILE_DEVICE_TYPES[contract["synthProfile"]]
 
         data[point_of_delivery["meterPointAdministrationNumber"]] = self._convert_recursive(
             {
@@ -138,33 +144,13 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         contract_accounts: dict[str, Any],
     ) -> None:
         mpan: str = contract["pointOfDelivery"]["meterPointAdministrationNumber"]
-        cutoff: datetime = dt_util.now() - timedelta(days=16)
-
-        if contract["synthProfile"] == SynthProfile.HOUSEHOLD.value:
-            device_type = DeviceType.EEG_IMPORT.value
-        elif contract["synthProfile"] == SynthProfile.PHOTOVOLTAICS.value:
-            device_type = DeviceType.EEG_EXPORT.value
-        else:
-            return
-
         grouped_energy_communities: dict[str, dict[str, Any]] = {}
 
         for energy_community in contract.get("energyCommunityData", {}).get("timeslices", []):
             energy_community_key: str = f"{mpan}_{energy_community['energyCommunityId']}"
 
-            profile_available_from: datetime = dt_util.as_local(
-                datetime.strptime(
-                    energy_community["profileDataAvailableFrom"],
-                    "%Y-%m-%d",
-                ).replace(tzinfo=DEFAULT_TIME_ZONE),
-            )
-
-            profile_available_to: datetime = dt_util.as_local(
-                datetime.strptime(
-                    energy_community["profileDataAvailableTo"],
-                    "%Y-%m-%d",
-                ).replace(tzinfo=DEFAULT_TIME_ZONE),
-            )
+            profile_available_from: datetime = self._parse_local_date(energy_community["profileDataAvailableFrom"])
+            profile_available_to: datetime = self._parse_local_date(energy_community["profileDataAvailableTo"])
 
             if energy_community_key in grouped_energy_communities:
                 grouped: dict[str, Any] = grouped_energy_communities[energy_community_key]
@@ -177,50 +163,84 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     "profile_available_to": profile_available_to,
                 }
 
-        for energy_community_key, grouped in grouped_energy_communities.items():
-            total_eeg_l2: list[dict[str, Any]] = []
-
-            if grouped["profile_available_from"] <= cutoff:
-                total_eeg_l2 = await self._get_consumptions_profile(
-                    contract_account_number=contract_accounts["contractAccountNumber"],
-                    energy_community=grouped["energy_community"],
-                    meter_point_administration_number=mpan,
-                    date_from=grouped["profile_available_from"],
-                    date_to=min(grouped["profile_available_to"], cutoff),
+        results: list[tuple[str, dict[str, Any] | list[Any] | str]] = await asyncio.gather(
+            *[
+                self._process_energy_community(
+                    contract=contract,
+                    contract_accounts=contract_accounts,
+                    mpan=mpan,
+                    energy_community_key=energy_community_key,
+                    grouped=grouped,
                 )
+                for energy_community_key, grouped in grouped_energy_communities.items()
+            ],
+        )
 
-            first_day, last_day = self._get_last_l2_month()
-            monthly_eeg_l2: list[dict[str, Any]] = []
+        data.update(dict(results))
 
-            if grouped["profile_available_from"] <= last_day and grouped["profile_available_to"] >= first_day:
-                monthly_eeg_l2 = await self._get_consumptions_profile(
-                    contract_account_number=contract_accounts["contractAccountNumber"],
-                    energy_community=grouped["energy_community"],
-                    meter_point_administration_number=mpan,
-                    date_from=max(first_day, grouped["profile_available_from"]),
-                    date_to=last_day,
-                )
+    async def _process_energy_community(
+        self,
+        *,
+        contract: dict[str, Any],
+        contract_accounts: dict[str, Any],
+        mpan: str,
+        energy_community_key: str,
+        grouped: dict[str, Any],
+    ) -> tuple[str, dict[str, Any] | list[Any] | str]:
+        cutoff: datetime = dt_util.now() - timedelta(days=16)
+        first_day, last_day = self._get_last_l2_month()
+        device_type: str = self.EEG_DEVICE_TYPES[contract["synthProfile"]]
 
-            total_eeg_l3 = await self._get_consumptions_profile(
+        total_eeg_l2_task: Awaitable[list[dict[str, Any]]] = (
+            self._get_consumptions_profile(
                 contract_account_number=contract_accounts["contractAccountNumber"],
                 energy_community=grouped["energy_community"],
                 meter_point_administration_number=mpan,
                 date_from=grouped["profile_available_from"],
-                date_to=grouped["profile_available_to"],
+                date_to=min(grouped["profile_available_to"], cutoff),
             )
+            if grouped["profile_available_from"] <= cutoff
+            else asyncio.sleep(0, result=[])
+        )
 
-            data[energy_community_key] = self._convert_recursive(
-                {
-                    "profile": contract["synthProfile"],
-                    "mpan": mpan,
-                    "deviceId": grouped["energy_community"]["energyCommunityId"],
-                    "deviceName": grouped["energy_community"]["energyCommunityName"],
-                    "deviceType": device_type,
-                    "totalEegL2": [total_eeg_l2] if total_eeg_l2 else [],
-                    "monthlyEegL2": [monthly_eeg_l2] if monthly_eeg_l2 else [],
-                    "totalEegL3": [total_eeg_l3] if total_eeg_l3 else [],
-                },
+        monthly_eeg_l2_task: Awaitable[list[dict[str, Any]]] = (
+            self._get_consumptions_profile(
+                contract_account_number=contract_accounts["contractAccountNumber"],
+                energy_community=grouped["energy_community"],
+                meter_point_administration_number=mpan,
+                date_from=max(first_day, grouped["profile_available_from"]),
+                date_to=last_day,
             )
+            if grouped["profile_available_from"] <= last_day and grouped["profile_available_to"] >= first_day
+            else asyncio.sleep(0, result=[])
+        )
+
+        total_eeg_l3_task: Awaitable[list[dict[str, Any]]] = self._get_consumptions_profile(
+            contract_account_number=contract_accounts["contractAccountNumber"],
+            energy_community=grouped["energy_community"],
+            meter_point_administration_number=mpan,
+            date_from=grouped["profile_available_from"],
+            date_to=grouped["profile_available_to"],
+        )
+
+        total_eeg_l2, monthly_eeg_l2, total_eeg_l3 = await asyncio.gather(
+            total_eeg_l2_task,
+            monthly_eeg_l2_task,
+            total_eeg_l3_task,
+        )
+
+        return energy_community_key, self._convert_recursive(
+            {
+                "profile": contract["synthProfile"],
+                "mpan": mpan,
+                "deviceId": grouped["energy_community"]["energyCommunityId"],
+                "deviceName": grouped["energy_community"]["energyCommunityName"],
+                "deviceType": device_type,
+                "totalEegL2": total_eeg_l2,
+                "monthlyEegL2": monthly_eeg_l2,
+                "totalEegL3": total_eeg_l3,
+            },
+        )
 
     async def _get_consumptions_profile(
         self,
@@ -254,19 +274,11 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
     @staticmethod
     def _get_meter_readings_data(last_readings_values: list[Mapping[str, Any]], meter_number: str) -> Mapping[str, Any]:
-        meter_readings_data: Mapping[str, Any] = {}
+        return next((item for item in last_readings_values if item["meternumber"] == meter_number), {})
 
-        for last_readings_value in last_readings_values:
-            if last_readings_value["meternumber"] == meter_number:
-                meter_readings_data = last_readings_value
-                break
-
-        return meter_readings_data
-
-    @staticmethod
-    def _camel_to_snake(name: str) -> str:
-        s1 = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", name)
-        return re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
+    def _camel_to_snake(self, name: str) -> str:
+        s1 = self.FIRST_CAP_RE.sub(r"\1_\2", name)
+        return self.ALL_CAP_RE.sub(r"\1_\2", s1).lower()
 
     def _convert_recursive(self, obj: dict[str, Any] | list[Any] | str) -> dict[str, Any] | list[Any] | str:
         if isinstance(obj, dict):
@@ -290,3 +302,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         last_day: datetime = min(last_day_of_month, cutoff)
 
         return first_day, last_day
+
+    @staticmethod
+    def _parse_local_date(date_str: str) -> datetime:
+        return dt_util.as_local(datetime.fromisoformat(date_str).replace(tzinfo=DEFAULT_TIME_ZONE))

@@ -125,27 +125,22 @@ class NetzOOEeServiceAggregatedSensorEntity(NetzOOEeServiceSensorEntity):
 
 
 def _sum_by_type(
-    groups: list[list[dict[str, Any]]],
+    items: list[dict[str, Any]],
     target_type: str,
 ) -> float:
-    total: float = sum(item["sum"]["value"] for group in groups for item in group if item["type"] == target_type)
+    total: float = sum(item["sum"]["value"] for item in items if item["type"] == target_type)
     return total
 
 
 def _sum_difference_by_type(
-    groups: list[list[dict[str, Any]]],
+    items: list[dict[str, Any]],
     positive_type: str,
     negative_type: str,
 ) -> float:
-    total: float = 0.0
+    positive: float = sum(item["sum"]["value"] for item in items if item["type"] == positive_type)
+    negative: float = sum(item["sum"]["value"] for item in items if item["type"] == negative_type)
 
-    for group in groups:
-        positive: float = sum(item["sum"]["value"] for item in group if item["type"] == positive_type)
-        negative: float = sum(item["sum"]["value"] for item in group if item["type"] == negative_type)
-
-        total += positive - negative
-
-    return total
+    return positive - negative
 
 
 def _sum_values_for_mpan(
@@ -154,31 +149,24 @@ def _sum_values_for_mpan(
     key: str,
     positive_type: str,
     negative_type: str | None = None,
-    device_type: str | None = None,
 ) -> float:
     total: float = 0.0
 
     for current_device_identifier, data in coordinator.data.items():
-        if current_device_identifier == device_identifier:
-            continue
-
         if not current_device_identifier.startswith(f"{device_identifier}_"):
             continue
 
-        if device_type and data.get("device_type") != device_type:
-            continue
-
-        groups: list[list[dict[str, Any]]] = data.get(key, [])
+        items: list[dict[str, Any]] = data.get(key, [])
 
         if negative_type:
             total += _sum_difference_by_type(
-                groups,
+                items,
                 positive_type,
                 negative_type,
             )
         else:
             total += _sum_by_type(
-                groups,
+                items,
                 positive_type,
             )
 
@@ -186,7 +174,7 @@ def _sum_values_for_mpan(
 
 
 def _timeline_by_type(
-    groups: list[list[dict[str, Any]]],
+    items: list[dict[str, Any]],
     target_type: str,
 ) -> list[dict[str, str]]:
     return [
@@ -194,8 +182,7 @@ def _timeline_by_type(
             "from": item["from"],
             "to": item["to"],
         }
-        for group in groups
-        for item in group
+        for item in items
         if item["type"] == target_type
     ]
 
@@ -313,7 +300,6 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             device_identifier,
             "total_eeg_l2",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
-            DeviceType.EEG_IMPORT.value,
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -332,7 +318,6 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             "total_eeg_l2",
             "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
-            DeviceType.EEG_IMPORT.value,
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -350,7 +335,6 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             device_identifier,
             "total_eeg_l3",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
-            DeviceType.EEG_IMPORT.value,
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -369,7 +353,6 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             "total_eeg_l3",
             "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
-            DeviceType.EEG_IMPORT.value,
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -387,7 +370,6 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             device_identifier,
             "monthly_eeg_l2",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
-            DeviceType.EEG_IMPORT.value,
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -406,7 +388,6 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             "monthly_eeg_l2",
             "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
-            DeviceType.EEG_IMPORT.value,
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -496,7 +477,6 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             "total_eeg_l2",
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-            DeviceType.EEG_IMPORT.value,
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -514,7 +494,6 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             device_identifier,
             "total_eeg_l2",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-            DeviceType.EEG_IMPORT.value,
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -533,7 +512,6 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             "total_eeg_l3",
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-            DeviceType.EEG_IMPORT.value,
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -551,7 +529,6 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             device_identifier,
             "total_eeg_l3",
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-            DeviceType.EEG_IMPORT.value,
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -570,7 +547,6 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             "monthly_eeg_l2",
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-            DeviceType.EEG_IMPORT.value,
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -588,7 +564,6 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             device_identifier,
             "monthly_eeg_l2",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-            DeviceType.EEG_IMPORT.value,
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -610,8 +585,8 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
         extra_state_attributes_fn=lambda data: (
             {
-                "name": data["total_eeg_l2"][0][0]["energy_community_name"],
-                "id": data["total_eeg_l2"][0][0]["energy_community_id"],
+                "name": data["total_eeg_l2"][0]["energy_community_name"],
+                "id": data["total_eeg_l2"][0]["energy_community_id"],
                 "timeline": _timeline_by_type(
                     data["total_eeg_l2"],
                     "ENERGY_COMMUNITY_OWN_COVERAGE",
@@ -661,8 +636,8 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
         extra_state_attributes_fn=lambda data: (
             {
-                "name": data["total_eeg_l3"][0][0]["energy_community_name"],
-                "id": data["total_eeg_l3"][0][0]["energy_community_id"],
+                "name": data["total_eeg_l3"][0]["energy_community_name"],
+                "id": data["total_eeg_l3"][0]["energy_community_id"],
                 "timeline": _timeline_by_type(
                     data["total_eeg_l3"],
                     "ENERGY_COMMUNITY_OWN_COVERAGE",
@@ -712,8 +687,8 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
         extra_state_attributes_fn=lambda data: (
             {
-                "name": data["monthly_eeg_l2"][0][0]["energy_community_name"],
-                "id": data["monthly_eeg_l2"][0][0]["energy_community_id"],
+                "name": data["monthly_eeg_l2"][0]["energy_community_name"],
+                "id": data["monthly_eeg_l2"][0]["energy_community_id"],
                 "timeline": _timeline_by_type(
                     data["monthly_eeg_l2"],
                     "ENERGY_COMMUNITY_OWN_COVERAGE",
@@ -767,8 +742,8 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
         extra_state_attributes_fn=lambda data: (
             {
-                "name": data["total_eeg_l2"][0][0]["energy_community_name"],
-                "id": data["total_eeg_l2"][0][0]["energy_community_id"],
+                "name": data["total_eeg_l2"][0]["energy_community_name"],
+                "id": data["total_eeg_l2"][0]["energy_community_id"],
                 "timeline": _timeline_by_type(
                     data["monthly_eeg_l2"],
                     "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
@@ -818,8 +793,8 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
         extra_state_attributes_fn=lambda data: (
             {
-                "name": data["total_eeg_l3"][0][0]["energy_community_name"],
-                "id": data["total_eeg_l3"][0][0]["energy_community_id"],
+                "name": data["total_eeg_l3"][0]["energy_community_name"],
+                "id": data["total_eeg_l3"][0]["energy_community_id"],
                 "timeline": _timeline_by_type(
                     data["total_eeg_l3"],
                     "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
@@ -869,8 +844,8 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
         extra_state_attributes_fn=lambda data: (
             {
-                "name": data["monthly_eeg_l2"][0][0]["energy_community_name"],
-                "id": data["monthly_eeg_l2"][0][0]["energy_community_id"],
+                "name": data["monthly_eeg_l2"][0]["energy_community_name"],
+                "id": data["monthly_eeg_l2"][0]["energy_community_id"],
                 "timeline": _timeline_by_type(
                     data["monthly_eeg_l2"],
                     "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
