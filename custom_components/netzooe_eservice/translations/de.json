@@ -31,28 +31,28 @@
                 "name": "Zählerstand"
             },
             "monthly_export_eeg_l2": {
-                "name": "Einspeisung EEG L2 (letztes Monat)"
+                "name": "EEG-Einspeisung L2 (letztes Monat)"
             },
             "monthly_export_supplier_l2": {
-                "name": "Einspeisung Energielieferant EEG L2 (letztes Monat)"
+                "name": "Einspeisung an Energielieferant L2 (letztes Monat)"
             },
             "monthly_import_eeg_l2": {
-                "name": "Netzbezug EEG L2 (letztes Monat)"
+                "name": "EEG-Netzbezug L2 (letztes Monat)"
             },
             "monthly_import_supplier_l2": {
-                "name": "Netzbezug Energielieferant L2 (letztes Monat)"
+                "name": "Netzbezug vom Energielieferanten L2 (letztes Monat)"
             },
             "monthly_trend_export_new": {
-                "name": "Einspeisung neu (30-Tage-Trend)"
+                "name": "Einspeisung (aktueller 30-Tage-Trend)"
             },
             "monthly_trend_export_old": {
-                "name": "Einspeisung alt (30-Tage-Trend)"
+                "name": "Einspeisung (vorheriger 30-Tage-Trend)"
             },
             "monthly_trend_import_new": {
-                "name": "Netzbezug neu (30-Tage-Trend)"
+                "name": "Netzbezug (aktueller 30-Tage-Trend)"
             },
             "monthly_trend_import_old": {
-                "name": "Netzbezug alt (30-Tage-Trend)"
+                "name": "Netzbezug (vorheriger 30-Tage-Trend)"
             },
             "scale_type": {
                 "name": "Typ"
@@ -61,40 +61,40 @@
                 "name": "Energielieferant"
             },
             "total_export_eeg_l2": {
-                "name": "Gesamte Einspeisung EEG L2 (vor 16 Tagen)"
+                "name": "Gesamte EEG-Einspeisung L2 (vor 16 Tagen)"
             },
             "total_export_eeg_l3": {
-                "name": "Gesamte Einspeisung EEG L2/L3"
+                "name": "Gesamte EEG-Einspeisung L2/L3"
             },
             "total_export_supplier_l2": {
-                "name": "Gesamte Einspeisung Energielieferant L2 (vor 16 Tagen)"
+                "name": "Gesamte Einspeisung an Energielieferant L2 (vor 16 Tagen)"
             },
             "total_export_supplier_l3": {
-                "name": "Gesamte Einspeisung Energielieferant L2/L3"
+                "name": "Gesamte Einspeisung an Energielieferant L2/L3"
             },
             "total_import_eeg_l2": {
-                "name": "Gesamter Netzbezug EEG L2 (vor 16 Tagen)"
+                "name": "Gesamter EEG-Netzbezug L2 (vor 16 Tagen)"
             },
             "total_import_eeg_l3": {
-                "name": "Gesamter Netzbezug EEG L2/L3"
+                "name": "Gesamter EEG-Netzbezug L2/L3"
             },
             "total_import_supplier_l2": {
-                "name": "Gesamter Netzbezug Energielieferant L2 (vor 16 Tagen)"
+                "name": "Gesamter Netzbezug vom Energielieferanten L2 (vor 16 Tagen)"
             },
             "total_import_supplier_l3": {
-                "name": "Gesamter Netzbezug Energielieferant L2/L3"
+                "name": "Gesamter Netzbezug vom Energielieferanten L2/L3"
             },
             "yearly_trend_export_new": {
-                "name": "Einspeisung neu (Jahres-Trend)"
+                "name": "Einspeisung (aktueller Jahres-Trend)"
             },
             "yearly_trend_export_old": {
-                "name": "Einspeisung alt (Jahres-Trend)"
+                "name": "Einspeisung (vorheriger Jahres-Trend)"
             },
             "yearly_trend_import_new": {
-                "name": "Netzbezug neu (Jahres-Trend)"
+                "name": "Netzbezug (aktueller Jahres-Trend)"
             },
             "yearly_trend_import_old": {
-                "name": "Netzbezug alt (Jahres-Trend)"
+                "name": "Netzbezug (vorheriger Jahres-Trend)"
             }
         }
     },

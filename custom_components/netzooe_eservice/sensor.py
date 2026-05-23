@@ -43,7 +43,7 @@ class NetzOOEeServiceSensorEntityDescription[T](
     """Class describing NetzOOEeService sensor entities."""
 
     entity_class: type[NetzOOEeServiceSensorEntity]
-    value_fn: Callable[[Mapping[str, Any]], StateType]
+    value_fn: Callable[..., StateType]
     extra_state_attributes_fn: Callable[[Mapping[str, Any]], Mapping[str, Any] | None]
     alt_key: str | None = None
 
@@ -115,6 +115,15 @@ class NetzOOEeServiceEEGSensorEntity(NetzOOEeServiceSensorEntity):
         )
 
 
+class NetzOOEeServiceAggregatedSensorEntity(NetzOOEeServiceSensorEntity):
+    """Aggregated sensor entity."""
+
+    @property
+    def native_value(self) -> StateType:
+        """Return the state of the sensor."""
+        return self.entity_description.value_fn(self.coordinator, self.device_identifier)
+
+
 def _sum_by_type(
     groups: list[list[dict[str, Any]]],
     target_type: str,
@@ -135,6 +144,43 @@ def _sum_difference_by_type(
         negative: float = sum(item["sum"]["value"] for item in group if item["type"] == negative_type)
 
         total += positive - negative
+
+    return total
+
+
+def _sum_values_for_mpan(
+    coordinator: NetzOOEeServiceDataUpdateCoordinator,
+    device_identifier: str,
+    key: str,
+    positive_type: str,
+    negative_type: str | None = None,
+    device_type: str | None = None,
+) -> float:
+    total: float = 0.0
+
+    for current_device_identifier, data in coordinator.data.items():
+        if current_device_identifier == device_identifier:
+            continue
+
+        if not current_device_identifier.startswith(f"{device_identifier}_"):
+            continue
+
+        if device_type and data.get("device_type") != device_type:
+            continue
+
+        groups: list[list[dict[str, Any]]] = data.get(key, [])
+
+        if negative_type:
+            total += _sum_difference_by_type(
+                groups,
+                positive_type,
+                negative_type,
+            )
+        else:
+            total += _sum_by_type(
+                groups,
+                positive_type,
+            )
 
     return total
 
@@ -253,6 +299,117 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             "to": data["yearly_trend"]["timerange_old"]["to"],
         },
     ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_import_eeg_l2",
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_import_eeg_l2",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "total_eeg_l2",
+            "ENERGY_COMMUNITY_OWN_COVERAGE",
+            DeviceType.EEG_IMPORT.value,
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_import_supplier_l2",
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_import_supplier_l2",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "total_eeg_l2",
+            "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+            "ENERGY_COMMUNITY_OWN_COVERAGE",
+            DeviceType.EEG_IMPORT.value,
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_import_eeg_l3",
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_eeg_l3",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_import_eeg_l3",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "total_eeg_l3",
+            "ENERGY_COMMUNITY_OWN_COVERAGE",
+            DeviceType.EEG_IMPORT.value,
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_import_supplier_l3",
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_eeg_l3",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_import_supplier_l3",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "total_eeg_l3",
+            "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+            "ENERGY_COMMUNITY_OWN_COVERAGE",
+            DeviceType.EEG_IMPORT.value,
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="monthly_import_eeg_l2",
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="monthly_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="monthly_import_eeg_l2",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "monthly_eeg_l2",
+            "ENERGY_COMMUNITY_OWN_COVERAGE",
+            DeviceType.EEG_IMPORT.value,
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="monthly_import_supplier_l2",
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="monthly_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="monthly_import_supplier_l2",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "monthly_eeg_l2",
+            "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+            "ENERGY_COMMUNITY_OWN_COVERAGE",
+            DeviceType.EEG_IMPORT.value,
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
 ]
 
 SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
@@ -323,6 +480,117 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             "from": data["yearly_trend"]["timerange_old"]["from"],
             "to": data["yearly_trend"]["timerange_old"]["to"],
         },
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_export_eeg_l2",
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_export_eeg_l2",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "total_eeg_l2",
+            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+            DeviceType.EEG_IMPORT.value,
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_export_supplier_l2",
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_export_supplier_l2",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "total_eeg_l2",
+            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+            DeviceType.EEG_IMPORT.value,
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_export_eeg_l3",
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_eeg_l3",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_export_eeg_l3",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "total_eeg_l3",
+            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+            DeviceType.EEG_IMPORT.value,
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="total_export_supplier_l3",
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_eeg_l3",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_export_supplier_l3",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "total_eeg_l3",
+            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+            DeviceType.EEG_IMPORT.value,
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="monthly_export_eeg_l2",
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="monthly_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="monthly_export_eeg_l2",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "monthly_eeg_l2",
+            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+            DeviceType.EEG_IMPORT.value,
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        alt_key="monthly_export_supplier_l2",
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="monthly_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="monthly_export_supplier_l2",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "monthly_eeg_l2",
+            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+            DeviceType.EEG_IMPORT.value,
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
 ]
 
@@ -661,16 +929,13 @@ async def async_setup_entry(
             sensor_types = SENSOR_EEG_EXPORT_TYPES
 
         for description in sensor_types:
-            value: StateType = description.value_fn(data)
-
-            if value is not None:
-                sensors += [
-                    description.entity_class(
-                        coordinator,
-                        description=description,
-                        entry=entry,
-                        device_identifier=device_identifier,
-                    ),
-                ]
+            sensors += [
+                description.entity_class(
+                    coordinator,
+                    description=description,
+                    entry=entry,
+                    device_identifier=device_identifier,
+                ),
+            ]
 
     async_add_entities(sensors)

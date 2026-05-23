@@ -31,28 +31,28 @@
                 "name": "Meter readings"
             },
             "monthly_export_eeg_l2": {
-                "name": "Electricity export EEG L2 (last month)"
+                "name": "Last month export from EEG L2"
             },
             "monthly_export_supplier_l2": {
-                "name": "Electricity export supplier L2 (last month)"
+                "name": "Last month export from supplier L2"
             },
             "monthly_import_eeg_l2": {
-                "name": "Electricity import EEG L2 (last month)"
+                "name": "Last month import from EEG L2"
             },
             "monthly_import_supplier_l2": {
-                "name": "Electricity import supplier L2 (last month)"
+                "name": "Last month import from supplier L2"
             },
             "monthly_trend_export_new": {
-                "name": "Electricity export new (monthly trend)"
+                "name": "Monthly export trend (current period)"
             },
             "monthly_trend_export_old": {
-                "name": "Electricity export old (monthly trend)"
+                "name": "Monthly export trend (previous period)"
             },
             "monthly_trend_import_new": {
-                "name": "Electricity import new (monthly trend)"
+                "name": "Monthly import trend (current period)"
             },
             "monthly_trend_import_old": {
-                "name": "Electricity import old (monthly trend)"
+                "name": "Monthly import trend (previous period)"
             },
             "scale_type": {
                 "name": "Type"
@@ -61,46 +61,46 @@
                 "name": "Supplier"
             },
             "total_export_eeg_l2": {
-                "name": "Total electricity export EGG L2 (16 days ago)"
+                "name": "Total export from EEG L2 (16 days ago)"
             },
             "total_export_eeg_l3": {
-                "name": "Total electricity export EEG L2/L3"
+                "name": "Total export from EEG L2/L3"
             },
             "total_export_supplier_l2": {
-                "name": "Total electricity export supplier L2 (16 days ago)"
+                "name": "Total export from supplier L2 (16 days ago)"
             },
             "total_export_supplier_l3": {
-                "name": "Total electricity export supplier L2/L3"
+                "name": "Total export from supplier L2/L3"
             },
             "total_import_eeg_l2": {
-                "name": "Total electricity import EEG L2 (16 days ago)"
+                "name": "Total import from EEG L2 (16 days ago)"
             },
             "total_import_eeg_l3": {
-                "name": "Total electricity import EEG L2/L3"
+                "name": "Total import from EEG L2/L3"
             },
             "total_import_supplier_l2": {
-                "name": "Total electricity import supplier L2 (16 days ago)"
+                "name": "Total import from supplier L2 (16 days ago)"
             },
             "total_import_supplier_l3": {
-                "name": "Total electricity import supplier L2/L3"
+                "name": "Total import from supplier L2/L3"
             },
             "yearly_trend_export_new": {
-                "name": "Electricity export new (yearly trend)"
+                "name": "Yearly export trend (current period)"
             },
             "yearly_trend_export_old": {
-                "name": "Electricity export old (yearly trend)"
+                "name": "Yearly export trend (previous period)"
             },
             "yearly_trend_import_new": {
-                "name": "Electricity import new (yearly trend)"
+                "name": "Yearly import trend (current period)"
             },
             "yearly_trend_import_old": {
-                "name": "Electricity import old (yearly trend)"
+                "name": "Yearly import trend (previous period)"
             }
         }
     },
     "exceptions": {
         "communication_error": {
-            "message": "An error occurred while communicate with the API: {error}"
+            "message": "An error occurred while communicating with the API: {error}"
         }
     }
 }
