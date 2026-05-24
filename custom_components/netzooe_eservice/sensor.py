@@ -82,7 +82,7 @@ class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
     @property
     def device_name(self) -> str | None:
         """Return the name of the current device."""
-        return f"{self.data['device_name']} ({self.device_identifier})"
+        return f"{self.data['deviceName']} ({self.device_identifier})"
 
     @property
     def native_value(self) -> StateType:
@@ -101,7 +101,10 @@ class NetzOOEeServiceEEGSensorEntity(NetzOOEeServiceSensorEntity):
     @property
     def device_name(self) -> str | None:
         """Return the name of the current device."""
-        return f"{self.data['profile']}: {self.data['device_name']} ({self._short_device_id(self.data['mpan'])})"
+        return (
+            f"{self.data['synthProfile']}: {self.data['deviceName']} "
+            f"({self._short_device_id(self.data['meterPointAdministrationNumber'])})"
+        )
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -111,7 +114,7 @@ class NetzOOEeServiceEEGSensorEntity(NetzOOEeServiceSensorEntity):
             name=self.device_name,
             model=NAME,
             manufacturer=MANUFACTURER,
-            via_device=(DOMAIN, self.data["mpan"]),
+            via_device=(DOMAIN, self.data["meterPointAdministrationNumber"]),
         )
 
 
@@ -192,7 +195,7 @@ SENSOR_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         entity_class=NetzOOEeServiceSensorEntity,
         key="scale_type",
         translation_key="scale_type",
-        value_fn=lambda data: data["scale_type"],
+        value_fn=lambda data: data["scaleType"],
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
     NetzOOEeServiceSensorEntityDescription[str](
@@ -202,10 +205,10 @@ SENSOR_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL_INCREASING,
         translation_key="meter_reading",
-        value_fn=(lambda data: data["meter_reading"]["values"]["new_result"]["reading_value"]),
+        value_fn=(lambda data: data["meterReading"]["values"]["newResult"]["readingValue"]),
         extra_state_attributes_fn=lambda data: {
-            "timestamp": data["meter_reading"]["values"]["new_result"]["timestamp"],
-            "meter_number": data["meter_reading"]["meter_number"],
+            "timestamp": data["meterReading"]["values"]["newResult"]["timestamp"],
+            "meter_number": data["meterReading"]["meterNumber"],
         },
     ),
     NetzOOEeServiceSensorEntityDescription[str](
@@ -227,12 +230,12 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_trend_import_new",
         icon="mdi:transmission-tower-export",
-        value_fn=lambda data: data["monthly_trend"]["consumption_new"]["sum"],
+        value_fn=lambda data: data["monthlyTrend"]["consumptionNew"]["sum"],
         extra_state_attributes_fn=lambda data: {
-            "per_day": data["monthly_trend"]["consumption_new"]["per_day"],
-            "days": data["monthly_trend"]["consumption_new"]["days"],
-            "from": data["monthly_trend"]["timerange_new"]["from"],
-            "to": data["monthly_trend"]["timerange_new"]["to"],
+            "per_day": data["monthlyTrend"]["consumptionNew"]["perDay"],
+            "days": data["monthlyTrend"]["consumptionNew"]["days"],
+            "from": data["monthlyTrend"]["timerangeNew"]["from"],
+            "to": data["monthlyTrend"]["timerangeNew"]["to"],
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
@@ -244,12 +247,12 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_trend_import_old",
         icon="mdi:transmission-tower-export",
-        value_fn=lambda data: data["monthly_trend"]["consumption_old"]["sum"],
+        value_fn=lambda data: data["monthlyTrend"]["consumptionOld"]["sum"],
         extra_state_attributes_fn=lambda data: {
-            "per_day": data["monthly_trend"]["consumption_old"]["per_day"],
-            "days": data["monthly_trend"]["consumption_old"]["days"],
-            "from": data["monthly_trend"]["timerange_old"]["from"],
-            "to": data["monthly_trend"]["timerange_old"]["to"],
+            "per_day": data["monthlyTrend"]["consumptionOld"]["perDay"],
+            "days": data["monthlyTrend"]["consumptionOld"]["days"],
+            "from": data["monthlyTrend"]["timerangeOld"]["from"],
+            "to": data["monthlyTrend"]["timerangeOld"]["to"],
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
@@ -261,12 +264,12 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         state_class=SensorStateClass.TOTAL,
         translation_key="yearly_trend_import_new",
         icon="mdi:transmission-tower-export",
-        value_fn=lambda data: data["yearly_trend"]["consumption_new"]["sum"],
+        value_fn=lambda data: data["yearlyTrend"]["consumptionNew"]["sum"],
         extra_state_attributes_fn=lambda data: {
-            "per_day": data["yearly_trend"]["consumption_new"]["per_day"],
-            "days": data["yearly_trend"]["consumption_new"]["days"],
-            "from": data["yearly_trend"]["timerange_new"]["from"],
-            "to": data["yearly_trend"]["timerange_new"]["to"],
+            "per_day": data["yearlyTrend"]["consumptionNew"]["perDay"],
+            "days": data["yearlyTrend"]["consumptionNew"]["days"],
+            "from": data["yearlyTrend"]["timerangeNew"]["from"],
+            "to": data["yearlyTrend"]["timerangeNew"]["to"],
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
@@ -278,12 +281,12 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         state_class=SensorStateClass.TOTAL,
         translation_key="yearly_trend_import_old",
         icon="mdi:transmission-tower-export",
-        value_fn=lambda data: data["yearly_trend"]["consumption_old"]["sum"],
+        value_fn=lambda data: data["yearlyTrend"]["consumptionOld"]["sum"],
         extra_state_attributes_fn=lambda data: {
-            "per_day": data["yearly_trend"]["consumption_old"]["per_day"],
-            "days": data["yearly_trend"]["consumption_old"]["days"],
-            "from": data["yearly_trend"]["timerange_old"]["from"],
-            "to": data["yearly_trend"]["timerange_old"]["to"],
+            "per_day": data["yearlyTrend"]["consumptionOld"]["perDay"],
+            "days": data["yearlyTrend"]["consumptionOld"]["days"],
+            "from": data["yearlyTrend"]["timerangeOld"]["from"],
+            "to": data["yearlyTrend"]["timerangeOld"]["to"],
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
@@ -298,7 +301,7 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
             coordinator,
             device_identifier,
-            "total_eeg_l2",
+            "totalEegL2",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
@@ -315,7 +318,7 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
             coordinator,
             device_identifier,
-            "total_eeg_l2",
+            "totalEegL2",
             "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
         ),
@@ -333,7 +336,7 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
             coordinator,
             device_identifier,
-            "total_eeg_l3",
+            "totalEegL3",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
@@ -350,7 +353,7 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
             coordinator,
             device_identifier,
-            "total_eeg_l3",
+            "totalEegL3",
             "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
         ),
@@ -368,7 +371,7 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
             coordinator,
             device_identifier,
-            "monthly_eeg_l2",
+            "monthlyEegL2",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
@@ -385,7 +388,7 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
             coordinator,
             device_identifier,
-            "monthly_eeg_l2",
+            "monthlyEegL2",
             "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
         ),
@@ -403,12 +406,12 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_trend_export_new",
         icon="mdi:transmission-tower-import",
-        value_fn=lambda data: data["monthly_trend"]["consumption_new"]["sum"],
+        value_fn=lambda data: data["monthlyTrend"]["consumptionNew"]["sum"],
         extra_state_attributes_fn=lambda data: {
-            "per_day": data["monthly_trend"]["consumption_new"]["per_day"],
-            "days": data["monthly_trend"]["consumption_new"]["days"],
-            "from": data["monthly_trend"]["timerange_new"]["from"],
-            "to": data["monthly_trend"]["timerange_new"]["to"],
+            "per_day": data["monthlyTrend"]["consumptionNew"]["perDay"],
+            "days": data["monthlyTrend"]["consumptionNew"]["days"],
+            "from": data["monthlyTrend"]["timerangeNew"]["from"],
+            "to": data["monthlyTrend"]["timerangeNew"]["to"],
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
@@ -420,12 +423,12 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_trend_export_old",
         icon="mdi:transmission-tower-import",
-        value_fn=lambda data: data["monthly_trend"]["consumption_old"]["sum"],
+        value_fn=lambda data: data["monthlyTrend"]["consumptionOld"]["sum"],
         extra_state_attributes_fn=lambda data: {
-            "per_day": data["monthly_trend"]["consumption_old"]["per_day"],
-            "days": data["monthly_trend"]["consumption_old"]["days"],
-            "from": data["monthly_trend"]["timerange_old"]["from"],
-            "to": data["monthly_trend"]["timerange_old"]["to"],
+            "per_day": data["monthlyTrend"]["consumptionOld"]["perDay"],
+            "days": data["monthlyTrend"]["consumptionOld"]["days"],
+            "from": data["monthlyTrend"]["timerangeOld"]["from"],
+            "to": data["monthlyTrend"]["timerangeOld"]["to"],
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
@@ -437,12 +440,12 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         state_class=SensorStateClass.TOTAL,
         translation_key="yearly_trend_export_new",
         icon="mdi:transmission-tower-import",
-        value_fn=lambda data: data["yearly_trend"]["consumption_new"]["sum"],
+        value_fn=lambda data: data["yearlyTrend"]["consumptionNew"]["sum"],
         extra_state_attributes_fn=lambda data: {
-            "per_day": data["yearly_trend"]["consumption_new"]["per_day"],
-            "days": data["yearly_trend"]["consumption_new"]["days"],
-            "from": data["yearly_trend"]["timerange_new"]["from"],
-            "to": data["yearly_trend"]["timerange_new"]["to"],
+            "per_day": data["yearlyTrend"]["consumptionNew"]["perDay"],
+            "days": data["yearlyTrend"]["consumptionNew"]["days"],
+            "from": data["yearlyTrend"]["timerangeNew"]["from"],
+            "to": data["yearlyTrend"]["timerangeNew"]["to"],
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
@@ -454,12 +457,12 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         state_class=SensorStateClass.TOTAL,
         translation_key="yearly_trend_export_old",
         icon="mdi:transmission-tower-import",
-        value_fn=lambda data: data["yearly_trend"]["consumption_old"]["sum"],
+        value_fn=lambda data: data["yearlyTrend"]["consumptionOld"]["sum"],
         extra_state_attributes_fn=lambda data: {
-            "per_day": data["yearly_trend"]["consumption_old"]["per_day"],
-            "days": data["yearly_trend"]["consumption_old"]["days"],
-            "from": data["yearly_trend"]["timerange_old"]["from"],
-            "to": data["yearly_trend"]["timerange_old"]["to"],
+            "per_day": data["yearlyTrend"]["consumptionOld"]["perDay"],
+            "days": data["yearlyTrend"]["consumptionOld"]["days"],
+            "from": data["yearlyTrend"]["timerangeOld"]["from"],
+            "to": data["yearlyTrend"]["timerangeOld"]["to"],
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
@@ -474,7 +477,7 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
             coordinator,
             device_identifier,
-            "total_eeg_l2",
+            "totalEegL2",
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
         ),
@@ -492,7 +495,7 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
             coordinator,
             device_identifier,
-            "total_eeg_l2",
+            "totalEegL2",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
@@ -509,7 +512,7 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
             coordinator,
             device_identifier,
-            "total_eeg_l3",
+            "totalEegL3",
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
         ),
@@ -527,7 +530,7 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
             coordinator,
             device_identifier,
-            "total_eeg_l3",
+            "totalEegL3",
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
@@ -544,7 +547,7 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
             coordinator,
             device_identifier,
-            "monthly_eeg_l2",
+            "monthlyEegL2",
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
         ),
@@ -562,7 +565,7 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
             coordinator,
             device_identifier,
-            "monthly_eeg_l2",
+            "monthlyEegL2",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
@@ -580,19 +583,19 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         translation_key="total_import_eeg_l2",
         icon="mdi:transmission-tower-export",
         value_fn=lambda data: _sum_by_type(
-            data["total_eeg_l2"],
+            data["totalEegL2"],
             "ENERGY_COMMUNITY_OWN_COVERAGE",
         ),
         extra_state_attributes_fn=lambda data: (
             {
-                "name": data["total_eeg_l2"][0]["energy_community_name"],
-                "id": data["total_eeg_l2"][0]["energy_community_id"],
+                "name": data["totalEegL2"][0]["energyCommunityName"],
+                "id": data["totalEegL2"][0]["energyCommunityId"],
                 "timeline": _timeline_by_type(
-                    data["total_eeg_l2"],
+                    data["totalEegL2"],
                     "ENERGY_COMMUNITY_OWN_COVERAGE",
                 ),
             }
-            if data["total_eeg_l2"]
+            if data["totalEegL2"]
             else {}
         ),
     ),
@@ -606,18 +609,18 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         translation_key="total_import_supplier_l2",
         icon="mdi:transmission-tower-export",
         value_fn=lambda data: _sum_difference_by_type(
-            data["total_eeg_l2"],
+            data["totalEegL2"],
             "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
         ),
         extra_state_attributes_fn=lambda data: (
             {
                 "timeline": _timeline_by_type(
-                    data["total_eeg_l2"],
+                    data["totalEegL2"],
                     "ENERGY_COMMUNITY_OWN_COVERAGE",
                 ),
             }
-            if data["total_eeg_l2"]
+            if data["totalEegL2"]
             else {}
         ),
     ),
@@ -631,19 +634,19 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         translation_key="total_import_eeg_l3",
         icon="mdi:transmission-tower-export",
         value_fn=lambda data: _sum_by_type(
-            data["total_eeg_l3"],
+            data["totalEegL3"],
             "ENERGY_COMMUNITY_OWN_COVERAGE",
         ),
         extra_state_attributes_fn=lambda data: (
             {
-                "name": data["total_eeg_l3"][0]["energy_community_name"],
-                "id": data["total_eeg_l3"][0]["energy_community_id"],
+                "name": data["totalEegL3"][0]["energyCommunityName"],
+                "id": data["totalEegL3"][0]["energyCommunityId"],
                 "timeline": _timeline_by_type(
-                    data["total_eeg_l3"],
+                    data["totalEegL3"],
                     "ENERGY_COMMUNITY_OWN_COVERAGE",
                 ),
             }
-            if data["total_eeg_l3"]
+            if data["totalEegL3"]
             else {}
         ),
     ),
@@ -657,18 +660,18 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         translation_key="total_import_supplier_l3",
         icon="mdi:transmission-tower-export",
         value_fn=lambda data: _sum_difference_by_type(
-            data["total_eeg_l3"],
+            data["totalEegL3"],
             "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
         ),
         extra_state_attributes_fn=lambda data: (
             {
                 "timeline": _timeline_by_type(
-                    data["total_eeg_l3"],
+                    data["totalEegL3"],
                     "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
                 ),
             }
-            if data["total_eeg_l3"]
+            if data["totalEegL3"]
             else {}
         ),
     ),
@@ -682,19 +685,19 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         translation_key="monthly_import_eeg_l2",
         icon="mdi:transmission-tower-export",
         value_fn=lambda data: _sum_by_type(
-            data["monthly_eeg_l2"],
+            data["monthlyEegL2"],
             "ENERGY_COMMUNITY_OWN_COVERAGE",
         ),
         extra_state_attributes_fn=lambda data: (
             {
-                "name": data["monthly_eeg_l2"][0]["energy_community_name"],
-                "id": data["monthly_eeg_l2"][0]["energy_community_id"],
+                "name": data["monthlyEegL2"][0]["energyCommunityName"],
+                "id": data["monthlyEegL2"][0]["energyCommunityId"],
                 "timeline": _timeline_by_type(
-                    data["monthly_eeg_l2"],
+                    data["monthlyEegL2"],
                     "ENERGY_COMMUNITY_OWN_COVERAGE",
                 ),
             }
-            if data["monthly_eeg_l2"]
+            if data["monthlyEegL2"]
             else {}
         ),
     ),
@@ -708,18 +711,18 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         translation_key="monthly_import_supplier_l2",
         icon="mdi:transmission-tower-export",
         value_fn=lambda data: _sum_difference_by_type(
-            data["monthly_eeg_l2"],
+            data["monthlyEegL2"],
             "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
         ),
         extra_state_attributes_fn=lambda data: (
             {
                 "timeline": _timeline_by_type(
-                    data["monthly_eeg_l2"],
+                    data["monthlyEegL2"],
                     "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
                 ),
             }
-            if data["monthly_eeg_l2"]
+            if data["monthlyEegL2"]
             else {}
         ),
     ),
@@ -736,20 +739,20 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         translation_key="total_export_eeg_l2",
         icon="mdi:transmission-tower-import",
         value_fn=lambda data: _sum_difference_by_type(
-            data["total_eeg_l2"],
+            data["totalEegL2"],
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
         ),
         extra_state_attributes_fn=lambda data: (
             {
-                "name": data["total_eeg_l2"][0]["energy_community_name"],
-                "id": data["total_eeg_l2"][0]["energy_community_id"],
+                "name": data["totalEegL2"][0]["energyCommunityName"],
+                "id": data["totalEegL2"][0]["energyCommunityId"],
                 "timeline": _timeline_by_type(
-                    data["monthly_eeg_l2"],
+                    data["monthlyEegL2"],
                     "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
                 ),
             }
-            if data["total_eeg_l2"]
+            if data["totalEegL2"]
             else {}
         ),
     ),
@@ -763,17 +766,17 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         translation_key="total_export_supplier_l2",
         icon="mdi:transmission-tower-import",
         value_fn=lambda data: _sum_by_type(
-            data["total_eeg_l2"],
+            data["totalEegL2"],
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
         ),
         extra_state_attributes_fn=lambda data: (
             {
                 "timeline": _timeline_by_type(
-                    data["monthly_eeg_l2"],
+                    data["monthlyEegL2"],
                     "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
                 ),
             }
-            if data["total_eeg_l2"]
+            if data["totalEegL2"]
             else {}
         ),
     ),
@@ -787,20 +790,20 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         translation_key="total_export_eeg_l3",
         icon="mdi:transmission-tower-import",
         value_fn=lambda data: _sum_difference_by_type(
-            data["total_eeg_l3"],
+            data["totalEegL3"],
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
         ),
         extra_state_attributes_fn=lambda data: (
             {
-                "name": data["total_eeg_l3"][0]["energy_community_name"],
-                "id": data["total_eeg_l3"][0]["energy_community_id"],
+                "name": data["totalEegL3"][0]["energyCommunityName"],
+                "id": data["totalEegL3"][0]["energyCommunityId"],
                 "timeline": _timeline_by_type(
-                    data["total_eeg_l3"],
+                    data["totalEegL3"],
                     "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
                 ),
             }
-            if data["total_eeg_l3"]
+            if data["totalEegL3"]
             else {}
         ),
     ),
@@ -814,17 +817,17 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         translation_key="total_export_supplier_l3",
         icon="mdi:transmission-tower-import",
         value_fn=lambda data: _sum_by_type(
-            data["total_eeg_l3"],
+            data["totalEegL3"],
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
         ),
         extra_state_attributes_fn=lambda data: (
             {
                 "timeline": _timeline_by_type(
-                    data["total_eeg_l3"],
+                    data["totalEegL3"],
                     "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
                 ),
             }
-            if data["total_eeg_l3"]
+            if data["totalEegL3"]
             else {}
         ),
     ),
@@ -838,20 +841,20 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         translation_key="monthly_export_eeg_l2",
         icon="mdi:transmission-tower-import",
         value_fn=lambda data: _sum_difference_by_type(
-            data["monthly_eeg_l2"],
+            data["monthlyEegL2"],
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
         ),
         extra_state_attributes_fn=lambda data: (
             {
-                "name": data["monthly_eeg_l2"][0]["energy_community_name"],
-                "id": data["monthly_eeg_l2"][0]["energy_community_id"],
+                "name": data["monthlyEegL2"][0]["energyCommunityName"],
+                "id": data["monthlyEegL2"][0]["energyCommunityId"],
                 "timeline": _timeline_by_type(
-                    data["monthly_eeg_l2"],
+                    data["monthlyEegL2"],
                     "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
                 ),
             }
-            if data["monthly_eeg_l2"]
+            if data["monthlyEegL2"]
             else {}
         ),
     ),
@@ -865,17 +868,17 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         translation_key="monthly_export_supplier_l2",
         icon="mdi:transmission-tower-import",
         value_fn=lambda data: _sum_by_type(
-            data["monthly_eeg_l2"],
+            data["monthlyEegL2"],
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
         ),
         extra_state_attributes_fn=lambda data: (
             {
                 "timeline": _timeline_by_type(
-                    data["monthly_eeg_l2"],
+                    data["monthlyEegL2"],
                     "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
                 ),
             }
-            if data["monthly_eeg_l2"]
+            if data["monthlyEegL2"]
             else {}
         ),
     ),
@@ -894,13 +897,13 @@ async def async_setup_entry(
     for device_identifier, data in coordinator.data.items():
         sensor_types: list[NetzOOEeServiceSensorEntityDescription[Any]] = []
 
-        if data.get("device_type") == DeviceType.HOUSEHOLD.value:
+        if data.get("deviceType") == DeviceType.HOUSEHOLD.value:
             sensor_types = SENSOR_DEFAULT_TYPES + SENSOR_HOUSEHOLD_TYPES
-        elif data.get("device_type") == DeviceType.PHOTOVOLTAICS.value:
+        elif data.get("deviceType") == DeviceType.PHOTOVOLTAICS.value:
             sensor_types = SENSOR_DEFAULT_TYPES + SENSOR_PHOTOVOLTAICS_TYPES
-        elif data.get("device_type") == DeviceType.EEG_IMPORT.value:
+        elif data.get("deviceType") == DeviceType.EEG_IMPORT.value:
             sensor_types = SENSOR_EEG_IMPORT_TYPES
-        elif data.get("device_type") == DeviceType.EEG_EXPORT.value:
+        elif data.get("deviceType") == DeviceType.EEG_EXPORT.value:
             sensor_types = SENSOR_EEG_EXPORT_TYPES
 
         for description in sensor_types:

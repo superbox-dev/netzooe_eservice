@@ -5,7 +5,6 @@ from __future__ import annotations
 import asyncio
 import calendar
 import logging
-import re
 from datetime import datetime
 from datetime import timedelta
 from typing import Any
@@ -41,9 +40,6 @@ type NetzOOEeServiceConfigEntry = ConfigEntry[NetzOOEeServiceDataUpdateCoordinat
 class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Class to manage fetching Netz OÖ eService data API."""
 
-    FIRST_CAP_RE: re.Pattern[str] = re.compile(r"(.)([A-Z][a-z]+)")
-    ALL_CAP_RE: re.Pattern[str] = re.compile(r"([a-z0-9])([A-Z])")
-
     PROFILE_DEVICE_TYPES: ClassVar[dict[str, str]] = {
         SynthProfile.HOUSEHOLD.value: DeviceType.HOUSEHOLD.value,
         SynthProfile.PHOTOVOLTAICS.value: DeviceType.PHOTOVOLTAICS.value,
@@ -71,11 +67,14 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             session=session,
         )
 
+        self._semaphore = asyncio.Semaphore(10)
+
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Read all values from API to update coordinator data."""
         data: dict[str, Any] = {}
+        tasks: list[Awaitable[None]] = []
 
         try:
             dashboard: dict[str, Any] = await self.api.dashboard()
@@ -100,11 +99,15 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     }:
                         self._append_mpan_data(data, contract=contract)
 
-                        await self._append_energy_community_data(
-                            data,
-                            contract=contract,
-                            contract_accounts=contract_accounts,
+                        tasks.append(
+                            self._append_energy_community_data(
+                                data,
+                                contract=contract,
+                                contract_accounts=contract_accounts,
+                            ),
                         )
+
+            await asyncio.gather(*tasks)
 
         except APIError as error:
             raise UpdateFailed(
@@ -121,24 +124,21 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         point_of_delivery: dict[str, Any] = contract["pointOfDelivery"]
         device_type: str = self.PROFILE_DEVICE_TYPES[contract["synthProfile"]]
 
-        data[point_of_delivery["meterPointAdministrationNumber"]] = self._convert_recursive(
-            {
-                "profile": contract["synthProfile"],
-                "deviceName": contract["synthProfile"],
-                "deviceType": device_type,
-                "scaleType": contract["scaleType"],
-                "monthlyTrend": point_of_delivery["monthlyTrend"],
-                "yearlyTrend": point_of_delivery["yearlyTrend"],
-                "supplier": contract["supplier"],
-                "meterReading": {
-                    "meterNumber": point_of_delivery["meter"]["meterNumber"],
-                    "values": self._get_meter_readings_data(
-                        point_of_delivery["lastReadings"]["values"],
-                        point_of_delivery["meter"]["meterNumber"],
-                    ),
-                },
+        data[point_of_delivery["meterPointAdministrationNumber"]] = {
+            "deviceName": contract["synthProfile"],
+            "deviceType": device_type,
+            "scaleType": contract["scaleType"],
+            "monthlyTrend": point_of_delivery["monthlyTrend"],
+            "yearlyTrend": point_of_delivery["yearlyTrend"],
+            "supplier": contract["supplier"],
+            "meterReading": {
+                "meterNumber": point_of_delivery["meter"]["meterNumber"],
+                "values": self._get_meter_readings_data(
+                    point_of_delivery["lastReadings"]["values"],
+                    point_of_delivery["meter"]["meterNumber"],
+                ),
             },
-        )
+        }
 
     async def _append_energy_community_data(
         self,
@@ -148,24 +148,24 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         contract: dict[str, Any],
         contract_accounts: dict[str, Any],
     ) -> None:
-        mpan: str = contract["pointOfDelivery"]["meterPointAdministrationNumber"]
+        meter_point_administration_number: str = contract["pointOfDelivery"]["meterPointAdministrationNumber"]
         grouped_energy_communities: dict[str, dict[str, Any]] = {}
 
         for energy_community in contract.get("energyCommunityData", {}).get("timeslices", []):
-            energy_community_key: str = f"{mpan}_{energy_community['energyCommunityId']}"
+            energy_community_key: str = f"{meter_point_administration_number}_{energy_community['energyCommunityId']}"
 
             profile_available_from: datetime = self._parse_local_date(energy_community["profileDataAvailableFrom"])
             profile_available_to: datetime = self._parse_local_date(energy_community["profileDataAvailableTo"])
 
             if energy_community_key in grouped_energy_communities:
                 grouped: dict[str, Any] = grouped_energy_communities[energy_community_key]
-                grouped["profile_available_from"] = min(grouped["profile_available_from"], profile_available_from)
-                grouped["profile_available_to"] = max(grouped["profile_available_to"], profile_available_to)
+                grouped["profileAvailableFrom"] = min(grouped["profileAvailableFrom"], profile_available_from)
+                grouped["profileAvailableTo"] = max(grouped["profileAvailableTo"], profile_available_to)
             else:
                 grouped_energy_communities[energy_community_key] = {
-                    "energy_community": energy_community,
-                    "profile_available_from": profile_available_from,
-                    "profile_available_to": profile_available_to,
+                    "energyCommunity": energy_community,
+                    "profileAvailableFrom": profile_available_from,
+                    "profileAvailableTo": profile_available_to,
                 }
 
         results: list[tuple[str, dict[str, Any] | list[Any] | str]] = await asyncio.gather(
@@ -173,7 +173,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 self._process_energy_community(
                     contract=contract,
                     contract_accounts=contract_accounts,
-                    mpan=mpan,
+                    meter_point_administration_number=meter_point_administration_number,
                     energy_community_key=energy_community_key,
                     grouped=grouped,
                 )
@@ -188,7 +188,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         *,
         contract: dict[str, Any],
         contract_accounts: dict[str, Any],
-        mpan: str,
+        meter_point_administration_number: str,
         energy_community_key: str,
         grouped: dict[str, Any],
     ) -> tuple[str, dict[str, Any] | list[Any] | str]:
@@ -196,56 +196,54 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         first_day, last_day = self._get_last_l2_month()
         device_type: str = self.EEG_DEVICE_TYPES[contract["synthProfile"]]
 
-        total_eeg_l2_task: Awaitable[list[dict[str, Any]]] = (
+        tasks: dict[str, Awaitable[list[dict[str, Any]]]] = {}
+
+        if grouped["profileAvailableFrom"] <= cutoff:
+            tasks["totalEegL2"] = self._api_call(
+                self._get_consumptions_profile(
+                    contract_account_number=contract_accounts["contractAccountNumber"],
+                    energy_community=grouped["energyCommunity"],
+                    meter_point_administration_number=meter_point_administration_number,
+                    date_from=grouped["profileAvailableFrom"],
+                    date_to=min(grouped["profileAvailableTo"], cutoff),
+                ),
+            )
+
+        if grouped["profileAvailableFrom"] <= last_day and grouped["profileAvailableTo"] >= first_day:
+            tasks["monthlyEegL2"] = self._api_call(
+                self._get_consumptions_profile(
+                    contract_account_number=contract_accounts["contractAccountNumber"],
+                    energy_community=grouped["energyCommunity"],
+                    meter_point_administration_number=meter_point_administration_number,
+                    date_from=max(first_day, grouped["profileAvailableFrom"]),
+                    date_to=last_day,
+                ),
+            )
+
+        tasks["totalEegL3"] = self._api_call(
             self._get_consumptions_profile(
                 contract_account_number=contract_accounts["contractAccountNumber"],
-                energy_community=grouped["energy_community"],
-                meter_point_administration_number=mpan,
-                date_from=grouped["profile_available_from"],
-                date_to=min(grouped["profile_available_to"], cutoff),
-            )
-            if grouped["profile_available_from"] <= cutoff
-            else asyncio.sleep(0, result=[])
+                energy_community=grouped["energyCommunity"],
+                meter_point_administration_number=meter_point_administration_number,
+                date_from=grouped["profileAvailableFrom"],
+                date_to=grouped["profileAvailableTo"],
+            ),
         )
 
-        monthly_eeg_l2_task: Awaitable[list[dict[str, Any]]] = (
-            self._get_consumptions_profile(
-                contract_account_number=contract_accounts["contractAccountNumber"],
-                energy_community=grouped["energy_community"],
-                meter_point_administration_number=mpan,
-                date_from=max(first_day, grouped["profile_available_from"]),
-                date_to=last_day,
-            )
-            if grouped["profile_available_from"] <= last_day and grouped["profile_available_to"] >= first_day
-            else asyncio.sleep(0, result=[])
-        )
+        task_names: list[str] = list(tasks.keys())
+        results: list[list[dict[str, Any]]] = await asyncio.gather(*tasks.values())
+        task_results: dict[str, list[dict[str, Any]]] = dict(zip(task_names, results, strict=True))
 
-        total_eeg_l3_task: Awaitable[list[dict[str, Any]]] = self._get_consumptions_profile(
-            contract_account_number=contract_accounts["contractAccountNumber"],
-            energy_community=grouped["energy_community"],
-            meter_point_administration_number=mpan,
-            date_from=grouped["profile_available_from"],
-            date_to=grouped["profile_available_to"],
-        )
-
-        total_eeg_l2, monthly_eeg_l2, total_eeg_l3 = await asyncio.gather(
-            total_eeg_l2_task,
-            monthly_eeg_l2_task,
-            total_eeg_l3_task,
-        )
-
-        return energy_community_key, self._convert_recursive(
-            {
-                "profile": contract["synthProfile"],
-                "mpan": mpan,
-                "deviceId": grouped["energy_community"]["energyCommunityId"],
-                "deviceName": grouped["energy_community"]["energyCommunityName"],
-                "deviceType": device_type,
-                "totalEegL2": total_eeg_l2,
-                "monthlyEegL2": monthly_eeg_l2,
-                "totalEegL3": total_eeg_l3,
-            },
-        )
+        return energy_community_key, {
+            "synthProfile": contract["synthProfile"],
+            "meterPointAdministrationNumber": meter_point_administration_number,
+            "deviceId": grouped["energyCommunity"]["energyCommunityId"],
+            "deviceName": grouped["energyCommunity"]["energyCommunityName"],
+            "deviceType": device_type,
+            "totalEegL2": task_results.get("totalEegL2", []),
+            "monthlyEegL2": task_results.get("monthlyEegL2", []),
+            "totalEegL3": task_results["totalEegL3"],
+        }
 
     async def _get_consumptions_profile(
         self,
@@ -255,6 +253,9 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         date_from: datetime,
         date_to: datetime,
     ) -> list[dict[str, Any]]:
+        _date_from: str = date_from.strftime("%Y-%m-%d")
+        _date_to: str = date_to.strftime("%Y-%m-%d")
+
         consumptions_profile: list[dict[str, Any]] = await self.api.consumptions_profile(
             pods=[
                 Pod(
@@ -263,8 +264,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     best_available_granularity=profile["granularity"],
                     energy_community_id=energy_community["energyCommunityId"],
                     meter_point_administration_number=meter_point_administration_number,
-                    date_from=date_from.strftime("%Y-%m-%d"),
-                    date_to=date_to.strftime("%Y-%m-%d"),
+                    date_from=_date_from,
+                    date_to=_date_to,
                 )
                 for profile in energy_community["profiles"]
             ],
@@ -279,20 +280,14 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
     @staticmethod
     def _get_meter_readings_data(last_readings_values: list[Mapping[str, Any]], meter_number: str) -> Mapping[str, Any]:
-        readings_map: Mapping[str, Any] = {item["meternumber"]: item for item in last_readings_values}
-        data: Mapping[str, Any] = readings_map.get(meter_number, {})
-        return data
+        meter_readings_data: Mapping[str, Any] = {}
 
-    def _camel_to_snake(self, name: str) -> str:
-        s1 = self.FIRST_CAP_RE.sub(r"\1_\2", name)
-        return self.ALL_CAP_RE.sub(r"\1_\2", s1).lower()
+        for item in last_readings_values:
+            if item["meternumber"] == meter_number:
+                meter_readings_data = item
+                break
 
-    def _convert_recursive(self, obj: dict[str, Any] | list[Any] | str) -> Any:
-        if isinstance(obj, dict):
-            return {self._camel_to_snake(k): self._convert_recursive(v) for k, v in obj.items()}
-        if isinstance(obj, list):
-            return [self._convert_recursive(i) for i in obj]
-        return obj
+        return meter_readings_data
 
     @staticmethod
     def _get_last_l2_month() -> tuple[datetime, datetime]:
@@ -313,3 +308,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
     @staticmethod
     def _parse_local_date(date_str: str) -> datetime:
         return dt_util.as_local(datetime.fromisoformat(date_str).replace(tzinfo=DEFAULT_TIME_ZONE))
+
+    async def _api_call[T](self, coro: Awaitable[T]) -> T:
+        async with self._semaphore:
+            async with asyncio.timeout(120):
+                return await coro
