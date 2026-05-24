@@ -748,7 +748,7 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
                 "name": data["totalEegL2"][0]["energyCommunityName"],
                 "id": data["totalEegL2"][0]["energyCommunityId"],
                 "timeline": _timeline_by_type(
-                    data["monthlyEegL2"],
+                    data["totalEegL2"],
                     "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
                 ),
             }
@@ -772,7 +772,7 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         extra_state_attributes_fn=lambda data: (
             {
                 "timeline": _timeline_by_type(
-                    data["monthlyEegL2"],
+                    data["totalEegL2"],
                     "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
                 ),
             }
