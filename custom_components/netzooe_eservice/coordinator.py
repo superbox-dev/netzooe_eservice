@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import calendar
 import logging
+from collections import defaultdict
 from datetime import datetime
 from datetime import timedelta
 from typing import Any
@@ -77,6 +78,11 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         tasks: list[Awaitable[None]] = []
 
         try:
+            consent_map: dict[str, list[dict[str, Any]]] = defaultdict(list)
+
+            for consent in await self.api.consents():
+                consent_map[consent["pod"]].append(consent)
+
             dashboard: dict[str, Any] = await self.api.dashboard()
 
             contract_accounts_results: list[dict[str, Any]] = await asyncio.gather(
@@ -104,6 +110,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                                 data,
                                 contract=contract,
                                 contract_accounts=contract_accounts,
+                                consent_map=consent_map,
                             ),
                         )
 
@@ -117,6 +124,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     "error": str(error),
                 },
             ) from error
+
+        _LOGGER.debug("data: %s", data)
 
         return data
 
@@ -147,6 +156,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         *,
         contract: dict[str, Any],
         contract_accounts: dict[str, Any],
+        consent_map: dict[str, list[dict[str, Any]]],
     ) -> None:
         meter_point_administration_number: str = contract["pointOfDelivery"]["meterPointAdministrationNumber"]
         grouped_energy_communities: dict[str, dict[str, Any]] = {}
@@ -173,6 +183,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 self._process_energy_community(
                     contract=contract,
                     contract_accounts=contract_accounts,
+                    consent_map=consent_map,
                     meter_point_administration_number=meter_point_administration_number,
                     energy_community_key=energy_community_key,
                     grouped=grouped,
@@ -188,6 +199,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         *,
         contract: dict[str, Any],
         contract_accounts: dict[str, Any],
+        consent_map: dict[str, list[dict[str, Any]]],
         meter_point_administration_number: str,
         energy_community_key: str,
         grouped: dict[str, Any],
@@ -234,6 +246,15 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         results: list[list[dict[str, Any]]] = await asyncio.gather(*tasks.values())
         task_results: dict[str, list[dict[str, Any]]] = dict(zip(task_names, results, strict=True))
 
+        consents: dict[str, Any] = next(
+            (
+                consent
+                for consent in consent_map[meter_point_administration_number]
+                if consent["serviceProvider"] in grouped["energyCommunity"]["energyCommunityId"]
+            ),
+            {},
+        )
+
         return energy_community_key, {
             "synthProfile": contract["synthProfile"],
             "meterPointAdministrationNumber": meter_point_administration_number,
@@ -243,6 +264,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             "totalEegL2": task_results.get("totalEegL2", []),
             "monthlyEegL2": task_results.get("monthlyEegL2", []),
             "totalEegL3": task_results["totalEegL3"],
+            "contributionPercentage": consents["contributionPercentage"],
+            "status": consents["status"],
         }
 
     async def _get_consumptions_profile(

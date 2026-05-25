@@ -13,6 +13,8 @@ from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.components.sensor import SensorEntityDescription
 from homeassistant.components.sensor import SensorStateClass
+from homeassistant.const import EntityCategory
+from homeassistant.const import PERCENTAGE
 from homeassistant.const import UnitOfEnergy
 from homeassistant.helpers.device_registry import DeviceInfo
 
@@ -45,7 +47,6 @@ class NetzOOEeServiceSensorEntityDescription[T](
     entity_class: type[NetzOOEeServiceSensorEntity]
     value_fn: Callable[..., StateType]
     extra_state_attributes_fn: Callable[[Mapping[str, Any]], Mapping[str, Any] | None]
-    alt_key: str | None = None
 
 
 class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
@@ -67,9 +68,7 @@ class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
             device_identifier=device_identifier,
         )
 
-        self._attr_unique_id = (
-            f"{self.device_identifier}_{self.entity_description.alt_key or self.entity_description.key}".lower()
-        )
+        self._attr_unique_id = f"{self.device_identifier}_{self.entity_description.key}".lower()
 
         self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
@@ -152,11 +151,15 @@ def _sum_values_for_mpan(
     key: str,
     positive_type: str,
     negative_type: str | None = None,
+    status: str | None = None,
 ) -> float:
     total: float = 0.0
 
     for current_device_identifier, data in coordinator.data.items():
         if not current_device_identifier.startswith(f"{device_identifier}_"):
+            continue
+
+        if status is not None and data["status"].lower() != status.lower():
             continue
 
         items: list[dict[str, Any]] = data.get(key, [])
@@ -222,10 +225,9 @@ SENSOR_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
 
 SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="monthly_trend_import_new",
         entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_trend",
+        key="monthly_trend_import_new",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_trend_import_new",
@@ -239,10 +241,9 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="monthly_trend_import_old",
         entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_trend",
+        key="monthly_trend_import_old",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_trend_import_old",
@@ -256,10 +257,9 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="yearly_trend_import_new",
         entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="yearly_trend",
+        key="yearly_trend_import_new",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="yearly_trend_import_new",
@@ -273,10 +273,9 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="yearly_trend_import_old",
         entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="yearly_trend",
+        key="yearly_trend_import_old",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="yearly_trend_import_old",
@@ -290,10 +289,10 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_import_eeg_l2",
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l2",
+        key="total_import_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_import_eeg_l2",
@@ -307,10 +306,10 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_import_supplier_l2",
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l2",
+        key="total_import_supplier_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_import_supplier_l2",
@@ -325,10 +324,10 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_import_eeg_l3",
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l3",
+        key="total_import_eeg_l3",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_import_eeg_l3",
@@ -342,10 +341,10 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_import_supplier_l3",
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l3",
+        key="total_import_supplier_l3",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_import_supplier_l3",
@@ -360,10 +359,10 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="monthly_import_eeg_l2",
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_eeg_l2",
+        key="monthly_import_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_import_eeg_l2",
@@ -377,10 +376,10 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="monthly_import_supplier_l2",
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_eeg_l2",
+        key="monthly_import_supplier_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_import_supplier_l2",
@@ -394,14 +393,118 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_import_active_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_import_active_eeg_l2",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "totalEegL2",
+            "ENERGY_COMMUNITY_OWN_COVERAGE",
+            status="active",
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_import_active_supplier_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_import_active_supplier_l2",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "totalEegL2",
+            "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+            "ENERGY_COMMUNITY_OWN_COVERAGE",
+            status="active",
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_import_active_eeg_l3",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_import_active_eeg_l3",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "totalEegL3",
+            "ENERGY_COMMUNITY_OWN_COVERAGE",
+            status="active",
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_import_active_supplier_l3",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_import_active_supplier_l3",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "totalEegL3",
+            "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+            "ENERGY_COMMUNITY_OWN_COVERAGE",
+            status="active",
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="monthly_import_active_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="monthly_import_active_eeg_l2",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "monthlyEegL2",
+            "ENERGY_COMMUNITY_OWN_COVERAGE",
+            status="active",
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="monthly_import_active_supplier_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="monthly_import_active_supplier_l2",
+        icon="mdi:transmission-tower-export",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "monthlyEegL2",
+            "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+            "ENERGY_COMMUNITY_OWN_COVERAGE",
+            status="active",
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
 ]
 
 SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="monthly_trend_export_new",
         entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_trend",
+        key="monthly_trend_export_new",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_trend_export_new",
@@ -415,10 +518,9 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="monthly_trend_export_old",
         entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_trend",
+        key="monthly_trend_export_old",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_trend_export_old",
@@ -432,10 +534,9 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="yearly_trend_export_new",
         entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="yearly_trend",
+        key="yearly_trend_export_new",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="yearly_trend_export_new",
@@ -449,10 +550,9 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="yearly_trend_export_old",
         entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="yearly_trend",
+        key="yearly_trend_export_old",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="yearly_trend_export_old",
@@ -466,10 +566,10 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         },
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_export_eeg_l2",
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l2",
+        key="total_export_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_export_eeg_l2",
@@ -484,10 +584,10 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_export_supplier_l2",
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l2",
+        key="total_export_supplier_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_export_supplier_l2",
@@ -501,10 +601,10 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_export_eeg_l3",
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l3",
+        key="total_export_eeg_l3",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_export_eeg_l3",
@@ -519,10 +619,10 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_export_supplier_l3",
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l3",
+        key="total_export_supplier_l3",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_export_supplier_l3",
@@ -536,10 +636,10 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="monthly_export_eeg_l2",
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_eeg_l2",
+        key="monthly_export_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_export_eeg_l2",
@@ -554,10 +654,10 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="monthly_export_supplier_l2",
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_eeg_l2",
+        key="monthly_export_supplier_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_export_supplier_l2",
@@ -570,14 +670,139 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_export_active_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_export_active_eeg_l2",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "totalEegL2",
+            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+            status="active",
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_export_active_supplier_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_export_active_supplier_l2",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "totalEegL2",
+            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+            status="active",
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_export_active_eeg_l3",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_export_active_eeg_l3",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "totalEegL3",
+            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+            status="active",
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="total_export_active_supplier_l3",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="total_export_active_supplier_l3",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "totalEegL3",
+            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+            status="active",
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="monthly_export_active_eeg_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="monthly_export_active_eeg_l2",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "monthlyEegL2",
+            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+            status="active",
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="monthly_export_active_supplier_l2",
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        translation_key="monthly_export_active_supplier_l2",
+        icon="mdi:transmission-tower-import",
+        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
+            coordinator,
+            device_identifier,
+            "monthlyEegL2",
+            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+            status="active",
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+]
+
+SENSOR_EEG_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
+    NetzOOEeServiceSensorEntityDescription[str](
+        entity_class=NetzOOEeServiceEEGSensorEntity,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        key="status",
+        translation_key="status",
+        value_fn=lambda data: data["status"].lower(),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[int](
+        entity_class=NetzOOEeServiceEEGSensorEntity,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        key="contribution_factor",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        translation_key="contribution_factor",
+        value_fn=lambda data: data["contributionPercentage"],
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
 ]
 
 SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_import_eeg_l2",
         entity_class=NetzOOEeServiceEEGSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l2",
+        key="total_import_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_import_eeg_l2",
@@ -600,10 +825,9 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_import_supplier_l2",
         entity_class=NetzOOEeServiceEEGSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l2",
+        key="total_import_supplier_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_import_supplier_l2",
@@ -625,10 +849,9 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_import_eeg_l3",
         entity_class=NetzOOEeServiceEEGSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l3",
+        key="total_import_eeg_l3",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_import_eeg_l3",
@@ -651,10 +874,9 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_import_supplier_l3",
         entity_class=NetzOOEeServiceEEGSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l3",
+        key="total_import_supplier_l3",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_import_supplier_l3",
@@ -676,10 +898,9 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="monthly_import_eeg_l2",
         entity_class=NetzOOEeServiceEEGSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_eeg_l2",
+        key="monthly_import_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_import_eeg_l2",
@@ -702,10 +923,9 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="monthly_import_supplier_l2",
         entity_class=NetzOOEeServiceEEGSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_eeg_l2",
+        key="monthly_import_supplier_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_import_supplier_l2",
@@ -730,10 +950,9 @@ SENSOR_EEG_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
 
 SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_export_eeg_l2",
         entity_class=NetzOOEeServiceEEGSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l2",
+        key="total_export_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_export_eeg_l2",
@@ -757,10 +976,9 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_export_supplier_l2",
         entity_class=NetzOOEeServiceEEGSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l2",
+        key="total_export_supplier_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_export_supplier_l2",
@@ -781,10 +999,9 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_export_eeg_l3",
         entity_class=NetzOOEeServiceEEGSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l3",
+        key="total_export_eeg_l3",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_export_eeg_l3",
@@ -808,10 +1025,9 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="total_export_supplier_l3",
         entity_class=NetzOOEeServiceEEGSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="total_eeg_l3",
+        key="total_export_supplier_l3",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="total_export_supplier_l3",
@@ -832,10 +1048,9 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="monthly_export_eeg_l2",
         entity_class=NetzOOEeServiceEEGSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_eeg_l2",
+        key="monthly_export_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_export_eeg_l2",
@@ -859,10 +1074,9 @@ SENSOR_EEG_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
     ),
     NetzOOEeServiceSensorEntityDescription[float](
-        alt_key="monthly_export_supplier_l2",
         entity_class=NetzOOEeServiceEEGSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_eeg_l2",
+        key="monthly_export_supplier_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
         translation_key="monthly_export_supplier_l2",
@@ -902,9 +1116,9 @@ async def async_setup_entry(
         elif data.get("deviceType") == DeviceType.PHOTOVOLTAICS.value:
             sensor_types = SENSOR_DEFAULT_TYPES + SENSOR_PHOTOVOLTAICS_TYPES
         elif data.get("deviceType") == DeviceType.EEG_IMPORT.value:
-            sensor_types = SENSOR_EEG_IMPORT_TYPES
+            sensor_types = SENSOR_EEG_DEFAULT_TYPES + SENSOR_EEG_IMPORT_TYPES
         elif data.get("deviceType") == DeviceType.EEG_EXPORT.value:
-            sensor_types = SENSOR_EEG_EXPORT_TYPES
+            sensor_types = SENSOR_EEG_DEFAULT_TYPES + SENSOR_EEG_EXPORT_TYPES
 
         for description in sensor_types:
             sensors += [

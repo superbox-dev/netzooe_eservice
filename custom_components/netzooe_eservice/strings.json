@@ -27,14 +27,29 @@
     },
     "entity": {
         "sensor": {
+            "contribution_factor": {
+                "name": "Contribution factor"
+            },
             "meter_reading": {
-                "name": "Meter readings"
+                "name": "Meter reading"
+            },
+            "monthly_export_active_eeg_l2": {
+                "name": "Last month export to EEG L2 (active)"
+            },
+            "monthly_export_active_supplier_l2": {
+                "name": "Last month export to supplier L2 (active)"
             },
             "monthly_export_eeg_l2": {
-                "name": "Last month export from EEG L2"
+                "name": "Last month export to EEG L2"
             },
             "monthly_export_supplier_l2": {
-                "name": "Last month export from supplier L2"
+                "name": "Last month export to supplier L2"
+            },
+            "monthly_import_active_eeg_l2": {
+                "name": "Last month import from EEG L2 (active)"
+            },
+            "monthly_import_active_supplier_l2": {
+                "name": "Last month import from supplier L2 (active)"
             },
             "monthly_import_eeg_l2": {
                 "name": "Last month import from EEG L2"
@@ -57,20 +72,47 @@
             "scale_type": {
                 "name": "Type"
             },
+            "status": {
+                "name": "Status"
+            },
             "supplier": {
                 "name": "Supplier"
             },
+            "total_export_active_eeg_l2": {
+                "name": "Total export to EEG L2 (active, 16 days ago)"
+            },
+            "total_export_active_eeg_l3": {
+                "name": "Total export to EEG L2/L3 (active)"
+            },
+            "total_export_active_supplier_l2": {
+                "name": "Total export to supplier L2 (active, 16 days ago)"
+            },
+            "total_export_active_supplier_l3": {
+                "name": "Total export to supplier L2/L3 (active)"
+            },
             "total_export_eeg_l2": {
-                "name": "Total export from EEG L2 (16 days ago)"
+                "name": "Total export to EEG L2 (16 days ago)"
             },
             "total_export_eeg_l3": {
-                "name": "Total export from EEG L2/L3"
+                "name": "Total export to EEG L2/L3"
             },
             "total_export_supplier_l2": {
-                "name": "Total export from supplier L2 (16 days ago)"
+                "name": "Total export to supplier L2 (16 days ago)"
             },
             "total_export_supplier_l3": {
-                "name": "Total export from supplier L2/L3"
+                "name": "Total export to supplier L2/L3"
+            },
+            "total_import_active_eeg_l2": {
+                "name": "Total import from EEG L2 (active, 16 days ago)"
+            },
+            "total_import_active_eeg_l3": {
+                "name": "Total import from EEG L2/L3 (active)"
+            },
+            "total_import_active_supplier_l2": {
+                "name": "Total import from supplier L2 (active, 16 days ago)"
+            },
+            "total_import_active_supplier_l3": {
+                "name": "Total import from supplier L2/L3 (active)"
             },
             "total_import_eeg_l2": {
                 "name": "Total import from EEG L2 (16 days ago)"
