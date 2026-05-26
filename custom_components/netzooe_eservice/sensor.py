@@ -81,7 +81,7 @@ class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
     @property
     def device_name(self) -> str | None:
         """Return the name of the current device."""
-        return f"{self.data['deviceName']} ({self.device_identifier})"
+        return f"{self.data['deviceName']} ({self._short_device_id(self.device_identifier)})"
 
     @property
     def native_value(self) -> StateType:
