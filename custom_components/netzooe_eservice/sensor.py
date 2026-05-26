@@ -395,6 +395,7 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
         key="total_import_active_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -412,6 +413,7 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
         key="total_import_active_supplier_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -430,6 +432,7 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
         key="total_import_active_eeg_l3",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -447,6 +450,7 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
         key="total_import_active_supplier_l3",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -465,6 +469,7 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
         key="monthly_import_active_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -482,6 +487,7 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
         key="monthly_import_active_supplier_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -672,6 +678,7 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
         key="total_export_active_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -690,6 +697,7 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
         key="total_export_active_supplier_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -707,6 +715,7 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
         key="total_export_active_eeg_l3",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -725,6 +734,7 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
         key="total_export_active_supplier_l3",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -742,6 +752,7 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
         key="monthly_export_active_eeg_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -760,6 +771,7 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        entity_registry_enabled_default=False,
         device_class=SensorDeviceClass.ENERGY,
         key="monthly_export_active_supplier_l2",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,

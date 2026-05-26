@@ -68,7 +68,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             session=session,
         )
 
-        self._semaphore = asyncio.Semaphore(10)
+        self._semaphore = asyncio.Semaphore(5)
 
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
 
