@@ -33,25 +33,25 @@
             "meter_reading": {
                 "name": "Meter reading"
             },
-            "monthly_export_active_eeg_l2": {
+            "monthly_export_active_energy_community_l2": {
                 "name": "Last month - energy community L2 export (active)"
             },
             "monthly_export_active_supplier_l2": {
                 "name": "Last month - supplier L2 export allocation (active)"
             },
-            "monthly_export_eeg_l2": {
+            "monthly_export_energy_community_l2": {
                 "name": "Last month - energy community L2 export"
             },
             "monthly_export_supplier_l2": {
                 "name": "Last month - supplier L2 export allocation"
             },
-            "monthly_import_active_eeg_l2": {
+            "monthly_import_active_energy_community_l2": {
                 "name": "Last month - energy community L2 import (active)"
             },
             "monthly_import_active_supplier_l2": {
                 "name": "Last month - supplier L2 import allocation (active)"
             },
-            "monthly_import_eeg_l2": {
+            "monthly_import_energy_community_l2": {
                 "name": "Last month - energy community L2 import"
             },
             "monthly_import_supplier_l2": {
@@ -78,10 +78,10 @@
             "supplier": {
                 "name": "Supplier"
             },
-            "total_export_active_eeg_l2": {
+            "total_export_active_energy_community_l2": {
                 "name": "Total - energy community L2 export (active, 16-day delay)"
             },
-            "total_export_active_eeg_l3": {
+            "total_export_active_energy_community_l3": {
                 "name": "Total - energy community L2/L3 export (active)"
             },
             "total_export_active_supplier_l2": {
@@ -90,10 +90,10 @@
             "total_export_active_supplier_l3": {
                 "name": "Total - supplier L2/L3 export allocation (active)"
             },
-            "total_export_eeg_l2": {
+            "total_export_energy_community_l2": {
                 "name": "Total - energy community L2 export (16-day delay)"
             },
-            "total_export_eeg_l3": {
+            "total_export_energy_community_l3": {
                 "name": "Total - energy community L2/L3 export"
             },
             "total_export_supplier_l2": {
@@ -102,10 +102,10 @@
             "total_export_supplier_l3": {
                 "name": "Total - supplier L2/L3 export allocation"
             },
-            "total_import_active_eeg_l2": {
+            "total_import_active_energy_community_l2": {
                 "name": "Total - energy community L2 import (active, 16-day delay)"
             },
-            "total_import_active_eeg_l3": {
+            "total_import_active_energy_community_l3": {
                 "name": "Total - energy community L2/L3 import (active)"
             },
             "total_import_active_supplier_l2": {
@@ -114,10 +114,10 @@
             "total_import_active_supplier_l3": {
                 "name": "Total - supplier L2/L3 import allocation (active)"
             },
-            "total_import_eeg_l2": {
+            "total_import_energy_community_l2": {
                 "name": "Total - energy community L2 import (16-day delay)"
             },
-            "total_import_eeg_l3": {
+            "total_import_energy_community_l3": {
                 "name": "Total - energy community L2/L3 import"
             },
             "total_import_supplier_l2": {
