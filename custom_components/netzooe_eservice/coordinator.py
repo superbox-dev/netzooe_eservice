@@ -27,6 +27,7 @@ from .const import DeviceType
 from .const import SCAN_INTERVAL
 
 if TYPE_CHECKING:
+    from collections.abc import Awaitable
     from collections.abc import Mapping
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
@@ -66,54 +67,60 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             session=session,
         )
 
+        self.dashboard: dict[str, Any] = {}
+
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
+
+    @staticmethod
+    async def _api_call_for_update(coro: Awaitable[Any]) -> None:
+        try:
+            await coro
+        except APIError as error:  # pragma: no cover
+            _LOGGER.error("An error occurred while communicating with the API: %s", error)  # noqa: TRY400
+            raise UpdateFailed(error) from error
+
+    async def _async_setup(self) -> None:
+        """Set up the coordinator."""
+        await self._api_call_for_update(self._async_fixed_data())
+
+    async def _async_fixed_data(self) -> None:
+        self.dashboard = await self.api.dashboard()
+        _LOGGER.debug("dashboard: %s", self.dashboard)
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Read all values from API to update coordinator data."""
         data: dict[str, Any] = {}
 
-        try:
-            consent_map: dict[str, list[dict[str, Any]]] = defaultdict(list)
-
-            for consent in await self.api.consents():
-                consent_map[consent["pod"]].append(consent)
-
-            dashboard: dict[str, Any] = await self.api.dashboard()
-
-            for account in dashboard["contractAccounts"]:
-                contract_accounts: dict[str, Any] = await self.api.contract_accounts(
-                    business_partner_number=account["businessPartnerNumber"],
-                    contract_account_number=account["contractAccountNumber"],
-                )
-
-                for contract in contract_accounts["contracts"]:
-                    if contract["branch"] == ConsumptionsProfilesBranch.ELECTRICITY.value and contract[
-                        "synthProfile"
-                    ] in {
-                        SynthProfile.HOUSEHOLD.value,
-                        SynthProfile.PHOTOVOLTAICS.value,
-                    }:
-                        self._append_mpan_data(data, contract=contract)
-
-                        await self._append_energy_community_data(
-                            data,
-                            contract=contract,
-                            contract_accounts=contract_accounts,
-                            consent_map=consent_map,
-                        )
-
-        except APIError as error:
-            raise UpdateFailed(
-                translation_domain=DOMAIN,
-                translation_key="communication_error",
-                translation_placeholders={
-                    "error": str(error),
-                },
-            ) from error
-
+        await self._api_call_for_update(self._append_data(data))
         _LOGGER.debug("data: %s", data)
 
         return data
+
+    async def _append_data(self, data: dict[str, Any]) -> None:
+        consent_map: dict[str, list[dict[str, Any]]] = defaultdict(list)
+
+        for consent in await self.api.consents():
+            consent_map[consent["pod"]].append(consent)
+
+        for account in self.dashboard["contractAccounts"]:
+            contract_accounts: dict[str, Any] = await self.api.contract_accounts(
+                business_partner_number=account["businessPartnerNumber"],
+                contract_account_number=account["contractAccountNumber"],
+            )
+
+            for contract in contract_accounts["contracts"]:
+                if contract["branch"] == ConsumptionsProfilesBranch.ELECTRICITY.value and contract["synthProfile"] in {
+                    SynthProfile.HOUSEHOLD.value,
+                    SynthProfile.PHOTOVOLTAICS.value,
+                }:
+                    self._append_mpan_data(data, contract=contract)
+
+                    await self._append_energy_community_data(
+                        data,
+                        contract=contract,
+                        contract_accounts=contract_accounts,
+                        consent_map=consent_map,
+                    )
 
     def _append_mpan_data(self, data: dict[str, Any], /, *, contract: dict[str, Any]) -> None:
         point_of_delivery: dict[str, Any] = contract["pointOfDelivery"]

@@ -30,32 +30,44 @@
             "contribution_factor": {
                 "name": "Teilnahmefaktor"
             },
+            "energy_community_export_l2": {
+                "name": "Energiegemeinschaft Einspeisung L2 (Stand: vor 16 Tagen)"
+            },
+            "energy_community_export_l3": {
+                "name": "Energiegemeinschaft Einspeisung L2/L3"
+            },
+            "energy_community_import_l2": {
+                "name": "Energiegemeinschaft Bezug L2 (Stand: vor 16 Tagen)"
+            },
+            "energy_community_import_l3": {
+                "name": "Energiegemeinschaft Bezug L2/L3"
+            },
+            "supplier_export_l2": {
+                "name": "Energielieferant Einspeisung L2 (Stand: vor 16 Tagen)"
+            },
+            "supplier_export_l3": {
+                "name": "Energielieferant Einspeisung L2/L3"
+            },
+            "supplier_import_l2": {
+                "name": "Energielieferant Netzbezug L2 (Stand: vor 16 Tagen)"
+            },
+            "supplier_import_l3": {
+                "name": "Energielieferant Netzbezug L2/L3"
+            },
+            "last_month_energy_community_export_l2": {
+                "name": "Energiegemeinschaft Einspeisung L2 (letzter Monat)"
+            },
+            "last_month_energy_community_import_l2": {
+                "name": "Energiegemeinschaft Bezug L2 (letzter Monat)"
+            },
+           "last_month_supplier_export_l2": {
+                "name": "Energielieferant Einspeisung L2 (letzter Monat)"
+            },
+            "last_month_supplier_import_l2": {
+                "name": "Energielieferant Netzbezug L2 (letzter Monat)"
+            },
             "meter_reading": {
                 "name": "Zählerstand"
-            },
-            "monthly_export_active_energy_community_l2": {
-                "name": "Letzter Monat - Energiegemeinschaft L2 Einspeisung (aktiv)"
-            },
-            "monthly_export_active_supplier_l2": {
-                "name": "Letzter Monat - Energielieferant L2 Einspeisung-Anteil (aktiv)"
-            },
-            "monthly_export_energy_community_l2": {
-                "name": "Letzter Monat - Energiegemeinschaft L2 Einspeisung"
-            },
-            "monthly_export_supplier_l2": {
-                "name": "Letzter Monat - Energielieferant L2 Einspeisung-Anteil"
-            },
-            "monthly_import_active_energy_community_l2": {
-                "name": "Letzter Monat - Energiegemeinschaft L2 Bezug (aktiv)"
-            },
-            "monthly_import_active_supplier_l2": {
-                "name": "Letzter Monat - Energielieferant L2 Netzbezug-Anteil (aktiv)"
-            },
-            "monthly_import_energy_community_l2": {
-                "name": "Letzter Monat - Energiegemeinschaft L2 Bezug"
-            },
-            "monthly_import_supplier_l2": {
-                "name": "Letzter Monat - Energielieferant L2 Netzbezug-Anteil"
             },
             "monthly_trend_export_new": {
                 "name": "Einspeisung (aktueller 30-Tage-Trend)"
@@ -78,54 +90,6 @@
             "supplier": {
                 "name": "Energielieferant"
             },
-            "total_export_active_energy_community_l2": {
-                "name": "Gesamt - Energiegemeinschaft L2 Einspeisung (aktiv, Stand: vor 16 Tagen)"
-            },
-            "total_export_active_energy_community_l3": {
-                "name": "Gesamt - Energiegemeinschaft L2/L3 Einspeisung (aktiv)"
-            },
-            "total_export_active_supplier_l2": {
-                "name": "Gesamt - Energielieferant L2 Einspeisung-Anteil (aktiv, Stand: vor 16 Tagen)"
-            },
-            "total_export_active_supplier_l3": {
-                "name": "Gesamt - Energielieferant L2/L3 Einspeisung-Anteil (aktiv)"
-            },
-            "total_export_energy_community_l2": {
-                "name": "Gesamt - Energiegemeinschaft L2 Einspeisung (Stand: vor 16 Tagen)"
-            },
-            "total_export_energy_community_l3": {
-                "name": "Gesamt - Energiegemeinschaft L2/L3 Einspeisung"
-            },
-            "total_export_supplier_l2": {
-                "name": "Gesamt - Energielieferant L2 Einspeisung-Anteil (Stand: vor 16 Tagen)"
-            },
-            "total_export_supplier_l3": {
-                "name": "Gesamt - Energielieferant L2/L3 Einspeisung-Anteil"
-            },
-            "total_import_active_energy_community_l2": {
-                "name": "Gesamt - Energiegemeinschaft L2 Bezug (aktiv, Stand: vor 16 Tagen)"
-            },
-            "total_import_active_energy_community_l3": {
-                "name": "Gesamt - Energiegemeinschaft L2/L3 Bezug (aktiv)"
-            },
-            "total_import_active_supplier_l2": {
-                "name": "Gesamt - Energielieferant L2 Netzbezug-Anteil (aktiv, Stand: vor 16 Tagen)"
-            },
-            "total_import_active_supplier_l3": {
-                "name": "Gesamt - Energielieferant L2/L3 Netzbezug-Anteil (aktiv)"
-            },
-            "total_import_energy_community_l2": {
-                "name": "Gesamt - Energiegemeinschaft L2 Bezug (Stand: vor 16 Tagen)"
-            },
-            "total_import_energy_community_l3": {
-                "name": "Gesamt - Energiegemeinschaft L2/L3 Bezug"
-            },
-            "total_import_supplier_l2": {
-                "name": "Gesamt - Energielieferant L2 Netzbezug-Anteil (Stand: vor 16 Tagen)"
-            },
-            "total_import_supplier_l3": {
-                "name": "Gesamt - Energielieferant L2/L3 Netzbezug-Anteil"
-            },
             "yearly_trend_export_new": {
                 "name": "Einspeisung (aktueller Jahres-Trend)"
             },
@@ -138,11 +102,6 @@
             "yearly_trend_import_old": {
                 "name": "Netzbezug (vorheriger Jahres-Trend)"
             }
-        }
-    },
-    "exceptions": {
-        "communication_error": {
-            "message": "Bei der Kommunikation mit der API ist ein Fehler aufgetreten: {error}"
         }
     }
 }

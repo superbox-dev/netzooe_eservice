@@ -30,32 +30,44 @@
             "contribution_factor": {
                 "name": "Contribution factor"
             },
+            "energy_community_export_l2": {
+                "name": "Energy community export L2 (16-day delay)"
+            },
+            "energy_community_export_l3": {
+                "name": "Energy community export L2/L3"
+            },
+            "energy_community_import_l2": {
+                "name": "Energy community import L2 (16-day delay)"
+            },
+            "energy_community_import_l3": {
+                "name": "Energy community import L2/L3"
+            },
+            "supplier_export_l2": {
+                "name": "Supplier export L2 (16-day delay)"
+            },
+            "supplier_export_l3": {
+                "name": "Supplier export L2/L3"
+            },
+            "supplier_import_l2": {
+                "name": "Supplier import L2 (16-day delay)"
+            },
+            "supplier_import_l3": {
+                "name": "Supplier import L2/L3"
+            },
+            "last_month_energy_community_export_l2": {
+                "name": "Energy community export L2 (last month)"
+            },
+            "last_month_energy_community_import_l2": {
+                "name": "Energy community import L2 (last month) "
+            },
+           "last_month_supplier_export_l2": {
+                "name": "Supplier export L2 (last month)"
+            },
+            "last_month_supplier_import_l2": {
+                "name": "Supplier import L2 (last month)"
+            },
             "meter_reading": {
                 "name": "Meter reading"
-            },
-            "monthly_export_active_energy_community_l2": {
-                "name": "Last month - energy community L2 export (active)"
-            },
-            "monthly_export_active_supplier_l2": {
-                "name": "Last month - supplier L2 export allocation (active)"
-            },
-            "monthly_export_energy_community_l2": {
-                "name": "Last month - energy community L2 export"
-            },
-            "monthly_export_supplier_l2": {
-                "name": "Last month - supplier L2 export allocation"
-            },
-            "monthly_import_active_energy_community_l2": {
-                "name": "Last month - energy community L2 import (active)"
-            },
-            "monthly_import_active_supplier_l2": {
-                "name": "Last month - supplier L2 import allocation (active)"
-            },
-            "monthly_import_energy_community_l2": {
-                "name": "Last month - energy community L2 import"
-            },
-            "monthly_import_supplier_l2": {
-                "name": "Last month - supplier L2 import allocation"
             },
             "monthly_trend_export_new": {
                 "name": "Monthly export trend (current period)"
@@ -78,54 +90,6 @@
             "supplier": {
                 "name": "Supplier"
             },
-            "total_export_active_energy_community_l2": {
-                "name": "Total - energy community L2 export (active, 16-day delay)"
-            },
-            "total_export_active_energy_community_l3": {
-                "name": "Total - energy community L2/L3 export (active)"
-            },
-            "total_export_active_supplier_l2": {
-                "name": "Total - supplier L2 export allocation (active, 16-day delay)"
-            },
-            "total_export_active_supplier_l3": {
-                "name": "Total - supplier L2/L3 export allocation (active)"
-            },
-            "total_export_energy_community_l2": {
-                "name": "Total - energy community L2 export (16-day delay)"
-            },
-            "total_export_energy_community_l3": {
-                "name": "Total - energy community L2/L3 export"
-            },
-            "total_export_supplier_l2": {
-                "name": "Total - supplier L2 export allocation (16-day delay)"
-            },
-            "total_export_supplier_l3": {
-                "name": "Total - supplier L2/L3 export allocation"
-            },
-            "total_import_active_energy_community_l2": {
-                "name": "Total - energy community L2 import (active, 16-day delay)"
-            },
-            "total_import_active_energy_community_l3": {
-                "name": "Total - energy community L2/L3 import (active)"
-            },
-            "total_import_active_supplier_l2": {
-                "name": "Total - supplier L2 import allocation (active, 16-day delay)"
-            },
-            "total_import_active_supplier_l3": {
-                "name": "Total - supplier L2/L3 import allocation (active)"
-            },
-            "total_import_energy_community_l2": {
-                "name": "Total - energy community L2 import (16-day delay)"
-            },
-            "total_import_energy_community_l3": {
-                "name": "Total - energy community L2/L3 import"
-            },
-            "total_import_supplier_l2": {
-                "name": "Total - supplier L2 import allocation (16-day delay)"
-            },
-            "total_import_supplier_l3": {
-                "name": "Total - supplier L2/L3 import allocation"
-            },
             "yearly_trend_export_new": {
                 "name": "Yearly export trend (current period)"
             },
@@ -138,11 +102,6 @@
             "yearly_trend_import_old": {
                 "name": "Yearly import trend (previous period)"
             }
-        }
-    },
-    "exceptions": {
-        "communication_error": {
-            "message": "An error occurred while communicating with the API: {error}"
         }
     }
 }
