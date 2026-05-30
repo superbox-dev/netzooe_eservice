@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import TYPE_CHECKING
+from unittest.mock import patch
 
 import pytest
 from homeassistant.const import CONF_PASSWORD
@@ -12,18 +13,26 @@ from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClien
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
 
 from custom_components.netzooe_eservice.const import DOMAIN
+from tests.api_data import CONSENTS_DATA
 from tests.api_data import CONTRACT_ACCOUNT_DATA_1
 from tests.api_data import CONTRACT_ACCOUNT_DATA_2
 from tests.api_data import DASHBOARD_DATA
-from tests.api_data import PROFILE_DATA_1
-from tests.api_data import PROFILE_DATA_2
-from tests.api_data import PROFILE_DATA_3
-from tests.api_data import PROFILE_DATA_4
-from tests.api_data import PROFILE_DATA_5
-from tests.api_data import PROFILE_DATA_6
+from tests.api_data import PROFILE_DATA_1_1
+from tests.api_data import PROFILE_DATA_1_2
+from tests.api_data import PROFILE_DATA_1_3
+from tests.api_data import PROFILE_DATA_1_4
+from tests.api_data import PROFILE_DATA_1_5
+from tests.api_data import PROFILE_DATA_1_6
+from tests.api_data import PROFILE_DATA_2_1
+from tests.api_data import PROFILE_DATA_2_2
+from tests.api_data import PROFILE_DATA_2_3
+from tests.api_data import PROFILE_DATA_2_4
+from tests.api_data import PROFILE_DATA_2_5
+from tests.api_data import PROFILE_DATA_2_6
 
 if TYPE_CHECKING:
     from _pytest.fixtures import SubRequest
+    from collections.abc import Generator
     from syrupy.assertion import SnapshotAssertion
     from yarl import URL
 
@@ -44,12 +53,18 @@ class FakeNetzOOEeServiceAPI:
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
 
         self.profile_data: list[list[dict[str, Any]]] = [
-            PROFILE_DATA_1,
-            PROFILE_DATA_2,
-            PROFILE_DATA_3,
-            PROFILE_DATA_4,
-            PROFILE_DATA_5,
-            PROFILE_DATA_6,
+            PROFILE_DATA_1_1,
+            PROFILE_DATA_1_2,
+            PROFILE_DATA_1_3,
+            PROFILE_DATA_1_4,
+            PROFILE_DATA_1_5,
+            PROFILE_DATA_1_6,
+            PROFILE_DATA_2_1,
+            PROFILE_DATA_2_2,
+            PROFILE_DATA_2_3,
+            PROFILE_DATA_2_4,
+            PROFILE_DATA_2_5,
+            PROFILE_DATA_2_6,
         ]
 
     def register_auth_request(self, /, *, status: int = 200, exc: Exception | None = None) -> None:
@@ -74,6 +89,19 @@ class FakeNetzOOEeServiceAPI:
                 "client-id": "netzonline",
             },
             status=200,
+        )
+
+        self.aioclient_mock.get(
+            "https://eservice.netzooe.at/service/v1.0/consents",
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept": "application/json, text/plain, */*",
+                "client-id": "netzonline",
+                "Content-Type": "application/json",
+                "x-xsrf-token": "mocked-token",
+            },
+            status=200,
+            json=CONSENTS_DATA,
         )
 
         self.aioclient_mock.get(
@@ -168,3 +196,15 @@ def config_entry(request: SubRequest) -> MockConfigEntry:
         domain=DOMAIN,
         **mock_config_entry_data,
     )
+
+
+@pytest.fixture
+def entity_registry_enabled_by_default() -> Generator[None]:
+    """Test fixture that ensures all entities are enabled in the registry."""
+    with (
+        patch(
+            "homeassistant.helpers.entity.Entity.entity_registry_enabled_default",
+            return_value=True,
+        ),
+    ):
+        yield

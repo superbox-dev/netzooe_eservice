@@ -98,8 +98,10 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
     async def _append_data(self, data: dict[str, Any]) -> None:
         consent_map: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        consents: list[dict[str, Any]] = await self.api.consents()
+        _LOGGER.debug("consents: %s", consents)
 
-        for consent in await self.api.consents():
+        for consent in consents:
             consent_map[consent["pod"]].append(consent)
 
         for account in self.dashboard["contractAccounts"]:
@@ -155,7 +157,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         grouped_energy_communities: dict[str, dict[str, Any]] = {}
 
         for energy_community in contract.get("energyCommunityData", {}).get("timeslices", []):
-            energy_community_key: str = f"{meter_point_administration_number}_{energy_community['energyCommunityId']}"
+            energy_community_key: str = energy_community["energyCommunityId"]
 
             profile_available_from: datetime = self._parse_local_date(energy_community["profileDataAvailableFrom"])
             profile_available_to: datetime = self._parse_local_date(energy_community["profileDataAvailableTo"])
@@ -171,13 +173,12 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     "profileAvailableTo": profile_available_to,
                 }
 
-        for energy_community_key, grouped in grouped_energy_communities.items():
+        for grouped in grouped_energy_communities.values():
             key, value = await self._process_energy_community(
                 contract=contract,
                 contract_accounts=contract_accounts,
                 consent_map=consent_map,
                 meter_point_administration_number=meter_point_administration_number,
-                energy_community_key=energy_community_key,
                 grouped=grouped,
             )
 
@@ -190,7 +191,6 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         contract_accounts: dict[str, Any],
         consent_map: dict[str, list[dict[str, Any]]],
         meter_point_administration_number: str,
-        energy_community_key: str,
         grouped: dict[str, Any],
     ) -> tuple[str, dict[str, Any] | list[Any] | str]:
         cutoff: datetime = dt_util.now() - timedelta(days=16)
@@ -235,7 +235,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             {},
         )
 
-        return energy_community_key, {
+        return f"{meter_point_administration_number}_{consents['serviceProvider']}", {
             "synthProfile": contract["synthProfile"],
             "meterPointAdministrationNumber": meter_point_administration_number,
             "deviceId": grouped["energyCommunity"]["energyCommunityId"],

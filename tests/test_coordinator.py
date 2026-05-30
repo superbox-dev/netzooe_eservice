@@ -9,7 +9,6 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from netzooe_eservice_api.error import APIError
 
-from custom_components.netzooe_eservice.const import DOMAIN
 from custom_components.netzooe_eservice.coordinator import NetzOOEeServiceDataUpdateCoordinator
 
 if TYPE_CHECKING:
@@ -30,13 +29,11 @@ async def test_async_update_data_api_error_raises_update_failed(hass: HomeAssist
     with (
         patch.object(
             coordinator.api,
-            "dashboard",
+            "consents",
             new=AsyncMock(side_effect=APIError("boom")),
         ),
         pytest.raises(UpdateFailed) as error,
     ):
         await coordinator._async_update_data()
 
-    assert error.value.translation_domain == DOMAIN
-    assert error.value.translation_key == "communication_error"
-    assert error.value.translation_placeholders == {"error": "boom"}
+    assert str(error.value) == "boom"

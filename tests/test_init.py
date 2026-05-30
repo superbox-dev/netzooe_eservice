@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import pytest
 from homeassistant.config_entries import ConfigEntryState
 
 from tests import setup_integration
@@ -13,6 +14,7 @@ if TYPE_CHECKING:
     from tests.conftest import FakeNetzOOEeServiceAPI
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_load_entry(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -25,6 +27,6 @@ async def test_load_entry(
     await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 30
+    assert hass.states.async_entity_ids_count() == 50
 
     assert set(hass.states.async_entity_ids()) == snapshot
