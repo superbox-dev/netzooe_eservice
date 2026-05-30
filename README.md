@@ -1,6 +1,8 @@
 # Netz OÖ eService
 
-A Home Assistant integration to read energy data from the Netz OÖ eService portal
+A Home Assistant integration to read energy data from the Netz OÖ eService portal.
+
+![dashboard.png](assets/dashboard.png)
 
 ## Requirements
 
