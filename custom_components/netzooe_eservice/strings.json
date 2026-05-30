@@ -60,7 +60,7 @@
             "last_month_energy_community_import_l2": {
                 "name": "Energy community import L2 (last month) "
             },
-           "last_month_supplier_export_l2": {
+            "last_month_supplier_export_l2": {
                 "name": "Supplier export L2 (last month)"
             },
             "last_month_supplier_import_l2": {
