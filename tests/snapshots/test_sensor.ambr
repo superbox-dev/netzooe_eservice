@@ -1098,7 +1098,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energy community import L2 (last month) ',
+      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energy community import L2 (last month)',
       'icon': 'mdi:transmission-tower-export',
       'id': 'ATCC9999DYNAMCC100087000000000002',
       'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
@@ -1318,7 +1318,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'device_class': 'energy',
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energy community import L2 (last month) ',
+      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energy community import L2 (last month)',
       'icon': 'mdi:transmission-tower-export',
       'state_class': <SensorStateClass.TOTAL: 'total'>,
       'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
