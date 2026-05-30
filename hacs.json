@@ -1,7 +1,8 @@
 {
     "name": "Netz OÖ eService",
     "filename": "netzooe_eservice.zip",
+    "country": ["AT"],
     "render_readme": true,
-    "homeassistant": "2025.1.0",
+    "homeassistant": "2026.3.0",
     "zip_release": true
 }
