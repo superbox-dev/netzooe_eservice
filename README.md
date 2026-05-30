@@ -19,6 +19,14 @@ A Home Assistant integration to read energy data from the Netz OÖ eService port
 
 [redirect-hacs]: https://my.home-assistant.io/redirect/hacs_repository/?owner=mh-superbox&repository=netzooe_eservice&category=integration
 
+## Donation
+
+I put a lot of time into this project. If you like it, you can support me with a donation.
+
+[![KoFi](https://raw.githubusercontent.com/superbox-dev/.github/refs/heads/main/profile/superbox-kofi.jpg)][kofi]
+
+[kofi]: https://ko-fi.com/F2F0KXO6D
+
 ## Changelog
 
 The changelog lives in the [CHANGELOG.md](CHANGELOG.md) document.
