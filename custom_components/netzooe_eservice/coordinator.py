@@ -206,7 +206,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 energy_community=grouped["energyCommunity"],
                 meter_point_administration_number=meter_point_administration_number,
                 date_from=grouped["profileAvailableFrom"],
-                date_to=grouped["profileAvailableTo"],
+                date_to=min(grouped["profileAvailableTo"], cutoff),
             )
 
         if grouped["profileAvailableFrom"] <= last_day and grouped["profileAvailableTo"] >= first_day:
