@@ -40,7 +40,7 @@ classifiers = [
 ]
 requires-python = ">= 3.14.2"
 dependencies = [
-    "netzooe_eservice_api~=1.0.2",
+    "netzooe_eservice_api~=1.1.0",
     "homeassistant>=2026.2.3",
     "requests>=2.32.5"
 ]
