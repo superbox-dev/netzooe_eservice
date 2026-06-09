@@ -103,5 +103,10 @@
                 "name": "Yearly import trend (previous period)"
             }
         }
+    },
+    "exceptions": {
+        "authentication_error": {
+            "message": "Authentication failed. Please check your credentials."
+        }
     }
 }

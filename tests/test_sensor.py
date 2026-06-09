@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from unittest.mock import patch
 
 import pytest
 from homeassistant.core import HomeAssistant
 from homeassistant.core import State
+from homeassistant.util import dt as dt_util
 
 from tests import setup_integration
 
@@ -77,7 +79,12 @@ async def test_sensors(
     fake_api.register_requests()
 
     hass.config.language = language
-    await setup_integration(hass, config_entry)
+
+    with patch(
+        "custom_components.netzooe_eservice.coordinator.dt_util.now",
+        return_value=dt_util.parse_datetime("2026-04-19T12:00:00+02:00"),
+    ):
+        await setup_integration(hass, config_entry)
 
     sensor: State | None = hass.states.get(entity)
     assert isinstance(sensor, State)

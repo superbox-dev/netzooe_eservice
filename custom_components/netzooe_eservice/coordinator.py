@@ -12,6 +12,7 @@ from typing import ClassVar
 from typing import TYPE_CHECKING
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util import dt as dt_util
@@ -21,13 +22,13 @@ from netzooe_eservice_api.api import Pod
 from netzooe_eservice_api.constants import ConsumptionsProfilesBranch
 from netzooe_eservice_api.constants import SynthProfile
 from netzooe_eservice_api.error import APIError
+from netzooe_eservice_api.error import AuthenticationError
 
 from .const import DOMAIN
 from .const import DeviceType
 from .const import SCAN_INTERVAL
 
 if TYPE_CHECKING:
-    from collections.abc import Awaitable
     from collections.abc import Mapping
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
@@ -71,30 +72,42 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
 
-    @staticmethod
-    async def _api_call_for_update(coro: Awaitable[Any]) -> None:
-        try:
-            await coro
-        except APIError as error:  # pragma: no cover
-            _LOGGER.error("An error occurred while communicating with the API: %s", error)  # noqa: TRY400
-            raise UpdateFailed(error) from error
-
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
-        await self._api_call_for_update(self._async_fixed_data())
-
-    async def _async_fixed_data(self) -> None:
-        self.dashboard = await self.api.dashboard()
-        _LOGGER.debug("dashboard: %s", self.dashboard)
+        try:
+            self.dashboard = await self.api.dashboard()
+        except AuthenticationError as error:  # pragma: no cover
+            raise ConfigEntryAuthFailed(
+                translation_domain=DOMAIN,
+                translation_key="authentication_error",
+            ) from error
+        except APIError as error:  # pragma: no cover
+            raise UpdateFailed(error) from error
+        else:
+            _LOGGER.debug("dashboard: %s", self.dashboard)
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Read all values from API to update coordinator data."""
         data: dict[str, Any] = {}
 
-        await self._api_call_for_update(self._append_data(data))
-        _LOGGER.debug("data: %s", data)
+        try:
+            await self._append_data(data)
+        except AuthenticationError as error:  # pragma: no cover
+            raise ConfigEntryAuthFailed(
+                translation_domain=DOMAIN,
+                translation_key="authentication_error",
+            ) from error
+        except APIError as error:  # pragma: no cover
+            _LOGGER.error("An error occurred while communicating with the API: %s", error)  # noqa: TRY400
 
-        return data
+            if self.data is not None:
+                _LOGGER.warning("Update failed, using cached data")
+                return self.data
+
+            raise UpdateFailed(error) from error
+        else:
+            _LOGGER.debug("data: %s", data)
+            return data
 
     async def _append_data(self, data: dict[str, Any]) -> None:
         consent_map: dict[str, list[dict[str, Any]]] = defaultdict(list)

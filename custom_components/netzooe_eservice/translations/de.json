@@ -103,5 +103,10 @@
                 "name": "Netzbezug (vorheriger Jahres-Trend)"
             }
         }
+    },
+    "exceptions": {
+        "authentication_error": {
+            "message": "Authentifizierung fehlgeschlagen. Bitte überprüfe deine Anmeldedaten."
+        }
     }
 }
