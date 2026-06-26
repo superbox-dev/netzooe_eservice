@@ -208,9 +208,9 @@ SENSOR_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL_INCREASING,
         translation_key="meter_reading",
-        value_fn=(lambda data: data["meterReading"]["values"]["newResult"]["readingValue"]),
+        value_fn=(lambda data: data["meterReading"]["values"].get("newResult", {}).get("readingValue")),
         extra_state_attributes_fn=lambda data: {
-            "timestamp": data["meterReading"]["values"]["newResult"]["timestamp"],
+            "timestamp": data["meterReading"]["values"].get("newResult", {}).get("timestamp"),
             "meter_number": data["meterReading"]["meterNumber"],
         },
     ),
