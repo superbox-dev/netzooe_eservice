@@ -117,25 +117,41 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         for consent in consents:
             consent_map[consent["pod"]].append(consent)
 
+        all_contracts_by_mpan: dict[str, list[dict[str, Any]]] = defaultdict(list)
+
         for account in self.dashboard["contractAccounts"]:
             contract_accounts: dict[str, Any] = await self.api.contract_accounts(
                 business_partner_number=account["businessPartnerNumber"],
                 contract_account_number=account["contractAccountNumber"],
             )
+            _LOGGER.debug("contract_accounts: %s", contract_accounts)
 
             for contract in contract_accounts["contracts"]:
                 if contract["branch"] == ConsumptionsProfilesBranch.ELECTRICITY.value and contract["synthProfile"] in {
                     SynthProfile.HOUSEHOLD.value,
                     SynthProfile.PHOTOVOLTAICS.value,
                 }:
-                    self._append_mpan_data(data, contract=contract)
-
-                    await self._append_energy_community_data(
-                        data,
-                        contract=contract,
-                        contract_accounts=contract_accounts,
-                        consent_map=consent_map,
+                    all_contracts_by_mpan[contract["pointOfDelivery"]["meterPointAdministrationNumber"]].append(
+                        {
+                            "contract": contract,
+                            "contractAccounts": contract_accounts,
+                        },
                     )
+
+                    if contract["active"]:
+                        self._append_mpan_data(data, contract=contract)
+
+        for contracts in all_contracts_by_mpan.values():
+            active_contract: dict[str, Any] = next(item for item in contracts if item["contract"]["active"])
+
+            await self._append_energy_community_data(
+                data,
+                contracts=contracts,
+                active_contract=active_contract,
+                consent_map=consent_map,
+            )
+
+        _LOGGER.debug("all_contracts_by_mpan: %s", all_contracts_by_mpan)
 
     def _append_mpan_data(self, data: dict[str, Any], /, *, contract: dict[str, Any]) -> None:
         point_of_delivery: dict[str, Any] = contract["pointOfDelivery"]
@@ -151,7 +167,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             "meterReading": {
                 "meterNumber": point_of_delivery["meter"]["meterNumber"],
                 "values": self._get_meter_readings_data(
-                    point_of_delivery["lastReadings"]["values"],
+                    point_of_delivery["lastReadings"].get("values", []),
                     point_of_delivery["meter"]["meterNumber"],
                 ),
             },
@@ -162,34 +178,43 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         data: dict[str, Any],
         /,
         *,
-        contract: dict[str, Any],
-        contract_accounts: dict[str, Any],
+        contracts: list[dict[str, Any]],
+        active_contract: dict[str, Any],
         consent_map: dict[str, list[dict[str, Any]]],
     ) -> None:
+        contract: dict[str, Any] = active_contract["contract"]
         meter_point_administration_number: str = contract["pointOfDelivery"]["meterPointAdministrationNumber"]
+
         grouped_energy_communities: dict[str, dict[str, Any]] = {}
 
-        for energy_community in contract.get("energyCommunityData", {}).get("timeslices", []):
-            energy_community_key: str = energy_community["energyCommunityId"]
+        for item in contracts:
+            for energy_community in item["contract"].get("energyCommunityData", {}).get("timeslices", []):
+                energy_community_key: str = energy_community["energyCommunityId"]
 
-            profile_available_from: datetime = self._parse_local_date(energy_community["profileDataAvailableFrom"])
-            profile_available_to: datetime = self._parse_local_date(energy_community["profileDataAvailableTo"])
+                profile_available_from: datetime = self._parse_local_date(energy_community["profileDataAvailableFrom"])
+                profile_available_to: datetime = self._parse_local_date(energy_community["profileDataAvailableTo"])
 
-            if energy_community_key in grouped_energy_communities:
-                grouped: dict[str, Any] = grouped_energy_communities[energy_community_key]
-                grouped["profileAvailableFrom"] = min(grouped["profileAvailableFrom"], profile_available_from)
-                grouped["profileAvailableTo"] = max(grouped["profileAvailableTo"], profile_available_to)
-            else:
-                grouped_energy_communities[energy_community_key] = {
-                    "energyCommunity": energy_community,
-                    "profileAvailableFrom": profile_available_from,
-                    "profileAvailableTo": profile_available_to,
-                }
+                if energy_community_key in grouped_energy_communities:
+                    grouped: dict[str, Any] = grouped_energy_communities[energy_community_key]
+                    grouped["profileAvailableFrom"] = min(
+                        grouped["profileAvailableFrom"],
+                        profile_available_from,
+                    )
+                    grouped["profileAvailableTo"] = max(
+                        grouped["profileAvailableTo"],
+                        profile_available_to,
+                    )
+                else:
+                    grouped_energy_communities[energy_community_key] = {
+                        "energyCommunity": energy_community,
+                        "profileAvailableFrom": profile_available_from,
+                        "profileAvailableTo": profile_available_to,
+                    }
 
         for grouped in grouped_energy_communities.values():
             key, value = await self._process_energy_community(
-                contract=contract,
-                contract_accounts=contract_accounts,
+                contracts=contracts,
+                active_contract=active_contract,
                 consent_map=consent_map,
                 meter_point_administration_number=meter_point_administration_number,
                 grouped=grouped,
@@ -200,44 +225,63 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
     async def _process_energy_community(
         self,
         *,
-        contract: dict[str, Any],
-        contract_accounts: dict[str, Any],
+        contracts: list[dict[str, Any]],
+        active_contract: dict[str, Any],
         consent_map: dict[str, list[dict[str, Any]]],
         meter_point_administration_number: str,
         grouped: dict[str, Any],
     ) -> tuple[str, dict[str, Any] | list[Any] | str]:
         cutoff: datetime = dt_util.now() - timedelta(days=16)
         first_day, last_day = self._get_last_l2_month()
-        device_type: str = self.ENERGY_COMMUNITY_DEVICE_TYPES[contract["synthProfile"]]
+
+        device_type: str = self.ENERGY_COMMUNITY_DEVICE_TYPES[active_contract["contract"]["synthProfile"]]
 
         total_l2: list[dict[str, Any]] = []
         monthly_l2: list[dict[str, Any]] = []
+        total_l3: list[dict[str, Any]] = []
 
-        if grouped["profileAvailableFrom"] <= cutoff:
-            total_l2 = await self._get_consumptions_profile(
-                contract_account_number=contract_accounts["contractAccountNumber"],
-                energy_community=grouped["energyCommunity"],
-                meter_point_administration_number=meter_point_administration_number,
-                date_from=grouped["profileAvailableFrom"],
-                date_to=min(grouped["profileAvailableTo"], cutoff),
-            )
+        for item in contracts:
+            contract: dict[str, Any] = item["contract"]
+            contract_accounts: dict[str, Any] = item["contractAccounts"]
 
-        if grouped["profileAvailableFrom"] <= last_day and grouped["profileAvailableTo"] >= first_day:
-            monthly_l2 = await self._get_consumptions_profile(
-                contract_account_number=contract_accounts["contractAccountNumber"],
-                energy_community=grouped["energyCommunity"],
-                meter_point_administration_number=meter_point_administration_number,
-                date_from=max(first_day, grouped["profileAvailableFrom"]),
-                date_to=last_day,
-            )
+            for energy_community in contract.get("energyCommunityData", {}).get("timeslices", []):
+                if energy_community["energyCommunityId"] != grouped["energyCommunity"]["energyCommunityId"]:
+                    continue
 
-        total_l3: list[dict[str, Any]] = await self._get_consumptions_profile(
-            contract_account_number=contract_accounts["contractAccountNumber"],
-            energy_community=grouped["energyCommunity"],
-            meter_point_administration_number=meter_point_administration_number,
-            date_from=grouped["profileAvailableFrom"],
-            date_to=grouped["profileAvailableTo"],
-        )
+                profile_available_from = self._parse_local_date(energy_community["profileDataAvailableFrom"])
+                profile_available_to = self._parse_local_date(energy_community["profileDataAvailableTo"])
+
+                if profile_available_from <= cutoff:
+                    total_l2.extend(
+                        await self._get_consumptions_profile(
+                            contract_account_number=contract_accounts["contractAccountNumber"],
+                            energy_community=energy_community,
+                            meter_point_administration_number=meter_point_administration_number,
+                            date_from=profile_available_from,
+                            date_to=min(profile_available_to, cutoff),
+                        ),
+                    )
+
+                if profile_available_from <= last_day and profile_available_to >= first_day:
+                    monthly_l2.extend(
+                        await self._get_consumptions_profile(
+                            contract_account_number=contract_accounts["contractAccountNumber"],
+                            energy_community=energy_community,
+                            meter_point_administration_number=meter_point_administration_number,
+                            date_from=max(first_day, profile_available_from),
+                            date_to=min(last_day, profile_available_to),
+                        ),
+                    )
+
+                total_l3.extend(
+                    await self._get_consumptions_profile(
+                        contract_account_number=contract_accounts["contractAccountNumber"],
+                        energy_community=energy_community,
+                        meter_point_administration_number=meter_point_administration_number,
+                        date_from=profile_available_from,
+                        date_to=profile_available_to,
+                    ),
+                )
 
         consents: dict[str, Any] = next(
             (
@@ -249,7 +293,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         )
 
         return f"{meter_point_administration_number}_{consents['serviceProvider']}", {
-            "synthProfile": contract["synthProfile"],
+            "synthProfile": active_contract["contract"]["synthProfile"],
             "meterPointAdministrationNumber": meter_point_administration_number,
             "deviceId": grouped["energyCommunity"]["energyCommunityId"],
             "deviceName": grouped["energyCommunity"]["energyCommunityName"],
@@ -291,6 +335,10 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             # When no profile exists (e.g. date range with no data) than the energy community information are missing!
             item["energyCommunityName"] = energy_community["energyCommunityName"]
             item["energyCommunityId"] = energy_community["energyCommunityId"]
+
+            # Overwrite the from/to with the correct time period, the time period from the API is not valid!
+            item["from"] = _date_from
+            item["to"] = _date_to
 
         return consumptions_profile
 
