@@ -31,28 +31,28 @@
                 "name": "Contribution factor"
             },
             "energy_community_export_l2": {
-                "name": "Energy community export L2 (16-day delay)"
+                "name": "Energy community export L1/L2 (16-day delay)"
             },
             "energy_community_export_l3": {
-                "name": "Energy community export L2/L3"
+                "name": "Energy community export L1/L2/L3"
             },
             "energy_community_import_l2": {
-                "name": "Energy community import L2 (16-day delay)"
+                "name": "Energy community import L1/L2 (16-day delay)"
             },
             "energy_community_import_l3": {
-                "name": "Energy community import L2/L3"
+                "name": "Energy community import L1/L2/L3"
             },
             "supplier_export_l2": {
-                "name": "Supplier export L2 (16-day delay)"
+                "name": "Supplier export L1/L2 (16-day delay)"
             },
             "supplier_export_l3": {
-                "name": "Supplier export L2/L3"
+                "name": "Supplier export L1/L2/L3"
             },
             "supplier_import_l2": {
-                "name": "Supplier import L2 (16-day delay)"
+                "name": "Supplier import L1/L2 (16-day delay)"
             },
             "supplier_import_l3": {
-                "name": "Supplier import L2/L3"
+                "name": "Supplier import L1/L2/L3"
             },
             "last_month_energy_community_export_l2": {
                 "name": "Energy community export L2 (last month)"

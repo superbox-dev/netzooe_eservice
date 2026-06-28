@@ -31,28 +31,28 @@
                 "name": "Teilnahmefaktor"
             },
             "energy_community_export_l2": {
-                "name": "Energiegemeinschaft Einspeisung L2 (Stand: vor 16 Tagen)"
+                "name": "Energiegemeinschaft Einspeisung L1/L2 (Stand: vor 16 Tagen)"
             },
             "energy_community_export_l3": {
-                "name": "Energiegemeinschaft Einspeisung L2/L3"
+                "name": "Energiegemeinschaft Einspeisung L1/L2/L3"
             },
             "energy_community_import_l2": {
-                "name": "Energiegemeinschaft Bezug L2 (Stand: vor 16 Tagen)"
+                "name": "Energiegemeinschaft Bezug L1/L2 (Stand: vor 16 Tagen)"
             },
             "energy_community_import_l3": {
-                "name": "Energiegemeinschaft Bezug L2/L3"
+                "name": "Energiegemeinschaft Bezug L1/L2/L3"
             },
             "supplier_export_l2": {
-                "name": "Energielieferant Einspeisung L2 (Stand: vor 16 Tagen)"
+                "name": "Energielieferant Einspeisung L1/L2 (Stand: vor 16 Tagen)"
             },
             "supplier_export_l3": {
-                "name": "Energielieferant Einspeisung L2/L3"
+                "name": "Energielieferant Einspeisung L1/L2/L3"
             },
             "supplier_import_l2": {
-                "name": "Energielieferant Netzbezug L2 (Stand: vor 16 Tagen)"
+                "name": "Energielieferant Netzbezug L1/L2 (Stand: vor 16 Tagen)"
             },
             "supplier_import_l3": {
-                "name": "Energielieferant Netzbezug L2/L3"
+                "name": "Energielieferant Netzbezug L1/L2/L3"
             },
             "last_month_energy_community_export_l2": {
                 "name": "Energiegemeinschaft Einspeisung L2 (letzter Monat)"
