@@ -5,7 +5,7 @@ from __future__ import annotations
 import calendar
 import logging
 from collections import defaultdict
-from datetime import datetime
+from datetime import date
 from datetime import timedelta
 from typing import Any
 from typing import ClassVar
@@ -16,7 +16,6 @@ from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util import dt as dt_util
-from homeassistant.util.dt import DEFAULT_TIME_ZONE
 from netzooe_eservice_api.api import NetzOOEeServiceAPI
 from netzooe_eservice_api.api import Pod
 from netzooe_eservice_api.constants import ConsumptionsProfilesBranch
@@ -211,8 +210,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         contract_account_number: str,
         timeslice: Mapping[str, Any],
         meter_point_administration_number: str,
-        date_from: datetime,
-        date_to: datetime,
+        date_from: date,
+        date_to: date,
     ) -> None:
         target.extend(
             await self._get_consumptions_profile(
@@ -233,7 +232,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         meter_point_administration_number: str,
         energy_community: dict[str, Any],
     ) -> tuple[str, dict[str, Any]]:
-        cutoff: datetime = dt_util.now() - timedelta(days=16)
+        cutoff: date = dt_util.now().date() - timedelta(days=16)
         first_day, last_day = self._get_last_l2_month()
 
         device_type: str = self.ENERGY_COMMUNITY_DEVICE_TYPES[active_contract["contract"]["synthProfile"]]
@@ -250,8 +249,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 if timeslice["energyCommunityId"] != energy_community["energyCommunityId"]:
                     continue
 
-                profile_available_from: datetime = self._parse_local_date(timeslice["profileDataAvailableFrom"])
-                profile_available_to: datetime = self._parse_local_date(timeslice["profileDataAvailableTo"])
+                profile_available_from: date = date.fromisoformat(timeslice["profileDataAvailableFrom"])
+                profile_available_to: date = date.fromisoformat(timeslice["profileDataAvailableTo"])
 
                 if profile_available_from <= cutoff:
                     await self._extend_consumptions_profile(
@@ -309,11 +308,11 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         contract_account_number: str,
         timeslice: Mapping[str, Any],
         meter_point_administration_number: str,
-        date_from: datetime,
-        date_to: datetime,
+        date_from: date,
+        date_to: date,
     ) -> list[dict[str, Any]]:
-        _date_from: str = date_from.strftime("%Y-%m-%d")
-        _date_to: str = date_to.strftime("%Y-%m-%d")
+        _date_from: str = date_from.isoformat()
+        _date_to: str = date_to.isoformat()
 
         consumptions_profile: list[dict[str, Any]] = await self.api.consumptions_profile(
             pods=[
@@ -353,21 +352,15 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         return meter_readings_data
 
     @staticmethod
-    def _get_last_l2_month() -> tuple[datetime, datetime]:
-        today: datetime = dt_util.now()
+    def _get_last_l2_month() -> tuple[date, date]:
+        today: date = dt_util.now().date()
         year: int = today.year - 1 if today.month == 1 else today.year
         month: int = 12 if today.month == 1 else today.month - 1
 
-        first_day: datetime = dt_util.as_local(datetime(year, month, 1, tzinfo=DEFAULT_TIME_ZONE))
-        last_day_of_month: datetime = dt_util.as_local(
-            datetime(year, month, calendar.monthrange(year, month)[1], tzinfo=DEFAULT_TIME_ZONE),
-        )
+        first_day: date = date(year, month, 1)
+        last_day_of_month: date = date(year, month, calendar.monthrange(year, month)[1])
 
-        cutoff: datetime = today - timedelta(days=16)
-        last_day: datetime = min(last_day_of_month, cutoff)
+        cutoff: date = today - timedelta(days=16)
+        last_day: date = min(last_day_of_month, cutoff)
 
         return first_day, last_day
-
-    @staticmethod
-    def _parse_local_date(date_str: str) -> datetime:
-        return dt_util.as_local(datetime.fromisoformat(date_str).replace(tzinfo=DEFAULT_TIME_ZONE))
