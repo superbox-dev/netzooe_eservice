@@ -197,7 +197,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             for timeslice in contract.get("energyCommunityData", {}).get("timeslices", []):
                 _LOGGER.debug("  %s", timeslice["energyCommunityName"])
 
-                community = self._get_or_create_energy_community(
+                energy_community: dict[str, Any] = self._get_or_create_energy_community(
                     energy_communities,
                     consent_map=consent_map,
                     meter_point_administration_number=meter_point_administration_number,
@@ -211,7 +211,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
                 if profile_available_from <= cutoff:
                     await self._extend_consumptions_profile(
-                        community["totalL2"],
+                        energy_community["totalL2"],
                         contract_account_number=contract_accounts["contractAccountNumber"],
                         timeslice=timeslice,
                         meter_point_administration_number=meter_point_administration_number,
@@ -221,7 +221,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
                 if profile_available_from <= last_day and profile_available_to >= first_day:
                     await self._extend_consumptions_profile(
-                        community["monthlyL2"],
+                        energy_community["monthlyL2"],
                         contract_account_number=contract_accounts["contractAccountNumber"],
                         timeslice=timeslice,
                         meter_point_administration_number=meter_point_administration_number,
@@ -230,7 +230,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     )
 
                 await self._extend_consumptions_profile(
-                    community["totalL3"],
+                    energy_community["totalL3"],
                     contract_account_number=contract_accounts["contractAccountNumber"],
                     timeslice=timeslice,
                     meter_point_administration_number=meter_point_administration_number,
