@@ -16,19 +16,28 @@ from custom_components.netzooe_eservice.const import DOMAIN
 from tests.api_data import CONSENTS_DATA
 from tests.api_data import CONTRACT_ACCOUNT_DATA_1
 from tests.api_data import CONTRACT_ACCOUNT_DATA_2
+from tests.api_data import CONTRACT_ACCOUNT_DATA_3
 from tests.api_data import DASHBOARD_DATA
-from tests.api_data import PROFILE_DATA_1_1
-from tests.api_data import PROFILE_DATA_1_2
-from tests.api_data import PROFILE_DATA_1_3
-from tests.api_data import PROFILE_DATA_1_4
-from tests.api_data import PROFILE_DATA_1_5
-from tests.api_data import PROFILE_DATA_1_6
-from tests.api_data import PROFILE_DATA_2_1
-from tests.api_data import PROFILE_DATA_2_2
-from tests.api_data import PROFILE_DATA_2_3
-from tests.api_data import PROFILE_DATA_2_4
-from tests.api_data import PROFILE_DATA_2_5
-from tests.api_data import PROFILE_DATA_2_6
+from tests.api_data import PROFILE_DATA_MONTHLY_L2_001_2
+from tests.api_data import PROFILE_DATA_MONTHLY_L2_001_3
+from tests.api_data import PROFILE_DATA_MONTHLY_L2_003_3
+from tests.api_data import PROFILE_DATA_MONTHLY_L2_003_4
+from tests.api_data import PROFILE_DATA_TOTAL_L2_001_1
+from tests.api_data import PROFILE_DATA_TOTAL_L2_001_2
+from tests.api_data import PROFILE_DATA_TOTAL_L2_001_3
+from tests.api_data import PROFILE_DATA_TOTAL_L2_003_1
+from tests.api_data import PROFILE_DATA_TOTAL_L2_003_2
+from tests.api_data import PROFILE_DATA_TOTAL_L2_003_3
+from tests.api_data import PROFILE_DATA_TOTAL_L2_003_4
+from tests.api_data import PROFILE_DATA_TOTAL_L3_001_1
+from tests.api_data import PROFILE_DATA_TOTAL_L3_001_2
+from tests.api_data import PROFILE_DATA_TOTAL_L3_001_3
+from tests.api_data import PROFILE_DATA_TOTAL_L3_002_1
+from tests.api_data import PROFILE_DATA_TOTAL_L3_002_2
+from tests.api_data import PROFILE_DATA_TOTAL_L3_003_1
+from tests.api_data import PROFILE_DATA_TOTAL_L3_003_2
+from tests.api_data import PROFILE_DATA_TOTAL_L3_003_3
+from tests.api_data import PROFILE_DATA_TOTAL_L3_003_4
 
 if TYPE_CHECKING:
     from _pytest.fixtures import SubRequest
@@ -53,18 +62,26 @@ class FakeNetzOOEeServiceAPI:
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
 
         self.profile_data: list[list[dict[str, Any]]] = [
-            PROFILE_DATA_1_1,
-            PROFILE_DATA_1_2,
-            PROFILE_DATA_1_3,
-            PROFILE_DATA_1_4,
-            PROFILE_DATA_1_5,
-            PROFILE_DATA_1_6,
-            PROFILE_DATA_2_1,
-            PROFILE_DATA_2_2,
-            PROFILE_DATA_2_3,
-            PROFILE_DATA_2_4,
-            PROFILE_DATA_2_5,
-            PROFILE_DATA_2_6,
+            PROFILE_DATA_TOTAL_L2_001_1,
+            PROFILE_DATA_TOTAL_L3_001_1,
+            PROFILE_DATA_TOTAL_L2_001_2,
+            PROFILE_DATA_MONTHLY_L2_001_2,
+            PROFILE_DATA_TOTAL_L3_001_2,
+            PROFILE_DATA_TOTAL_L2_001_3,
+            PROFILE_DATA_MONTHLY_L2_001_3,
+            PROFILE_DATA_TOTAL_L3_001_3,
+            PROFILE_DATA_TOTAL_L3_002_1,
+            PROFILE_DATA_TOTAL_L3_002_2,
+            PROFILE_DATA_TOTAL_L2_003_1,
+            PROFILE_DATA_TOTAL_L3_003_1,
+            PROFILE_DATA_TOTAL_L2_003_2,
+            PROFILE_DATA_TOTAL_L3_003_2,
+            PROFILE_DATA_TOTAL_L2_003_3,
+            PROFILE_DATA_MONTHLY_L2_003_3,
+            PROFILE_DATA_TOTAL_L3_003_3,
+            PROFILE_DATA_TOTAL_L2_003_4,
+            PROFILE_DATA_MONTHLY_L2_003_4,
+            PROFILE_DATA_TOTAL_L3_003_4,
         ]
 
     def register_auth_request(self, /, *, status: int = 200, exc: Exception | None = None) -> None:
@@ -118,7 +135,7 @@ class FakeNetzOOEeServiceAPI:
         )
 
         self.aioclient_mock.get(
-            "https://eservice.netzooe.at/service/v1.0/contract-accounts/2222222222/111111111111",
+            "https://eservice.netzooe.at/service/v1.0/contract-accounts/100/001",
             headers={
                 "User-Agent": "Mozilla/5.0",
                 "Accept": "application/json, text/plain, */*",
@@ -131,7 +148,7 @@ class FakeNetzOOEeServiceAPI:
         )
 
         self.aioclient_mock.get(
-            "https://eservice.netzooe.at/service/v1.0/contract-accounts/2222222222/111111111112",
+            "https://eservice.netzooe.at/service/v1.0/contract-accounts/100/002",
             headers={
                 "User-Agent": "Mozilla/5.0",
                 "Accept": "application/json, text/plain, */*",
@@ -141,6 +158,19 @@ class FakeNetzOOEeServiceAPI:
             },
             status=200,
             json=CONTRACT_ACCOUNT_DATA_2,
+        )
+
+        self.aioclient_mock.get(
+            "https://eservice.netzooe.at/service/v1.0/contract-accounts/100/003",
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept": "application/json, text/plain, */*",
+                "client-id": "netzonline",
+                "Content-Type": "application/json",
+                "x-xsrf-token": "mocked-token",
+            },
+            status=200,
+            json=CONTRACT_ACCOUNT_DATA_3,
         )
 
         self.aioclient_mock.post(

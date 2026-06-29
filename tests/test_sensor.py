@@ -82,7 +82,7 @@ async def test_sensors(
 
     with patch(
         "custom_components.netzooe_eservice.coordinator.dt_util.now",
-        return_value=dt_util.parse_datetime("2026-04-19T12:00:00+02:00"),
+        return_value=dt_util.parse_datetime("2026-06-28T12:00:00+02:00"),
     ):
         await setup_integration(hass, config_entry)
 
