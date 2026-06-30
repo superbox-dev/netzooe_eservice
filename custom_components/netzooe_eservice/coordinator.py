@@ -109,11 +109,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             return data
 
     async def _append_data(self, data: dict[str, Any]) -> None:
-        consent_map: dict[str, list[dict[str, Any]]] = defaultdict(list)
-        consents: list[dict[str, Any]] = await self.api.consents()
-
-        for consent in consents:
-            consent_map[consent["pod"]].append(consent)
+        consents_map: dict[str, list[dict[str, Any]]] = await self._get_consents_map()
 
         all_contracts_by_mpan: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
@@ -145,8 +141,35 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 data,
                 contracts=contracts,
                 active_contract=active_contract,
-                consent_map=consent_map,
+                consents_map=consents_map,
             )
+
+    async def _get_consents_map(self) -> dict[str, list[dict[str, Any]]]:
+        consents: list[dict[str, Any]] = await self.api.consents()
+        latest_consents: dict[tuple[str, str], dict[str, Any]] = {}
+
+        for consent in consents:
+            key = (consent["pod"], consent["serviceProvider"])
+
+            existing: dict[str, Any] | None = latest_consents.get(key)
+
+            # The API returns the consent history. Keep only the most recent
+            # consent per POD and service provider.
+            if existing is None or (
+                date.fromisoformat(consent["validThrough"]["from"]),
+                date.fromisoformat(consent["validThrough"]["to"]),
+            ) > (
+                date.fromisoformat(existing["validThrough"]["from"]),
+                date.fromisoformat(existing["validThrough"]["to"]),
+            ):
+                latest_consents[key] = consent
+
+        consents_map: dict[str, list[dict[str, Any]]] = defaultdict(list)
+
+        for consent in latest_consents.values():
+            consents_map[consent["pod"]].append(consent)
+
+        return consents_map
 
     def _append_mpan_data(self, data: dict[str, Any], /, *, contract: dict[str, Any]) -> None:
         point_of_delivery: dict[str, Any] = contract["pointOfDelivery"]
@@ -175,7 +198,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         *,
         contracts: list[dict[str, Any]],
         active_contract: dict[str, Any],
-        consent_map: dict[str, list[dict[str, Any]]],
+        consents_map: dict[str, list[dict[str, Any]]],
     ) -> None:
         cutoff: date = dt_util.now().date() - timedelta(days=16)
         first_day, last_day = self._get_last_l2_month()
@@ -199,7 +222,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
                 energy_community: dict[str, Any] = self._get_or_create_energy_community(
                     energy_communities,
-                    consent_map=consent_map,
+                    consents_map=consents_map,
                     meter_point_administration_number=meter_point_administration_number,
                     active_contract=active_contract,
                     device_type=device_type,
@@ -253,7 +276,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         energy_communities: dict[str, dict[str, Any]],
         /,
         *,
-        consent_map: dict[str, list[dict[str, Any]]],
+        consents_map: dict[str, list[dict[str, Any]]],
         meter_point_administration_number: str,
         active_contract: dict[str, Any],
         device_type: str,
@@ -262,7 +285,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         consent: dict[str, Any] = next(
             (
                 consent
-                for consent in consent_map[meter_point_administration_number]
+                for consent in consents_map[meter_point_administration_number]
                 if consent["serviceProvider"] in timeslice["energyCommunityId"]
             ),
             {},
