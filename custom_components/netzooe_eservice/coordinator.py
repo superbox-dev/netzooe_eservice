@@ -28,7 +28,6 @@ from .const import DeviceType
 from .const import SCAN_INTERVAL
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
 
@@ -257,6 +256,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     )
 
                 if profile_available_to <= cutoff:
+                    # L2 already covers the complete available profile.
+                    # No need to request L3 again.
                     energy_community["totalL3"].extend(total_l2)
                 else:
                     energy_community["totalL3"].extend(
@@ -316,7 +317,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
     async def _get_consumptions_profile(
         self,
         contract_account_number: str,
-        timeslice: Mapping[str, Any],
+        timeslice: dict[str, Any],
         meter_point_administration_number: str,
         date_from: date,
         date_to: date,
@@ -351,8 +352,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         return consumptions_profile
 
     @staticmethod
-    def _get_meter_readings_data(last_readings_values: list[Mapping[str, Any]], meter_number: str) -> Mapping[str, Any]:
-        meter_readings_data: Mapping[str, Any] = {}
+    def _get_meter_readings_data(last_readings_values: list[dict[str, Any]], meter_number: str) -> dict[str, Any]:
+        meter_readings_data: dict[str, Any] = {}
 
         for item in last_readings_values:
             if item["meternumber"] == meter_number:
