@@ -18,26 +18,23 @@ from tests.api_data import CONTRACT_ACCOUNT_DATA_1
 from tests.api_data import CONTRACT_ACCOUNT_DATA_2
 from tests.api_data import CONTRACT_ACCOUNT_DATA_3
 from tests.api_data import DASHBOARD_DATA
-from tests.api_data import PROFILE_DATA_MONTHLY_L2_001_2
-from tests.api_data import PROFILE_DATA_MONTHLY_L2_001_3
-from tests.api_data import PROFILE_DATA_MONTHLY_L2_003_3
-from tests.api_data import PROFILE_DATA_MONTHLY_L2_003_4
-from tests.api_data import PROFILE_DATA_TOTAL_L2_001_1
-from tests.api_data import PROFILE_DATA_TOTAL_L2_001_2
-from tests.api_data import PROFILE_DATA_TOTAL_L2_001_3
-from tests.api_data import PROFILE_DATA_TOTAL_L2_003_1
-from tests.api_data import PROFILE_DATA_TOTAL_L2_003_2
-from tests.api_data import PROFILE_DATA_TOTAL_L2_003_3
-from tests.api_data import PROFILE_DATA_TOTAL_L2_003_4
-from tests.api_data import PROFILE_DATA_TOTAL_L3_001_1
-from tests.api_data import PROFILE_DATA_TOTAL_L3_001_2
-from tests.api_data import PROFILE_DATA_TOTAL_L3_001_3
-from tests.api_data import PROFILE_DATA_TOTAL_L3_002_1
-from tests.api_data import PROFILE_DATA_TOTAL_L3_002_2
-from tests.api_data import PROFILE_DATA_TOTAL_L3_003_1
-from tests.api_data import PROFILE_DATA_TOTAL_L3_003_2
-from tests.api_data import PROFILE_DATA_TOTAL_L3_003_3
-from tests.api_data import PROFILE_DATA_TOTAL_L3_003_4
+from tests.api_data import EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3
+from tests.api_data import EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4
+from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3
+from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4
+from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3
+from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2
+from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4
+from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2
+from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3
+from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2
+from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3
+from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2
+from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1
+from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3
+from tests.api_data import WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1
+from tests.api_data import WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1
+from tests.api_data import WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2
 
 if TYPE_CHECKING:
     from _pytest.fixtures import SubRequest
@@ -62,26 +59,26 @@ class FakeNetzOOEeServiceAPI:
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
 
         self.profile_data: list[list[dict[str, Any]]] = [
-            PROFILE_DATA_TOTAL_L2_001_1,
-            PROFILE_DATA_TOTAL_L3_001_1,
-            PROFILE_DATA_TOTAL_L2_001_2,
-            PROFILE_DATA_MONTHLY_L2_001_2,
-            PROFILE_DATA_TOTAL_L3_001_2,
-            PROFILE_DATA_TOTAL_L2_001_3,
-            PROFILE_DATA_MONTHLY_L2_001_3,
-            PROFILE_DATA_TOTAL_L3_001_3,
-            PROFILE_DATA_TOTAL_L3_002_1,
-            PROFILE_DATA_TOTAL_L3_002_2,
-            PROFILE_DATA_TOTAL_L2_003_1,
-            PROFILE_DATA_TOTAL_L3_003_1,
-            PROFILE_DATA_TOTAL_L2_003_2,
-            PROFILE_DATA_TOTAL_L3_003_2,
-            PROFILE_DATA_TOTAL_L2_003_3,
-            PROFILE_DATA_MONTHLY_L2_003_3,
-            PROFILE_DATA_TOTAL_L3_003_3,
-            PROFILE_DATA_TOTAL_L2_003_4,
-            PROFILE_DATA_MONTHLY_L2_003_4,
-            PROFILE_DATA_TOTAL_L3_003_4,
+            WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1,
+            SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2,
+            SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2,
+            SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2,
+            # PROFILE_DATA_TOTAL_L3_001_2,
+            EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3,
+            EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3,
+            EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3,
+            SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1,
+            EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2,
+            WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1,
+            # PROFILE_DATA_TOTAL_L3_003_1,
+            WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2,
+            # PROFILE_DATA_TOTAL_L3_003_2,
+            SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3,
+            SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3,
+            SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3,
+            EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4,
+            EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4,
+            EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4,
         ]
 
     def register_auth_request(self, /, *, status: int = 200, exc: Exception | None = None) -> None:

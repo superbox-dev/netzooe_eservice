@@ -209,56 +209,44 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 profile_available_from: date = date.fromisoformat(timeslice["profileDataAvailableFrom"])
                 profile_available_to: date = date.fromisoformat(timeslice["profileDataAvailableTo"])
 
+                total_l2_profile_available_to: date = min(profile_available_to, cutoff)
+                total_l2: list[dict[str, Any]] = []
+
                 if profile_available_from <= cutoff:
-                    await self._extend_consumptions_profile(
-                        energy_community["totalL2"],
+                    total_l2 = await self._get_consumptions_profile(
                         contract_account_number=contract_accounts["contractAccountNumber"],
                         timeslice=timeslice,
                         meter_point_administration_number=meter_point_administration_number,
                         date_from=profile_available_from,
-                        date_to=min(profile_available_to, cutoff),
+                        date_to=total_l2_profile_available_to,
                     )
+                    energy_community["totalL2"].extend(total_l2)
 
                 if profile_available_from <= last_day and profile_available_to >= first_day:
-                    await self._extend_consumptions_profile(
-                        energy_community["monthlyL2"],
-                        contract_account_number=contract_accounts["contractAccountNumber"],
-                        timeslice=timeslice,
-                        meter_point_administration_number=meter_point_administration_number,
-                        date_from=max(first_day, profile_available_from),
-                        date_to=min(last_day, profile_available_to),
+                    energy_community["monthlyL2"].extend(
+                        await self._get_consumptions_profile(
+                            contract_account_number=contract_accounts["contractAccountNumber"],
+                            timeslice=timeslice,
+                            meter_point_administration_number=meter_point_administration_number,
+                            date_from=max(first_day, profile_available_from),
+                            date_to=min(last_day, profile_available_to),
+                        ),
                     )
 
-                await self._extend_consumptions_profile(
-                    energy_community["totalL3"],
-                    contract_account_number=contract_accounts["contractAccountNumber"],
-                    timeslice=timeslice,
-                    meter_point_administration_number=meter_point_administration_number,
-                    date_from=profile_available_from,
-                    date_to=profile_available_to,
-                )
+                if profile_available_to <= cutoff:
+                    energy_community["totalL3"].extend(total_l2)
+                else:
+                    energy_community["totalL3"].extend(
+                        await self._get_consumptions_profile(
+                            contract_account_number=contract_accounts["contractAccountNumber"],
+                            timeslice=timeslice,
+                            meter_point_administration_number=meter_point_administration_number,
+                            date_from=profile_available_from,
+                            date_to=profile_available_to,
+                        ),
+                    )
 
         data.update(energy_communities)
-
-    async def _extend_consumptions_profile(
-        self,
-        target: list[dict[str, Any]],
-        *,
-        contract_account_number: str,
-        timeslice: Mapping[str, Any],
-        meter_point_administration_number: str,
-        date_from: date,
-        date_to: date,
-    ) -> None:
-        target.extend(
-            await self._get_consumptions_profile(
-                contract_account_number=contract_account_number,
-                timeslice=timeslice,
-                meter_point_administration_number=meter_point_administration_number,
-                date_from=date_from,
-                date_to=date_to,
-            ),
-        )
 
     @staticmethod
     def _get_or_create_energy_community(

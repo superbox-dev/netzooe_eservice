@@ -596,7 +596,7 @@ CONTRACT_ACCOUNT_DATA_3: dict[str, Any] = {
     ],
 }
 
-PROFILE_DATA_TOTAL_L2_001_1: list[dict[str, Any]] = [
+WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2024-10-07T00:00:00",
@@ -625,36 +625,7 @@ PROFILE_DATA_TOTAL_L2_001_1: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_TOTAL_L3_001_1: list[dict[str, Any]] = [
-    {
-        "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
-        "from": "2024-10-07T00:00:00",
-        "to": "2025-09-30T23:59:59",
-        "type": "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-        "energyDirection": "GENERATION",
-        "sum": {
-            "value": 8000.000,
-            "unit": "KWH",
-        },
-        "energyCommunityId": "AT00300000000RC100930000000965743",
-        "energyCommunityName": "wseg 07614 0523 UW Partenstein",
-    },
-    {
-        "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
-        "from": "2024-10-07T00:00:00",
-        "to": "2025-09-30T23:59:59",
-        "type": "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-        "energyDirection": "GENERATION",
-        "sum": {
-            "value": 7000.000,
-            "unit": "KWH",
-        },
-        "energyCommunityId": "AT00300000000RC100930000000965743",
-        "energyCommunityName": "wseg 07614 0523 UW Partenstein",
-    },
-]
-
-PROFILE_DATA_TOTAL_L2_001_2: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-01-26T00:00:00",
@@ -683,7 +654,7 @@ PROFILE_DATA_TOTAL_L2_001_2: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_MONTHLY_L2_001_2: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-05-01T00:00:00",
@@ -712,7 +683,7 @@ PROFILE_DATA_MONTHLY_L2_001_2: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_TOTAL_L3_001_2: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-01-26T00:00:00",
@@ -741,7 +712,7 @@ PROFILE_DATA_TOTAL_L3_001_2: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_TOTAL_L2_001_3: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-05-21T00:00:00",
@@ -770,7 +741,7 @@ PROFILE_DATA_TOTAL_L2_001_3: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_MONTHLY_L2_001_3: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-05-21T00:00:00",
@@ -799,7 +770,7 @@ PROFILE_DATA_MONTHLY_L2_001_3: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_TOTAL_L3_001_3: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-05-21T00:00:00",
@@ -828,7 +799,7 @@ PROFILE_DATA_TOTAL_L3_001_3: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_TOTAL_L3_002_1: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-06-17T00:00:00",
@@ -857,7 +828,7 @@ PROFILE_DATA_TOTAL_L3_002_1: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_TOTAL_L3_002_2: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-06-17T00:00:00",
@@ -886,7 +857,7 @@ PROFILE_DATA_TOTAL_L3_002_2: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_TOTAL_L2_003_1: list[dict[str, Any]] = [
+WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2024-05-06T00:00:00",
@@ -915,36 +886,7 @@ PROFILE_DATA_TOTAL_L2_003_1: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_TOTAL_L3_003_1: list[dict[str, Any]] = [
-    {
-        "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
-        "from": "2024-05-06T00:00:00",
-        "to": "2024-05-07T23:59:59",
-        "type": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
-        "energyDirection": "CONSUMPTION",
-        "sum": {
-            "value": 7.000,
-            "unit": "KWH",
-        },
-        "energyCommunityId": "AT00300000000RC100930000000965743",
-        "energyCommunityName": "wseg 07614 0523 UW Partenstein",
-    },
-    {
-        "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
-        "from": "2024-05-06T00:00:00",
-        "to": "2024-05-07T23:59:59",
-        "type": "ENERGY_COMMUNITY_OWN_COVERAGE",
-        "energyDirection": "CONSUMPTION",
-        "sum": {
-            "value": 2.000,
-            "unit": "KWH",
-        },
-        "energyCommunityId": "AT00300000000RC100930000000965743",
-        "energyCommunityName": "wseg 07614 0523 UW Partenstein",
-    },
-]
-
-PROFILE_DATA_TOTAL_L2_003_2: list[dict[str, Any]] = [
+WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2024-10-07T00:00:00",
@@ -973,64 +915,7 @@ PROFILE_DATA_TOTAL_L2_003_2: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_TOTAL_L3_003_2: list[dict[str, Any]] = [
-    {
-        "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
-        "from": "2024-05-06T00:00:00",
-        "to": "2024-05-07T23:59:59",
-        "type": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
-        "energyDirection": "CONSUMPTION",
-        "sum": {
-            "value": 7.000,
-            "unit": "KWH",
-        },
-        "energyCommunityId": "AT00300000000RC100930000000965743",
-        "energyCommunityName": "wseg 07614 0523 UW Partenstein",
-    },
-    {
-        "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
-        "from": "2024-10-07T00:00:00",
-        "to": "2025-09-30T23:59:59",
-        "granularity": "YEAR",
-        "type": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
-        "energyDirection": "CONSUMPTION",
-        "sum": {
-            "value": 3800.000,
-            "unit": "KWH",
-        },
-        "energyCommunityId": "AT00300000000RC100930000000965743",
-        "energyCommunityName": "wseg 07614 0523 UW Partenstein",
-    },
-    {
-        "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
-        "from": "2024-05-06T00:00:00",
-        "to": "2024-05-07T23:59:59",
-        "granularity": "YEAR",
-        "type": "ENERGY_COMMUNITY_OWN_COVERAGE",
-        "energyDirection": "CONSUMPTION",
-        "sum": {
-            "value": 2.000,
-            "unit": "KWH",
-        },
-        "energyCommunityId": "AT00300000000RC100930000000965743",
-        "energyCommunityName": "wseg 07614 0523 UW Partenstein",
-    },
-    {
-        "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
-        "from": "2024-10-07T00:00:00",
-        "to": "2025-09-30T23:59:59",
-        "type": "ENERGY_COMMUNITY_OWN_COVERAGE",
-        "energyDirection": "CONSUMPTION",
-        "sum": {
-            "value": 350.000,
-            "unit": "KWH",
-        },
-        "energyCommunityId": "AT00300000000RC100930000000965743",
-        "energyCommunityName": "wseg 07614 0523 UW Partenstein",
-    },
-]
-
-PROFILE_DATA_TOTAL_L2_003_3: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-01-26T00:00:00",
@@ -1058,7 +943,7 @@ PROFILE_DATA_TOTAL_L2_003_3: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_MONTHLY_L2_003_3: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-05-01T00:00:00",
@@ -1087,7 +972,7 @@ PROFILE_DATA_MONTHLY_L2_003_3: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_TOTAL_L3_003_3: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-01-26T00:00:00",
@@ -1116,7 +1001,7 @@ PROFILE_DATA_TOTAL_L3_003_3: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_TOTAL_L2_003_4: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-05-21T00:00:00",
@@ -1145,7 +1030,7 @@ PROFILE_DATA_TOTAL_L2_003_4: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_MONTHLY_L2_003_4: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-05-21T00:00:00",
@@ -1174,7 +1059,7 @@ PROFILE_DATA_MONTHLY_L2_003_4: list[dict[str, Any]] = [
     },
 ]
 
-PROFILE_DATA_TOTAL_L3_003_4: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4: list[dict[str, Any]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-05-21T00:00:00",
