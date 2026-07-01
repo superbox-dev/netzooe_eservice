@@ -69,17 +69,14 @@
             "meter_reading": {
                 "name": "Zählerstand"
             },
-            "monthly_trend_export_new": {
-                "name": "Einspeisung (aktueller 30-Tage-Trend)"
+            "monthly_trend": {
+                "name": "30-Tage-Trend"
             },
-            "monthly_trend_export_old": {
-                "name": "Einspeisung (vorheriger 30-Tage-Trend)"
+            "monthly_trend_new": {
+                "name": "aktueller 30-Tage-Trend"
             },
-            "monthly_trend_import_new": {
-                "name": "Netzbezug (aktueller 30-Tage-Trend)"
-            },
-            "monthly_trend_import_old": {
-                "name": "Netzbezug (vorheriger 30-Tage-Trend)"
+            "monthly_trend_old": {
+                "name": "vorheriger 30-Tage-Trend"
             },
             "scale_type": {
                 "name": "Typ"
@@ -90,17 +87,14 @@
             "supplier": {
                 "name": "Energielieferant"
             },
-            "yearly_trend_export_new": {
-                "name": "Einspeisung (aktueller Jahres-Trend)"
+            "yearly_trend": {
+                "name": "Jahres-Trend"
             },
-            "yearly_trend_export_old": {
-                "name": "Einspeisung (vorheriger Jahres-Trend)"
+            "yearly_trend_new": {
+                "name": "aktueller Jahres-Trend"
             },
-            "yearly_trend_import_new": {
-                "name": "Netzbezug (aktueller Jahres-Trend)"
-            },
-            "yearly_trend_import_old": {
-                "name": "Netzbezug (vorheriger Jahres-Trend)"
+            "yearly_trend_old": {
+                "name": "vorheriger Jahres-Trend"
             }
         }
     },

@@ -221,16 +221,13 @@ SENSOR_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         value_fn=lambda data: data["supplier"]["name"],
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
-]
-
-SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_trend_import_new",
+        key="monthly_trend_new",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
-        translation_key="monthly_trend_import_new",
+        translation_key="monthly_trend_new",
         icon="mdi:transmission-tower-export",
         value_fn=lambda data: data["monthlyTrend"]["consumptionNew"]["sum"],
         extra_state_attributes_fn=lambda data: {
@@ -243,10 +240,10 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="monthly_trend_import_old",
+        key="monthly_trend_old",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
-        translation_key="monthly_trend_import_old",
+        translation_key="monthly_trend_old",
         icon="mdi:transmission-tower-export",
         value_fn=lambda data: data["monthlyTrend"]["consumptionOld"]["sum"],
         extra_state_attributes_fn=lambda data: {
@@ -259,10 +256,29 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="yearly_trend_import_new",
+        key="monthly_trend",
+        native_unit_of_measurement=PERCENTAGE,
+        suggested_display_precision=2,
+        translation_key="monthly_trend",
+        icon="mdi:chart-areaspline",
+        value_fn=lambda data: (
+            (
+                (data["monthlyTrend"]["consumptionOld"]["sum"] - data["monthlyTrend"]["consumptionNew"]["sum"])
+                / data["monthlyTrend"]["consumptionOld"]["sum"]
+                * 100
+            )
+            if data["monthlyTrend"]["consumptionOld"]["sum"] > 0
+            else 0
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="yearly_trend_new",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
-        translation_key="yearly_trend_import_new",
+        translation_key="yearly_trend_new",
         icon="mdi:transmission-tower-export",
         value_fn=lambda data: data["yearlyTrend"]["consumptionNew"]["sum"],
         extra_state_attributes_fn=lambda data: {
@@ -275,10 +291,10 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceSensorEntity,
         device_class=SensorDeviceClass.ENERGY,
-        key="yearly_trend_import_old",
+        key="yearly_trend_old",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
-        translation_key="yearly_trend_import_old",
+        translation_key="yearly_trend_old",
         icon="mdi:transmission-tower-export",
         value_fn=lambda data: data["yearlyTrend"]["consumptionOld"]["sum"],
         extra_state_attributes_fn=lambda data: {
@@ -288,6 +304,28 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             "to": data["yearlyTrend"]["timerangeOld"]["to"],
         },
     ),
+    NetzOOEeServiceSensorEntityDescription[float](
+        entity_class=NetzOOEeServiceSensorEntity,
+        device_class=SensorDeviceClass.ENERGY,
+        key="yearly_trend",
+        native_unit_of_measurement=PERCENTAGE,
+        suggested_display_precision=2,
+        translation_key="yearly_trend",
+        icon="mdi:chart-areaspline",
+        value_fn=lambda data: (
+            (
+                (data["yearlyTrend"]["consumptionOld"]["sum"] - data["yearlyTrend"]["consumptionNew"]["sum"])
+                / data["yearlyTrend"]["consumptionOld"]["sum"]
+                * 100
+            )
+            if data["yearlyTrend"]["consumptionOld"]["sum"] > 0
+            else 0
+        ),
+        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+]
+
+SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
         entity_registry_enabled_default=False,
@@ -402,70 +440,6 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
 ]
 
 SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceSensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="monthly_trend_export_new",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="monthly_trend_export_new",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda data: data["monthlyTrend"]["consumptionNew"]["sum"],
-        extra_state_attributes_fn=lambda data: {
-            "per_day": data["monthlyTrend"]["consumptionNew"]["perDay"],
-            "days": data["monthlyTrend"]["consumptionNew"]["days"],
-            "from": data["monthlyTrend"]["timerangeNew"]["from"],
-            "to": data["monthlyTrend"]["timerangeNew"]["to"],
-        },
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceSensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="monthly_trend_export_old",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="monthly_trend_export_old",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda data: data["monthlyTrend"]["consumptionOld"]["sum"],
-        extra_state_attributes_fn=lambda data: {
-            "per_day": data["monthlyTrend"]["consumptionOld"]["perDay"],
-            "days": data["monthlyTrend"]["consumptionOld"]["days"],
-            "from": data["monthlyTrend"]["timerangeOld"]["from"],
-            "to": data["monthlyTrend"]["timerangeOld"]["to"],
-        },
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceSensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="yearly_trend_export_new",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="yearly_trend_export_new",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda data: data["yearlyTrend"]["consumptionNew"]["sum"],
-        extra_state_attributes_fn=lambda data: {
-            "per_day": data["yearlyTrend"]["consumptionNew"]["perDay"],
-            "days": data["yearlyTrend"]["consumptionNew"]["days"],
-            "from": data["yearlyTrend"]["timerangeNew"]["from"],
-            "to": data["yearlyTrend"]["timerangeNew"]["to"],
-        },
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceSensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="yearly_trend_export_old",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="yearly_trend_export_old",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda data: data["yearlyTrend"]["consumptionOld"]["sum"],
-        extra_state_attributes_fn=lambda data: {
-            "per_day": data["yearlyTrend"]["consumptionOld"]["perDay"],
-            "days": data["yearlyTrend"]["consumptionOld"]["days"],
-            "from": data["yearlyTrend"]["timerangeOld"]["from"],
-            "to": data["yearlyTrend"]["timerangeOld"]["to"],
-        },
-    ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceAggregatedSensorEntity,
         entity_registry_enabled_default=False,

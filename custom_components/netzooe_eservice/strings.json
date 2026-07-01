@@ -69,17 +69,14 @@
             "meter_reading": {
                 "name": "Meter reading"
             },
-            "monthly_trend_export_new": {
-                "name": "Monthly export trend (current period)"
+            "monthly_trend": {
+                "name": "Monthly trend"
             },
-            "monthly_trend_export_old": {
-                "name": "Monthly export trend (previous period)"
+            "monthly_trend_new": {
+                "name": "Monthly trend (current period)"
             },
-            "monthly_trend_import_new": {
-                "name": "Monthly import trend (current period)"
-            },
-            "monthly_trend_import_old": {
-                "name": "Monthly import trend (previous period)"
+            "monthly_trend_old": {
+                "name": "Monthly trend (previous period)"
             },
             "scale_type": {
                 "name": "Type"
@@ -90,18 +87,15 @@
             "supplier": {
                 "name": "Supplier"
             },
-            "yearly_trend_export_new": {
-                "name": "Yearly export trend (current period)"
+            "yearly_trend": {
+                "name": "Yearly trend"
             },
-            "yearly_trend_export_old": {
-                "name": "Yearly export trend (previous period)"
+            "yearly_trend_new": {
+                "name": "Yearly trend (current period)"
             },
-            "yearly_trend_import_new": {
-                "name": "Yearly import trend (current period)"
+            "yearly_trend_old": {
+                "name": "Yearly trend (previous period)"
             },
-            "yearly_trend_import_old": {
-                "name": "Yearly import trend (previous period)"
-            }
         }
     },
     "exceptions": {
