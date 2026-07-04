@@ -2,9 +2,9 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_contribution_factor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Teilnahmefaktor',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Teilnahmefaktor',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_contribution_factor',
@@ -17,19 +17,19 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energiegemeinschaft Einspeisung L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energiegemeinschaft Einspeisung L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'ATCC9999DYNAMCC100087000000000002',
       'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-01-26',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l2',
@@ -42,19 +42,19 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energiegemeinschaft Einspeisung L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energiegemeinschaft Einspeisung L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'ATCC9999DYNAMCC100087000000000002',
       'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-01-26',
           'to': '2026-06-28',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l3',
@@ -67,19 +67,19 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energiegemeinschaft Einspeisung L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energiegemeinschaft Einspeisung L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'ATCC9999DYNAMCC100087000000000002',
       'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-01',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_energy_community_export_l2',
@@ -92,17 +92,17 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energielieferant Einspeisung L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energielieferant Einspeisung L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-01',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_supplier_export_l2',
@@ -115,7 +115,7 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Status',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status',
@@ -128,17 +128,17 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energielieferant Einspeisung L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energielieferant Einspeisung L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-01-26',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l2',
@@ -151,17 +151,17 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energielieferant Einspeisung L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energielieferant Einspeisung L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-01-26',
           'to': '2026-06-28',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l3',
@@ -174,11 +174,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Energiegemeinschaft Einspeisung L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energiegemeinschaft Einspeisung L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2',
@@ -191,11 +191,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Energiegemeinschaft Einspeisung L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energiegemeinschaft Einspeisung L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3',
@@ -208,11 +208,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Energiegemeinschaft Einspeisung L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energiegemeinschaft Einspeisung L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2',
@@ -225,11 +225,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Energielieferant Einspeisung L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energielieferant Einspeisung L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_supplier_export_l2',
@@ -242,12 +242,12 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Zählerstand',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Zählerstand',
       'meter_number': '3000000',
-      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
       'timestamp': '2026-06-28T00:15:00',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading',
@@ -260,10 +260,10 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) 30-Tage-Trend',
-      'icon': 'mdi:chart-areaspline',
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) 30-Tage-Trend',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend',
@@ -277,14 +277,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 30,
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) aktueller 30-Tage-Trend',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) aktueller 30-Tage-Trend',
       'from': '2026-05-29T00:00:00',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 25.86666666666667,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-06-28T23:59:59',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_new',
@@ -298,14 +298,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 30,
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) vorheriger 30-Tage-Trend',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) vorheriger 30-Tage-Trend',
       'from': '2026-04-29T00:00:00',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 23.36666666666667,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-05-28T23:59:59',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_old',
@@ -318,9 +318,9 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_contribution_factor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Teilnahmefaktor',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Teilnahmefaktor',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_contribution_factor',
@@ -333,19 +333,19 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energiegemeinschaft Einspeisung L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energiegemeinschaft Einspeisung L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'AT00300000000RC100930000000965743',
       'name': 'wseg 07614 0523 UW Partenstein',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_energy_community_export_l2',
@@ -358,19 +358,19 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_energy_community_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energiegemeinschaft Einspeisung L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energiegemeinschaft Einspeisung L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'AT00300000000RC100930000000965743',
       'name': 'wseg 07614 0523 UW Partenstein',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_energy_community_export_l3',
@@ -383,11 +383,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energiegemeinschaft Einspeisung L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energiegemeinschaft Einspeisung L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_energy_community_export_l2',
@@ -400,11 +400,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energielieferant Einspeisung L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energielieferant Einspeisung L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_supplier_export_l2',
@@ -417,7 +417,7 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_status]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Status',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_status',
@@ -430,17 +430,17 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energielieferant Einspeisung L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energielieferant Einspeisung L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_supplier_export_l2',
@@ -453,17 +453,17 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_supplier_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energielieferant Einspeisung L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energielieferant Einspeisung L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_supplier_export_l3',
@@ -476,9 +476,9 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_contribution_factor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Teilnahmefaktor',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Teilnahmefaktor',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_contribution_factor',
@@ -491,19 +491,19 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energiegemeinschaft Einspeisung L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energiegemeinschaft Einspeisung L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'AT00300000000RC103550000000985681',
       'name': 'EEG Oberösterreich RID-11',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l2',
@@ -516,19 +516,19 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energiegemeinschaft Einspeisung L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energiegemeinschaft Einspeisung L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'AT00300000000RC103550000000985681',
       'name': 'EEG Oberösterreich RID-11',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-06-28',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l3',
@@ -541,19 +541,19 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energiegemeinschaft Einspeisung L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energiegemeinschaft Einspeisung L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'AT00300000000RC103550000000985681',
       'name': 'EEG Oberösterreich RID-11',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_energy_community_export_l2',
@@ -566,17 +566,17 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energielieferant Einspeisung L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energielieferant Einspeisung L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_supplier_export_l2',
@@ -589,7 +589,7 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Status',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status',
@@ -602,17 +602,17 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energielieferant Einspeisung L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energielieferant Einspeisung L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l2',
@@ -625,17 +625,17 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energielieferant Einspeisung L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energielieferant Einspeisung L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-06-28',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l3',
@@ -648,7 +648,7 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_scale_type]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik (11111111) Typ',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Typ',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_scale_type',
@@ -661,7 +661,7 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_supplier]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik (11111111) Energielieferant',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energielieferant',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier',
@@ -674,11 +674,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Energielieferant Einspeisung L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energielieferant Einspeisung L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l2',
@@ -691,11 +691,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Energielieferant Einspeisung L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energielieferant Einspeisung L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l3',
@@ -708,10 +708,10 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Jahres-Trend',
-      'icon': 'mdi:chart-areaspline',
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Jahres-Trend',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend',
@@ -725,14 +725,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 365,
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) aktueller Jahres-Trend',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) aktueller Jahres-Trend',
       'from': '2025-05-31T00:00:00',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 12.30742191780822,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-05-31T23:59:59',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_new',
@@ -746,14 +746,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 365,
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) vorheriger Jahres-Trend',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) vorheriger Jahres-Trend',
       'from': '2024-05-31T00:00:00',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 11.90084109589041,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2025-05-30T23:59:59',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_old',
@@ -766,9 +766,9 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_contribution_factor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Teilnahmefaktor',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Teilnahmefaktor',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_contribution_factor',
@@ -781,19 +781,19 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energiegemeinschaft Bezug L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energiegemeinschaft Bezug L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'ATCC9999DYNAMCC100087000000000002',
       'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-01-26',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l2',
@@ -806,12 +806,12 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energiegemeinschaft Bezug L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energiegemeinschaft Bezug L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'ATCC9999DYNAMCC100087000000000002',
       'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-06-17',
@@ -822,7 +822,7 @@
           'to': '2026-06-16',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l3',
@@ -835,19 +835,19 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energiegemeinschaft Bezug L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energiegemeinschaft Bezug L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'ATCC9999DYNAMCC100087000000000002',
       'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-01',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_energy_community_import_l2',
@@ -860,17 +860,17 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energielieferant Netzbezug L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energielieferant Netzbezug L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-01',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_supplier_import_l2',
@@ -883,7 +883,7 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Status',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status',
@@ -896,17 +896,17 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energielieferant Netzbezug L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energielieferant Netzbezug L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-01-26',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_supplier_import_l2',
@@ -919,10 +919,10 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_supplier_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energielieferant Netzbezug L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energielieferant Netzbezug L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-06-17',
@@ -933,7 +933,7 @@
           'to': '2026-06-16',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_supplier_import_l3',
@@ -946,11 +946,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Energiegemeinschaft Bezug L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energiegemeinschaft Bezug L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2',
@@ -963,11 +963,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Energiegemeinschaft Bezug L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energiegemeinschaft Bezug L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l3',
@@ -980,11 +980,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Energiegemeinschaft Bezug L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energiegemeinschaft Bezug L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2',
@@ -997,11 +997,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Energielieferant Netzbezug L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energielieferant Netzbezug L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_supplier_import_l2',
@@ -1014,12 +1014,12 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Zählerstand',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Zählerstand',
       'meter_number': '3000000',
-      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
       'timestamp': '2026-06-28T00:15:00',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading',
@@ -1032,10 +1032,10 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) 30-Tage-Trend',
-      'icon': 'mdi:chart-areaspline',
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) 30-Tage-Trend',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend',
@@ -1049,14 +1049,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 0,
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) aktueller 30-Tage-Trend',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) aktueller 30-Tage-Trend',
       'from': '2026-06-28T17:07:11.908040171',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 0.0,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-06-29T17:07:11.908040275',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_new',
@@ -1070,14 +1070,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 0,
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) vorheriger 30-Tage-Trend',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) vorheriger 30-Tage-Trend',
       'from': '2026-06-28T17:07:11.908037756',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 0.0,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-06-29T17:07:11.908038675',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_old',
@@ -1090,9 +1090,9 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_contribution_factor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Teilnahmefaktor',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Teilnahmefaktor',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_contribution_factor',
@@ -1105,12 +1105,12 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energiegemeinschaft Bezug L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energiegemeinschaft Bezug L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'AT00300000000RC100930000000965743',
       'name': 'wseg 07614 0523 UW Partenstein',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
@@ -1121,7 +1121,7 @@
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_energy_community_import_l2',
@@ -1134,12 +1134,12 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_energy_community_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energiegemeinschaft Bezug L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energiegemeinschaft Bezug L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'AT00300000000RC100930000000965743',
       'name': 'wseg 07614 0523 UW Partenstein',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
@@ -1150,7 +1150,7 @@
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_energy_community_import_l3',
@@ -1163,11 +1163,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energiegemeinschaft Bezug L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energiegemeinschaft Bezug L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_energy_community_import_l2',
@@ -1180,11 +1180,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energielieferant Netzbezug L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energielieferant Netzbezug L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_supplier_import_l2',
@@ -1197,7 +1197,7 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_status]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Status',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_status',
@@ -1210,10 +1210,10 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energielieferant Netzbezug L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energielieferant Netzbezug L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
@@ -1224,7 +1224,7 @@
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_supplier_import_l2',
@@ -1237,10 +1237,10 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_supplier_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energielieferant Netzbezug L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energielieferant Netzbezug L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
@@ -1251,7 +1251,7 @@
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_supplier_import_l3',
@@ -1264,9 +1264,9 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_contribution_factor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Teilnahmefaktor',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Teilnahmefaktor',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_contribution_factor',
@@ -1279,19 +1279,19 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energiegemeinschaft Bezug L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energiegemeinschaft Bezug L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'AT00300000000RC103550000000985681',
       'name': 'EEG Oberösterreich RID-11',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_energy_community_import_l2',
@@ -1304,12 +1304,12 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_energy_community_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energiegemeinschaft Bezug L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energiegemeinschaft Bezug L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'AT00300000000RC103550000000985681',
       'name': 'EEG Oberösterreich RID-11',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-06-17',
@@ -1320,7 +1320,7 @@
           'to': '2026-06-16',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_energy_community_import_l3',
@@ -1333,19 +1333,19 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energiegemeinschaft Bezug L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energiegemeinschaft Bezug L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'AT00300000000RC103550000000985681',
       'name': 'EEG Oberösterreich RID-11',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_energy_community_import_l2',
@@ -1358,17 +1358,17 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energielieferant Netzbezug L2 (letzter Monat)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energielieferant Netzbezug L2 (letzter Monat)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_supplier_import_l2',
@@ -1381,7 +1381,7 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Status',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status',
@@ -1394,17 +1394,17 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energielieferant Netzbezug L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energielieferant Netzbezug L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_supplier_import_l2',
@@ -1417,10 +1417,10 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_supplier_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energielieferant Netzbezug L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energielieferant Netzbezug L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-06-17',
@@ -1431,7 +1431,7 @@
           'to': '2026-06-16',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_supplier_import_l3',
@@ -1444,7 +1444,7 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_scale_type]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt (11111112) Typ',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Typ',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_scale_type',
@@ -1457,7 +1457,7 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_supplier]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt (11111112) Energielieferant',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energielieferant',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier',
@@ -1470,11 +1470,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Energielieferant Netzbezug L1/L2 (Stand: vor 16 Tagen)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energielieferant Netzbezug L1/L2 (Stand: vor 16 Tagen)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier_import_l2',
@@ -1487,11 +1487,11 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_supplier_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Energielieferant Netzbezug L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energielieferant Netzbezug L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier_import_l3',
@@ -1504,10 +1504,10 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Jahres-Trend',
-      'icon': 'mdi:chart-areaspline',
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Jahres-Trend',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend',
@@ -1521,14 +1521,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 0,
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) aktueller Jahres-Trend',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) aktueller Jahres-Trend',
       'from': '2026-06-28T17:07:11.908041578',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 0.0,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-06-29T17:07:11.908041679',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_new',
@@ -1542,14 +1542,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 0,
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) vorheriger Jahres-Trend',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) vorheriger Jahres-Trend',
       'from': '2026-06-28T17:07:11.908041155',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 0.0,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-06-29T17:07:11.908041266',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_old',
@@ -1562,9 +1562,9 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_contribution_factor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Contribution factor',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Contribution factor',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_contribution_factor',
@@ -1577,19 +1577,19 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energy community export L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energy community export L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'ATCC9999DYNAMCC100087000000000002',
       'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-01-26',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l2',
@@ -1602,19 +1602,19 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energy community export L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energy community export L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'ATCC9999DYNAMCC100087000000000002',
       'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-01-26',
           'to': '2026-06-28',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l3',
@@ -1627,19 +1627,19 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energy community export L2 (last month)',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Energy community export L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'ATCC9999DYNAMCC100087000000000002',
       'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-01',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_energy_community_export_l2',
@@ -1652,17 +1652,17 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Supplier export L2 (last month)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Supplier export L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-01',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_supplier_export_l2',
@@ -1675,7 +1675,7 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Status',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status',
@@ -1688,17 +1688,17 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Supplier export L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Supplier export L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-01-26',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l2',
@@ -1711,17 +1711,17 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Supplier export L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111) Supplier export L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-01-26',
           'to': '2026-06-28',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l3',
@@ -1734,11 +1734,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Energy community export L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energy community export L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2',
@@ -1751,11 +1751,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Energy community export L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energy community export L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3',
@@ -1768,11 +1768,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Energy community export L2 (last month)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energy community export L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2',
@@ -1785,11 +1785,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Supplier export L2 (last month)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Supplier export L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_supplier_export_l2',
@@ -1802,12 +1802,12 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Meter reading',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Meter reading',
       'meter_number': '3000000',
-      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
       'timestamp': '2026-06-28T00:15:00',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading',
@@ -1820,10 +1820,10 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Monthly trend',
-      'icon': 'mdi:chart-areaspline',
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Monthly trend',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend',
@@ -1837,14 +1837,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 30,
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Monthly trend (current period)',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Monthly trend (current period)',
       'from': '2026-05-29T00:00:00',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 25.86666666666667,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-06-28T23:59:59',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_new',
@@ -1858,14 +1858,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 30,
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Monthly trend (previous period)',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Monthly trend (previous period)',
       'from': '2026-04-29T00:00:00',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 23.36666666666667,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-05-28T23:59:59',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_old',
@@ -1878,9 +1878,9 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_contribution_factor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Contribution factor',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Contribution factor',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_contribution_factor',
@@ -1893,19 +1893,19 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energy community export L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energy community export L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'AT00300000000RC100930000000965743',
       'name': 'wseg 07614 0523 UW Partenstein',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_energy_community_export_l2',
@@ -1918,19 +1918,19 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_energy_community_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energy community export L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energy community export L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'AT00300000000RC100930000000965743',
       'name': 'wseg 07614 0523 UW Partenstein',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_energy_community_export_l3',
@@ -1943,11 +1943,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energy community export L2 (last month)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Energy community export L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_energy_community_export_l2',
@@ -1960,11 +1960,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Supplier export L2 (last month)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Supplier export L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_supplier_export_l2',
@@ -1977,7 +1977,7 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_status]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Status',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_status',
@@ -1990,17 +1990,17 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Supplier export L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Supplier export L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_supplier_export_l2',
@@ -2013,17 +2013,17 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_supplier_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Supplier export L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Supplier export L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_supplier_export_l3',
@@ -2036,9 +2036,9 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_contribution_factor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Contribution factor',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Contribution factor',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_contribution_factor',
@@ -2051,19 +2051,19 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energy community export L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energy community export L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'AT00300000000RC103550000000985681',
       'name': 'EEG Oberösterreich RID-11',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l2',
@@ -2076,19 +2076,19 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energy community export L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energy community export L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'AT00300000000RC103550000000985681',
       'name': 'EEG Oberösterreich RID-11',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-06-28',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l3',
@@ -2101,19 +2101,19 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_energy_community_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energy community export L2 (last month)',
-      'icon': 'mdi:transmission-tower-import',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Energy community export L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
       'id': 'AT00300000000RC103550000000985681',
       'name': 'EEG Oberösterreich RID-11',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_energy_community_export_l2',
@@ -2126,17 +2126,17 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Supplier export L2 (last month)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Supplier export L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_supplier_export_l2',
@@ -2149,7 +2149,7 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Status',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status',
@@ -2162,17 +2162,17 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Supplier export L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Supplier export L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l2',
@@ -2185,17 +2185,17 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Supplier export L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Supplier export L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-06-28',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l3',
@@ -2208,7 +2208,7 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_scale_type]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik (11111111) Type',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Type',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_scale_type',
@@ -2221,7 +2221,7 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_supplier]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Photovoltaik (11111111) Supplier',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Supplier',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier',
@@ -2234,11 +2234,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Supplier export L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Supplier export L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l2',
@@ -2251,11 +2251,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Supplier export L1/L2/L3',
-      'icon': 'mdi:transmission-tower-import',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Supplier export L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-import',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l3',
@@ -2268,10 +2268,10 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Yearly trend',
-      'icon': 'mdi:chart-areaspline',
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Yearly trend',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend',
@@ -2285,14 +2285,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 365,
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Yearly trend (current period)',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Yearly trend (current period)',
       'from': '2025-05-31T00:00:00',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 12.30742191780822,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-05-31T23:59:59',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_new',
@@ -2306,14 +2306,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 365,
-      'device_class': 'energy',
-      'friendly_name': 'Photovoltaik (11111111) Yearly trend (previous period)',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Yearly trend (previous period)',
       'from': '2024-05-31T00:00:00',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 11.90084109589041,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2025-05-30T23:59:59',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_old',
@@ -2326,9 +2326,9 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_contribution_factor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Contribution factor',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Contribution factor',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_contribution_factor',
@@ -2341,19 +2341,19 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energy community import L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energy community import L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'ATCC9999DYNAMCC100087000000000002',
       'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-01-26',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l2',
@@ -2366,12 +2366,12 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energy community import L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energy community import L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'ATCC9999DYNAMCC100087000000000002',
       'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-06-17',
@@ -2382,7 +2382,7 @@
           'to': '2026-06-16',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l3',
@@ -2395,19 +2395,19 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energy community import L2 (last month)',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energy community import L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'ATCC9999DYNAMCC100087000000000002',
       'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-01',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_energy_community_import_l2',
@@ -2420,17 +2420,17 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Supplier import L2 (last month)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Supplier import L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-01',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_supplier_import_l2',
@@ -2443,7 +2443,7 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Status',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status',
@@ -2456,17 +2456,17 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Supplier import L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Supplier import L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-01-26',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_supplier_import_l2',
@@ -2479,10 +2479,10 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_supplier_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Supplier import L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Supplier import L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-06-17',
@@ -2493,7 +2493,7 @@
           'to': '2026-06-16',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_supplier_import_l3',
@@ -2506,11 +2506,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Energy community import L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energy community import L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2',
@@ -2523,11 +2523,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Energy community import L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energy community import L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l3',
@@ -2540,11 +2540,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Energy community import L2 (last month)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energy community import L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2',
@@ -2557,11 +2557,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Supplier import L2 (last month)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Supplier import L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_supplier_import_l2',
@@ -2574,12 +2574,12 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Meter reading',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Meter reading',
       'meter_number': '3000000',
-      'state_class': <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL_INCREASING: 'total_increasing'>,
       'timestamp': '2026-06-28T00:15:00',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading',
@@ -2592,10 +2592,10 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Monthly trend',
-      'icon': 'mdi:chart-areaspline',
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Monthly trend',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend',
@@ -2609,14 +2609,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 0,
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Monthly trend (current period)',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Monthly trend (current period)',
       'from': '2026-06-28T17:07:11.908040171',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 0.0,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-06-29T17:07:11.908040275',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_new',
@@ -2630,14 +2630,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 0,
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Monthly trend (previous period)',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Monthly trend (previous period)',
       'from': '2026-06-28T17:07:11.908037756',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 0.0,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-06-29T17:07:11.908038675',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_old',
@@ -2650,9 +2650,9 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_contribution_factor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Contribution factor',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Contribution factor',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_contribution_factor',
@@ -2665,12 +2665,12 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energy community import L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energy community import L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'AT00300000000RC100930000000965743',
       'name': 'wseg 07614 0523 UW Partenstein',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
@@ -2681,7 +2681,7 @@
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_energy_community_import_l2',
@@ -2694,12 +2694,12 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_energy_community_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energy community import L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energy community import L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'AT00300000000RC100930000000965743',
       'name': 'wseg 07614 0523 UW Partenstein',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
@@ -2710,7 +2710,7 @@
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_energy_community_import_l3',
@@ -2723,11 +2723,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energy community import L2 (last month)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Energy community import L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_energy_community_import_l2',
@@ -2740,11 +2740,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Supplier import L2 (last month)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Supplier import L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_supplier_import_l2',
@@ -2757,7 +2757,7 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_status]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Status',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_status',
@@ -2770,10 +2770,10 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Supplier import L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Supplier import L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
@@ -2784,7 +2784,7 @@
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_supplier_import_l2',
@@ -2797,10 +2797,10 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_supplier_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Supplier import L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Supplier import L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2024-05-06',
@@ -2811,7 +2811,7 @@
           'to': '2025-09-30',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_supplier_import_l3',
@@ -2824,9 +2824,9 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_contribution_factor]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Contribution factor',
-      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Contribution factor',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_contribution_factor',
@@ -2839,19 +2839,19 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energy community import L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energy community import L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'AT00300000000RC103550000000985681',
       'name': 'EEG Oberösterreich RID-11',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_energy_community_import_l2',
@@ -2864,12 +2864,12 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_energy_community_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energy community import L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energy community import L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'AT00300000000RC103550000000985681',
       'name': 'EEG Oberösterreich RID-11',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-06-17',
@@ -2880,7 +2880,7 @@
           'to': '2026-06-16',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_energy_community_import_l3',
@@ -2893,19 +2893,19 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_energy_community_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energy community import L2 (last month)',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Energy community import L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'id': 'AT00300000000RC103550000000985681',
       'name': 'EEG Oberösterreich RID-11',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_energy_community_import_l2',
@@ -2918,17 +2918,17 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Supplier import L2 (last month)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Supplier import L2 (last month)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-05-31',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_supplier_import_l2',
@@ -2941,7 +2941,7 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Status',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Status',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status',
@@ -2954,17 +2954,17 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Supplier import L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Supplier import L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-05-21',
           'to': '2026-06-12',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_supplier_import_l2',
@@ -2977,10 +2977,10 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_supplier_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt: EEG Oberösterreich RID-11 (11111112) Supplier import L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Supplier import L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'timeline': list([
         dict({
           'from': '2026-06-17',
@@ -2991,7 +2991,7 @@
           'to': '2026-06-16',
         }),
       ]),
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_supplier_import_l3',
@@ -3004,7 +3004,7 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_scale_type]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt (11111112) Type',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Type',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_scale_type',
@@ -3017,7 +3017,7 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_supplier]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'friendly_name': 'Haushalt (11111112) Supplier',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Supplier',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier',
@@ -3030,11 +3030,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_supplier_import_l2]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Supplier import L1/L2 (16-day delay)',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Supplier import L1/L2 (16-day delay)',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier_import_l2',
@@ -3047,11 +3047,11 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_supplier_import_l3]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Supplier import L1/L2/L3',
-      'icon': 'mdi:transmission-tower-export',
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Supplier import L1/L2/L3',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier_import_l3',
@@ -3064,10 +3064,10 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Yearly trend',
-      'icon': 'mdi:chart-areaspline',
-      'unit_of_measurement': '%',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Yearly trend',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend',
@@ -3081,14 +3081,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 0,
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Yearly trend (current period)',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Yearly trend (current period)',
       'from': '2026-06-28T17:07:11.908041578',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 0.0,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-06-29T17:07:11.908041679',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_new',
@@ -3102,14 +3102,14 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'days': 0,
-      'device_class': 'energy',
-      'friendly_name': 'Haushalt (11111112) Yearly trend (previous period)',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Yearly trend (previous period)',
       'from': '2026-06-28T17:07:11.908041155',
-      'icon': 'mdi:transmission-tower-export',
+      <EntityStateAttribute.ICON: 'icon'>: 'mdi:transmission-tower-export',
       'per_day': 0.0,
-      'state_class': <SensorStateClass.TOTAL: 'total'>,
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
       'to': '2026-06-29T17:07:11.908041266',
-      'unit_of_measurement': <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_old',

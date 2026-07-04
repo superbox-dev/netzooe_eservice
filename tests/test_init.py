@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from unittest.mock import patch
 
 import pytest
 from homeassistant.config_entries import ConfigEntryState
+from homeassistant.util import dt as dt_util
 
 from tests import setup_integration
 
@@ -24,7 +26,11 @@ async def test_load_entry(
     fake_api.register_auth_request()
     fake_api.register_requests()
 
-    await setup_integration(hass, config_entry)
+    with patch(
+        "custom_components.netzooe_eservice.coordinator.dt_util.now",
+        return_value=dt_util.parse_datetime("2026-06-28T12:00:00+02:00"),
+    ):
+        await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
     assert hass.states.async_entity_ids_count() == 78
