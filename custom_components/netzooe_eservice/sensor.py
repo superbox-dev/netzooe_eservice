@@ -263,7 +263,7 @@ SENSOR_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         icon="mdi:chart-areaspline",
         value_fn=lambda data: (
             (
-                (data["monthlyTrend"]["consumptionOld"]["sum"] - data["monthlyTrend"]["consumptionNew"]["sum"])
+                (data["monthlyTrend"]["consumptionNew"]["sum"] - data["monthlyTrend"]["consumptionOld"]["sum"])
                 / data["monthlyTrend"]["consumptionOld"]["sum"]
                 * 100
             )
@@ -314,7 +314,7 @@ SENSOR_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         icon="mdi:chart-areaspline",
         value_fn=lambda data: (
             (
-                (data["yearlyTrend"]["consumptionOld"]["sum"] - data["yearlyTrend"]["consumptionNew"]["sum"])
+                (data["yearlyTrend"]["consumptionNew"]["sum"] - data["yearlyTrend"]["consumptionOld"]["sum"])
                 / data["yearlyTrend"]["consumptionOld"]["sum"]
                 * 100
             )

@@ -270,7 +270,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '-10.6990014265335',
+    'state': '10.6990014265335',
   })
 # ---
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_new]
@@ -718,7 +718,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '-3.41640408977655',
+    'state': '3.41640408977655',
   })
 # ---
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_new]
@@ -1830,7 +1830,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '-10.6990014265335',
+    'state': '10.6990014265335',
   })
 # ---
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_new]
@@ -2278,7 +2278,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '-3.41640408977655',
+    'state': '3.41640408977655',
   })
 # ---
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_new]
