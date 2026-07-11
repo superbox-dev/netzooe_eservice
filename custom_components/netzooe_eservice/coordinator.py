@@ -134,7 +134,21 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                         self._append_mpan_data(data, contract=contract)
 
         for contracts in all_contracts_by_mpan.values():
-            active_contract: dict[str, Any] = next(item for item in contracts if item["contract"]["active"])
+            active_contract: dict[str, Any] | None = next(
+                (
+                item 
+                for item in contracts
+                if item["contract"].get("active")
+                ), 
+            None,
+            )
+
+            if active_contract is None:
+                _LOGGER.warning(
+                    "Skipping %d contract(s) because no active contract was returned by the API.",
+                    len (contracts),
+                )
+                continue
 
             await self._append_energy_community_data(
                 data,
