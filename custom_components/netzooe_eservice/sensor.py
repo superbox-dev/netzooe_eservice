@@ -255,7 +255,6 @@ SENSOR_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceSensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
         key="monthly_trend",
         native_unit_of_measurement=PERCENTAGE,
         suggested_display_precision=2,
@@ -306,7 +305,6 @@ SENSOR_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
     ),
     NetzOOEeServiceSensorEntityDescription[float](
         entity_class=NetzOOEeServiceSensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
         key="yearly_trend",
         native_unit_of_measurement=PERCENTAGE,
         suggested_display_precision=2,
