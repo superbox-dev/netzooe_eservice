@@ -260,7 +260,6 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) 30-Tage-Trend',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -708,7 +707,6 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Jahres-Trend',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -1032,7 +1030,6 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) 30-Tage-Trend',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -1504,7 +1501,6 @@
 # name: test_sensors[de-sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Jahres-Trend',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -1820,7 +1816,6 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Monthly trend',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -2268,7 +2263,6 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Yearly trend',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -2592,7 +2586,6 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Monthly trend',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
@@ -3064,7 +3057,6 @@
 # name: test_sensors[en-sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend]
   StateSnapshot({
     'attributes': ReadOnlyDict({
-      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'energy',
       <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Yearly trend',
       <EntityStateAttribute.ICON: 'icon'>: 'mdi:chart-areaspline',
       <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: '%',
