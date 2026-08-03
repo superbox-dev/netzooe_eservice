@@ -148,6 +148,10 @@ DASHBOARD_DATA: dict[str, Any] = {
             "contractAccountNumber": "003",
             "businessPartnerNumber": "100",
         },
+        {
+            "contractAccountNumber": "004",
+            "businessPartnerNumber": "100",
+        },
     ],
 }
 
@@ -585,6 +589,78 @@ CONTRACT_ACCOUNT_DATA_3: dict[str, Any] = {
                         "profileDataAvailableTo": "2026-06-16",
                     },
                 ],
+                "energyCommunityActive": True,
+            },
+            "supplier": {
+                "id": "AT113021",
+                "name": "easy green energy GmbH & Co KG",
+            },
+            "synthProfile": "Haushalt",
+        },
+    ],
+}
+
+CONTRACT_ACCOUNT_DATA_4: dict[str, Any] = {
+    "contractAccountNumber": "004",
+    "businessPartnerNumber": "200",
+    "active": False,
+    "branch": "STROM",
+    "contracts": [
+        {
+            "branch": "STROM",
+            "scaleType": "EEG 7ngem",
+            "active": False,
+            "pointOfDelivery": {
+                "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+                "meter": {
+                    "meterNumber": "3000000",
+                },
+                "monthlyTrend": {
+                    "consumptionOld": {
+                        "sum": 0.0,
+                        "perDay": 0.0,
+                        "days": 0,
+                    },
+                    "consumptionNew": {
+                        "sum": 0.0,
+                        "perDay": 0.0,
+                        "days": 0,
+                    },
+                    "timerangeOld": {
+                        "from": "2026-06-28T17:11:06.851202621",
+                        "to": "2026-06-29T17:11:06.851203478",
+                    },
+                    "timerangeNew": {
+                        "from": "2026-06-28T17:11:06.85120513",
+                        "to": "2026-06-29T17:11:06.851205241",
+                    },
+                },
+                "yearlyTrend": {
+                    "consumptionOld": {
+                        "sum": 0.0,
+                        "perDay": 0.0,
+                        "days": 0,
+                    },
+                    "consumptionNew": {
+                        "sum": 0.0,
+                        "perDay": 0.0,
+                        "days": 0,
+                    },
+                    "timerangeOld": {
+                        "from": "2026-06-28T17:11:06.851206116",
+                        "to": "2026-06-29T17:11:06.85120623",
+                    },
+                    "timerangeNew": {
+                        "from": "2026-06-28T17:11:06.851206505",
+                        "to": "2026-06-29T17:11:06.85120663",
+                    },
+                },
+                "lastReadings": {},
+            },
+            "powerGenerationUnit": False,
+            "energyCommunityData": {
+                "status": "HISTORICAL",
+                "timeslices": [],
                 "energyCommunityActive": True,
             },
             "supplier": {

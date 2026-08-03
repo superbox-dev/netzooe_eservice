@@ -133,20 +133,17 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     if contract["active"]:
                         self._append_mpan_data(data, contract=contract)
 
-        for contracts in all_contracts_by_mpan.values():
+        for mpan, contracts in all_contracts_by_mpan.items():
             active_contract: dict[str, Any] | None = next(
-                (
-                item 
-                for item in contracts
-                if item["contract"].get("active")
-                ), 
-            None,
+                (item for item in contracts if item["contract"].get("active")),
+                None,
             )
 
             if active_contract is None:
                 _LOGGER.warning(
-                    "Skipping %d contract(s) because no active contract was returned by the API.",
-                    len (contracts),
+                    "Skipping %d contract(s) because no active contract for meter point %s was returned by the API.",
+                    len(contracts),
+                    mpan,
                 )
                 continue
 
