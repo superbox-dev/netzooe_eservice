@@ -17,6 +17,7 @@ from tests.api_data import CONSENTS_DATA
 from tests.api_data import CONTRACT_ACCOUNT_DATA_1
 from tests.api_data import CONTRACT_ACCOUNT_DATA_2
 from tests.api_data import CONTRACT_ACCOUNT_DATA_3
+from tests.api_data import CONTRACT_ACCOUNT_DATA_4
 from tests.api_data import DASHBOARD_DATA
 from tests.api_data import EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3
 from tests.api_data import EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4
@@ -168,6 +169,19 @@ class FakeNetzOOEeServiceAPI:
             },
             status=200,
             json=CONTRACT_ACCOUNT_DATA_3,
+        )
+
+        self.aioclient_mock.get(
+            "https://eservice.netzooe.at/service/v1.0/contract-accounts/100/004",
+            headers={
+                "User-Agent": "Mozilla/5.0",
+                "Accept": "application/json, text/plain, */*",
+                "client-id": "netzonline",
+                "Content-Type": "application/json",
+                "x-xsrf-token": "mocked-token",
+            },
+            status=200,
+            json=CONTRACT_ACCOUNT_DATA_4,
         )
 
         self.aioclient_mock.post(

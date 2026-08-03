@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 from unittest.mock import patch
 
@@ -22,13 +23,20 @@ async def test_load_entry(
     config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     snapshot: SnapshotAssertion,
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
     fake_api.register_auth_request()
     fake_api.register_requests()
 
-    with patch(
-        "custom_components.netzooe_eservice.coordinator.dt_util.now",
-        return_value=dt_util.parse_datetime("2026-06-28T12:00:00+02:00"),
+    with (
+        patch(
+            "custom_components.netzooe_eservice.coordinator.dt_util.now",
+            return_value=dt_util.parse_datetime("2026-06-28T12:00:00+02:00"),
+        ),
+        caplog.at_level(
+            logging.WARNING,
+            logger="custom_components.netzooe_eservice.coordinator",
+        ),
     ):
         await setup_integration(hass, config_entry)
 
@@ -36,3 +44,8 @@ async def test_load_entry(
     assert hass.states.async_entity_ids_count() == 78
 
     assert set(hass.states.async_entity_ids()) == snapshot
+
+    assert (
+        "Skipping 1 contract(s) because no active contract for meter point "
+        "AT0000000000000000000000011111113 was returned by the API." in caplog.text
+    )
