@@ -14,13 +14,18 @@ from custom_components.netzooe_eservice.coordinator import NetzOOEeServiceDataUp
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from aiohttp import ClientSession
+    from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 
-async def test_async_update_data_api_error_raises_update_failed(hass: HomeAssistant) -> None:
+async def test_async_update_data_api_error_raises_update_failed(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+) -> None:
     session: ClientSession = async_get_clientsession(hass)
 
     coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
         hass,
+        config_entry,
         username="test",
         password="test",  # noqa: S106
         session=session,

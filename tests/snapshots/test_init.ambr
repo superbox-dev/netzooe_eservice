@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_load_entry
+# name: test_load_entry[config_entry0]
   set({
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_contribution_factor',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l2',
