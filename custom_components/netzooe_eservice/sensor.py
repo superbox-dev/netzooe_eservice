@@ -54,6 +54,8 @@ class NetzOOEeServiceSensorEntityDescription[T](
 class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
     """Netz OÖ eService sensor entity."""
 
+    entity_description: NetzOOEeServiceSensorEntityDescription[StateType]
+
     def __init__(
         self,
         coordinator: NetzOOEeServiceDataUpdateCoordinator,
@@ -62,7 +64,7 @@ class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
         device_identifier: str,
     ) -> None:
         """Initialize the entity."""
-        self.entity_description: NetzOOEeServiceSensorEntityDescription[StateType] = description
+        self.entity_description = description
 
         super().__init__(
             coordinator,

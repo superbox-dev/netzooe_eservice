@@ -60,10 +60,10 @@ audit = [
     "pip-audit>=2.9.0",
 ]
 lint = [
-    "mypy>=1.17.1",
     "prek>=0.4.13",
     "ruff>=0.16.2",
     "rumdl>=0.2.54",
+    "ty>=0.0.70",
     "types-PyYAML>=6.0.12.20260724",
     "yamllint>=1.38.0",
 ]
@@ -76,10 +76,3 @@ test = [
 
 [tool.setuptools]
 packages = []
-
-[tool.mypy]
-strict = true
-junit_xml = "reports/mypy.xml"
-disable_error_code = [
-    "import-untyped"
-]
