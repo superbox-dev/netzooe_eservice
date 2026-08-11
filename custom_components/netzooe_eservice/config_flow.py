@@ -10,14 +10,18 @@ from typing import TYPE_CHECKING
 import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow
 from homeassistant.config_entries import ConfigFlowResult
+from homeassistant.config_entries import OptionsFlowWithReload
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_USERNAME
+from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from netzooe_eservice_api.api import NetzOOEeServiceAPI
 from netzooe_eservice_api.error import APIError
 
 from .const import CONFIG_ENTRY_VERSION
+from .const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
+from .const import DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .const import NAME
@@ -26,6 +30,7 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
     from .coordinator import NetzOOEeServiceConfigEntry
+    from .coordinator import NetzOOEeServiceDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -130,6 +135,46 @@ class NetzOOEeServiceConfigFlow(ConfigFlow, domain=DOMAIN):
         self._abort_if_unique_id_configured()
 
         return self.async_create_entry(title=f"{MANUFACTURER} {NAME} ({user_input[CONF_USERNAME]})", data=user_input)
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(
+        config_entry: NetzOOEeServiceConfigEntry,  # noqa: ARG004
+    ) -> NetzOOEeServiceOptionsFlow:
+        """Get the options flow for this handler."""
+        return NetzOOEeServiceOptionsFlow()
+
+
+class NetzOOEeServiceOptionsFlow(OptionsFlowWithReload):
+    """Option flow for Netz OÖ eService."""
+
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        """Handle options flow."""
+        if user_input is not None:
+            return self.async_create_entry(data=user_input)
+
+        coordinator: NetzOOEeServiceDataUpdateCoordinator | None = getattr(
+            self.config_entry,
+            "runtime_data",
+            None,
+        )
+
+        if coordinator is None:
+            return self.async_abort(reason="options_not_ready")
+
+        schema_fields: dict[Any, Any] = {
+            vol.Optional(
+                CONF_SHOW_REVOKED_ENERGY_COMMUNITIES,
+                default=self.config_entry.options.get(
+                    CONF_SHOW_REVOKED_ENERGY_COMMUNITIES,
+                    DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES,
+                ),
+            ): bool,
+        }
+        return self.async_show_form(
+            step_id="init",
+            data_schema=vol.Schema(schema_fields),
+        )
 
 
 class CannotConnectError(HomeAssistantError):
