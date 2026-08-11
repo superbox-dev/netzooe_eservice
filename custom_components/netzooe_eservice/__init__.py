@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
 from typing import TYPE_CHECKING
+from typing import Any
 
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_USERNAME

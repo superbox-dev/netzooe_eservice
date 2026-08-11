@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from typing import Any
 from typing import TYPE_CHECKING
+from typing import Any
 from unittest.mock import patch
 
 import pytest
@@ -9,8 +9,8 @@ from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_USERNAME
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
-from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
+from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 
 from custom_components.netzooe_eservice.const import DOMAIN
 from tests.api_data import CONSENTS_DATA
@@ -38,8 +38,9 @@ from tests.api_data import WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1
 from tests.api_data import WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2
 
 if TYPE_CHECKING:
-    from _pytest.fixtures import SubRequest
     from collections.abc import Generator
+
+    from _pytest.fixtures import SubRequest
     from syrupy.assertion import SnapshotAssertion
     from yarl import URL
 
