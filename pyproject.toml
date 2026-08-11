@@ -52,12 +52,8 @@ version = "1.1.0b1"
 
 [dependency-groups]
 dev = [
-    { include-group = "audit" },
     { include-group = "lint" },
     { include-group = "test" },
-]
-audit = [
-    "pip-audit>=2.9.0",
 ]
 lint = [
     "prek>=0.4.13",
