@@ -228,6 +228,9 @@ def config_entry(request: SubRequest) -> MockConfigEntry:
             CONF_PASSWORD: "test",
         },
         "unique_id": "test",
+        "options": {
+            "show_revoked_energy_communities": False,
+        },
     }
 
     if hasattr(request, "param"):

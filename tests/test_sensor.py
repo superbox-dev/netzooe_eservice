@@ -106,6 +106,19 @@ if TYPE_CHECKING:
         "en",
     ],
 )
+@pytest.mark.parametrize(
+    "config_entry",
+    [
+        (
+            {
+                "options": {
+                    "show_revoked_energy_communities": True,
+                },
+            }
+        ),
+    ],
+    indirect=["config_entry"],
+)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_sensors(
     hass: HomeAssistant,
