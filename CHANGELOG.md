@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-08-12
+
+### Added
+
+- Add "Show revoked energy communities" option. Disabled by default. When enabled, revoked energy communities are
+  displayed and their values are included in the total sensors. [(ISSUE #21)][issue-21]
+
+[issue-21]: https://github.com/superbox-dev/netzooe_eservice/issues/21
+
 ## [1.0.1] - 2026-08-03
 
 ### Fixed
