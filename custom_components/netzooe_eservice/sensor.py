@@ -145,7 +145,7 @@ def _sum_difference_by_type(
     return positive - negative
 
 
-def _sum_values_for_mpan(
+def _sum_values_for_mpan(  # noqa: PLR0917
     coordinator: NetzOOEeServiceDataUpdateCoordinator,
     device_identifier: str,
     key: str,

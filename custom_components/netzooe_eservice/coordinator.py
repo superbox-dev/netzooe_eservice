@@ -23,6 +23,8 @@ from netzooe_eservice_api.constants import SynthProfile
 from netzooe_eservice_api.error import APIError
 from netzooe_eservice_api.error import AuthenticationError
 
+from .const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
+from .const import DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES
 from .const import DOMAIN
 from .const import DeviceType
 from .const import SCAN_INTERVAL
@@ -53,6 +55,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
     def __init__(
         self,
         hass: HomeAssistant,
+        entry: NetzOOEeServiceConfigEntry,
         /,
         *,
         username: str,
@@ -60,6 +63,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         session: ClientSession,
     ) -> None:
         """Initialize."""
+        self.config_entry: NetzOOEeServiceConfigEntry = entry
+
         self.api: NetzOOEeServiceAPI = NetzOOEeServiceAPI(
             username=username,
             password=password,
@@ -67,6 +72,11 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         )
 
         self.dashboard: dict[str, Any] = {}
+
+        self.show_revoked_energy_communities: bool = self.config_entry.options.get(
+            CONF_SHOW_REVOKED_ENERGY_COMMUNITIES,
+            DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES,
+        )
 
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
 
@@ -230,6 +240,20 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             for timeslice in contract.get("energyCommunityData", {}).get("timeslices", []):
                 _LOGGER.debug("  %s", timeslice["energyCommunityName"])
 
+                if (
+                    self._is_revoked_energy_community(
+                        consents_map=consents_map,
+                        meter_point_administration_number=meter_point_administration_number,
+                        timeslice=timeslice,
+                    )
+                    and self.show_revoked_energy_communities is False
+                ):
+                    _LOGGER.debug(
+                        "  Skipping revoked energy community %s",
+                        timeslice["energyCommunityName"],
+                    )
+                    continue
+
                 energy_community: dict[str, Any] = self._get_or_create_energy_community(
                     energy_communities,
                     consents_map=consents_map,
@@ -386,3 +410,22 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         last_day: date = min(last_day_of_month, cutoff)
 
         return first_day, last_day
+
+    def _is_revoked_energy_community(
+        self,
+        *,
+        consents_map: dict[str, list[dict[str, Any]]],
+        meter_point_administration_number: str,
+        timeslice: dict[str, Any],
+    ) -> bool:
+        """Return whether the energy community is revoked."""
+        consent = next(
+            (
+                consent
+                for consent in consents_map[meter_point_administration_number]
+                if consent["serviceProvider"] in timeslice["energyCommunityId"]
+            ),
+            None,
+        )
+
+        return consent is not None and consent["status"] == "REVOKED"

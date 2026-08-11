@@ -102,5 +102,17 @@
         "authentication_error": {
             "message": "Authentifizierung fehlgeschlagen. Bitte überprüfe deine Anmeldedaten."
         }
+    },
+    "options": {
+        "abort": {
+            "options_not_ready": "Integration nicht vollständig geladen"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "show_revoked_energy_communities": "Widerrufene Energiegemeinschaften anzeigen"
+                }
+            }
+        }
     }
 }

@@ -102,5 +102,17 @@
         "authentication_error": {
             "message": "Authentication failed. Please check your credentials."
         }
+    },
+    "options": {
+        "abort": {
+            "options_not_ready": "Integration not fully loaded"
+        },
+        "step": {
+            "init": {
+                "data": {
+                    "show_revoked_energy_communities": "Show revoked energy communities"
+                }
+            }
+        }
     }
 }

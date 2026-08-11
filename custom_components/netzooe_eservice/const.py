@@ -7,9 +7,11 @@ from enum import Enum
 from typing import Final
 
 CONFIG_ENTRY_VERSION: Final[int] = 1
+CONF_SHOW_REVOKED_ENERGY_COMMUNITIES: Final[str] = "show_revoked_energy_communities"
+DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES: Final[bool] = False
 DOMAIN: Final[str] = "netzooe_eservice"
-MANUFACTURER: Final = "Netz OÖ"
-NAME: Final = "eService"
+MANUFACTURER: Final[str] = "Netz OÖ"
+NAME: Final[str] = "eService"
 SCAN_INTERVAL: Final[timedelta] = timedelta(hours=3)
 
 
