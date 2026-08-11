@@ -4,8 +4,6 @@ from typing import TYPE_CHECKING
 from unittest.mock import patch
 
 import pytest
-from homeassistant.core import HomeAssistant
-from homeassistant.core import State
 from homeassistant.util import dt as dt_util
 
 from tests import setup_integration
@@ -13,92 +11,11 @@ from tests import setup_integration
 if TYPE_CHECKING:
     from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
+    from homeassistant.core import HomeAssistant
+    from homeassistant.core import State
     from tests.conftest import FakeNetzOOEeServiceAPI
 
 
-@pytest.mark.parametrize(
-    "entity",
-    [
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_contribution_factor",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_energy_community_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_supplier_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_supplier_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_new",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend_old",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_contribution_factor",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_energy_community_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_energy_community_export_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_energy_community_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_supplier_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_status",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_supplier_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_supplier_export_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_contribution_factor",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_energy_community_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_supplier_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_scale_type",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_supplier",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_new",
-        "sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend_old",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_contribution_factor",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_energy_community_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_supplier_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_supplier_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_supplier_import_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_supplier_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_new",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend_old",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_contribution_factor",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_energy_community_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_energy_community_import_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_energy_community_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_supplier_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_status",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_supplier_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_supplier_import_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_contribution_factor",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_energy_community_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_energy_community_import_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_energy_community_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_supplier_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_supplier_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_supplier_import_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_scale_type",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_supplier",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_supplier_import_l2",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_supplier_import_l3",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_new",
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend_old",
-    ],
-)
 @pytest.mark.parametrize(
     "language",
     [
@@ -109,13 +26,16 @@ if TYPE_CHECKING:
 @pytest.mark.parametrize(
     "config_entry",
     [
-        (
-            {
-                "options": {
-                    "show_revoked_energy_communities": True,
-                },
-            }
-        ),
+        {
+            "options": {
+                "show_revoked_energy_communities": True,
+            },
+        },
+        {
+            "options": {
+                "show_revoked_energy_communities": False,
+            },
+        },
     ],
     indirect=["config_entry"],
 )
@@ -125,7 +45,6 @@ async def test_sensors(
     config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     snapshot: SnapshotAssertion,
-    entity: str,
     language: str,
 ) -> None:
     fake_api.register_auth_request()
@@ -139,6 +58,8 @@ async def test_sensors(
     ):
         await setup_integration(hass, config_entry)
 
-    sensor: State | None = hass.states.get(entity)
-    assert isinstance(sensor, State)
-    assert sensor == snapshot
+    states: dict[str, State | None] = {
+        entity_id: hass.states.get(entity_id) for entity_id in sorted(hass.states.async_entity_ids("sensor"))
+    }
+
+    assert states == snapshot

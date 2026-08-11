@@ -145,13 +145,12 @@ def _sum_difference_by_type(
     return positive - negative
 
 
-def _sum_values_for_mpan(  # noqa: PLR0917
+def _sum_values_for_mpan(
     coordinator: NetzOOEeServiceDataUpdateCoordinator,
     device_identifier: str,
     key: str,
     positive_type: str,
     negative_type: str | None = None,
-    status: str | None = None,
 ) -> float:
     total: float = 0.0
 
@@ -159,7 +158,7 @@ def _sum_values_for_mpan(  # noqa: PLR0917
         if not current_device_identifier.startswith(f"{device_identifier}_"):
             continue
 
-        if status is not None and data["status"].lower() != status.lower():
+        if not coordinator.show_revoked_energy_communities and data["status"].lower() != "active":
             continue
 
         items: list[dict[str, Any]] = data.get(key, [])
@@ -338,7 +337,6 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             device_identifier,
             "totalL2",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
-            status="active",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -357,7 +355,6 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             "totalL2",
             "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
-            status="active",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -375,7 +372,6 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             device_identifier,
             "totalL3",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
-            status="active",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -394,7 +390,6 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             "totalL3",
             "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
-            status="active",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -412,7 +407,6 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             device_identifier,
             "monthlyL2",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
-            status="active",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -431,7 +425,6 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
             "monthlyL2",
             "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OWN_COVERAGE",
-            status="active",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -453,7 +446,6 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             "totalL2",
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-            status="active",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -471,7 +463,6 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             device_identifier,
             "totalL2",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-            status="active",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -490,7 +481,6 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             "totalL3",
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-            status="active",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -508,7 +498,6 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             device_identifier,
             "totalL3",
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-            status="active",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -527,7 +516,6 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             "monthlyL2",
             "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-            status="active",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
@@ -545,7 +533,6 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             device_identifier,
             "monthlyL2",
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-            status="active",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),

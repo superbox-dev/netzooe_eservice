@@ -20,13 +20,16 @@ if TYPE_CHECKING:
 @pytest.mark.parametrize(
     "config_entry",
     [
-        (
-            {
-                "options": {
-                    "show_revoked_energy_communities": True,
-                },
-            }
-        ),
+        {
+            "options": {
+                "show_revoked_energy_communities": True,
+            },
+        },
+        {
+            "options": {
+                "show_revoked_energy_communities": False,
+            },
+        },
     ],
     indirect=["config_entry"],
 )
@@ -54,7 +57,7 @@ async def test_load_entry(
         await setup_integration(hass, config_entry)
 
     assert config_entry.state is ConfigEntryState.LOADED
-    assert hass.states.async_entity_ids_count() == 78
+    assert hass.states.async_entity_ids_count() == snapshot
 
     assert set(hass.states.async_entity_ids()) == snapshot
 
