@@ -13,7 +13,6 @@ hooks = [
   { id = "check-case-conflict" },
   { id = "mixed-line-ending" },
   { id = "detect-private-key" },
-  { id = "end-of-file-fixer" },
   { id = "trailing-whitespace" }
 ]
 
