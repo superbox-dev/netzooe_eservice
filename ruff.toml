@@ -10,7 +10,6 @@ ignore = [
     "D203",    # one-blank-line-before-class
     "D213",    # multi-line-summary-second-line
     "ERA001",  # commented-out-code
-    "I001",    # unsorted-imports
     "PLR0913", # too-many-arguments
     "S101",    # assert
     "TRY003",  # raise-vanilla-args
@@ -25,3 +24,6 @@ ignore = [
     "PLR2004", # magic-value-comparison
     "SLF001",  # private-member-access
 ]
+
+[lint.isort]
+force-single-line = true

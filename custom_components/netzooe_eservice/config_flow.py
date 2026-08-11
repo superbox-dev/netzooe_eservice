@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import logging
 from http import HTTPStatus
-from typing import Any
 from typing import TYPE_CHECKING
+from typing import Any
 
 import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow
@@ -19,8 +19,8 @@ from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from netzooe_eservice_api.api import NetzOOEeServiceAPI
 from netzooe_eservice_api.error import APIError
 
-from .const import CONFIG_ENTRY_VERSION
 from .const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
+from .const import CONFIG_ENTRY_VERSION
 from .const import DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES
 from .const import DOMAIN
 from .const import MANUFACTURER
@@ -29,6 +29,7 @@ from .const import NAME
 if TYPE_CHECKING:
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
+
     from .coordinator import NetzOOEeServiceConfigEntry
     from .coordinator import NetzOOEeServiceDataUpdateCoordinator
 

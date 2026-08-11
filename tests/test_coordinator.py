@@ -12,8 +12,8 @@ from netzooe_eservice_api.error import APIError
 from custom_components.netzooe_eservice.coordinator import NetzOOEeServiceDataUpdateCoordinator
 
 if TYPE_CHECKING:
-    from homeassistant.core import HomeAssistant
     from aiohttp import ClientSession
+    from homeassistant.core import HomeAssistant
     from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 

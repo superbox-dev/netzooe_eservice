@@ -4,32 +4,34 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
-from typing import TYPE_CHECKING
 
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.components.sensor import SensorEntityDescription
 from homeassistant.components.sensor import SensorStateClass
-from homeassistant.const import EntityCategory
 from homeassistant.const import PERCENTAGE
+from homeassistant.const import EntityCategory
 from homeassistant.const import UnitOfEnergy
 from homeassistant.helpers.device_registry import DeviceInfo
 
 from .const import DOMAIN
-from .const import DeviceType
 from .const import MANUFACTURER
 from .const import NAME
+from .const import DeviceType
 from .entity import NetzOOEeServiceEntity
 
 if TYPE_CHECKING:
     from collections.abc import Callable
     from collections.abc import Mapping
+
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from homeassistant.helpers.typing import StateType
+
     from .coordinator import NetzOOEeServiceConfigEntry
     from .coordinator import NetzOOEeServiceDataUpdateCoordinator
 

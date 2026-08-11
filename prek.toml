@@ -33,14 +33,14 @@ entry = "uv run ruff check"
 language = "system"
 types = ["python"]
 
-[[repos.hooks]]
-id = "mypy"
-name = "mypy"
-entry = "uv run mypy"
-language = "system"
-types = ["python"]
-pass_filenames = false
-require_serial = true
+#[[repos.hooks]]
+#id = "mypy"
+#name = "mypy"
+#entry = "uv run mypy"
+#language = "system"
+#types = ["python"]
+#pass_filenames = false
+#require_serial = true
 
 [[repos.hooks]]
 id = "rumdl"

@@ -7,9 +7,9 @@ import logging
 from collections import defaultdict
 from datetime import date
 from datetime import timedelta
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import ClassVar
-from typing import TYPE_CHECKING
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import ConfigEntryAuthFailed
@@ -26,8 +26,8 @@ from netzooe_eservice_api.error import AuthenticationError
 from .const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
 from .const import DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES
 from .const import DOMAIN
-from .const import DeviceType
 from .const import SCAN_INTERVAL
+from .const import DeviceType
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
