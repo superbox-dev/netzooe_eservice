@@ -64,7 +64,7 @@ uv run black .
 To test the code we use [pytest](https://docs.pytest.org):
 
 ```bash
-uv run pytest -n auto
+uv run pytest
 ```
 
 ## License
