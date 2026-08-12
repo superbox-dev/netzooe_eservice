@@ -86,7 +86,7 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: coverage-xml
-          path: reports
+          path: .
       - name: Create coverage badge
         run: uv run genbadge coverage --input-file coverage.xml
       - name: Verify coverage badge changed
