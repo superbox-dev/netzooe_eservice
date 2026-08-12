@@ -7,18 +7,13 @@ log_cli_level = "INFO"
 log_cli_format = "%(levelname)-8s | %(asctime)s | [%(name)s] %(message)s"
 # https://docs.pytest.org/en/latest/reference/reference.html#ini-options-ref
 addopts = [
-    "--cov=custom_components",
+    "--cov",
     "--cov-report=term-missing",
-    "--cov-report=xml:reports/coverage.xml",
     "--color=yes",
     "--exitfirst",
     "--failed-first",
     "--strict-config",
     "--strict-markers",
-    "--junitxml=reports/pytest.xml",
 ]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
-markers = [
-    "no_fail_on_eservice_errors: Disable the fail_on_eservice_errors autouse fixture",
-]

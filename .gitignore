@@ -16,7 +16,6 @@
 .rumdl_cache
 
 # reports
-reports/
 .coverage
 
 # build package
