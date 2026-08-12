@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: coverage-xml
-          path: reports/coverage.xml
+          path: coverage.xml
           if-no-files-found: error
           overwrite: True
 
@@ -88,7 +88,7 @@ jobs:
           name: coverage-xml
           path: reports
       - name: Create coverage badge
-        run: uv run genbadge coverage --input-file reports/coverage.xml
+        run: uv run genbadge coverage --input-file coverage.xml
       - name: Verify coverage badge changed
         uses: tj-actions/verify-changed-files@v20
         id: changed-files
