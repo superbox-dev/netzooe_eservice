@@ -1362,7 +1362,6 @@ source = { editable = "." }
 dependencies = [
     { name = "homeassistant" },
     { name = "netzooe-eservice-api" },
-    { name = "requests" },
 ]
 
 [package.dev-dependencies]
@@ -1395,9 +1394,8 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "homeassistant", specifier = ">=2026.3.0" },
-    { name = "netzooe-eservice-api", specifier = "~=1.1.0" },
-    { name = "requests", specifier = ">=2.34.2" },
+    { name = "homeassistant", specifier = ">=2026.7.0" },
+    { name = "netzooe-eservice-api", specifier = "~=1.1.1" },
 ]
 
 [package.metadata.requires-dev]
@@ -1430,14 +1428,14 @@ test = [
 
 [[package]]
 name = "netzooe-eservice-api"
-version = "1.1.0"
+version = "1.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c9/1b/bb9f4cc52dc89969c198295cc29928e4f71ae8caf16bac7140b1b5df1b85/netzooe_eservice_api-1.1.0.tar.gz", hash = "sha256:abcce6259f44074e2a945bd9acac3eb573b043851b53edfd12871eaa752fefcb", size = 105754, upload-time = "2026-06-09T08:09:19.944Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b2/15/da7af7bd1df6086057939ae5808143c50a963b536e3f4fe33930430fa10a/netzooe_eservice_api-1.1.1.tar.gz", hash = "sha256:caf507d74b6d733432105ef1a73ab2371d356420f01eb92b87c50833bbf40f0f", size = 91127, upload-time = "2026-08-12T07:09:58.827Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a8/b8/399e6679857299cb1620e147f8678f7050c94ab89dad7b7f606f5b1a8317/netzooe_eservice_api-1.1.0-py3-none-any.whl", hash = "sha256:376905d52edcbc35df0c2e3381f79c629930f38ce4cec949ac312cb233e32f43", size = 10715, upload-time = "2026-06-09T08:09:18.864Z" },
+    { url = "https://files.pythonhosted.org/packages/e4/22/3ae1b9deb1b691bd0bdbfc79c927431e42fce2ea105bbaca39d96c3a3a97/netzooe_eservice_api-1.1.1-py3-none-any.whl", hash = "sha256:3b32895c4c15562e46dc4a137db355f0c2a9c32e3d5b9b21fbe31231269d768b", size = 11027, upload-time = "2026-08-12T07:09:57.755Z" },
 ]
 
 [[package]]

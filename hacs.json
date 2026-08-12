@@ -3,6 +3,6 @@
     "filename": "netzooe_eservice.zip",
     "country": ["AT"],
     "render_readme": true,
-    "homeassistant": "2026.3.0",
+    "homeassistant": "2026.7.0",
     "zip_release": true
 }
