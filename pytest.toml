@@ -14,6 +14,7 @@ addopts = [
     "--failed-first",
     "--strict-config",
     "--strict-markers",
+    "-n=auto",
 ]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
