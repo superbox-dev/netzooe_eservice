@@ -162,22 +162,22 @@ def _sum_values_for_mpan(
         if not current_device_identifier.startswith(f"{device_identifier}_"):
             continue
 
-        if not coordinator.show_revoked_energy_communities and data["status"].lower() != "active":
-            continue
+        is_active: bool = data["status"].lower() == "active"
 
-        items: list[dict[str, Any]] = data.get(key, [])
+        if coordinator.show_revoked_energy_communities or is_active:
+            items: list[dict[str, Any]] = data.get(key, [])
 
-        if negative_type:
-            total += _sum_difference_by_type(
-                items,
-                positive_type,
-                negative_type,
-            )
-        else:
-            total += _sum_by_type(
-                items,
-                positive_type,
-            )
+            if negative_type:
+                total += _sum_difference_by_type(
+                    items,
+                    positive_type,
+                    negative_type,
+                )
+            else:
+                total += _sum_by_type(
+                    items,
+                    positive_type,
+                )
 
     return total
 
