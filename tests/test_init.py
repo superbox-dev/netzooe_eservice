@@ -6,8 +6,10 @@ from unittest.mock import patch
 
 import pytest
 from homeassistant.config_entries import ConfigEntryState
+from homeassistant.helpers import device_registry as dr
 from homeassistant.util import dt as dt_util
 
+from custom_components.netzooe_eservice.const import DOMAIN
 from tests import setup_integration
 
 if TYPE_CHECKING:
@@ -66,3 +68,27 @@ async def test_load_entry(
         "Skipping 1 contract(s) because no active contract for meter point "
         "AT0000000000000000000000011111113 was returned by the API." in caplog.text
     )
+
+
+async def test_stale_device_removed_on_setup(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+) -> None:
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    config_entry.add_to_hass(hass)
+
+    device_registry: dr.DeviceRegistry = dr.async_get(hass)
+    stale_device: dr.DeviceEntry = device_registry.async_get_or_create(
+        config_entry_id=config_entry.entry_id,
+        identifiers={(DOMAIN, "stale_identifier_not_in_api_data")},
+        name="Stale device",
+    )
+
+    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    assert config_entry.state is ConfigEntryState.LOADED
+    assert device_registry.async_get(stale_device.id) is None
