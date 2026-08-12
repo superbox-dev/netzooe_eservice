@@ -12,6 +12,7 @@ from homeassistant.data_entry_flow import FlowResultType
 from netzooe_eservice_api.error import APIError
 
 from custom_components.netzooe_eservice.const import DOMAIN
+from tests import setup_integration
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigFlowResult
@@ -124,3 +125,56 @@ async def test_reconfigure_flow(
 
     assert result_user_step["type"] == FlowResultType.ABORT
     assert result_user_step["reason"] == "reconfigure_successful"
+
+
+async def test_option_flow(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+) -> None:
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    await setup_integration(hass, config_entry)
+
+    result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
+        config_entry.entry_id,
+        data=None,
+    )
+
+    assert result_init["type"] is FlowResultType.FORM
+    assert result_init["step_id"] == "init"
+    assert result_init["data_schema"]
+
+    assert list(result_init["data_schema"].schema.keys()) == [
+        "show_revoked_energy_communities",
+    ]
+
+    result_create_entry: ConfigFlowResult = await hass.config_entries.options.async_configure(
+        result_init["flow_id"], user_input={"show_revoked_energy_communities": True}
+    )
+
+    assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
+    assert result_create_entry["data"] == {
+        "show_revoked_energy_communities": True,
+    }
+
+
+async def test_option_flow_when_integration_not_fully_loaded(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+) -> None:
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    await setup_integration(hass, config_entry)
+    config_entry.runtime_data = None
+
+    result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
+        config_entry.entry_id,
+        data=None,
+    )
+
+    assert result_init["type"] == FlowResultType.ABORT
+    assert result_init["reason"] == "options_not_ready"
