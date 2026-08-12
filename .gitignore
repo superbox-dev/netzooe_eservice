@@ -14,7 +14,7 @@
 .pytest_cache
 .rumdl_cache
 
-# reports
+# coverage
 coverage.xml
 .coverage
 
