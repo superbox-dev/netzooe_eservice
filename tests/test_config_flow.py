@@ -148,15 +148,24 @@ async def test_option_flow(
 
     assert list(result_init["data_schema"].schema.keys()) == [
         "show_revoked_energy_communities",
+        "include_inactive_contract_account_data",
+        "show_inactive_meter_points",
     ]
 
     result_create_entry: ConfigFlowResult = await hass.config_entries.options.async_configure(
-        result_init["flow_id"], user_input={"show_revoked_energy_communities": True}
+        result_init["flow_id"],
+        user_input={
+            "show_revoked_energy_communities": True,
+            "include_inactive_contract_account_data": False,
+            "show_inactive_meter_points": True,
+        },
     )
 
     assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
     assert result_create_entry["data"] == {
         "show_revoked_energy_communities": True,
+        "include_inactive_contract_account_data": False,
+        "show_inactive_meter_points": True,
     }
 
 

@@ -110,7 +110,14 @@
         "step": {
             "init": {
                 "data": {
-                    "show_revoked_energy_communities": "Widerrufene Energiegemeinschaften anzeigen"
+                    "include_inactive_contract_account_data": "Daten von inaktiven Vertragskonten einbeziehen (gleicher Zählpunkt)",
+                    "show_revoked_energy_communities": "Widerrufene Energiegemeinschaften anzeigen",
+                    "show_inactive_meter_points": "Inaktive Zählpunkte anzeigen"
+                },
+                "data_description": {
+                    "include_inactive_contract_account_data": "Wenn aktiviert, werden Daten von Vertragskonten mit inaktiven Stromanbietern am gleichen Zählpunkt mit den Daten des aktiven Kontos zusammengeführt. Dies betrifft sowohl die einzelnen Energiegemeinschafts-Sensoren als auch die Gesamt-Bezugs-/Einspeisungssensoren des Zählpunkts.",
+                    "show_revoked_energy_communities": "Wenn aktiviert, werden Energiegemeinschaften mit widerrufener Teilnahme als eigene Geräte mit eigenen Sensoren angezeigt, anstatt nur aktive Mitgliedschaften. Ihre Verbrauchs-/Erzeugungsdaten werden außerdem in die Gesamt-Bezugs-/Einspeisungssensoren des Zählpunkts mit eingerechnet.",
+                    "show_inactive_meter_points": "Wenn aktiviert, werden auch Zählpunkte angezeigt, deren Vertragskonten alle inaktiv sind."
                 }
             }
         }

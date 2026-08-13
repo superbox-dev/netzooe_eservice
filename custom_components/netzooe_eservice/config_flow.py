@@ -16,11 +16,16 @@ from homeassistant.const import CONF_USERNAME
 from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
+from homeassistant.helpers.selector import BooleanSelector
 from netzooe_eservice_api.api import NetzOOEeServiceAPI
 from netzooe_eservice_api.error import APIError
 
+from .const import CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
+from .const import CONF_SHOW_INACTIVE_METER_POINTS
 from .const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
 from .const import CONFIG_ENTRY_VERSION
+from .const import DEFAULT_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
+from .const import DEFAULT_SHOW_INACTIVE_METER_POINTS
 from .const import DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES
 from .const import DOMAIN
 from .const import MANUFACTURER
@@ -170,7 +175,21 @@ class NetzOOEeServiceOptionsFlow(OptionsFlowWithReload):
                     CONF_SHOW_REVOKED_ENERGY_COMMUNITIES,
                     DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES,
                 ),
-            ): bool,
+            ): BooleanSelector(),
+            vol.Optional(
+                CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA,
+                default=self.config_entry.options.get(
+                    CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA,
+                    DEFAULT_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA,
+                ),
+            ): BooleanSelector(),
+            vol.Optional(
+                CONF_SHOW_INACTIVE_METER_POINTS,
+                default=self.config_entry.options.get(
+                    CONF_SHOW_INACTIVE_METER_POINTS,
+                    DEFAULT_SHOW_INACTIVE_METER_POINTS,
+                ),
+            ): BooleanSelector(),
         }
         return self.async_show_form(
             step_id="init",

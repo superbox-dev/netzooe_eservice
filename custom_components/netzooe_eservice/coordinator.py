@@ -10,6 +10,7 @@ from datetime import timedelta
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import ClassVar
+from typing import NamedTuple
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import ConfigEntryAuthFailed
@@ -23,7 +24,11 @@ from netzooe_eservice_api.constants import SynthProfile
 from netzooe_eservice_api.error import APIError
 from netzooe_eservice_api.error import AuthenticationError
 
+from .const import CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
+from .const import CONF_SHOW_INACTIVE_METER_POINTS
 from .const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
+from .const import DEFAULT_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
+from .const import DEFAULT_SHOW_INACTIVE_METER_POINTS
 from .const import DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES
 from .const import DOMAIN
 from .const import SCAN_INTERVAL
@@ -36,6 +41,14 @@ if TYPE_CHECKING:
 _LOGGER = logging.getLogger(__name__)
 
 type NetzOOEeServiceConfigEntry = ConfigEntry[NetzOOEeServiceDataUpdateCoordinator]
+
+
+class ActiveContractData(NamedTuple):
+    """Active contract and the contracts to use for a meter point."""
+
+    active_contract: dict[str, Any]
+    contracts_to_use: list[dict[str, Any]]
+    is_active: bool
 
 
 class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
@@ -76,6 +89,16 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         self.show_revoked_energy_communities: bool = self.config_entry.options.get(
             CONF_SHOW_REVOKED_ENERGY_COMMUNITIES,
             DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES,
+        )
+
+        self.include_inactive_contract_account_data: bool = self.config_entry.options.get(
+            CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA,
+            DEFAULT_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA,
+        )
+
+        self.show_inactive_meter_points: bool = self.config_entry.options.get(
+            CONF_SHOW_INACTIVE_METER_POINTS,
+            DEFAULT_SHOW_INACTIVE_METER_POINTS,
         )
 
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
@@ -119,7 +142,30 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
     async def _append_data(self, data: dict[str, Any]) -> None:
         consents_map: dict[str, list[dict[str, Any]]] = await self._get_consents_map()
+        all_contracts_by_mpan: dict[str, list[dict[str, Any]]] = await self._collect_contracts_by_mpan()
 
+        for mpan, contracts in all_contracts_by_mpan.items():
+            active_contract_data: ActiveContractData | None = self._get_active_contract_data(mpan, contracts)
+
+            if active_contract_data is None:
+                continue
+
+            self._append_mpan_data(data, contract=active_contract_data.active_contract["contract"])
+
+            if not active_contract_data.is_active:
+                # No genuinely active contract for this meter point:
+                # skip energy community data, it would be meaningless without an active consent.
+                continue
+
+            await self._append_energy_community_data(
+                data,
+                contracts=active_contract_data.contracts_to_use,
+                active_contract=active_contract_data.active_contract,
+                consents_map=consents_map,
+            )
+
+    async def _collect_contracts_by_mpan(self) -> dict[str, list[dict[str, Any]]]:
+        """Fetch contract accounts and group electricity contracts by meter point."""
         all_contracts_by_mpan: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
         for account in self.dashboard["contractAccounts"]:
@@ -127,6 +173,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 business_partner_number=account["businessPartnerNumber"],
                 contract_account_number=account["contractAccountNumber"],
             )
+
+            _LOGGER.debug("contract_accounts: %s", contract_accounts)
 
             for contract in contract_accounts["contracts"]:
                 if contract["branch"] == ConsumptionsProfilesBranch.ELECTRICITY.value and contract["synthProfile"] in {
@@ -140,29 +188,52 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                         },
                     )
 
-                    if contract["active"]:
-                        self._append_mpan_data(data, contract=contract)
+        return all_contracts_by_mpan
 
-        for mpan, contracts in all_contracts_by_mpan.items():
-            active_contract: dict[str, Any] | None = next(
-                (item for item in contracts if item["contract"].get("active")),
-                None,
-            )
+    def _get_active_contract_data(
+        self,
+        mpan: str,
+        contracts: list[dict[str, Any]],
+        /,
+    ) -> ActiveContractData | None:
+        """Return the active contract and the contracts to use for the given meter point."""
+        active_contract: dict[str, Any] | None = next(
+            (item for item in contracts if item["contract"].get("active")),
+            None,
+        )
 
-            if active_contract is None:
+        if active_contract is None:
+            if not self.show_inactive_meter_points:
                 _LOGGER.warning(
                     "Skipping %d contract(s) because no active contract for meter point %s was returned by the API.",
                     len(contracts),
                     mpan,
                 )
-                continue
+                return None
 
-            await self._append_energy_community_data(
-                data,
-                contracts=contracts,
-                active_contract=active_contract,
-                consents_map=consents_map,
+            most_recent_contract: dict[str, Any] = max(
+                contracts,
+                key=lambda item: date.fromisoformat(item["contract"]["moveOutDate"]),
             )
+
+            _LOGGER.debug(
+                "No active contract for meter point %s, "
+                "using most recently ended contract (moveOutDate=%s) as fallback.",
+                mpan,
+                most_recent_contract["contract"]["moveOutDate"],
+            )
+
+            return ActiveContractData(
+                active_contract=most_recent_contract,
+                contracts_to_use=contracts,
+                is_active=False,
+            )
+
+        contracts_to_use: list[dict[str, Any]] = (
+            contracts if self.include_inactive_contract_account_data else [active_contract]
+        )
+
+        return ActiveContractData(active_contract=active_contract, contracts_to_use=contracts_to_use, is_active=True)
 
     async def _get_consents_map(self) -> dict[str, list[dict[str, Any]]]:
         consents: list[dict[str, Any]] = await self.api.consents()
@@ -226,86 +297,130 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         meter_point_administration_number: str = active_contract["contract"]["pointOfDelivery"][
             "meterPointAdministrationNumber"
         ]
-
         device_type: str = self.ENERGY_COMMUNITY_DEVICE_TYPES[active_contract["contract"]["synthProfile"]]
 
         energy_communities: dict[str, dict[str, Any]] = {}
 
         for item in contracts:
-            contract: dict[str, Any] = item["contract"]
-            contract_accounts: dict[str, Any] = item["contractAccounts"]
-
-            _LOGGER.debug("Contract %s", contract_accounts["contractAccountNumber"])
-
-            for timeslice in contract.get("energyCommunityData", {}).get("timeslices", []):
-                _LOGGER.debug("  %s", timeslice["energyCommunityName"])
-
-                if (
-                    self._is_revoked_energy_community(
-                        consents_map=consents_map,
-                        meter_point_administration_number=meter_point_administration_number,
-                        timeslice=timeslice,
-                    )
-                    and self.show_revoked_energy_communities is False
-                ):
-                    _LOGGER.debug(
-                        "  Skipping revoked energy community %s",
-                        timeslice["energyCommunityName"],
-                    )
-                    continue
-
-                energy_community: dict[str, Any] = self._get_or_create_energy_community(
-                    energy_communities,
-                    consents_map=consents_map,
-                    meter_point_administration_number=meter_point_administration_number,
-                    active_contract=active_contract,
-                    device_type=device_type,
-                    timeslice=timeslice,
-                )
-
-                profile_available_from: date = date.fromisoformat(timeslice["profileDataAvailableFrom"])
-                profile_available_to: date = date.fromisoformat(timeslice["profileDataAvailableTo"])
-
-                total_l2_profile_available_to: date = min(profile_available_to, cutoff)
-                total_l2: list[dict[str, Any]] = []
-
-                if profile_available_from <= cutoff:
-                    total_l2 = await self._get_consumptions_profile(
-                        contract_account_number=contract_accounts["contractAccountNumber"],
-                        timeslice=timeslice,
-                        meter_point_administration_number=meter_point_administration_number,
-                        date_from=profile_available_from,
-                        date_to=total_l2_profile_available_to,
-                    )
-                    energy_community["totalL2"].extend(total_l2)
-
-                if profile_available_from <= last_day and profile_available_to >= first_day:
-                    energy_community["monthlyL2"].extend(
-                        await self._get_consumptions_profile(
-                            contract_account_number=contract_accounts["contractAccountNumber"],
-                            timeslice=timeslice,
-                            meter_point_administration_number=meter_point_administration_number,
-                            date_from=max(first_day, profile_available_from),
-                            date_to=min(last_day, profile_available_to),
-                        ),
-                    )
-
-                if profile_available_to <= cutoff:
-                    # L2 already covers the complete available profile.
-                    # No need to request L3 again.
-                    energy_community["totalL3"].extend(total_l2)
-                else:
-                    energy_community["totalL3"].extend(
-                        await self._get_consumptions_profile(
-                            contract_account_number=contract_accounts["contractAccountNumber"],
-                            timeslice=timeslice,
-                            meter_point_administration_number=meter_point_administration_number,
-                            date_from=profile_available_from,
-                            date_to=profile_available_to,
-                        ),
-                    )
+            await self._append_timeslices_for_contract(
+                energy_communities,
+                item=item,
+                active_contract=active_contract,
+                device_type=device_type,
+                meter_point_administration_number=meter_point_administration_number,
+                consents_map=consents_map,
+                cutoff=cutoff,
+                first_day=first_day,
+                last_day=last_day,
+            )
 
         data.update(energy_communities)
+
+    async def _append_timeslices_for_contract(
+        self,
+        energy_communities: dict[str, dict[str, Any]],
+        /,
+        *,
+        item: dict[str, Any],
+        active_contract: dict[str, Any],
+        device_type: str,
+        meter_point_administration_number: str,
+        consents_map: dict[str, list[dict[str, Any]]],
+        cutoff: date,
+        first_day: date,
+        last_day: date,
+    ) -> None:
+        contract: dict[str, Any] = item["contract"]
+        contract_accounts: dict[str, Any] = item["contractAccounts"]
+
+        _LOGGER.debug("Contract %s", contract_accounts["contractAccountNumber"])
+
+        for timeslice in contract.get("energyCommunityData", {}).get("timeslices", []):
+            _LOGGER.debug("  %s", timeslice["energyCommunityName"])
+
+            if (
+                self._is_revoked_energy_community(
+                    consents_map=consents_map,
+                    meter_point_administration_number=meter_point_administration_number,
+                    timeslice=timeslice,
+                )
+                and self.show_revoked_energy_communities is False
+            ):
+                _LOGGER.debug("  Skipping revoked energy community %s", timeslice["energyCommunityName"])
+                continue
+
+            energy_community: dict[str, Any] = self._get_or_create_energy_community(
+                energy_communities,
+                consents_map=consents_map,
+                meter_point_administration_number=meter_point_administration_number,
+                active_contract=active_contract,
+                device_type=device_type,
+                timeslice=timeslice,
+            )
+
+            await self._append_profile_data(
+                energy_community,
+                contract_account_number=contract_accounts["contractAccountNumber"],
+                timeslice=timeslice,
+                meter_point_administration_number=meter_point_administration_number,
+                cutoff=cutoff,
+                first_day=first_day,
+                last_day=last_day,
+            )
+
+    async def _append_profile_data(
+        self,
+        energy_community: dict[str, Any],
+        /,
+        *,
+        contract_account_number: str,
+        timeslice: dict[str, Any],
+        meter_point_administration_number: str,
+        cutoff: date,
+        first_day: date,
+        last_day: date,
+    ) -> None:
+        profile_available_from: date = date.fromisoformat(timeslice["profileDataAvailableFrom"])
+        profile_available_to: date = date.fromisoformat(timeslice["profileDataAvailableTo"])
+
+        total_l2_profile_available_to: date = min(profile_available_to, cutoff)
+        total_l2: list[dict[str, Any]] = []
+
+        if profile_available_from <= cutoff:
+            total_l2 = await self._get_consumptions_profile(
+                contract_account_number=contract_account_number,
+                timeslice=timeslice,
+                meter_point_administration_number=meter_point_administration_number,
+                date_from=profile_available_from,
+                date_to=total_l2_profile_available_to,
+            )
+            energy_community["totalL2"].extend(total_l2)
+
+        if profile_available_from <= last_day and profile_available_to >= first_day:
+            energy_community["monthlyL2"].extend(
+                await self._get_consumptions_profile(
+                    contract_account_number=contract_account_number,
+                    timeslice=timeslice,
+                    meter_point_administration_number=meter_point_administration_number,
+                    date_from=max(first_day, profile_available_from),
+                    date_to=min(last_day, profile_available_to),
+                ),
+            )
+
+        if profile_available_to <= cutoff:
+            # L2 already covers the complete available profile.
+            # No need to request L3 again.
+            energy_community["totalL3"].extend(total_l2)
+        else:
+            energy_community["totalL3"].extend(
+                await self._get_consumptions_profile(
+                    contract_account_number=contract_account_number,
+                    timeslice=timeslice,
+                    meter_point_administration_number=meter_point_administration_number,
+                    date_from=profile_available_from,
+                    date_to=profile_available_to,
+                ),
+            )
 
     @staticmethod
     def _get_or_create_energy_community(

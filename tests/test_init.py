@@ -26,11 +26,29 @@ if TYPE_CHECKING:
         {
             "options": {
                 "show_revoked_energy_communities": True,
+                "include_inactive_contract_account_data": True,
+                "show_inactive_meter_points": False,
+            },
+        },
+        {
+            "options": {
+                "show_revoked_energy_communities": True,
+                "include_inactive_contract_account_data": False,
+                "show_inactive_meter_points": False,
             },
         },
         {
             "options": {
                 "show_revoked_energy_communities": False,
+                "include_inactive_contract_account_data": False,
+                "show_inactive_meter_points": False,
+            },
+        },
+        {
+            "options": {
+                "show_revoked_energy_communities": False,
+                "include_inactive_contract_account_data": True,
+                "show_inactive_meter_points": False,
             },
         },
     ],

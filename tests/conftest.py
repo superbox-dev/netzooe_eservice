@@ -230,6 +230,7 @@ def config_entry(request: SubRequest) -> MockConfigEntry:
         },
         "unique_id": "test",
         "options": {
+            "include_inactive_contract_account_data": True,
             "show_revoked_energy_communities": False,
         },
     }
