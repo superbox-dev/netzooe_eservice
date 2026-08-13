@@ -7,14 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.0] - 2026-08-12
+## [1.1.0] - 2026-08-13
 
 ### Added
 
 - Add "Show revoked energy communities" option. Disabled by default. When enabled, revoked energy communities are
-  displayed and their values are included in the total sensors. [(ISSUE #21)][issue-21]
+  shown as separate devices with their own sensors, and their values are included in the total sensors.
+  [(Issue #21)][issue-21]
+- Add "Include data from inactive contract accounts (same meter point)" option. Enabled by default. When disabled,
+  data from contract accounts with inactive suppliers at the same meter point is no longer merged into the active
+  account's data, including the total import/export sensors. [(Issue #22)][issue-22]
+- Add "Show inactive meter points" option. Disabled by default. When enabled, meter points where all contract
+  accounts are inactive are also shown as devices with their own sensors, using the most recently ended contract's
+  data. [(Issue #22)][issue-22]
 
 [issue-21]: https://github.com/superbox-dev/netzooe_eservice/issues/21
+[issue-22]: https://github.com/superbox-dev/netzooe_eservice/issues/22
 
 ## [1.0.1] - 2026-08-03
 
