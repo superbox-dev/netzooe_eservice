@@ -48,7 +48,6 @@ class ActiveContractData(NamedTuple):
 
     active_contract: dict[str, Any]
     contracts_to_use: list[dict[str, Any]]
-    is_active: bool
 
 
 class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
@@ -152,11 +151,6 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
             self._append_mpan_data(data, contract=active_contract_data.active_contract["contract"])
 
-            if not active_contract_data.is_active:
-                # No genuinely active contract for this meter point:
-                # skip energy community data, it would be meaningless without an active consent.
-                continue
-
             await self._append_energy_community_data(
                 data,
                 contracts=active_contract_data.contracts_to_use,
@@ -226,14 +220,13 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             return ActiveContractData(
                 active_contract=most_recent_contract,
                 contracts_to_use=contracts,
-                is_active=False,
             )
 
         contracts_to_use: list[dict[str, Any]] = (
             contracts if self.include_inactive_contract_account_data else [active_contract]
         )
 
-        return ActiveContractData(active_contract=active_contract, contracts_to_use=contracts_to_use, is_active=True)
+        return ActiveContractData(active_contract=active_contract, contracts_to_use=contracts_to_use)
 
     async def _get_consents_map(self) -> dict[str, list[dict[str, Any]]]:
         consents: list[dict[str, Any]] = await self.api.consents()

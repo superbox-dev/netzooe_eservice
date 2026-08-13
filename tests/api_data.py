@@ -165,6 +165,7 @@ CONTRACT_ACCOUNT_DATA_1: dict[str, Any] = {
             "branch": "STROM",
             "scaleType": "Gem.Erz. / Erzeugung",
             "active": True,
+            "moveOutDate": "9999-12-31",
             "pointOfDelivery": {
                 "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
                 "meter": {
@@ -316,6 +317,7 @@ CONTRACT_ACCOUNT_DATA_2: dict[str, Any] = {
             "branch": "STROM",
             "scaleType": "EEG 7ngem",
             "active": True,
+            "moveOutDate": "9999-12-31",
             "pointOfDelivery": {
                 "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
                 "meter": {
@@ -445,6 +447,7 @@ CONTRACT_ACCOUNT_DATA_3: dict[str, Any] = {
             "branch": "STROM",
             "scaleType": "EEG 7ngem",
             "active": False,
+            "moveOutDate": "2026-06-16",
             "pointOfDelivery": {
                 "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
                 "meter": {
@@ -610,6 +613,7 @@ CONTRACT_ACCOUNT_DATA_4: dict[str, Any] = {
             "branch": "STROM",
             "scaleType": "EEG 7ngem",
             "active": False,
+            "moveOutDate": "2026-05-15",
             "pointOfDelivery": {
                 "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
                 "meter": {
