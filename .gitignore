@@ -16,7 +16,7 @@
 
 # coverage
 coverage.xml
-.coverage
+.coverage*
 
 # build package
 *.egg-info

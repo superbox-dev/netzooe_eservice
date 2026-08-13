@@ -110,7 +110,14 @@
         "step": {
             "init": {
                 "data": {
-                    "show_revoked_energy_communities": "Show revoked energy communities"
+                    "include_inactive_contract_account_data": "Include data from inactive contract accounts (same meter point)",
+                    "show_revoked_energy_communities": "Show revoked energy communities",
+                    "show_inactive_meter_points": "Show inactive meter points"
+                },
+                "data_description": {
+                    "include_inactive_contract_account_data": "When enabled, data from contract accounts with inactive suppliers at the same meter point is merged into the active account's data. This affects both the individual energy community sensors and the total import/export sensors for the meter point.",
+                    "show_revoked_energy_communities": "When enabled, energy communities with revoked participation are shown as separate devices with their own sensors, instead of only active memberships. Their consumption/production data is also added to the total import/export sensors for the meter point.",
+                    "show_inactive_meter_points": "When enabled, meter points where all contract accounts are inactive are also shown."
                 }
             }
         }
