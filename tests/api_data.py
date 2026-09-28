@@ -215,6 +215,15 @@ CONTRACT_ACCOUNT_DATA_1: dict[str, Any] = {
                     "values": [
                         {
                             "meternumber": "3000000",
+                            "referenceNumber": "1.6.0",
+                            "newResult": {
+                                "timestamp": "2026-09-01T00:00:00",
+                                "readingValue": 3.998,
+                            },
+                        },
+                        {
+                            "meternumber": "3000000",
+                            "referenceNumber": "1.8.1",
                             "newResult": {
                                 "timestamp": "2026-06-28T00:15:00",
                                 "readingValue": 11000.00,
@@ -367,6 +376,15 @@ CONTRACT_ACCOUNT_DATA_2: dict[str, Any] = {
                     "values": [
                         {
                             "meternumber": "3000000",
+                            "referenceNumber": "2.6.0",
+                            "newResult": {
+                                "timestamp": "2026-09-01T00:00:00",
+                                "readingValue": 3.998,
+                            },
+                        },
+                        {
+                            "meternumber": "3000000",
+                            "referenceNumber": "2.8.1",
                             "newResult": {
                                 "timestamp": "2026-06-28T00:15:00",
                                 "readingValue": 44000.000,

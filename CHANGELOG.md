@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-09-28
+
+### Fixed
+
+- Fix Home Assistant device registry compatibility by replacing the deprecated `via_device` with `via_device_id`.
+- Fix meter reading selection when the API returns multiple registers for the same meter. Energy readings are now
+  selected by the valid OBIS references 1.8.1 or 2.8.1 instead of relying on the order returned
+  by the API. [(Issue #25)][issue-25]
+
+[issue-25]: https://github.com/superbox-dev/netzooe_eservice/issues/25
+
 ## [1.1.0] - 2026-08-17
 
 ### Added

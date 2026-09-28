@@ -16,6 +16,7 @@ from homeassistant.components.sensor import SensorStateClass
 from homeassistant.const import PERCENTAGE
 from homeassistant.const import EntityCategory
 from homeassistant.const import UnitOfEnergy
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import DeviceInfo
 
 from .const import DOMAIN
@@ -117,7 +118,11 @@ class NetzOOEeServiceEnergyCommunitySensorEntity(NetzOOEeServiceSensorEntity):
             name=self.device_name,
             model=NAME,
             manufacturer=MANUFACTURER,
-            via_device=(DOMAIN, self.data["meterPointAdministrationNumber"]),
+            via_device_id=dr.async_get_device_id_by_identifier(
+                self.hass,
+                (DOMAIN, self.data["meterPointAdministrationNumber"]),
+                config_entry_id=self.entry.entry_id,
+            ),
         )
 
 

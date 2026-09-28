@@ -496,14 +496,14 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
     @staticmethod
     def _get_meter_readings_data(last_readings_values: list[dict[str, Any]], meter_number: str) -> dict[str, Any]:
-        meter_readings_data: dict[str, Any] = {}
+        """Return the valid energy meter reading."""
+        valid_reference_numbers = {"1.8.1", "2.8.1"}
 
         for item in last_readings_values:
-            if item["meternumber"] == meter_number:
-                meter_readings_data = item
-                break
+            if item["meternumber"] == meter_number and item["referenceNumber"] in valid_reference_numbers:
+                return item
 
-        return meter_readings_data
+        return {}
 
     @staticmethod
     def _get_last_l2_month() -> tuple[date, date]:
