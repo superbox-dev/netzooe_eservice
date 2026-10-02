@@ -16,6 +16,7 @@ from homeassistant.components.sensor import SensorStateClass
 from homeassistant.const import PERCENTAGE
 from homeassistant.const import EntityCategory
 from homeassistant.const import UnitOfEnergy
+from homeassistant.const import UnitOfPower
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import DeviceInfo
 
@@ -216,10 +217,10 @@ SENSOR_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL_INCREASING,
         translation_key="meter_reading",
-        value_fn=(lambda data: data["meterReading"]["values"].get("newResult", {}).get("readingValue")),
+        value_fn=(lambda data: data["meterReading"].get("newResult", {}).get("readingValue")),
         extra_state_attributes_fn=lambda data: {
-            "timestamp": data["meterReading"]["values"].get("newResult", {}).get("timestamp"),
-            "meter_number": data["meterReading"]["meterNumber"],
+            "timestamp": data["meterReading"].get("newResult", {}).get("timestamp"),
+            "meter_number": data["meterNumber"],
         },
     ),
     NetzOOEeServiceSensorEntityDescription[str](
@@ -437,6 +438,21 @@ SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
+    NetzOOEeServiceSensorEntityDescription[str](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.POWER,
+        key="last_month_peak_import_power",
+        native_unit_of_measurement=UnitOfPower.KILO_WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+        translation_key="last_month_peak_import_power",
+        value_fn=lambda coordinator, device_identifier: (
+            coordinator.data[device_identifier]["lastMonthPeakPower"].get("newResult", {}).get("readingValue")
+        ),
+        extra_state_attributes_fn=lambda data: {
+            "timestamp": data["lastMonthPeakPower"].get("newResult", {}).get("timestamp"),
+            "meter_number": data["meterNumber"],
+        },
+    ),
 ]
 
 SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
@@ -544,6 +560,21 @@ SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = 
             "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
         ),
         extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+    ),
+    NetzOOEeServiceSensorEntityDescription[str](
+        entity_class=NetzOOEeServiceAggregatedSensorEntity,
+        device_class=SensorDeviceClass.POWER,
+        key="last_month_peak_export_power",
+        native_unit_of_measurement=UnitOfPower.KILO_WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+        translation_key="last_month_peak_export_power",
+        value_fn=lambda coordinator, device_identifier: (
+            coordinator.data[device_identifier]["lastMonthPeakPower"].get("newResult", {}).get("readingValue")
+        ),
+        extra_state_attributes_fn=lambda data: {
+            "timestamp": data["lastMonthPeakPower"].get("newResult", {}).get("timestamp"),
+            "meter_number": data["meterNumber"],
+        },
     ),
 ]
 

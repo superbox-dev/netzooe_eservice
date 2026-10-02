@@ -266,13 +266,17 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             "monthlyTrend": point_of_delivery["monthlyTrend"],
             "yearlyTrend": point_of_delivery["yearlyTrend"],
             "supplier": contract["supplier"],
-            "meterReading": {
-                "meterNumber": point_of_delivery["meter"]["meterNumber"],
-                "values": self._get_meter_readings_data(
-                    point_of_delivery["lastReadings"].get("values", []),
-                    point_of_delivery["meter"]["meterNumber"],
-                ),
-            },
+            "meterNumber": point_of_delivery["meter"]["meterNumber"],
+            "meterReading": self._get_meter_point_data(
+                point_of_delivery["lastReadings"].get("values", []),
+                meter_number=point_of_delivery["meter"]["meterNumber"],
+                valid_reference_numbers={"1.8.1", "2.8.1"},
+            ),
+            "lastMonthPeakPower": self._get_meter_point_data(
+                point_of_delivery["lastReadings"].get("values", []),
+                meter_number=point_of_delivery["meter"]["meterNumber"],
+                valid_reference_numbers={"1.6.0", "2.6.0"},
+            ),
         }
 
     async def _append_energy_community_data(
@@ -495,10 +499,14 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         return consumptions_profile
 
     @staticmethod
-    def _get_meter_readings_data(last_readings_values: list[dict[str, Any]], meter_number: str) -> dict[str, Any]:
+    def _get_meter_point_data(
+        last_readings_values: list[dict[str, Any]],
+        /,
+        *,
+        meter_number: str,
+        valid_reference_numbers: set[str],
+    ) -> dict[str, Any]:
         """Return the valid energy meter reading."""
-        valid_reference_numbers = {"1.8.1", "2.8.1"}
-
         for item in last_readings_values:
             if item["meternumber"] == meter_number and item["referenceNumber"] in valid_reference_numbers:
                 return item

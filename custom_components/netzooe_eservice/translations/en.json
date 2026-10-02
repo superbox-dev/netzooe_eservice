@@ -55,16 +55,22 @@
                 "name": "Supplier import L1/L2/L3"
             },
             "last_month_energy_community_export_l2": {
-                "name": "Energy community export L2 (last month)"
+                "name": "Energy community export L2 (previous month)"
             },
             "last_month_energy_community_import_l2": {
-                "name": "Energy community import L2 (last month)"
+                "name": "Energy community import L2 (previous month)"
+            },
+            "last_month_peak_export_power": {
+              "name": "Maximum Export Power (previous month)"
+            },
+            "last_month_peak_import_power": {
+              "name": "Maximum Import Power (previous month)"
             },
             "last_month_supplier_export_l2": {
-                "name": "Supplier export L2 (last month)"
+                "name": "Supplier export L2 (previous month)"
             },
             "last_month_supplier_import_l2": {
-                "name": "Supplier import L2 (last month)"
+                "name": "Supplier import L2 (previous month)"
             },
             "meter_reading": {
                 "name": "Meter reading"

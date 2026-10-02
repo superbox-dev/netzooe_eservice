@@ -55,16 +55,22 @@
                 "name": "Energielieferant Netzbezug L1/L2/L3"
             },
             "last_month_energy_community_export_l2": {
-                "name": "Energiegemeinschaft Einspeisung L2 (letzter Monat)"
+                "name": "Energiegemeinschaft Einspeisung L2 (Vormonat)"
             },
             "last_month_energy_community_import_l2": {
-                "name": "Energiegemeinschaft Bezug L2 (letzter Monat)"
+                "name": "Energiegemeinschaft Bezug L2 (Vormonat)"
+            },
+            "last_month_peak_export_power": {
+              "name": "Maximale Einspeiseleistung (Vormonat)"
+            },
+            "last_month_peak_import_power": {
+              "name": "Maximale Bezugsleistung (Vormonat)"
             },
            "last_month_supplier_export_l2": {
-                "name": "Energielieferant Einspeisung L2 (letzter Monat)"
+                "name": "Energielieferant Einspeisung L2 (Vormonat)"
             },
             "last_month_supplier_import_l2": {
-                "name": "Energielieferant Netzbezug L2 (letzter Monat)"
+                "name": "Energielieferant Netzbezug L2 (Vormonat)"
             },
             "meter_reading": {
                 "name": "Zählerstand"

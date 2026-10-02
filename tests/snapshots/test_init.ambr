@@ -1,6 +1,6 @@
 # serializer version: 1
 # name: test_load_entry_with_disabled_inactive_meter_points[config_entry0]
-  78
+  80
 # ---
 # name: test_load_entry_with_disabled_inactive_meter_points[config_entry0].1
   set({
@@ -15,6 +15,7 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2',
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_supplier_export_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend',
@@ -54,6 +55,7 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l3',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2',
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_supplier_import_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend',
@@ -85,7 +87,7 @@
   })
 # ---
 # name: test_load_entry_with_disabled_inactive_meter_points[config_entry1]
-  70
+  72
 # ---
 # name: test_load_entry_with_disabled_inactive_meter_points[config_entry1].1
   set({
@@ -100,6 +102,7 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2',
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_supplier_export_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend',
@@ -139,6 +142,7 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l3',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2',
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_supplier_import_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend',
@@ -162,7 +166,7 @@
   })
 # ---
 # name: test_load_entry_with_disabled_inactive_meter_points[config_entry2]
-  62
+  64
 # ---
 # name: test_load_entry_with_disabled_inactive_meter_points[config_entry2].1
   set({
@@ -177,6 +181,7 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2',
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_supplier_export_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend',
@@ -208,6 +213,7 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l3',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2',
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_supplier_import_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend',
@@ -231,7 +237,7 @@
   })
 # ---
 # name: test_load_entry_with_disabled_inactive_meter_points[config_entry3]
-  62
+  64
 # ---
 # name: test_load_entry_with_disabled_inactive_meter_points[config_entry3].1
   set({
@@ -246,6 +252,7 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2',
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_supplier_export_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend',
@@ -277,6 +284,7 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l3',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2',
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_supplier_import_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend',
@@ -300,7 +308,7 @@
   })
 # ---
 # name: test_load_entry_with_enabled_inactive_meter_points[config_entry0]
-  77
+  80
 # ---
 # name: test_load_entry_with_enabled_inactive_meter_points[config_entry0].1
   set({
@@ -315,6 +323,7 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2',
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_supplier_export_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading',
     'sensor.netzooe_eservice_at0000000000000000000000011111111_monthly_trend',
@@ -346,6 +355,7 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l3',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2',
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_supplier_import_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading',
     'sensor.netzooe_eservice_at0000000000000000000000011111112_monthly_trend',
@@ -369,6 +379,7 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111113_energy_community_import_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111113_energy_community_import_l3',
     'sensor.netzooe_eservice_at0000000000000000000000011111113_last_month_energy_community_import_l2',
+    'sensor.netzooe_eservice_at0000000000000000000000011111113_last_month_peak_import_power',
     'sensor.netzooe_eservice_at0000000000000000000000011111113_last_month_supplier_import_l2',
     'sensor.netzooe_eservice_at0000000000000000000000011111113_meter_reading',
     'sensor.netzooe_eservice_at0000000000000000000000011111113_monthly_trend',
