@@ -16,7 +16,8 @@ DEFAULT_SHOW_INACTIVE_METER_POINTS: Final[bool] = False
 DOMAIN: Final[str] = "netzooe_eservice"
 MANUFACTURER: Final[str] = "Netz OÖ"
 NAME: Final[str] = "eService"
-SCAN_INTERVAL: Final[timedelta] = timedelta(hours=3)
+SCAN_INTERVAL: Final[timedelta] = timedelta(minutes=15)
+SCAN_INTERVAL_FULL = timedelta(hours=3)
 
 
 class DeviceType(Enum):

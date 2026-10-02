@@ -9,9 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0] - 2026-10-02
 
-### Fixed
+### Added
 
 - Add sensors for the maximum import and export power from the previous month.
+
+### Changed
+
+- Update energy community contribution percentages and statuses every 15 minutes while keeping the full data refresh at
+  3-hour intervals.
 
 ## [1.1.1] - 2026-09-28
 
