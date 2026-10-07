@@ -61,12 +61,12 @@
                 "name": "Energiegemeinschaft Bezug L2 (Vormonat)"
             },
             "last_month_peak_export_power": {
-              "name": "Maximale Einspeiseleistung (Vormonat)"
+                "name": "Maximale Einspeiseleistung (Vormonat)"
             },
             "last_month_peak_import_power": {
-              "name": "Maximale Bezugsleistung (Vormonat)"
+                "name": "Maximale Bezugsleistung (Vormonat)"
             },
-           "last_month_supplier_export_l2": {
+            "last_month_supplier_export_l2": {
                 "name": "Energielieferant Einspeisung L2 (Vormonat)"
             },
             "last_month_supplier_import_l2": {
@@ -116,11 +116,13 @@
         "step": {
             "init": {
                 "data": {
+                    "frequent_updates": "Häufige Updates (alle 15 Minuten)",
                     "include_inactive_contract_account_data": "Daten von inaktiven Vertragskonten einbeziehen (gleicher Zählpunkt)",
                     "show_revoked_energy_communities": "Widerrufene Energiegemeinschaften anzeigen",
                     "show_inactive_meter_points": "Inaktive Zählpunkte anzeigen"
                 },
                 "data_description": {
+                    "frequent_updates": "Wenn aktiviert, werden Status und Teilnahmefaktor der Energiegemeinschaften alle 15 Minuten aktualisiert. Wenn deaktiviert, werden alle Daten nur alle 3 Stunden aktualisiert.",
                     "include_inactive_contract_account_data": "Wenn aktiviert, werden Daten von Vertragskonten mit inaktiven Stromanbietern am gleichen Zählpunkt mit den Daten des aktiven Kontos zusammengeführt. Dies betrifft sowohl die einzelnen Energiegemeinschafts-Sensoren als auch die Gesamt-Bezugs-/Einspeisungssensoren des Zählpunkts.",
                     "show_revoked_energy_communities": "Wenn aktiviert, werden Energiegemeinschaften mit widerrufener Teilnahme als eigene Geräte mit eigenen Sensoren angezeigt, anstatt nur aktive Mitgliedschaften. Ihre Verbrauchs-/Erzeugungsdaten werden außerdem in die Gesamt-Bezugs-/Einspeisungssensoren des Zählpunkts mit eingerechnet.",
                     "show_inactive_meter_points": "Wenn aktiviert, werden auch Zählpunkte angezeigt, deren Vertragskonten alle inaktiv sind."

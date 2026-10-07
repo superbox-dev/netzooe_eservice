@@ -25,9 +25,11 @@ from netzooe_eservice_api.constants import SynthProfile
 from netzooe_eservice_api.error import APIError
 from netzooe_eservice_api.error import AuthenticationError
 
+from .const import CONF_FREQUENT_UPDATES
 from .const import CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
 from .const import CONF_SHOW_INACTIVE_METER_POINTS
 from .const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
+from .const import DEFAULT_FREQUENT_UPDATES
 from .const import DEFAULT_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
 from .const import DEFAULT_SHOW_INACTIVE_METER_POINTS
 from .const import DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES
@@ -88,6 +90,11 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         self.dashboard: dict[str, Any] = {}
         self._last_full_update: datetime | None = None
 
+        self.frequent_updates: bool = self.config_entry.options.get(
+            CONF_FREQUENT_UPDATES,
+            DEFAULT_FREQUENT_UPDATES,
+        )
+
         self.show_revoked_energy_communities: bool = self.config_entry.options.get(
             CONF_SHOW_REVOKED_ENERGY_COMMUNITIES,
             DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES,
@@ -103,7 +110,12 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             DEFAULT_SHOW_INACTIVE_METER_POINTS,
         )
 
-        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
+        super().__init__(
+            hass,
+            _LOGGER,
+            name=DOMAIN,
+            update_interval=SCAN_INTERVAL if self.frequent_updates else SCAN_INTERVAL_FULL,
+        )
 
     async def _async_setup(self) -> None:
         """Set up the coordinator."""
@@ -123,7 +135,13 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         """Read values from API to update coordinator data."""
         now: datetime = dt_util.now()
 
-        if self._last_full_update is None or now - self._last_full_update >= SCAN_INTERVAL_FULL:
+        # Without frequent updates the coordinator only runs every SCAN_INTERVAL_FULL,
+        # so always do a full update (avoids missing it because of scheduling jitter).
+        if (
+            not self.frequent_updates
+            or self._last_full_update is None
+            or now - self._last_full_update >= SCAN_INTERVAL_FULL
+        ):
             return await self._async_full_update(now)
 
         return await self._async_update_energy_community_data()

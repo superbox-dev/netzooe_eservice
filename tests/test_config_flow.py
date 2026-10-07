@@ -147,6 +147,7 @@ async def test_option_flow(
     assert result_init["data_schema"]
 
     assert list(result_init["data_schema"].schema.keys()) == [
+        "frequent_updates",
         "show_revoked_energy_communities",
         "include_inactive_contract_account_data",
         "show_inactive_meter_points",
@@ -155,6 +156,7 @@ async def test_option_flow(
     result_create_entry: ConfigFlowResult = await hass.config_entries.options.async_configure(
         result_init["flow_id"],
         user_input={
+            "frequent_updates": False,
             "show_revoked_energy_communities": True,
             "include_inactive_contract_account_data": False,
             "show_inactive_meter_points": True,
@@ -163,9 +165,39 @@ async def test_option_flow(
 
     assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
     assert result_create_entry["data"] == {
+        "frequent_updates": False,
         "show_revoked_energy_communities": True,
         "include_inactive_contract_account_data": False,
         "show_inactive_meter_points": True,
+    }
+
+
+async def test_option_flow_defaults(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+) -> None:
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    await setup_integration(hass, config_entry)
+
+    result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
+        config_entry.entry_id,
+        data=None,
+    )
+
+    result_create_entry: ConfigFlowResult = await hass.config_entries.options.async_configure(
+        result_init["flow_id"],
+        user_input={},
+    )
+
+    assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
+    assert result_create_entry["data"] == {
+        "frequent_updates": True,
+        "show_revoked_energy_communities": False,
+        "include_inactive_contract_account_data": True,
+        "show_inactive_meter_points": False,
     }
 
 

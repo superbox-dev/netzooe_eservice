@@ -20,10 +20,12 @@ from homeassistant.helpers.selector import BooleanSelector
 from netzooe_eservice_api.api import NetzOOEeServiceAPI
 from netzooe_eservice_api.error import APIError
 
+from .const import CONF_FREQUENT_UPDATES
 from .const import CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
 from .const import CONF_SHOW_INACTIVE_METER_POINTS
 from .const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
 from .const import CONFIG_ENTRY_VERSION
+from .const import DEFAULT_FREQUENT_UPDATES
 from .const import DEFAULT_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
 from .const import DEFAULT_SHOW_INACTIVE_METER_POINTS
 from .const import DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES
@@ -169,6 +171,13 @@ class NetzOOEeServiceOptionsFlow(OptionsFlowWithReload):
             return self.async_abort(reason="options_not_ready")
 
         schema_fields: dict[Any, Any] = {
+            vol.Optional(
+                CONF_FREQUENT_UPDATES,
+                default=self.config_entry.options.get(
+                    CONF_FREQUENT_UPDATES,
+                    DEFAULT_FREQUENT_UPDATES,
+                ),
+            ): BooleanSelector(),
             vol.Optional(
                 CONF_SHOW_REVOKED_ENERGY_COMMUNITIES,
                 default=self.config_entry.options.get(

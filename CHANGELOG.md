@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.2.0] - 2026-10-02
+## [1.2.0] - 2026-10-07
 
 ### Added
 
 - Add sensors for the maximum import and export power from the previous month.
+- Add the option "Frequent updates" to enable or disable the 15-minute update of the energy community contribution
+  percentages and statuses. When disabled, all data is refreshed every 3 hours only.
 
 ### Changed
 

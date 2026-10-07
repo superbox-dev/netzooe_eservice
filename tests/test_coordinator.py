@@ -11,6 +11,9 @@ from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util import dt as dt_util
 from netzooe_eservice_api.error import APIError
 
+from custom_components.netzooe_eservice.const import CONF_FREQUENT_UPDATES
+from custom_components.netzooe_eservice.const import SCAN_INTERVAL
+from custom_components.netzooe_eservice.const import SCAN_INTERVAL_FULL
 from custom_components.netzooe_eservice.coordinator import NetzOOEeServiceDataUpdateCoordinator
 
 if TYPE_CHECKING:
@@ -182,3 +185,81 @@ async def test_async_update_data_calls_energy_community_update(
 
     assert data == {"test": {}}
     update.assert_awaited_once()
+
+
+async def test_update_interval_with_frequent_updates(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+) -> None:
+    session: ClientSession = async_get_clientsession(hass)
+
+    coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
+        hass,
+        config_entry,
+        username="test",
+        password="test",  # noqa: S106
+        session=session,
+    )
+
+    assert coordinator.frequent_updates is True
+    assert coordinator.update_interval == SCAN_INTERVAL
+
+
+async def test_update_interval_without_frequent_updates(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+) -> None:
+    config_entry.add_to_hass(hass)
+    hass.config_entries.async_update_entry(config_entry, options={CONF_FREQUENT_UPDATES: False})
+
+    session: ClientSession = async_get_clientsession(hass)
+
+    coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
+        hass,
+        config_entry,
+        username="test",
+        password="test",  # noqa: S106
+        session=session,
+    )
+
+    assert coordinator.frequent_updates is False
+    assert coordinator.update_interval == SCAN_INTERVAL_FULL
+
+
+async def test_async_update_data_always_full_update_without_frequent_updates(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+) -> None:
+    config_entry.add_to_hass(hass)
+    hass.config_entries.async_update_entry(config_entry, options={CONF_FREQUENT_UPDATES: False})
+
+    session: ClientSession = async_get_clientsession(hass)
+
+    coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
+        hass,
+        config_entry,
+        username="test",
+        password="test",  # noqa: S106
+        session=session,
+    )
+
+    # Last full update was just now: with frequent updates this would only refresh the consents.
+    coordinator._last_full_update = dt_util.now()
+
+    with (
+        patch.object(
+            coordinator,
+            "_async_full_update",
+            new=AsyncMock(return_value={"test": {}}),
+        ) as full_update,
+        patch.object(
+            coordinator,
+            "_async_update_energy_community_data",
+            new=AsyncMock(),
+        ) as energy_community_update,
+    ):
+        data: dict[str, Any] = await coordinator._async_update_data()
+
+    assert data == {"test": {}}
+    full_update.assert_awaited_once()
+    energy_community_update.assert_not_awaited()
