@@ -66,7 +66,7 @@ Code lives in `custom_components/netzooe_eservice/`.
   - full update every 3 hours
   - "Frequent updates" option (disabled by default):
     - coordinator runs every 15 minutes
-    - in between full updates, only energy community contribution percentages and statuses are refreshed
+    - in between full updates, only energy community contribution factors and statuses are refreshed
   - on `APIError` the previous data is kept, if it exists
 - `__init__.py`:
   - removes devices that are no longer in `coordinator.data` after every update

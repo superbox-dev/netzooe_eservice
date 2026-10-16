@@ -40,16 +40,16 @@ To change the credentials later, select **Reconfigure** in the integration's men
 
 Open **Settings** → **Devices & services** → **Netz OÖ eService** → **Configure** to change these options:
 
-| Option                                                         | Default  | Description                                                                                                                       |
-|----------------------------------------------------------------|----------|-----------------------------------------------------------------------------------------------------------------------------------|
-| Frequent updates (every 15 minutes)                            | Disabled | Refresh the energy community contribution percentages and statuses every 15 minutes. When disabled, all data is refreshed every 3 hours only. |
-| Show revoked energy communities                                | Disabled | Show revoked energy communities as separate devices and include their values in the total sensors.                               |
-| Include data from inactive contract accounts (same meter point) | Enabled  | Merge data from contract accounts with inactive suppliers at the same meter point into the active account's data.                 |
-| Show inactive meter points                                     | Disabled | Show meter points where all contract accounts are inactive, using the data of the most recently ended contract.                  |
+| Option                                                          | Default  | Description                                                                                                                               |
+|-----------------------------------------------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| Frequent updates (every 15 minutes)                             | Disabled | Refresh the energy community contribution factors and statuses every 15 minutes. When disabled, all data is refreshed every 3 hours only. |
+| Show revoked energy communities                                 | Disabled | Show revoked energy communities as separate devices and include their values in the total sensors.                                        |
+| Include data from inactive contract accounts (same meter point) | Enabled  | Merge data from contract accounts with inactive suppliers at the same meter point into the active account's data.                         |
+| Show inactive meter points                                      | Disabled | Show meter points where all contract accounts are inactive, using the data of the most recently ended contract.                           |
 
 ## Data updates
 
-All data is refreshed every 3 hours. With **Frequent updates** enabled, the contribution percentages and statuses of
+All data is refreshed every 3 hours. With **Frequent updates** enabled, the contribution factors and statuses of
 the energy communities are additionally refreshed every 15 minutes.
 
 Sensors marked with "16-day delay" contain values that the portal only provides with a delay of about 16 days.
