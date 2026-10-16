@@ -20,8 +20,8 @@
                     "username": "Username"
                 },
                 "data_description": {
-                    "password": "The password to log in to your {name} device.",
-                    "username": "The username to log in to your {name} device."
+                    "password": "The password of your {name} portal account.",
+                    "username": "The username of your {name} portal account."
                 },
                 "description": "Please enter the username and password."
             }
@@ -90,7 +90,12 @@
                 "name": "Type"
             },
             "status": {
-                "name": "Status"
+                "name": "Status",
+                "state": {
+                    "active": "Active",
+                    "active_unchangeable": "Active (unchangeable)",
+                    "revoked": "Revoked"
+                }
             },
             "supplier": {
                 "name": "Supplier"
@@ -109,6 +114,9 @@
     "exceptions": {
         "authentication_error": {
             "message": "Authentication failed. Please check your credentials."
+        },
+        "update_failed": {
+            "message": "Failed to fetch the data from the eService portal: {error}"
         }
     },
     "options": {

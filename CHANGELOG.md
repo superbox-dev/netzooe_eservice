@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the "Frequent updates" option. Disabled by default. When enabled, the energy community contribution
   factors and statuses are refreshed every 15 minutes, while the full data refresh stays at 3-hour intervals.
 - Added reauthentication. If the portal rejects the credentials, Home Assistant now asks for the new password.
+- Added diagnostics. Credentials and customer numbers are removed.
+- Added the sensors of new meter points and energy communities after an update, without reloading the integration.
 
 ### Changed
 
@@ -24,6 +26,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   makes a full update about 3 times faster.
 - Fetched the dashboard on every full update, so the contract accounts are no longer only read at startup.
 - Logged API errors with cached data as a single warning instead of an error and a warning.
+- Logged API errors with cached data only once until the portal is available again.
+- Changed the `status` sensor to an enum sensor with translated states. Unknown statuses are shown as unknown.
+- Moved the sensor icons to `icons.json`.
+- Translated the error message if the first update fails.
+- Documented the installation parameters, sensors, use cases, known limitations, troubleshooting and removal in the
+  README.
 
 ### Fixed
 

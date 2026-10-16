@@ -397,3 +397,87 @@ async def test_frequent_updates_exclude_revoked_energy_community_from_totals(
 
     assert _state(hass, STATUS_ENTITY_ID) == "revoked"
     assert float(_state(hass, TOTAL_EXPORT_ENTITY_ID)) == pytest.approx(total_before - energy_community_export)
+
+
+@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"])
+async def test_api_error_logged_once_until_available_again(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    aioclient_mock: AiohttpClientMocker,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Test that API errors are logged once and the recovery is logged."""
+    await _setup(hass, config_entry, fake_api)
+
+    for _ in range(2):
+        aioclient_mock.clear_requests()
+        fake_api.register_auth_request()
+        fake_api.register_session_request()
+        fake_api.register_consents_request(status=500)
+
+        await _refresh(hass, config_entry)
+
+    assert caplog.text.count("Update failed, using cached data") == 1
+
+    aioclient_mock.clear_requests()
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    with caplog.at_level(logging.INFO, logger="custom_components.netzooe_eservice.coordinator"):
+        await _refresh(hass, config_entry)
+
+    assert "The eService portal is available again" in caplog.text
+
+
+@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_new_energy_community_sensors_added_without_reload(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    aioclient_mock: AiohttpClientMocker,
+) -> None:
+    """Test that the sensors of a new energy community are added after an update."""
+    fake_api.register_auth_request()
+    fake_api.register_requests(consents=[])
+
+    with patch(
+        "custom_components.netzooe_eservice.coordinator.dt_util.now",
+        return_value=NOW,
+    ):
+        await setup_integration(hass, config_entry)
+
+    assert hass.states.get(CONTRIBUTION_FACTOR_ENTITY_ID) is None
+
+    aioclient_mock.clear_requests()
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    await _refresh(hass, config_entry)
+
+    assert _contribution_factor(hass) == "93"
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_unknown_status(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+) -> None:
+    """Test that an unknown consent status is shown as unknown."""
+    consents: list[dict[str, Any]] = [
+        consent | {"status": "NEW_STATUS"} if consent["contributionPercentage"] == "93" else consent
+        for consent in CONSENTS_DATA
+    ]
+
+    fake_api.register_auth_request()
+    fake_api.register_requests(consents=consents)
+
+    with patch(
+        "custom_components.netzooe_eservice.coordinator.dt_util.now",
+        return_value=NOW,
+    ):
+        await setup_integration(hass, config_entry)
+
+    assert _state(hass, STATUS_ENTITY_ID) == "unknown"

@@ -150,6 +150,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         )
 
         self._last_full_update: datetime | None = None
+        self._api_error_logged: bool = False
 
         self.frequent_updates: bool = entry.options.get(CONF_FREQUENT_UPDATES, DEFAULT_FREQUENT_UPDATES)
         self.show_revoked_energy_communities: bool = entry.options.get(
@@ -197,10 +198,22 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             ) from error
         except APIError as error:
             if self.data is None:
-                raise UpdateFailed(error) from error
+                raise UpdateFailed(
+                    translation_domain=DOMAIN,
+                    translation_key="update_failed",
+                    translation_placeholders={"error": str(error)},
+                ) from error
 
-            _LOGGER.warning("Update failed, using cached data: %s", error)
+            # Log only once until the portal is available again.
+            if not self._api_error_logged:
+                _LOGGER.warning("Update failed, using cached data: %s", error)
+                self._api_error_logged = True
+
             return self.data
+
+        if self._api_error_logged:
+            _LOGGER.info("The eService portal is available again")
+            self._api_error_logged = False
 
         _LOGGER.debug("data: %s", data)
         return data

@@ -20,8 +20,8 @@
                     "username": "Benutzername"
                 },
                 "data_description": {
-                    "password": "Das Passwort zur Anmeldung bei deinem {name}-Gerät.",
-                    "username": "Der Benutzername zur Anmeldung bei deinem {name}-Gerät."
+                    "password": "Das Passwort deines {name}-Portalkontos.",
+                    "username": "Der Benutzername deines {name}-Portalkontos."
                 },
                 "description": "Bitte gib den Benutzernamen und das Passwort ein."
             }
@@ -90,7 +90,12 @@
                 "name": "Typ"
             },
             "status": {
-                "name": "Status"
+                "name": "Status",
+                "state": {
+                    "active": "Aktiv",
+                    "active_unchangeable": "Aktiv (nicht änderbar)",
+                    "revoked": "Widerrufen"
+                }
             },
             "supplier": {
                 "name": "Energielieferant"
@@ -109,6 +114,9 @@
     "exceptions": {
         "authentication_error": {
             "message": "Authentifizierung fehlgeschlagen. Bitte überprüfe deine Anmeldedaten."
+        },
+        "update_failed": {
+            "message": "Die Daten konnten nicht vom eService-Portal abgerufen werden: {error}"
         }
     },
     "options": {

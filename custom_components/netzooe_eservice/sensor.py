@@ -21,6 +21,7 @@ from homeassistant.const import PERCENTAGE
 from homeassistant.const import EntityCategory
 from homeassistant.const import UnitOfEnergy
 from homeassistant.const import UnitOfPower
+from homeassistant.core import callback
 from homeassistant.helpers import device_registry as dr
 from netzooe_eservice_api.constants import ConsentsStatus
 
@@ -46,6 +47,7 @@ ENERGY_COMMUNITY_OWN_COVERAGE: Final[str] = "ENERGY_COMMUNITY_OWN_COVERAGE"
 ENERGY_COMMUNITY_CONSUMPTION: Final[str] = "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR"
 ENERGY_COMMUNITY_GENERATION: Final[str] = "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR"
 ENERGY_COMMUNITY_OVER_COVERAGE: Final[str] = "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR"
+STATUS_OPTIONS: Final[list[str]] = [status.value.lower() for status in ConsentsStatus]
 
 type Direction = Literal["import", "export"]
 
@@ -143,6 +145,12 @@ class NetzOOEeServiceSensorEntityDescription(SensorEntityDescription):
     """Return the extra state attributes from the device data."""
 
 
+def _status(data: Mapping[str, Any]) -> str | None:
+    """Return the status of the consent, or `None` if it is missing or unknown."""
+    status: str = (data["status"] or "").lower()
+    return status if status in STATUS_OPTIONS else None
+
+
 def _sum_by_type(items: list[dict[str, Any]], target_type: str) -> float:
     """Return the sum of all profile values of the given type."""
     total: float = sum(item["sum"]["value"] for item in items if item["type"] == target_type)
@@ -165,7 +173,6 @@ def _trend_descriptions(key: Literal["monthly", "yearly"], /) -> list[NetzOOEeSe
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key=f"{key}_trend_{name}",
-            icon="mdi:transmission-tower-export",
             value_fn=lambda data: data[trend][consumption]["sum"],
             extra_state_attributes_fn=lambda data: {
                 "per_day": data[trend][consumption]["perDay"],
@@ -188,7 +195,6 @@ def _trend_descriptions(key: Literal["monthly", "yearly"], /) -> list[NetzOOEeSe
             native_unit_of_measurement=PERCENTAGE,
             suggested_display_precision=2,
             translation_key=f"{key}_trend",
-            icon="mdi:chart-areaspline",
             value_fn=change,
         ),
     ]
@@ -239,7 +245,6 @@ def _energy_community_descriptions(
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
             state_class=SensorStateClass.TOTAL,
             translation_key=key,
-            icon="mdi:transmission-tower-export" if direction == "import" else "mdi:transmission-tower-import",
             value_fn=value,
             extra_state_attributes_fn=attributes,
         )
@@ -313,10 +318,12 @@ SENSOR_DEFAULT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
 SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
     NetzOOEeServiceSensorEntityDescription(
         entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
+        device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
         key="status",
+        options=STATUS_OPTIONS,
         translation_key="status",
-        value_fn=lambda data: data["status"].lower() if data["status"] else None,
+        value_fn=_status,
     ),
     NetzOOEeServiceSensorEntityDescription(
         entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
@@ -370,16 +377,34 @@ async def async_setup_entry(
     entry: NetzOOEeServiceConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up the sensors of all devices from a config entry."""
+    """Set up the sensors of all devices from a config entry and add the sensors of new devices after updates."""
     coordinator: NetzOOEeServiceDataUpdateCoordinator = entry.runtime_data
+    known_device_identifiers: set[str] = set()
 
-    async_add_entities(
-        description.entity_class(
-            coordinator,
-            description=description,
-            entry=entry,
-            device_identifier=device_identifier,
+    @callback
+    def async_add_new_devices() -> None:
+        """Add the sensors of the devices that are not known yet."""
+        device_identifiers: set[str] = set(coordinator.data)
+        new_device_identifiers: set[str] = device_identifiers - known_device_identifiers
+
+        # Removed devices are forgotten, so their sensors are added again if they come back.
+        known_device_identifiers.intersection_update(device_identifiers)
+        known_device_identifiers.update(new_device_identifiers)
+
+        if not new_device_identifiers:
+            return
+
+        async_add_entities(
+            description.entity_class(
+                coordinator,
+                description=description,
+                entry=entry,
+                device_identifier=device_identifier,
+            )
+            for device_identifier, data in coordinator.data.items()
+            if device_identifier in new_device_identifiers
+            for description in SENSOR_TYPES[data["deviceType"]]
         )
-        for device_identifier, data in coordinator.data.items()
-        for description in SENSOR_TYPES[data["deviceType"]]
-    )
+
+    async_add_new_devices()
+    entry.async_on_unload(coordinator.async_add_listener(async_add_new_devices))
