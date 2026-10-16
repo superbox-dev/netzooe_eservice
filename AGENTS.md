@@ -30,8 +30,6 @@ Before finishing a change, run:
   - device identifiers
   - option keys (`CONF_*`) and their default behaviour
   - `translation_key`s
-- **100% test coverage** is enforced:
-  - every new code path needs a test
 - **Minimum versions**:
   - Python 3.14
   - Home Assistant 2026.9.4
@@ -47,7 +45,6 @@ Before finishing a change, run:
 - No real credentials or customer data:
   - applies to code, tests and docs
   - e.g. contract account numbers, meter point numbers
-  - use the fake data in `tests/api_data.py`
 - Portal access:
   - never call the portal directly
   - missing endpoints belong in `netzooe_eservice_api`
@@ -83,10 +80,7 @@ Code lives in `custom_components/netzooe_eservice/`.
 1. `sensor.py`: add a `NetzOOEeServiceSensorEntityDescription` to the matching `SENSOR_*_TYPES` list
 2. `strings.json`, `translations/en.json`, `translations/de.json`: add the name under `entity.sensor.<key>`
 3. `coordinator.py`: fetch the data, if it is not in `coordinator.data` yet
-4. Tests:
-   - add the API response to `tests/api_data.py`
-   - run `uv run pytest --snapshot-update`
-   - review the diff in `tests/snapshots/test_sensor.ambr`
+4. Tests: see [Tests](#tests)
 
 ## Adding an option
 
@@ -97,7 +91,17 @@ Code lives in `custom_components/netzooe_eservice/`.
 
 ## Tests
 
+- Run with `uv run pytest` (parallel, coverage, stops at first failure)
+- **100% test coverage** is enforced:
+  - every new code path needs a test
+- Snapshots (syrupy) are in `tests/snapshots/`:
+  - regenerate with `uv run pytest --snapshot-update`
+  - always review the diff, e.g. `tests/snapshots/test_sensor.ambr`
+- New sensor:
+  - add the API response to `tests/api_data.py`
+  - regenerate the snapshots and review the new entities
 - HTTP is mocked with `FakeNetzOOEeServiceAPI` in `tests/conftest.py` and the responses in `tests/api_data.py`
+- Only use the fake data in `tests/api_data.py`, never real customer data
 - The `config_entry` fixture is parametrized indirectly with `data` / `options`
 - Patch `custom_components.netzooe_eservice.coordinator.dt_util.now` for date-dependent values
 - Never test or patch internal methods or attributes (e.g. `coordinator._async_update_data()`):
@@ -109,9 +113,13 @@ Code lives in `custom_components/netzooe_eservice/`.
 
 - `CHANGELOG.md`:
   - every user-visible change gets an entry under `## [Unreleased]`
-  - Keep a Changelog format, entries start with an imperative verb ("Add ...", "Fix ...")
+  - Keep a Changelog format, past tense
   - identifiers in backticks
-  - issues as `[(Issue #25)][issue-25]`
+  - issues as `([Issue #25][issue-25])`
+  - releases are linked at the bottom:
+    - `[Unreleased]` compares the latest tag with `HEAD`
+    - each release compares its tag with the previous one
+    - the first release links to its release tag
 - Versions:
   - the version is in `pyproject.toml` and `manifest.json`
   - only change it when asked
