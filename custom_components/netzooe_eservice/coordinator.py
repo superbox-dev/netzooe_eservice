@@ -69,6 +69,8 @@ ENERGY_COMMUNITY_DEVICE_TYPES: Final[dict[str, str]] = {
 }
 METER_READING_REFERENCE_NUMBERS: Final[set[str]] = {"1.8.1", "2.8.1"}
 PEAK_POWER_REFERENCE_NUMBERS: Final[set[str]] = {"1.6.0", "2.6.0"}
+ENERGY_COMMUNITY_ID_SERVICE_PROVIDER: Final[slice] = slice(13, 21)
+"""Position of the service provider code in the energy community ID, e.g. `AT00300000000RC100930000000965743`."""
 
 
 class ActiveContractData(NamedTuple):
@@ -151,6 +153,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
         self._last_full_update: datetime | None = None
         self._api_error_logged: bool = False
+        self._missing_consents_logged: set[str] = set()
 
         self.frequent_updates: bool = entry.options.get(CONF_FREQUENT_UPDATES, DEFAULT_FREQUENT_UPDATES)
         self.show_revoked_energy_communities: bool = entry.options.get(
@@ -176,19 +179,21 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch all data, or with frequent updates only the energy community data in between full updates."""
         now: datetime = dt_util.now()
+        # Compare in UTC, the difference of two local times ignores a DST change in between.
+        now_utc: datetime = dt_util.as_utc(now)
 
         # Without frequent updates the coordinator only runs every SCAN_INTERVAL_FULL,
         # so always do a full update (avoids missing it because of scheduling jitter).
         full_update: bool = (
             not self.frequent_updates
             or self._last_full_update is None
-            or now - self._last_full_update >= SCAN_INTERVAL_FULL
+            or now_utc - self._last_full_update >= SCAN_INTERVAL_FULL
         )
 
         try:
             if full_update:
                 data: dict[str, Any] = await self._async_fetch_all_data(ProfilePeriods.from_today(now.date()))
-                self._last_full_update = now
+                self._last_full_update = now_utc
             else:
                 data = await self._async_fetch_energy_community_data()
         except AuthenticationError as error:
@@ -223,19 +228,37 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         semaphore: asyncio.Semaphore = asyncio.Semaphore(MAX_PARALLEL_REQUESTS)
 
         async def limited(coroutine: Coroutine[Any, Any, T]) -> T:
-            async with semaphore:
-                return await coroutine
+            try:
+                async with semaphore:
+                    return await coroutine
+            finally:
+                # Close the coroutine if it was cancelled before it started (avoids "never awaited").
+                coroutine.close()
 
-        return await asyncio.gather(*(limited(coroutine) for coroutine in coroutines))
+        tasks: list[asyncio.Task[T]] = [asyncio.create_task(limited(coroutine)) for coroutine in coroutines]
+
+        try:
+            return await asyncio.gather(*tasks)
+        finally:
+            # If a request fails, cancel the remaining ones (e.g. no further logins with rejected credentials).
+            for task in tasks:
+                task.cancel()
 
     async def _async_fetch_all_data(self, periods: ProfilePeriods, /) -> dict[str, Any]:
         """Fetch the data of all meter points and their energy communities."""
-        consents_map: ConsentsMap
-        contracts_by_mpan: dict[str, list[dict[str, Any]]]
-        consents_map, contracts_by_mpan = await asyncio.gather(
-            self._async_fetch_consents_map(),
+        consents_task: asyncio.Task[ConsentsMap] = asyncio.create_task(self._async_fetch_consents_map())
+        contracts_task: asyncio.Task[dict[str, list[dict[str, Any]]]] = asyncio.create_task(
             self._async_fetch_contracts_by_mpan(),
         )
+
+        try:
+            await asyncio.gather(consents_task, contracts_task)
+        finally:
+            consents_task.cancel()
+            contracts_task.cancel()
+
+        consents_map: ConsentsMap = consents_task.result()
+        contracts_by_mpan: dict[str, list[dict[str, Any]]] = contracts_task.result()
 
         data: dict[str, Any] = {}
         profile_requests: list[ProfileRequest] = []
@@ -278,6 +301,10 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 device_data["meterPointAdministrationNumber"],
                 device_data["deviceId"],
             )
+
+            # Keep the previous values, the next full update removes the energy community if its consent is gone.
+            if not consent:
+                continue
 
             data[device_identifier] = device_data | {
                 "contributionPercentage": consent.get("contributionPercentage"),
@@ -375,10 +402,18 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
     @staticmethod
     def _get_consent(consents_map: ConsentsMap, mpan: str, energy_community_id: str, /) -> dict[str, Any]:
         """Return the consent of an energy community at a meter point, or an empty dict if there is none."""
-        # The energy community ID contains the service provider code of the consent.
+        # The energy community ID contains the service provider code of the consent, usually at a fixed position.
+        # Prefer an exact match there, so a code that also appears elsewhere in the ID does not match.
+        consents: list[dict[str, Any]] = [
+            consent for consent in consents_map.get(mpan, []) if consent["serviceProvider"] in energy_community_id
+        ]
         return next(
-            (consent for consent in consents_map.get(mpan, []) if consent["serviceProvider"] in energy_community_id),
-            {},
+            (
+                consent
+                for consent in consents
+                if energy_community_id[ENERGY_COMMUNITY_ID_SERVICE_PROVIDER] == consent["serviceProvider"]
+            ),
+            consents[0] if consents else {},
         )
 
     @staticmethod
@@ -461,8 +496,14 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         consent: dict[str, Any] = self._get_consent(consents_map, mpan, timeslice["energyCommunityId"])
 
         if not consent:
-            _LOGGER.warning("No consent found for energy community %s", timeslice["energyCommunityId"])
+            # Log only once until the consent is returned again.
+            if timeslice["energyCommunityId"] not in self._missing_consents_logged:
+                _LOGGER.warning("No consent found for energy community %s", timeslice["energyCommunityId"])
+                self._missing_consents_logged.add(timeslice["energyCommunityId"])
+
             return None
+
+        self._missing_consents_logged.discard(timeslice["energyCommunityId"])
 
         if consent["status"] == ConsentsStatus.REVOKED.value and not self.show_revoked_energy_communities:
             _LOGGER.debug("  Skipping revoked energy community %s", timeslice["energyCommunityName"])

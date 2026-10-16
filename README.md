@@ -96,7 +96,8 @@ Energy community:
 | Status                                          | Status of the participation: active, active (unchangeable) or revoked       |
 
 The total sensors of the meter point are disabled by default. Enable them in the entity settings if your meter
-point takes part in several energy communities.
+point takes part in several energy communities. They only include energy communities with the status "active",
+unless **Show revoked energy communities** is enabled.
 
 ## Known limitations
 

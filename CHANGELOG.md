@@ -20,7 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated `netzooe_eservice_api` to 1.1.2b1. Timeouts and unexpected HTTP status codes of the portal are now handled
   as API errors, so the previous data is kept instead of failing the update.
-- Renamed "(letzter Monat)" to "(Vormonat)" in the German sensor names. Existing entity IDs are not changed.
+- Renamed "(letzter Monat)" to "(Vormonat)" in the German sensor names and "(last month)" to "(previous month)" in
+  the English sensor names. Existing entity IDs are not changed.
 - Documented the options and update intervals in the README.
 - Requested the contract accounts and consumption profiles in parallel (at most 4 requests at the same time), which
   makes a full update about 3 times faster.
@@ -39,6 +40,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `supplier_export_l3` of the meter point, which showed the total generation instead of the supplier export
   of all energy communities.
 - Fixed the `status` sensor failing if the portal returns a consent without a status.
+- Fixed the update failing if the portal returns an energy community without a consent. The energy community is now
+  skipped and a warning is logged once.
+- Fixed energy communities getting the consent of another service provider whose code also appears in their ID.
 - Fixed the "already configured" message and added the missing "wrong account" message of the config flow.
 
 ## [1.1.1] - 2026-09-28

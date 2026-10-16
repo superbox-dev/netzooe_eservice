@@ -115,7 +115,7 @@ class NetzOOEeServiceAggregatedSensorEntity(NetzOOEeServiceSensorEntity):
 
     @property
     def native_value(self) -> float:
-        """Return the sum of the values of all shown energy communities of the meter point."""
+        """Return the sum of the values of all active (or, if shown, all) energy communities of the meter point."""
         prefix: str = f"{self.device_identifier}_"
 
         return sum(
@@ -123,7 +123,7 @@ class NetzOOEeServiceAggregatedSensorEntity(NetzOOEeServiceSensorEntity):
                 cast("float", self.entity_description.value_fn(data))
                 for device_identifier, data in self.coordinator.data.items()
                 if device_identifier.startswith(prefix)
-                and (data["status"] != ConsentsStatus.REVOKED.value or self.coordinator.show_revoked_energy_communities)
+                and (data["status"] == ConsentsStatus.ACTIVE.value or self.coordinator.show_revoked_energy_communities)
             ),
             start=0.0,
         )
