@@ -1,3 +1,7 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Fixtures and the fake eService portal API for the tests."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -53,11 +57,15 @@ def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
 
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:  # noqa: ARG001
+    """Enable custom integrations in all tests."""
     return
 
 
 class FakeNetzOOEeServiceAPI:
+    """Fake eService portal API that registers the mocked HTTP responses."""
+
     def __init__(self, aioclient_mock: AiohttpClientMocker) -> None:
+        """Initialize the fake API with the consumption profiles in the order of the requests."""
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
 
         self.profile_data_queue: list[list[dict[str, Any]]] = []
@@ -66,16 +74,13 @@ class FakeNetzOOEeServiceAPI:
             SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2,
             SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2,
             SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2,
-            # PROFILE_DATA_TOTAL_L3_001_2,
             EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3,
             EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3,
             EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3,
             SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1,
             EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2,
             WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1,
-            # PROFILE_DATA_TOTAL_L3_003_1,
             WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2,
-            # PROFILE_DATA_TOTAL_L3_003_2,
             SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3,
             SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3,
             SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3,
@@ -85,6 +90,7 @@ class FakeNetzOOEeServiceAPI:
         ]
 
     def register_auth_request(self, /, *, status: int = 200, exc: Exception | None = None) -> None:
+        """Register the login request."""
         self.aioclient_mock.post(
             "https://eservice.netzooe.at/service/j_security_check",
             headers={
@@ -98,6 +104,7 @@ class FakeNetzOOEeServiceAPI:
         )
 
     def register_session_request(self) -> None:
+        """Register the session request."""
         self.aioclient_mock.get(
             "https://eservice.netzooe.at/service/v1.0/session",
             headers={
@@ -115,6 +122,7 @@ class FakeNetzOOEeServiceAPI:
         consents: list[dict[str, Any]] | None = None,
         status: int = 200,
     ) -> None:
+        """Register the consents request."""
         self.aioclient_mock.get(
             "https://eservice.netzooe.at/service/v1.0/consents",
             headers={
@@ -129,6 +137,7 @@ class FakeNetzOOEeServiceAPI:
         )
 
     def register_dashboard_request(self, /, *, status: int = 200) -> None:
+        """Register the dashboard request."""
         self.aioclient_mock.get(
             "https://eservice.netzooe.at/service/v1.0/dashboard",
             headers={
@@ -143,12 +152,14 @@ class FakeNetzOOEeServiceAPI:
         )
 
     def register_requests(self, /, *, consents: list[dict[str, Any]] | None = None) -> None:
+        """Register all requests of a full update except the login."""
         self.register_session_request()
         self.register_consents_request(consents=consents)
         self.register_dashboard_request()
         self.register_contract_account_requests()
 
     def register_contract_account_requests(self) -> None:
+        """Register the contract account and consumption profile requests."""
         self.profile_data_queue = list(self.profile_data)
 
         self.aioclient_mock.get(
@@ -219,8 +230,9 @@ class FakeNetzOOEeServiceAPI:
         self,
         method: str,
         url: URL,
-        *args: Any,  # noqa: ARG002
+        *args: object,  # noqa: ARG002
     ) -> AiohttpClientMockResponse:
+        """Return the next consumption profile in the order of the requests."""
         response = self.profile_data_queue.pop(0)
 
         return AiohttpClientMockResponse(
@@ -235,11 +247,13 @@ class FakeNetzOOEeServiceAPI:
 async def fake_api(
     aioclient_mock: AiohttpClientMocker,
 ) -> FakeNetzOOEeServiceAPI:
+    """Return the fake eService portal API."""
     return FakeNetzOOEeServiceAPI(aioclient_mock)
 
 
 @pytest.fixture
 def config_entry(request: SubRequest) -> MockConfigEntry:
+    """Return a config entry, optionally updated with the indirect parameter."""
     mock_config_entry_data: dict[str, Any] = {
         "title": "Netz OÖ eService (test)",
         "data": {

@@ -1,3 +1,5 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
 """Config flow for Netz OÖ eService."""
 
 from __future__ import annotations
@@ -6,6 +8,7 @@ import logging
 from http import HTTPStatus
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Final
 
 import probatio as vol
 from homeassistant.config_entries import ConfigFlow
@@ -34,6 +37,8 @@ from .const import MANUFACTURER
 from .const import NAME
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
 
@@ -42,11 +47,19 @@ if TYPE_CHECKING:
 
 _LOGGER = logging.getLogger(__name__)
 
+# Options with their defaults, in the order of the options form.
+OPTIONS: Final[dict[str, bool]] = {
+    CONF_FREQUENT_UPDATES: DEFAULT_FREQUENT_UPDATES,
+    CONF_SHOW_REVOKED_ENERGY_COMMUNITIES: DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES,
+    CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: DEFAULT_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA,
+    CONF_SHOW_INACTIVE_METER_POINTS: DEFAULT_SHOW_INACTIVE_METER_POINTS,
+}
+
 
 async def validate_input(hass: HomeAssistant, /, *, data: dict[str, Any]) -> None:
-    """Validate the user input allows us to connect."""
+    """Validate that the credentials can log in to the eService portal."""
     session: ClientSession = async_create_clientsession(hass)
-    _LOGGER.debug("Try to connected to the Netz OÖ eService portal")
+    _LOGGER.debug("Try to connect to the Netz OÖ eService portal")
 
     client: NetzOOEeServiceAPI = NetzOOEeServiceAPI(
         username=data[CONF_USERNAME],
@@ -77,7 +90,7 @@ class NetzOOEeServiceConfigFlow(ConfigFlow, domain=DOMAIN):
         self._entry: NetzOOEeServiceConfigEntry | None = None
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """Handle a flow initialized by the user."""
+        """Handle a flow initialized by the user, also used for reconfiguration and reauthentication."""
         errors: dict[str, str] = {}
 
         if user_input is not None and user_input.get(CONF_USERNAME) and user_input.get(CONF_PASSWORD):
@@ -103,13 +116,19 @@ class NetzOOEeServiceConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle reconfiguration of the integration."""
         self._entry = self._get_reconfigure_entry()
-
         self._username = self._entry.data[CONF_USERNAME]
 
         return await self.async_step_user(user_input)
 
-    async def _async_validate_or_error(self, user_input: dict[str, Any]) -> dict[str, Any]:
-        """Validate or error."""
+    async def async_step_reauth(self, entry_data: Mapping[str, Any]) -> ConfigFlowResult:
+        """Handle reauthentication if the portal rejects the credentials."""
+        self._entry = self._get_reauth_entry()
+        self._username = entry_data[CONF_USERNAME]
+
+        return await self.async_step_user()
+
+    async def _async_validate_or_error(self, user_input: dict[str, Any]) -> dict[str, str]:
+        """Validate the user input and return the errors for the form."""
         errors: dict[str, str] = {}
 
         try:
@@ -125,6 +144,7 @@ class NetzOOEeServiceConfigFlow(ConfigFlow, domain=DOMAIN):
         return errors
 
     async def _async_complete_entry(self, user_input: dict[str, Any]) -> ConfigFlowResult:
+        """Create the config entry, or update the existing one on reconfiguration and reauthentication."""
         await self.async_set_unique_id(user_input[CONF_USERNAME])
 
         if self._entry is not None:
@@ -170,39 +190,14 @@ class NetzOOEeServiceOptionsFlow(OptionsFlowWithReload):
         if coordinator is None:
             return self.async_abort(reason="options_not_ready")
 
-        schema_fields: dict[Any, Any] = {
-            vol.Optional(
-                CONF_FREQUENT_UPDATES,
-                default=self.config_entry.options.get(
-                    CONF_FREQUENT_UPDATES,
-                    DEFAULT_FREQUENT_UPDATES,
-                ),
-            ): BooleanSelector(),
-            vol.Optional(
-                CONF_SHOW_REVOKED_ENERGY_COMMUNITIES,
-                default=self.config_entry.options.get(
-                    CONF_SHOW_REVOKED_ENERGY_COMMUNITIES,
-                    DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES,
-                ),
-            ): BooleanSelector(),
-            vol.Optional(
-                CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA,
-                default=self.config_entry.options.get(
-                    CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA,
-                    DEFAULT_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA,
-                ),
-            ): BooleanSelector(),
-            vol.Optional(
-                CONF_SHOW_INACTIVE_METER_POINTS,
-                default=self.config_entry.options.get(
-                    CONF_SHOW_INACTIVE_METER_POINTS,
-                    DEFAULT_SHOW_INACTIVE_METER_POINTS,
-                ),
-            ): BooleanSelector(),
-        }
         return self.async_show_form(
             step_id="init",
-            data_schema=vol.Schema(schema_fields),
+            data_schema=vol.Schema(
+                {
+                    vol.Optional(option, default=self.config_entry.options.get(option, default)): BooleanSelector()
+                    for option, default in OPTIONS.items()
+                },
+            ),
         )
 
 

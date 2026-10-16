@@ -648,7 +648,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '10050.0',
+      'state': '8440.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -2084,7 +2084,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '10050.0',
+      'state': '8440.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -3520,7 +3520,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '10050.0',
+      'state': '8440.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -4726,7 +4726,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '10050.0',
+      'state': '8440.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5790,7 +5790,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '715.0',
+      'state': '512.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6846,7 +6846,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '715.0',
+      'state': '512.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7902,7 +7902,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '715.0',
+      'state': '512.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9030,7 +9030,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '715.0',
+      'state': '512.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({

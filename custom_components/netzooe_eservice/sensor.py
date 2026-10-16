@@ -1,12 +1,16 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
 """Support for the Netz OÖ eService sensors."""
 
 from __future__ import annotations
 
-import logging
 from dataclasses import dataclass
+from dataclasses import replace
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
+from typing import Literal
+from typing import cast
 
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.components.sensor import SensorDeviceClass
@@ -18,11 +22,9 @@ from homeassistant.const import EntityCategory
 from homeassistant.const import UnitOfEnergy
 from homeassistant.const import UnitOfPower
 from homeassistant.helpers import device_registry as dr
-from homeassistant.helpers.device_registry import DeviceInfo
+from netzooe_eservice_api.constants import ConsentsStatus
 
 from .const import DOMAIN
-from .const import MANUFACTURER
-from .const import NAME
 from .const import DeviceType
 from .entity import NetzOOEeServiceEntity
 
@@ -31,37 +33,32 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
     from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.device_registry import DeviceInfo
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from homeassistant.helpers.typing import StateType
 
     from .coordinator import NetzOOEeServiceConfigEntry
     from .coordinator import NetzOOEeServiceDataUpdateCoordinator
 
-_LOGGER = logging.getLogger(__name__)
-
 PARALLEL_UPDATES: Final[int] = 0
 
+ENERGY_COMMUNITY_OWN_COVERAGE: Final[str] = "ENERGY_COMMUNITY_OWN_COVERAGE"
+ENERGY_COMMUNITY_CONSUMPTION: Final[str] = "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR"
+ENERGY_COMMUNITY_GENERATION: Final[str] = "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR"
+ENERGY_COMMUNITY_OVER_COVERAGE: Final[str] = "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR"
 
-@dataclass(frozen=True, kw_only=True)
-class NetzOOEeServiceSensorEntityDescription[T](
-    SensorEntityDescription,
-):
-    """Class describing NetzOOEeService sensor entities."""
-
-    entity_class: type[NetzOOEeServiceSensorEntity]
-    value_fn: Callable[..., StateType]
-    extra_state_attributes_fn: Callable[[Mapping[str, Any]], Mapping[str, Any] | None]
+type Direction = Literal["import", "export"]
 
 
 class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
     """Netz OÖ eService sensor entity."""
 
-    entity_description: NetzOOEeServiceSensorEntityDescription[StateType]
+    entity_description: NetzOOEeServiceSensorEntityDescription
 
     def __init__(
         self,
         coordinator: NetzOOEeServiceDataUpdateCoordinator,
-        description: NetzOOEeServiceSensorEntityDescription[StateType],
+        description: NetzOOEeServiceSensorEntityDescription,
         entry: NetzOOEeServiceConfigEntry,
         device_identifier: str,
     ) -> None:
@@ -75,19 +72,7 @@ class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
         )
 
         self._attr_unique_id = f"{self.device_identifier}_{self.entity_description.key}".lower()
-
         self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
-
-    @property
-    def data(self) -> Mapping[str, Any]:
-        """Return sensor data from the coordinator."""
-        data: Mapping[str, Any] = self.coordinator.data[self.device_identifier]
-        return data
-
-    @property
-    def device_name(self) -> str | None:
-        """Return the name of the current device."""
-        return f"{self.data['deviceName']} ({self._short_device_id(self.device_identifier)})"
 
     @property
     def native_value(self) -> StateType:
@@ -104,8 +89,8 @@ class NetzOOEeServiceEnergyCommunitySensorEntity(NetzOOEeServiceSensorEntity):
     """Netz OÖ eService energy community sensor entity."""
 
     @property
-    def device_name(self) -> str | None:
-        """Return the name of the current device."""
+    def device_name(self) -> str:
+        """Return the name of the device."""
         return (
             f"{self.data['synthProfile']}: {self.data['deviceName']} "
             f"({self._short_device_id(self.data['meterPointAdministrationNumber'])})"
@@ -113,481 +98,227 @@ class NetzOOEeServiceEnergyCommunitySensorEntity(NetzOOEeServiceSensorEntity):
 
     @property
     def device_info(self) -> DeviceInfo:
-        """Return updated device specific attributes."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self.device_identifier)},
-            name=self.device_name,
-            model=NAME,
-            manufacturer=MANUFACTURER,
-            via_device_id=dr.async_get_device_id_by_identifier(
-                self.hass,
-                (DOMAIN, self.data["meterPointAdministrationNumber"]),
-                config_entry_id=self.entry.entry_id,
-            ),
+        """Return the device info, linked to the device of the meter point."""
+        device_info: DeviceInfo = super().device_info
+        device_info["via_device_id"] = dr.async_get_device_id_by_identifier(
+            self.hass,
+            (DOMAIN, self.data["meterPointAdministrationNumber"]),
+            config_entry_id=self.entry.entry_id,
         )
+        return device_info
 
 
 class NetzOOEeServiceAggregatedSensorEntity(NetzOOEeServiceSensorEntity):
-    """Aggregated sensor entity."""
+    """Meter point sensor entity with the total of all energy communities of the meter point."""
 
     @property
-    def native_value(self) -> StateType:
-        """Return the state of the sensor."""
-        return self.entity_description.value_fn(self.coordinator, self.device_identifier)
+    def native_value(self) -> float:
+        """Return the sum of the values of all shown energy communities of the meter point."""
+        prefix: str = f"{self.device_identifier}_"
+
+        return sum(
+            (
+                cast("float", self.entity_description.value_fn(data))
+                for device_identifier, data in self.coordinator.data.items()
+                if device_identifier.startswith(prefix)
+                and (data["status"] != ConsentsStatus.REVOKED.value or self.coordinator.show_revoked_energy_communities)
+            ),
+            start=0.0,
+        )
 
 
-def _sum_by_type(
-    items: list[dict[str, Any]],
-    target_type: str,
-) -> float:
+def _no_attributes(_data: Mapping[str, Any]) -> Mapping[str, Any] | None:
+    """Return no extra state attributes."""
+    return None
+
+
+@dataclass(frozen=True, kw_only=True)
+class NetzOOEeServiceSensorEntityDescription(SensorEntityDescription):
+    """Class describing Netz OÖ eService sensor entities."""
+
+    entity_class: type[NetzOOEeServiceSensorEntity] = NetzOOEeServiceSensorEntity
+    value_fn: Callable[[Mapping[str, Any]], StateType]
+    """Return the state from the device data."""
+    extra_state_attributes_fn: Callable[[Mapping[str, Any]], Mapping[str, Any] | None] = _no_attributes
+    """Return the extra state attributes from the device data."""
+
+
+def _sum_by_type(items: list[dict[str, Any]], target_type: str) -> float:
+    """Return the sum of all profile values of the given type."""
     total: float = sum(item["sum"]["value"] for item in items if item["type"] == target_type)
     return total
 
 
-def _sum_difference_by_type(
-    items: list[dict[str, Any]],
-    positive_type: str,
-    negative_type: str,
-) -> float:
-    positive: float = sum(item["sum"]["value"] for item in items if item["type"] == positive_type)
-    negative: float = sum(item["sum"]["value"] for item in items if item["type"] == negative_type)
-
-    return positive - negative
+def _timeline_by_type(items: list[dict[str, Any]], target_type: str) -> list[dict[str, str]]:
+    """Return the time ranges of all profile values of the given type."""
+    return [{"from": item["from"], "to": item["to"]} for item in items if item["type"] == target_type]
 
 
-def _sum_values_for_mpan(
-    coordinator: NetzOOEeServiceDataUpdateCoordinator,
-    device_identifier: str,
-    key: str,
-    positive_type: str,
-    negative_type: str | None = None,
-) -> float:
-    total: float = 0.0
+def _trend_descriptions(key: Literal["monthly", "yearly"], /) -> list[NetzOOEeServiceSensorEntityDescription]:
+    """Return the sensors of the monthly or yearly consumption trend of a meter point."""
+    trend: str = f"{key}Trend"
 
-    for current_device_identifier, data in coordinator.data.items():
-        if not current_device_identifier.startswith(f"{device_identifier}_"):
-            continue
+    def period(name: str, consumption: str, timerange: str) -> NetzOOEeServiceSensorEntityDescription:
+        return NetzOOEeServiceSensorEntityDescription(
+            device_class=SensorDeviceClass.ENERGY,
+            key=f"{key}_trend_{name}",
+            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            state_class=SensorStateClass.TOTAL,
+            translation_key=f"{key}_trend_{name}",
+            icon="mdi:transmission-tower-export",
+            value_fn=lambda data: data[trend][consumption]["sum"],
+            extra_state_attributes_fn=lambda data: {
+                "per_day": data[trend][consumption]["perDay"],
+                "days": data[trend][consumption]["days"],
+                "from": data[trend][timerange]["from"],
+                "to": data[trend][timerange]["to"],
+            },
+        )
 
-        is_active: bool = data["status"].lower() == "active"
+    def change(data: Mapping[str, Any]) -> float:
+        new: float = data[trend]["consumptionNew"]["sum"]
+        old: float = data[trend]["consumptionOld"]["sum"]
+        return (new - old) / old * 100 if old > 0 else 0
 
-        if coordinator.show_revoked_energy_communities or is_active:
-            items: list[dict[str, Any]] = data.get(key, [])
-
-            if negative_type:
-                total += _sum_difference_by_type(
-                    items,
-                    positive_type,
-                    negative_type,
-                )
-            else:
-                total += _sum_by_type(
-                    items,
-                    positive_type,
-                )
-
-    return total
-
-
-def _timeline_by_type(
-    items: list[dict[str, Any]],
-    target_type: str,
-) -> list[dict[str, str]]:
     return [
-        {
-            "from": item["from"],
-            "to": item["to"],
-        }
-        for item in items
-        if item["type"] == target_type
+        period("new", "consumptionNew", "timerangeNew"),
+        period("old", "consumptionOld", "timerangeOld"),
+        NetzOOEeServiceSensorEntityDescription(
+            key=f"{key}_trend",
+            native_unit_of_measurement=PERCENTAGE,
+            suggested_display_precision=2,
+            translation_key=f"{key}_trend",
+            icon="mdi:chart-areaspline",
+            value_fn=change,
+        ),
     ]
 
 
-SENSOR_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
-    NetzOOEeServiceSensorEntityDescription[str](
-        entity_class=NetzOOEeServiceSensorEntity,
+def _energy_community_descriptions(
+    direction: Direction,
+    /,
+    *,
+    energy_community: tuple[str, str | None],
+    supplier: tuple[str, str | None],
+) -> list[NetzOOEeServiceSensorEntityDescription]:
+    """Return the energy community and supplier sensors of an energy community.
+
+    ``energy_community`` and ``supplier`` are the profile types whose values are added and subtracted.
+    Only the energy community sensors have the name and ID of the energy community as attributes.
+    """
+
+    def description(
+        key: str,
+        profile: str,
+        types: tuple[str, str | None],
+        /,
+        *,
+        with_name: bool,
+    ) -> NetzOOEeServiceSensorEntityDescription:
+        positive_type, negative_type = types
+
+        def value(data: Mapping[str, Any]) -> float:
+            total: float = _sum_by_type(data[profile], positive_type)
+            return total - _sum_by_type(data[profile], negative_type) if negative_type else total
+
+        def attributes(data: Mapping[str, Any]) -> Mapping[str, Any]:
+            items: list[dict[str, Any]] = data[profile]
+
+            if not items:
+                return {}
+
+            name: dict[str, Any] = (
+                {"name": items[0]["energyCommunityName"], "id": items[0]["energyCommunityId"]} if with_name else {}
+            )
+            return name | {"timeline": _timeline_by_type(items, positive_type)}
+
+        return NetzOOEeServiceSensorEntityDescription(
+            entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
+            device_class=SensorDeviceClass.ENERGY,
+            key=key,
+            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            state_class=SensorStateClass.TOTAL,
+            translation_key=key,
+            icon="mdi:transmission-tower-export" if direction == "import" else "mdi:transmission-tower-import",
+            value_fn=value,
+            extra_state_attributes_fn=attributes,
+        )
+
+    return [
+        description(f"{prefix}{kind}_{direction}_{level}", profile, types, with_name=kind == "energy_community")
+        for prefix, profile, level in (("", "totalL2", "l2"), ("", "totalL3", "l3"), ("last_month_", "monthlyL2", "l2"))
+        for kind, types in (("energy_community", energy_community), ("supplier", supplier))
+    ]
+
+
+def _aggregated_descriptions(
+    descriptions: list[NetzOOEeServiceSensorEntityDescription],
+    /,
+) -> list[NetzOOEeServiceSensorEntityDescription]:
+    """Return the meter point sensors with the totals of the given energy community sensors."""
+    return [
+        replace(
+            description,
+            entity_class=NetzOOEeServiceAggregatedSensorEntity,
+            entity_registry_enabled_default=False,
+            extra_state_attributes_fn=_no_attributes,
+        )
+        for description in descriptions
+    ]
+
+
+def _peak_power_description(direction: Direction, /) -> NetzOOEeServiceSensorEntityDescription:
+    """Return the sensor with the maximum power of the previous month of a meter point."""
+    return NetzOOEeServiceSensorEntityDescription(
+        device_class=SensorDeviceClass.POWER,
+        key=f"last_month_peak_{direction}_power",
+        native_unit_of_measurement=UnitOfPower.KILO_WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+        translation_key=f"last_month_peak_{direction}_power",
+        value_fn=lambda data: data["lastMonthPeakPower"].get("newResult", {}).get("readingValue"),
+        extra_state_attributes_fn=lambda data: {
+            "timestamp": data["lastMonthPeakPower"].get("newResult", {}).get("timestamp"),
+            "meter_number": data["meterNumber"],
+        },
+    )
+
+
+SENSOR_DEFAULT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
+    NetzOOEeServiceSensorEntityDescription(
         key="scale_type",
         translation_key="scale_type",
         value_fn=lambda data: data["scaleType"],
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
-    NetzOOEeServiceSensorEntityDescription[str](
-        entity_class=NetzOOEeServiceSensorEntity,
+    NetzOOEeServiceSensorEntityDescription(
         device_class=SensorDeviceClass.ENERGY,
         key="meter_reading",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL_INCREASING,
         translation_key="meter_reading",
-        value_fn=(lambda data: data["meterReading"].get("newResult", {}).get("readingValue")),
+        value_fn=lambda data: data["meterReading"].get("newResult", {}).get("readingValue"),
         extra_state_attributes_fn=lambda data: {
             "timestamp": data["meterReading"].get("newResult", {}).get("timestamp"),
             "meter_number": data["meterNumber"],
         },
     ),
-    NetzOOEeServiceSensorEntityDescription[str](
-        entity_class=NetzOOEeServiceSensorEntity,
+    NetzOOEeServiceSensorEntityDescription(
         key="supplier",
         translation_key="supplier",
         value_fn=lambda data: data["supplier"]["name"],
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceSensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="monthly_trend_new",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="monthly_trend_new",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda data: data["monthlyTrend"]["consumptionNew"]["sum"],
-        extra_state_attributes_fn=lambda data: {
-            "per_day": data["monthlyTrend"]["consumptionNew"]["perDay"],
-            "days": data["monthlyTrend"]["consumptionNew"]["days"],
-            "from": data["monthlyTrend"]["timerangeNew"]["from"],
-            "to": data["monthlyTrend"]["timerangeNew"]["to"],
-        },
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceSensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="monthly_trend_old",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="monthly_trend_old",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda data: data["monthlyTrend"]["consumptionOld"]["sum"],
-        extra_state_attributes_fn=lambda data: {
-            "per_day": data["monthlyTrend"]["consumptionOld"]["perDay"],
-            "days": data["monthlyTrend"]["consumptionOld"]["days"],
-            "from": data["monthlyTrend"]["timerangeOld"]["from"],
-            "to": data["monthlyTrend"]["timerangeOld"]["to"],
-        },
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceSensorEntity,
-        key="monthly_trend",
-        native_unit_of_measurement=PERCENTAGE,
-        suggested_display_precision=2,
-        translation_key="monthly_trend",
-        icon="mdi:chart-areaspline",
-        value_fn=lambda data: (
-            (
-                (data["monthlyTrend"]["consumptionNew"]["sum"] - data["monthlyTrend"]["consumptionOld"]["sum"])
-                / data["monthlyTrend"]["consumptionOld"]["sum"]
-                * 100
-            )
-            if data["monthlyTrend"]["consumptionOld"]["sum"] > 0
-            else 0
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceSensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="yearly_trend_new",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="yearly_trend_new",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda data: data["yearlyTrend"]["consumptionNew"]["sum"],
-        extra_state_attributes_fn=lambda data: {
-            "per_day": data["yearlyTrend"]["consumptionNew"]["perDay"],
-            "days": data["yearlyTrend"]["consumptionNew"]["days"],
-            "from": data["yearlyTrend"]["timerangeNew"]["from"],
-            "to": data["yearlyTrend"]["timerangeNew"]["to"],
-        },
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceSensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="yearly_trend_old",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="yearly_trend_old",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda data: data["yearlyTrend"]["consumptionOld"]["sum"],
-        extra_state_attributes_fn=lambda data: {
-            "per_day": data["yearlyTrend"]["consumptionOld"]["perDay"],
-            "days": data["yearlyTrend"]["consumptionOld"]["days"],
-            "from": data["yearlyTrend"]["timerangeOld"]["from"],
-            "to": data["yearlyTrend"]["timerangeOld"]["to"],
-        },
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceSensorEntity,
-        key="yearly_trend",
-        native_unit_of_measurement=PERCENTAGE,
-        suggested_display_precision=2,
-        translation_key="yearly_trend",
-        icon="mdi:chart-areaspline",
-        value_fn=lambda data: (
-            (
-                (data["yearlyTrend"]["consumptionNew"]["sum"] - data["yearlyTrend"]["consumptionOld"]["sum"])
-                / data["yearlyTrend"]["consumptionOld"]["sum"]
-                * 100
-            )
-            if data["yearlyTrend"]["consumptionOld"]["sum"] > 0
-            else 0
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
+    *_trend_descriptions("monthly"),
+    *_trend_descriptions("yearly"),
 ]
 
-SENSOR_HOUSEHOLD_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        entity_registry_enabled_default=False,
-        device_class=SensorDeviceClass.ENERGY,
-        key="energy_community_import_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="energy_community_import_l2",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
-            coordinator,
-            device_identifier,
-            "totalL2",
-            "ENERGY_COMMUNITY_OWN_COVERAGE",
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        entity_registry_enabled_default=False,
-        device_class=SensorDeviceClass.ENERGY,
-        key="supplier_import_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="supplier_import_l2",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
-            coordinator,
-            device_identifier,
-            "totalL2",
-            "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
-            "ENERGY_COMMUNITY_OWN_COVERAGE",
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        entity_registry_enabled_default=False,
-        device_class=SensorDeviceClass.ENERGY,
-        key="energy_community_import_l3",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="energy_community_import_l3",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
-            coordinator,
-            device_identifier,
-            "totalL3",
-            "ENERGY_COMMUNITY_OWN_COVERAGE",
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        entity_registry_enabled_default=False,
-        device_class=SensorDeviceClass.ENERGY,
-        key="supplier_import_l3",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="supplier_import_l3",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
-            coordinator,
-            device_identifier,
-            "totalL3",
-            "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
-            "ENERGY_COMMUNITY_OWN_COVERAGE",
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        entity_registry_enabled_default=False,
-        device_class=SensorDeviceClass.ENERGY,
-        key="last_month_energy_community_import_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="last_month_energy_community_import_l2",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
-            coordinator,
-            device_identifier,
-            "monthlyL2",
-            "ENERGY_COMMUNITY_OWN_COVERAGE",
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        entity_registry_enabled_default=False,
-        device_class=SensorDeviceClass.ENERGY,
-        key="last_month_supplier_import_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="last_month_supplier_import_l2",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
-            coordinator,
-            device_identifier,
-            "monthlyL2",
-            "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
-            "ENERGY_COMMUNITY_OWN_COVERAGE",
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
-    NetzOOEeServiceSensorEntityDescription[str](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        device_class=SensorDeviceClass.POWER,
-        key="last_month_peak_import_power",
-        native_unit_of_measurement=UnitOfPower.KILO_WATT,
-        state_class=SensorStateClass.MEASUREMENT,
-        translation_key="last_month_peak_import_power",
-        value_fn=lambda coordinator, device_identifier: (
-            coordinator.data[device_identifier]["lastMonthPeakPower"].get("newResult", {}).get("readingValue")
-        ),
-        extra_state_attributes_fn=lambda data: {
-            "timestamp": data["lastMonthPeakPower"].get("newResult", {}).get("timestamp"),
-            "meter_number": data["meterNumber"],
-        },
-    ),
-]
-
-SENSOR_PHOTOVOLTAICS_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        entity_registry_enabled_default=False,
-        device_class=SensorDeviceClass.ENERGY,
-        key="energy_community_export_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="energy_community_export_l2",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
-            coordinator,
-            device_identifier,
-            "totalL2",
-            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        entity_registry_enabled_default=False,
-        device_class=SensorDeviceClass.ENERGY,
-        key="supplier_export_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="supplier_export_l2",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
-            coordinator,
-            device_identifier,
-            "totalL2",
-            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        entity_registry_enabled_default=False,
-        device_class=SensorDeviceClass.ENERGY,
-        key="energy_community_export_l3",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="energy_community_export_l3",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
-            coordinator,
-            device_identifier,
-            "totalL3",
-            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        entity_registry_enabled_default=False,
-        device_class=SensorDeviceClass.ENERGY,
-        key="supplier_export_l3",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="supplier_export_l3",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
-            coordinator,
-            device_identifier,
-            "totalL3",
-            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        entity_registry_enabled_default=False,
-        device_class=SensorDeviceClass.ENERGY,
-        key="last_month_energy_community_export_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="last_month_energy_community_export_l2",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
-            coordinator,
-            device_identifier,
-            "monthlyL2",
-            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        entity_registry_enabled_default=False,
-        device_class=SensorDeviceClass.ENERGY,
-        key="last_month_supplier_export_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="last_month_supplier_export_l2",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda coordinator, device_identifier: _sum_values_for_mpan(
-            coordinator,
-            device_identifier,
-            "monthlyL2",
-            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-        ),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
-    ),
-    NetzOOEeServiceSensorEntityDescription[str](
-        entity_class=NetzOOEeServiceAggregatedSensorEntity,
-        device_class=SensorDeviceClass.POWER,
-        key="last_month_peak_export_power",
-        native_unit_of_measurement=UnitOfPower.KILO_WATT,
-        state_class=SensorStateClass.MEASUREMENT,
-        translation_key="last_month_peak_export_power",
-        value_fn=lambda coordinator, device_identifier: (
-            coordinator.data[device_identifier]["lastMonthPeakPower"].get("newResult", {}).get("readingValue")
-        ),
-        extra_state_attributes_fn=lambda data: {
-            "timestamp": data["lastMonthPeakPower"].get("newResult", {}).get("timestamp"),
-            "meter_number": data["meterNumber"],
-        },
-    ),
-]
-
-SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
-    NetzOOEeServiceSensorEntityDescription[str](
+SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
+    NetzOOEeServiceSensorEntityDescription(
         entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
         entity_category=EntityCategory.DIAGNOSTIC,
         key="status",
         translation_key="status",
-        value_fn=lambda data: data["status"].lower(),
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
+        value_fn=lambda data: data["status"].lower() if data["status"] else None,
     ),
-    NetzOOEeServiceSensorEntityDescription[int](
+    NetzOOEeServiceSensorEntityDescription(
         entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
         entity_category=EntityCategory.DIAGNOSTIC,
         key="contribution_factor",
@@ -595,309 +326,43 @@ SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES: list[NetzOOEeServiceSensorEntityDescripti
         state_class=SensorStateClass.MEASUREMENT,
         translation_key="contribution_factor",
         value_fn=lambda data: data["contributionPercentage"],
-        extra_state_attributes_fn=lambda data: {},  # noqa: ARG005
     ),
 ]
 
-SENSOR_ENERGY_COMMUNITY_IMPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="energy_community_import_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="energy_community_import_l2",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda data: _sum_by_type(
-            data["totalL2"],
-            "ENERGY_COMMUNITY_OWN_COVERAGE",
-        ),
-        extra_state_attributes_fn=lambda data: (
-            {
-                "name": data["totalL2"][0]["energyCommunityName"],
-                "id": data["totalL2"][0]["energyCommunityId"],
-                "timeline": _timeline_by_type(
-                    data["totalL2"],
-                    "ENERGY_COMMUNITY_OWN_COVERAGE",
-                ),
-            }
-            if data["totalL2"]
-            else {}
-        ),
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="supplier_import_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="supplier_import_l2",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda data: _sum_difference_by_type(
-            data["totalL2"],
-            "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
-            "ENERGY_COMMUNITY_OWN_COVERAGE",
-        ),
-        extra_state_attributes_fn=lambda data: (
-            {
-                "timeline": _timeline_by_type(
-                    data["totalL2"],
-                    "ENERGY_COMMUNITY_OWN_COVERAGE",
-                ),
-            }
-            if data["totalL2"]
-            else {}
-        ),
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="energy_community_import_l3",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="energy_community_import_l3",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda data: _sum_by_type(
-            data["totalL3"],
-            "ENERGY_COMMUNITY_OWN_COVERAGE",
-        ),
-        extra_state_attributes_fn=lambda data: (
-            {
-                "name": data["totalL3"][0]["energyCommunityName"],
-                "id": data["totalL3"][0]["energyCommunityId"],
-                "timeline": _timeline_by_type(
-                    data["totalL3"],
-                    "ENERGY_COMMUNITY_OWN_COVERAGE",
-                ),
-            }
-            if data["totalL3"]
-            else {}
-        ),
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="supplier_import_l3",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="supplier_import_l3",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda data: _sum_difference_by_type(
-            data["totalL3"],
-            "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
-            "ENERGY_COMMUNITY_OWN_COVERAGE",
-        ),
-        extra_state_attributes_fn=lambda data: (
-            {
-                "timeline": _timeline_by_type(
-                    data["totalL3"],
-                    "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
-                ),
-            }
-            if data["totalL3"]
-            else {}
-        ),
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="last_month_energy_community_import_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="last_month_energy_community_import_l2",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda data: _sum_by_type(
-            data["monthlyL2"],
-            "ENERGY_COMMUNITY_OWN_COVERAGE",
-        ),
-        extra_state_attributes_fn=lambda data: (
-            {
-                "name": data["monthlyL2"][0]["energyCommunityName"],
-                "id": data["monthlyL2"][0]["energyCommunityId"],
-                "timeline": _timeline_by_type(
-                    data["monthlyL2"],
-                    "ENERGY_COMMUNITY_OWN_COVERAGE",
-                ),
-            }
-            if data["monthlyL2"]
-            else {}
-        ),
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="last_month_supplier_import_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="last_month_supplier_import_l2",
-        icon="mdi:transmission-tower-export",
-        value_fn=lambda data: _sum_difference_by_type(
-            data["monthlyL2"],
-            "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
-            "ENERGY_COMMUNITY_OWN_COVERAGE",
-        ),
-        extra_state_attributes_fn=lambda data: (
-            {
-                "timeline": _timeline_by_type(
-                    data["monthlyL2"],
-                    "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
-                ),
-            }
-            if data["monthlyL2"]
-            else {}
-        ),
-    ),
+SENSOR_ENERGY_COMMUNITY_IMPORT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = (
+    _energy_community_descriptions(
+        "import",
+        energy_community=(ENERGY_COMMUNITY_OWN_COVERAGE, None),
+        supplier=(ENERGY_COMMUNITY_CONSUMPTION, ENERGY_COMMUNITY_OWN_COVERAGE),
+    )
+)
+
+SENSOR_ENERGY_COMMUNITY_EXPORT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = (
+    _energy_community_descriptions(
+        "export",
+        energy_community=(ENERGY_COMMUNITY_GENERATION, ENERGY_COMMUNITY_OVER_COVERAGE),
+        supplier=(ENERGY_COMMUNITY_OVER_COVERAGE, None),
+    )
+)
+
+SENSOR_HOUSEHOLD_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
+    *_aggregated_descriptions(SENSOR_ENERGY_COMMUNITY_IMPORT_TYPES),
+    _peak_power_description("import"),
 ]
 
-SENSOR_ENERGY_COMMUNITY_EXPORT_TYPES: list[NetzOOEeServiceSensorEntityDescription[Any]] = [
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="energy_community_export_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="energy_community_export_l2",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda data: _sum_difference_by_type(
-            data["totalL2"],
-            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-        ),
-        extra_state_attributes_fn=lambda data: (
-            {
-                "name": data["totalL2"][0]["energyCommunityName"],
-                "id": data["totalL2"][0]["energyCommunityId"],
-                "timeline": _timeline_by_type(
-                    data["totalL2"],
-                    "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-                ),
-            }
-            if data["totalL2"]
-            else {}
-        ),
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="supplier_export_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="supplier_export_l2",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda data: _sum_by_type(
-            data["totalL2"],
-            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-        ),
-        extra_state_attributes_fn=lambda data: (
-            {
-                "timeline": _timeline_by_type(
-                    data["totalL2"],
-                    "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-                ),
-            }
-            if data["totalL2"]
-            else {}
-        ),
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="energy_community_export_l3",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="energy_community_export_l3",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda data: _sum_difference_by_type(
-            data["totalL3"],
-            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-        ),
-        extra_state_attributes_fn=lambda data: (
-            {
-                "name": data["totalL3"][0]["energyCommunityName"],
-                "id": data["totalL3"][0]["energyCommunityId"],
-                "timeline": _timeline_by_type(
-                    data["totalL3"],
-                    "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-                ),
-            }
-            if data["totalL3"]
-            else {}
-        ),
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="supplier_export_l3",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="supplier_export_l3",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda data: _sum_by_type(
-            data["totalL3"],
-            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-        ),
-        extra_state_attributes_fn=lambda data: (
-            {
-                "timeline": _timeline_by_type(
-                    data["totalL3"],
-                    "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-                ),
-            }
-            if data["totalL3"]
-            else {}
-        ),
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="last_month_energy_community_export_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="last_month_energy_community_export_l2",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda data: _sum_difference_by_type(
-            data["monthlyL2"],
-            "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-        ),
-        extra_state_attributes_fn=lambda data: (
-            {
-                "name": data["monthlyL2"][0]["energyCommunityName"],
-                "id": data["monthlyL2"][0]["energyCommunityId"],
-                "timeline": _timeline_by_type(
-                    data["monthlyL2"],
-                    "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
-                ),
-            }
-            if data["monthlyL2"]
-            else {}
-        ),
-    ),
-    NetzOOEeServiceSensorEntityDescription[float](
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
-        device_class=SensorDeviceClass.ENERGY,
-        key="last_month_supplier_export_l2",
-        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        state_class=SensorStateClass.TOTAL,
-        translation_key="last_month_supplier_export_l2",
-        icon="mdi:transmission-tower-import",
-        value_fn=lambda data: _sum_by_type(
-            data["monthlyL2"],
-            "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-        ),
-        extra_state_attributes_fn=lambda data: (
-            {
-                "timeline": _timeline_by_type(
-                    data["monthlyL2"],
-                    "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
-                ),
-            }
-            if data["monthlyL2"]
-            else {}
-        ),
-    ),
+SENSOR_PHOTOVOLTAICS_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
+    *_aggregated_descriptions(SENSOR_ENERGY_COMMUNITY_EXPORT_TYPES),
+    _peak_power_description("export"),
 ]
+
+SENSOR_TYPES: Final[dict[str, list[NetzOOEeServiceSensorEntityDescription]]] = {
+    DeviceType.HOUSEHOLD.value: SENSOR_DEFAULT_TYPES + SENSOR_HOUSEHOLD_TYPES,
+    DeviceType.PHOTOVOLTAICS.value: SENSOR_DEFAULT_TYPES + SENSOR_PHOTOVOLTAICS_TYPES,
+    DeviceType.ENERGY_COMMUNITY_IMPORT.value: SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES
+    + SENSOR_ENERGY_COMMUNITY_IMPORT_TYPES,
+    DeviceType.ENERGY_COMMUNITY_EXPORT.value: SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES
+    + SENSOR_ENERGY_COMMUNITY_EXPORT_TYPES,
+}
 
 
 async def async_setup_entry(
@@ -905,30 +370,16 @@ async def async_setup_entry(
     entry: NetzOOEeServiceConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up Netz OÖ eService from a config entry."""
+    """Set up the sensors of all devices from a config entry."""
     coordinator: NetzOOEeServiceDataUpdateCoordinator = entry.runtime_data
-    sensors: list[NetzOOEeServiceSensorEntity] = []
 
-    for device_identifier, data in coordinator.data.items():
-        sensor_types: list[NetzOOEeServiceSensorEntityDescription[Any]] = []
-
-        if data.get("deviceType") == DeviceType.HOUSEHOLD.value:
-            sensor_types = SENSOR_DEFAULT_TYPES + SENSOR_HOUSEHOLD_TYPES
-        elif data.get("deviceType") == DeviceType.PHOTOVOLTAICS.value:
-            sensor_types = SENSOR_DEFAULT_TYPES + SENSOR_PHOTOVOLTAICS_TYPES
-        elif data.get("deviceType") == DeviceType.ENERGY_COMMUNITY_IMPORT.value:
-            sensor_types = SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES + SENSOR_ENERGY_COMMUNITY_IMPORT_TYPES
-        elif data.get("deviceType") == DeviceType.ENERGY_COMMUNITY_EXPORT.value:
-            sensor_types = SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES + SENSOR_ENERGY_COMMUNITY_EXPORT_TYPES
-
-        for description in sensor_types:
-            sensors += [
-                description.entity_class(
-                    coordinator,
-                    description=description,
-                    entry=entry,
-                    device_identifier=device_identifier,
-                ),
-            ]
-
-    async_add_entities(sensors)
+    async_add_entities(
+        description.entity_class(
+            coordinator,
+            description=description,
+            entry=entry,
+            device_identifier=device_identifier,
+        )
+        for device_identifier, data in coordinator.data.items()
+        for description in SENSOR_TYPES[data["deviceType"]]
+    )

@@ -1,3 +1,7 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Fake responses of the eService portal API."""
+
 from __future__ import annotations
 
 from typing import Any
@@ -689,6 +693,11 @@ CONTRACT_ACCOUNT_DATA_4: dict[str, Any] = {
                 "id": "AT113021",
                 "name": "easy green energy GmbH & Co KG",
             },
+            "synthProfile": "Haushalt",
+        },
+        {
+            "branch": "GAS",
+            "active": True,
             "synthProfile": "Haushalt",
         },
     ],

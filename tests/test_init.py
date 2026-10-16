@@ -1,3 +1,7 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Tests for the setup of the integration."""
+
 from __future__ import annotations
 
 import logging
@@ -62,6 +66,7 @@ async def test_load_entry_with_disabled_inactive_meter_points(
     snapshot: SnapshotAssertion,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
+    """Test the entities without inactive meter points."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
@@ -109,6 +114,7 @@ async def test_load_entry_with_enabled_inactive_meter_points(
     snapshot: SnapshotAssertion,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
+    """Test the entities with inactive meter points."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
@@ -135,6 +141,7 @@ async def test_stale_device_removed_on_setup(
     config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
+    """Test that devices that are no longer returned by the API are removed."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 

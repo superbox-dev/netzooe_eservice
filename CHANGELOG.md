@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added sensors for the maximum import and export power from the previous month.
 - Added the "Frequent updates" option. Disabled by default. When enabled, the energy community contribution
   factors and statuses are refreshed every 15 minutes, while the full data refresh stays at 3-hour intervals.
+- Added reauthentication. If the portal rejects the credentials, Home Assistant now asks for the new password.
 
 ### Changed
 
@@ -19,10 +20,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   as API errors, so the previous data is kept instead of failing the update.
 - Renamed "(letzter Monat)" to "(Vormonat)" in the German sensor names. Existing entity IDs are not changed.
 - Documented the options and update intervals in the README.
+- Requested the contract accounts and consumption profiles in parallel (at most 4 requests at the same time), which
+  makes a full update about 3 times faster.
+- Fetched the dashboard on every full update, so the contract accounts are no longer only read at startup.
+- Logged API errors with cached data as a single warning instead of an error and a warning.
 
 ### Fixed
 
 - Fixed the "Open HACS repository" link in the README.
+- Fixed `supplier_export_l3` of the meter point, which showed the total generation instead of the supplier export
+  of all energy communities.
+- Fixed the `status` sensor failing if the portal returns a consent without a status.
+- Fixed the "already configured" message and added the missing "wrong account" message of the config flow.
 
 ## [1.1.1] - 2026-09-28
 

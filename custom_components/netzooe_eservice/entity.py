@@ -1,11 +1,13 @@
-"""Entity classes for the KEBA KeEnergy integration."""
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Base entity for the Netz OÖ eService integration."""
 
 from __future__ import annotations
 
-import logging
 import re
+from typing import TYPE_CHECKING
 from typing import Any
-from typing import TypeVar
+from typing import Final
 
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -16,9 +18,11 @@ from .const import NAME
 from .coordinator import NetzOOEeServiceConfigEntry
 from .coordinator import NetzOOEeServiceDataUpdateCoordinator
 
-_LOGGER = logging.getLogger(__name__)
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
-T = TypeVar("T", str, int, float)
+# Matches IDs like "AT0031000000000000000000000012345" and captures the number without leading zeros, e.g. "12345".
+SHORT_DEVICE_ID_PATTERN: Final[re.Pattern[str]] = re.compile(r"^[A-Z]{2}\d{4}0*([1-9][0-9]*)$")
 
 
 class NetzOOEeServiceEntity(CoordinatorEntity[NetzOOEeServiceDataUpdateCoordinator]):
@@ -38,13 +42,19 @@ class NetzOOEeServiceEntity(CoordinatorEntity[NetzOOEeServiceDataUpdateCoordinat
         self.device_identifier: str = device_identifier
 
     @property
-    def device_name(self) -> str | None:  # pragma: no cover
-        """Return the name of the current device."""
-        return None
+    def data(self) -> Mapping[str, Any]:
+        """Return the device data from the coordinator."""
+        data: Mapping[str, Any] = self.coordinator.data[self.device_identifier]
+        return data
+
+    @property
+    def device_name(self) -> str:
+        """Return the name of the device."""
+        return f"{self.data['deviceName']} ({self._short_device_id(self.device_identifier)})"
 
     @property
     def device_info(self) -> DeviceInfo:
-        """Return updated device specific attributes."""
+        """Return the device info."""
         return DeviceInfo(
             identifiers={(DOMAIN, self.device_identifier)},
             name=self.device_name,
@@ -54,5 +64,6 @@ class NetzOOEeServiceEntity(CoordinatorEntity[NetzOOEeServiceDataUpdateCoordinat
 
     @staticmethod
     def _short_device_id(device_id: str) -> str:
-        match: re.Match[Any] | None = re.search(r"^[A-Z]{2}\d{4}0*([1-9][0-9]*)$", device_id)
+        """Return the short form of a meter point or energy community ID, e.g. for device names."""
+        match: re.Match[str] | None = SHORT_DEVICE_ID_PATTERN.search(device_id)
         return match.group(1) if match else device_id

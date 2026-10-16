@@ -1,3 +1,7 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Tests for the sensors."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -62,6 +66,7 @@ async def test_sensors(
     snapshot: SnapshotAssertion,
     language: str,
 ) -> None:
+    """Test the states of all sensors."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 

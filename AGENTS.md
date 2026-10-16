@@ -39,9 +39,8 @@ Before finishing a change, run:
   - single-line imports
   - full type annotations, including local variables
 - No `# type: ignore`, no new `ruff.toml` ignores
-- `# noqa` only for the existing patterns:
-  - `ARG00x` for required signatures and lambdas
-  - `TRY400`
+- `# noqa` only for `ARG00x` in required signatures
+- Every file starts with the copyright and SPDX header (`CPY001`)
 - No real credentials or customer data:
   - applies to code, tests and docs
   - e.g. contract account numbers, meter point numbers
@@ -60,16 +59,20 @@ Code lives in `custom_components/netzooe_eservice/`.
 - `coordinator.py`:
   - `coordinator.data` maps a device identifier to the device's data dict
   - `deviceType` (`DeviceType`) decides which `SENSOR_*_TYPES` from `sensor.py` are created
-  - full update every 3 hours
+  - full update every 3 hours: dashboard, consents and contract accounts, then all consumption profiles
+  - requests run in parallel, at most `MAX_PARALLEL_REQUESTS` at the same time
   - "Frequent updates" option (disabled by default):
     - coordinator runs every 15 minutes
     - in between full updates, only energy community contribution factors and statuses are refreshed
   - on `APIError` the previous data is kept, if it exists
+  - on `AuthenticationError` the reauth flow starts
 - `__init__.py`:
   - removes devices that are no longer in `coordinator.data` after every update
 - `sensor.py`:
   - `unique_id` is `<device identifier>_<key>`
   - renaming a `key` creates new entities and orphans the old ones
+  - energy community sensors come from `_energy_community_descriptions()`
+  - the meter point totals reuse them via `_aggregated_descriptions()`
 - Translations:
   - `strings.json` and `translations/en.json` must be **identical**
   - `translations/de.json` has the same keys
@@ -92,7 +95,7 @@ Code lives in `custom_components/netzooe_eservice/`.
 ## Tests
 
 - Run with `uv run pytest` (parallel, coverage, stops at first failure)
-- **100% test coverage** is enforced:
+- **100% test coverage** is enforced, including branches:
   - every new code path needs a test
 - Snapshots (syrupy) are in `tests/snapshots/`:
   - regenerate with `uv run pytest --snapshot-update`

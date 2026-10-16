@@ -1,3 +1,7 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
+"""Tests for the config and options flow."""
+
 from __future__ import annotations
 
 from http import HTTPStatus
@@ -26,6 +30,7 @@ async def test_user_flow(
     hass: HomeAssistant,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
+    """Test that the user flow creates a config entry."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
@@ -71,6 +76,7 @@ async def test_user_flow_failed(
     side_effect: Exception,
     expected_error: str,
 ) -> None:
+    """Test that the user flow shows an error if the login fails."""
     fake_api.register_auth_request(exc=side_effect)
     fake_api.register_requests()
 
@@ -103,6 +109,7 @@ async def test_reconfigure_flow(
     config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
+    """Test that the reconfigure flow updates the config entry."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
@@ -127,11 +134,68 @@ async def test_reconfigure_flow(
     assert result_user_step["reason"] == "reconfigure_successful"
 
 
+async def test_reconfigure_flow_wrong_account(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+) -> None:
+    """Test that the reconfigure flow aborts for another account."""
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    config_entry.add_to_hass(hass)
+
+    result: ConfigFlowResult = await config_entry.start_reconfigure_flow(hass)
+
+    result_user_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {
+            "username": "other",
+            "password": "test",
+        },
+    )
+
+    assert result_user_step["type"] == FlowResultType.ABORT
+    assert result_user_step["reason"] == "wrong_account"
+
+
+async def test_reauth_flow(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+) -> None:
+    """Test that the reauth flow updates the credentials."""
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    config_entry.add_to_hass(hass)
+
+    result: ConfigFlowResult = await config_entry.start_reauth_flow(hass)
+
+    assert result["type"] == FlowResultType.FORM
+    assert result["step_id"] == "user"
+
+    result_user_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {
+            "username": "test",
+            "password": "new-password",
+        },
+    )
+
+    await hass.async_block_till_done()
+
+    assert result_user_step["type"] == FlowResultType.ABORT
+    assert result_user_step["reason"] == "reauth_successful"
+    assert config_entry.data == {CONF_USERNAME: "test", CONF_PASSWORD: "new-password"}
+
+
 async def test_option_flow(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
+    """Test that the options flow saves all options."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
@@ -177,6 +241,7 @@ async def test_option_flow_defaults(
     config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
+    """Test that the options flow uses the default values."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
@@ -206,6 +271,7 @@ async def test_option_flow_when_integration_not_fully_loaded(
     config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
+    """Test that the options flow aborts if the integration is not loaded."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 

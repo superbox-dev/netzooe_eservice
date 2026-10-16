@@ -1,3 +1,5 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
 """Constants for the Netz OÖ eService integration."""
 
 from __future__ import annotations
@@ -20,6 +22,11 @@ MANUFACTURER: Final[str] = "Netz OÖ"
 NAME: Final[str] = "eService"
 SCAN_INTERVAL: Final[timedelta] = timedelta(minutes=15)
 SCAN_INTERVAL_FULL: Final[timedelta] = timedelta(hours=3)
+
+# The portal provides the L1/L2 profile data of the energy communities with a delay of about 16 days.
+PROFILE_DATA_DELAY: Final[timedelta] = timedelta(days=16)
+# Maximum number of consumption profile requests that are sent to the portal at the same time.
+MAX_PARALLEL_REQUESTS: Final[int] = 4
 
 
 class DeviceType(Enum):

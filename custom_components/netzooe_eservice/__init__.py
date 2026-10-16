@@ -1,8 +1,9 @@
+# Copyright 2026 Michael Hacker
+# SPDX-License-Identifier: Apache-2.0
 """The Netz OÖ eService integration."""
 
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING
 from typing import Any
 
@@ -25,11 +26,9 @@ PLATFORMS: list[Platform] = [
     Platform.SENSOR,
 ]
 
-_LOGGER = logging.getLogger(__name__)
-
 
 async def async_setup_entry(hass: HomeAssistant, entry: NetzOOEeServiceConfigEntry) -> bool:
-    """Set up Netz OÖ eService platform."""
+    """Set up Netz OÖ eService from a config entry."""
     username: str = entry.data[CONF_USERNAME]
     password: str = entry.data[CONF_PASSWORD]
 
@@ -61,8 +60,9 @@ def _async_remove_stale_devices(
     entry: NetzOOEeServiceConfigEntry,
     data: dict[str, Any],
 ) -> None:
+    """Remove the devices of the config entry that are no longer in the coordinator data."""
     device_registry: DeviceRegistry = dr.async_get(hass)
-    valid_identifiers: set[str] = set(data.keys())
+    valid_identifiers: set[str] = set(data)
 
     for device_entry in dr.async_entries_for_config_entry(device_registry, entry.entry_id):
         our_identifiers: set[str] = {i[1] for i in device_entry.identifiers if i[0] == DOMAIN}
