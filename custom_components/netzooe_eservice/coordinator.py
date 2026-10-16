@@ -126,7 +126,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 translation_domain=DOMAIN,
                 translation_key="authentication_error",
             ) from error
-        except APIError as error:  # pragma: no cover
+        except APIError as error:
             raise UpdateFailed(error) from error
         else:
             _LOGGER.debug("dashboard: %s", self.dashboard)
@@ -157,7 +157,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 translation_domain=DOMAIN,
                 translation_key="authentication_error",
             ) from error
-        except APIError as error:  # pragma: no cover
+        except APIError as error:
             _LOGGER.error("An error occurred while communicating with the API: %s", error)  # noqa: TRY400
 
             if self.data is not None:
@@ -179,7 +179,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 translation_domain=DOMAIN,
                 translation_key="authentication_error",
             ) from error
-        except APIError as error:  # pragma: no cover
+        except APIError as error:
             _LOGGER.error("An error occurred while communicating with the API: %s", error)  # noqa: TRY400
 
             if self.data is not None:
@@ -188,7 +188,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 )
                 return self.data
 
-            raise UpdateFailed(error) from error
+            raise UpdateFailed(error) from error  # pragma: no cover
 
         if self.data is None:  # pragma: no cover
             return {}

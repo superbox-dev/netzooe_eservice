@@ -1,271 +1,275 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 from typing import Any
-from unittest.mock import AsyncMock
 from unittest.mock import patch
 
 import pytest
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.update_coordinator import UpdateFailed
+from homeassistant.config_entries import ConfigEntryState
 from homeassistant.util import dt as dt_util
-from netzooe_eservice_api.error import APIError
 
-from custom_components.netzooe_eservice.const import CONF_FREQUENT_UPDATES
 from custom_components.netzooe_eservice.const import SCAN_INTERVAL
 from custom_components.netzooe_eservice.const import SCAN_INTERVAL_FULL
-from custom_components.netzooe_eservice.coordinator import NetzOOEeServiceDataUpdateCoordinator
+from tests import setup_integration
+from tests.api_data import CONSENTS_DATA
 
 if TYPE_CHECKING:
-    from aiohttp import ClientSession
+    from datetime import datetime
+    from datetime import timedelta
+
     from homeassistant.core import HomeAssistant
+    from homeassistant.core import State
     from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
+
+    from custom_components.netzooe_eservice.coordinator import NetzOOEeServiceDataUpdateCoordinator
+    from tests.conftest import FakeNetzOOEeServiceAPI
+
+NOW: datetime | None = dt_util.parse_datetime("2026-06-28T12:00:00+02:00")
+
+CONTRIBUTION_FACTOR_ENTITY_ID: str = (
+    "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_contribution_factor"
+)
+
+FREQUENT_UPDATES_ENABLED: dict[str, Any] = {
+    "options": {
+        "include_inactive_contract_account_data": True,
+        "show_revoked_energy_communities": False,
+        "frequent_updates": True,
+    },
+}
+
+FREQUENT_UPDATES_DISABLED: dict[str, Any] = {
+    "options": {
+        "include_inactive_contract_account_data": True,
+        "show_revoked_energy_communities": False,
+        "frequent_updates": False,
+    },
+}
 
 
-async def test_async_update_data_api_error_raises_update_failed(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-) -> None:
-    session: ClientSession = async_get_clientsession(hass)
+def _contract_account_requested(aioclient_mock: AiohttpClientMocker) -> bool:
+    return any("/contract-accounts/" in str(url) for _method, url, _data, _headers in aioclient_mock.mock_calls)
 
-    coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
-        hass,
-        config_entry,
-        username="test",
-        password="test",  # noqa: S106
-        session=session,
-    )
 
-    with (
-        patch.object(
-            coordinator.api,
-            "consents",
-            new=AsyncMock(side_effect=APIError("boom")),
-        ),
-        pytest.raises(UpdateFailed) as error,
+def _contribution_factor(hass: HomeAssistant) -> str:
+    state: State | None = hass.states.get(CONTRIBUTION_FACTOR_ENTITY_ID)
+    assert state is not None
+    return state.state
+
+
+async def _refresh(hass: HomeAssistant, config_entry: MockConfigEntry, now: datetime | None = NOW) -> None:
+    coordinator: NetzOOEeServiceDataUpdateCoordinator = config_entry.runtime_data
+
+    with patch(
+        "custom_components.netzooe_eservice.coordinator.dt_util.now",
+        return_value=now,
     ):
-        await coordinator._async_update_data()
+        await coordinator.async_refresh()
+        await hass.async_block_till_done()
 
-    assert str(error.value) == "boom"
 
+async def _setup(hass: HomeAssistant, config_entry: MockConfigEntry, fake_api: FakeNetzOOEeServiceAPI) -> None:
+    fake_api.register_auth_request()
+    fake_api.register_requests()
 
-async def test_async_setup_api_error_raises_update_failed(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-) -> None:
-    session: ClientSession = async_get_clientsession(hass)
-
-    coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
-        hass,
-        config_entry,
-        username="test",
-        password="test",  # noqa: S106
-        session=session,
-    )
-
-    with (
-        patch.object(
-            coordinator.api,
-            "dashboard",
-            new=AsyncMock(side_effect=APIError("boom")),
-        ),
-        pytest.raises(UpdateFailed) as error,
+    with patch(
+        "custom_components.netzooe_eservice.coordinator.dt_util.now",
+        return_value=NOW,
     ):
-        await coordinator._async_setup()
+        await setup_integration(hass, config_entry)
 
-    assert str(error.value) == "boom"
+    assert config_entry.state is ConfigEntryState.LOADED
 
 
-def test_get_or_create_energy_community_without_consent(
+async def test_setup_api_error_retries_setup(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
-    session: ClientSession = async_get_clientsession(hass)
+    fake_api.register_auth_request()
+    fake_api.register_session_request()
+    fake_api.register_dashboard_request(status=500)
 
-    coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
-        hass,
-        config_entry,
-        username="test",
-        password="test",  # noqa: S106
-        session=session,
-    )
-
-    energy_communities: dict[str, dict[str, object]] = {}
-
-    result: dict[str, object] | None = coordinator._get_or_create_energy_community(
-        energy_communities,
-        consents_map={"AT001": []},
-        meter_point_administration_number="AT001",
-        active_contract={
-            "contract": {
-                "synthProfile": "H0",
-            },
-        },
-        device_type="energy_community",
-        timeslice={
-            "energyCommunityId": "CC100087",
-            "energyCommunityName": "Test",
-        },
-    )
-
-    assert result is None
-    assert energy_communities == {}
-
-
-async def test_async_update_energy_community_data(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-) -> None:
-    session: ClientSession = async_get_clientsession(hass)
-
-    coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
-        hass,
-        config_entry,
-        username="test",
-        password="test",  # noqa: S106
-        session=session,
-    )
-
-    coordinator.data = {
-        "meter": {
-            "meterPointAdministrationNumber": "AT001",
-        },
-        "energy_community": {
-            "meterPointAdministrationNumber": "AT001",
-            "deviceId": "CC100087",
-            "contributionPercentage": 10,
-            "status": "OLD",
-        },
-    }
-
-    consents_map: dict[str, list[dict[str, object]]] = {
-        "AT001": [
-            {
-                "serviceProvider": "CC100087",
-                "contributionPercentage": 99,
-                "status": "ACTIVE",
-            },
-        ],
-    }
-
-    with patch.object(
-        coordinator,
-        "_get_consents_map",
-        new=AsyncMock(return_value=consents_map),
-    ):
-        data: dict[str, Any] = await coordinator._async_update_energy_community_data()
-
-    assert data["energy_community"]["contributionPercentage"] == 99
-    assert data["energy_community"]["status"] == "ACTIVE"
-    assert data["meter"]["meterPointAdministrationNumber"] == "AT001"
-
-
-async def test_async_update_data_calls_energy_community_update(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-) -> None:
     config_entry.add_to_hass(hass)
-    hass.config_entries.async_update_entry(config_entry, options={CONF_FREQUENT_UPDATES: True})
 
-    session: ClientSession = async_get_clientsession(hass)
+    assert not await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
 
-    coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
-        hass,
-        config_entry,
-        username="test",
-        password="test",  # noqa: S106
-        session=session,
-    )
-
-    coordinator._last_full_update = dt_util.now()
-
-    with patch.object(
-        coordinator,
-        "_async_update_energy_community_data",
-        new=AsyncMock(return_value={"test": {}}),
-    ) as update:
-        data: dict[str, Any] = await coordinator._async_update_data()
-
-    assert data == {"test": {}}
-    update.assert_awaited_once()
+    assert config_entry.state is ConfigEntryState.SETUP_RETRY
 
 
-async def test_update_interval_with_frequent_updates(
+async def test_first_update_api_error_retries_setup(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
+    fake_api.register_auth_request()
+    fake_api.register_session_request()
+    fake_api.register_dashboard_request()
+    fake_api.register_consents_request(status=500)
+
     config_entry.add_to_hass(hass)
-    hass.config_entries.async_update_entry(config_entry, options={CONF_FREQUENT_UPDATES: True})
 
-    session: ClientSession = async_get_clientsession(hass)
+    assert not await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
 
-    coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
-        hass,
-        config_entry,
-        username="test",
-        password="test",  # noqa: S106
-        session=session,
-    )
-
-    assert coordinator.frequent_updates is True
-    assert coordinator.update_interval == SCAN_INTERVAL
+    assert config_entry.state is ConfigEntryState.SETUP_RETRY
 
 
-async def test_update_interval_without_frequent_updates(
+@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_full_update_api_error_keeps_data(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    aioclient_mock: AiohttpClientMocker,
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
-    config_entry.add_to_hass(hass)
-    hass.config_entries.async_update_entry(config_entry, options={CONF_FREQUENT_UPDATES: False})
+    await _setup(hass, config_entry, fake_api)
 
-    session: ClientSession = async_get_clientsession(hass)
+    aioclient_mock.clear_requests()
+    fake_api.register_auth_request()
+    fake_api.register_session_request()
+    fake_api.register_consents_request(status=500)
 
-    coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
-        hass,
-        config_entry,
-        username="test",
-        password="test",  # noqa: S106
-        session=session,
-    )
+    await _refresh(hass, config_entry)
 
-    assert coordinator.frequent_updates is False
-    assert coordinator.update_interval == SCAN_INTERVAL_FULL
+    assert config_entry.runtime_data.last_update_success is True
+    assert _contribution_factor(hass) == "93"
+    assert "Update failed, using cached data" in caplog.text
 
 
-async def test_async_update_data_always_full_update_without_frequent_updates(
+@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_frequent_updates_only_refresh_energy_community_data(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    aioclient_mock: AiohttpClientMocker,
 ) -> None:
-    config_entry.add_to_hass(hass)
-    hass.config_entries.async_update_entry(config_entry, options={CONF_FREQUENT_UPDATES: False})
+    await _setup(hass, config_entry, fake_api)
 
-    session: ClientSession = async_get_clientsession(hass)
+    assert _contribution_factor(hass) == "93"
 
-    coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
-        hass,
-        config_entry,
-        username="test",
-        password="test",  # noqa: S106
-        session=session,
-    )
+    consents: list[dict[str, Any]] = [
+        consent | {"contributionPercentage": "50"} if consent["contributionPercentage"] == "93" else consent
+        for consent in CONSENTS_DATA
+    ]
+
+    aioclient_mock.clear_requests()
+    fake_api.register_auth_request()
+    fake_api.register_session_request()
+    fake_api.register_consents_request(consents=consents)
+
+    await _refresh(hass, config_entry)
+
+    assert _contribution_factor(hass) == "50"
+    assert not _contract_account_requested(aioclient_mock)
+
+
+@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"])
+async def test_frequent_updates_full_update_after_full_scan_interval(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    aioclient_mock: AiohttpClientMocker,
+) -> None:
+    await _setup(hass, config_entry, fake_api)
+
+    aioclient_mock.clear_requests()
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    assert NOW is not None
+    await _refresh(hass, config_entry, NOW + SCAN_INTERVAL_FULL)
+
+    assert _contract_account_requested(aioclient_mock)
+
+
+@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"])
+async def test_without_frequent_updates_always_full_update(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    aioclient_mock: AiohttpClientMocker,
+) -> None:
+    await _setup(hass, config_entry, fake_api)
+
+    aioclient_mock.clear_requests()
+    fake_api.register_auth_request()
+    fake_api.register_requests()
 
     # Last full update was just now: with frequent updates this would only refresh the consents.
-    coordinator._last_full_update = dt_util.now()
+    await _refresh(hass, config_entry)
+
+    assert _contract_account_requested(aioclient_mock)
+
+
+@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_energy_community_update_api_error_keeps_data(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    aioclient_mock: AiohttpClientMocker,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    await _setup(hass, config_entry, fake_api)
+
+    aioclient_mock.clear_requests()
+    fake_api.register_auth_request()
+    fake_api.register_session_request()
+    fake_api.register_consents_request(status=500)
+
+    await _refresh(hass, config_entry)
+
+    assert config_entry.runtime_data.last_update_success is True
+    assert _contribution_factor(hass) == "93"
+    assert "Energy community data update failed, using cached data" in caplog.text
+
+
+@pytest.mark.parametrize(
+    ("config_entry", "update_interval"),
+    [
+        (FREQUENT_UPDATES_ENABLED, SCAN_INTERVAL),
+        (FREQUENT_UPDATES_DISABLED, SCAN_INTERVAL_FULL),
+    ],
+    indirect=["config_entry"],
+)
+async def test_update_interval(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    update_interval: timedelta,
+) -> None:
+    await _setup(hass, config_entry, fake_api)
+
+    assert config_entry.runtime_data.update_interval == update_interval
+
+
+async def test_energy_community_without_consent(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    fake_api.register_auth_request()
+    fake_api.register_requests(consents=[])
 
     with (
-        patch.object(
-            coordinator,
-            "_async_full_update",
-            new=AsyncMock(return_value={"test": {}}),
-        ) as full_update,
-        patch.object(
-            coordinator,
-            "_async_update_energy_community_data",
-            new=AsyncMock(),
-        ) as energy_community_update,
+        patch(
+            "custom_components.netzooe_eservice.coordinator.dt_util.now",
+            return_value=NOW,
+        ),
+        caplog.at_level(
+            logging.WARNING,
+            logger="custom_components.netzooe_eservice.coordinator",
+        ),
     ):
-        data: dict[str, Any] = await coordinator._async_update_data()
+        await setup_integration(hass, config_entry)
 
-    assert data == {"test": {}}
-    full_update.assert_awaited_once()
-    energy_community_update.assert_not_awaited()
+    assert config_entry.state is ConfigEntryState.LOADED
+    assert hass.states.get(CONTRIBUTION_FACTOR_ENTITY_ID) is None
+    assert "No consent found for energy community" in caplog.text

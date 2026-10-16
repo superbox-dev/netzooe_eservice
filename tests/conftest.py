@@ -60,6 +60,7 @@ class FakeNetzOOEeServiceAPI:
     def __init__(self, aioclient_mock: AiohttpClientMocker) -> None:
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
 
+        self.profile_data_queue: list[list[dict[str, Any]]] = []
         self.profile_data: list[list[dict[str, Any]]] = [
             WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1,
             SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2,
@@ -96,7 +97,7 @@ class FakeNetzOOEeServiceAPI:
             exc=exc,
         )
 
-    def register_requests(self) -> None:
+    def register_session_request(self) -> None:
         self.aioclient_mock.get(
             "https://eservice.netzooe.at/service/v1.0/session",
             headers={
@@ -107,6 +108,13 @@ class FakeNetzOOEeServiceAPI:
             status=200,
         )
 
+    def register_consents_request(
+        self,
+        /,
+        *,
+        consents: list[dict[str, Any]] | None = None,
+        status: int = 200,
+    ) -> None:
         self.aioclient_mock.get(
             "https://eservice.netzooe.at/service/v1.0/consents",
             headers={
@@ -116,10 +124,11 @@ class FakeNetzOOEeServiceAPI:
                 "Content-Type": "application/json",
                 "x-xsrf-token": "mocked-token",
             },
-            status=200,
-            json=CONSENTS_DATA,
+            status=status,
+            json=CONSENTS_DATA if consents is None else consents,
         )
 
+    def register_dashboard_request(self, /, *, status: int = 200) -> None:
         self.aioclient_mock.get(
             "https://eservice.netzooe.at/service/v1.0/dashboard",
             headers={
@@ -129,9 +138,18 @@ class FakeNetzOOEeServiceAPI:
                 "Content-Type": "application/json",
                 "x-xsrf-token": "mocked-token",
             },
-            status=200,
+            status=status,
             json=DASHBOARD_DATA,
         )
+
+    def register_requests(self, /, *, consents: list[dict[str, Any]] | None = None) -> None:
+        self.register_session_request()
+        self.register_consents_request(consents=consents)
+        self.register_dashboard_request()
+        self.register_contract_account_requests()
+
+    def register_contract_account_requests(self) -> None:
+        self.profile_data_queue = list(self.profile_data)
 
         self.aioclient_mock.get(
             "https://eservice.netzooe.at/service/v1.0/contract-accounts/100/001",
@@ -203,7 +221,7 @@ class FakeNetzOOEeServiceAPI:
         url: URL,
         *args: Any,  # noqa: ARG002
     ) -> AiohttpClientMockResponse:
-        response = self.profile_data.pop(0)
+        response = self.profile_data_queue.pop(0)
 
         return AiohttpClientMockResponse(
             method,

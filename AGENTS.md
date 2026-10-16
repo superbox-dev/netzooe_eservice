@@ -100,6 +100,10 @@ Code lives in `custom_components/netzooe_eservice/`.
 - HTTP is mocked with `FakeNetzOOEeServiceAPI` in `tests/conftest.py` and the responses in `tests/api_data.py`
 - The `config_entry` fixture is parametrized indirectly with `data` / `options`
 - Patch `custom_components.netzooe_eservice.coordinator.dt_util.now` for date-dependent values
+- Never test or patch internal methods or attributes (e.g. `coordinator._async_update_data()`):
+  - set up the integration and drive it via the mocked HTTP responses
+  - trigger updates with `coordinator.async_refresh()`
+  - assert entity states, `ConfigEntryState` or the requested URLs
 
 ## Changelog, versions and git
 

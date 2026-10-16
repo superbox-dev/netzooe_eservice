@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add sensors for the maximum import and export power from the previous month.
+- Add the "Frequent updates" option. Disabled by default. When enabled, the energy community contribution
+  factors and statuses are refreshed every 15 minutes, while the full data refresh stays at 3-hour intervals.
+
 ### Changed
 
 - Update `netzooe_eservice_api` to 1.1.2b1. Timeouts and unexpected HTTP status codes of the portal are now handled as
@@ -16,14 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix the "Open HACS repository" link in the README.
-
-## [1.2.0] - 2026-10-07
-
-### Added
-
-- Add sensors for the maximum import and export power from the previous month.
-- Add the "Frequent updates" option. Disabled by default. When enabled, the energy community contribution
-  percentages and statuses are refreshed every 15 minutes, while the full data refresh stays at 3-hour intervals.
 
 ## [1.1.1] - 2026-09-28
 
