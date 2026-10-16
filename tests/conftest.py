@@ -111,6 +111,7 @@ class FakeNetzOOEeServiceAPI:
                 "User-Agent": "Mozilla/5.0",
                 "Accept": "application/json, text/plain, */*",
                 "client-id": "netzonline",
+                "Set-Cookie": "XSRF-TOKEN=mocked-token; Path=/",
             },
             status=200,
         )

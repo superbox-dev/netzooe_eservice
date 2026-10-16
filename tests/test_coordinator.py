@@ -338,6 +338,8 @@ async def test_authentication_error_starts_reauth(
     await _setup(hass, config_entry, fake_api)
 
     aioclient_mock.clear_requests()
+    fake_api.register_dashboard_request(status=HTTPStatus.UNAUTHORIZED)
+    fake_api.register_consents_request(status=HTTPStatus.UNAUTHORIZED)
     fake_api.register_auth_request(status=HTTPStatus.UNAUTHORIZED)
 
     await _refresh(hass, config_entry)
