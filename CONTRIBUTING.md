@@ -2,8 +2,6 @@
 
 <!--start-contributing-->
 
-## Guidelines
-
 Contributing to this project should be as easy and transparent as possible, whether it's:
 
 - Reporting a bug
@@ -13,63 +11,54 @@ Contributing to this project should be as easy and transparent as possible, whet
 
 ## Getting started
 
-Run development server:
+The project uses [uv](https://docs.astral.sh/uv/).
 
-1. Set up the project with `./scripts/setup.sh`.
-2. Run `./scripts/develop.sh`.
+1. Set up the project with `./scripts/setup.sh`. This installs the dependencies and the [prek](https://prek.j178.dev)
+   hooks.
+2. Start Home Assistant with `./scripts/develop.sh`.
 3. Open <http://127.0.0.1:8123> in your browser.
 
-## GitHub is used for everything
-
-GitHub is used to host code, to track issues and feature requests, as well as accept pull requests.
+## Pull requests
 
 Pull requests are the best way to propose changes to the codebase.
 
-1. Fork the repo and create your branch from `main`
-2. If you've changed something, update the documentation.
-3. Make sure your code lints with `./scripts/lint.sh`.
-4. Test you contribution.
-5. Issue that pull request!
+1. Fork the repository and create your branch from `develop`. `main` is the release branch.
+2. Update the documentation if you changed something user-visible.
+3. Add an entry under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md).
+4. Make sure `./scripts/lint.sh` and `uv run pytest` pass.
+5. Open the pull request against `develop`.
 
-## Report bugs using GitHub's [issues](https://github.com/superbox-dev/netzooe_eservice/issues)
+Never use real credentials or customer data (contract account numbers, meter point numbers, ...) in code, tests or
+issues. Use the fake data in `tests/api_data.py`.
 
-GitHub issues are used to track public bugs.
-Report a bug by [opening a new issue](https://github.com/superbox-dev/netzooe_eservice/issues/new/choose);
-it's that easy!
+## Coding style
 
-## Write bug reports with detail, background, and sample code
+`./scripts/lint.sh` runs [ruff](https://docs.astral.sh/ruff/) (format and lint), [ty](https://docs.astral.sh/ty/),
+yamllint and [rumdl](https://github.com/rvben/rumdl). See [AGENTS.md](AGENTS.md) for the project rules.
 
-**Great Bug Reports** tend to have:
+## Tests
 
-- A quick summary and/or background
-- Steps to reproduce
-  - Be specific!
-  - Give sample code if you can.
-- What you expected would happen
-- What actually happens
-- Notes (possibly including why you think this might be happening, or stuff you tried that didn't work)
-
-People *love* thorough bug reports. I'm not even kidding.
-
-## Use a Consistent Coding Style
-
-Use [ruff](https://docs.astral.sh/ruff/formatter/) to make sure the code follows the style.
-
-```bash
-uv run ruff format --check
-```
-
-## Test your code modification
-
-To test the code we use [pytest](https://docs.pytest.org):
+Tests use [pytest](https://docs.pytest.org). **100% test coverage is enforced**, so every new code path needs a test.
 
 ```bash
 uv run pytest
 ```
 
+## Report bugs
+
+Report a bug by [opening a new issue](https://github.com/superbox-dev/netzooe_eservice/issues/new/choose).
+Great bug reports tend to have:
+
+- A quick summary and/or background
+- Steps to reproduce
+- What you expected would happen
+- What actually happens
+- Debug logs (remove credentials and customer data first)
+- Notes (possibly including why you think this might be happening, or stuff you tried that didn't work)
+
 ## License
 
-By contributing, you agree that your contributions will be licensed under its [Apache License][license].
+By contributing, you agree that your contributions will be licensed under the [Apache License][license].
 
 [license]: https://github.com/superbox-dev/netzooe_eservice/blob/main/LICENSE
 

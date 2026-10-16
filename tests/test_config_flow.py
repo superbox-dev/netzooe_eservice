@@ -194,7 +194,7 @@ async def test_option_flow_defaults(
 
     assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
     assert result_create_entry["data"] == {
-        "frequent_updates": True,
+        "frequent_updates": False,
         "show_revoked_energy_communities": False,
         "include_inactive_contract_account_data": True,
         "show_inactive_meter_points": False,

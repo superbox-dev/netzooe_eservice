@@ -164,6 +164,9 @@ async def test_async_update_data_calls_energy_community_update(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
 ) -> None:
+    config_entry.add_to_hass(hass)
+    hass.config_entries.async_update_entry(config_entry, options={CONF_FREQUENT_UPDATES: True})
+
     session: ClientSession = async_get_clientsession(hass)
 
     coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
@@ -191,6 +194,9 @@ async def test_update_interval_with_frequent_updates(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
 ) -> None:
+    config_entry.add_to_hass(hass)
+    hass.config_entries.async_update_entry(config_entry, options={CONF_FREQUENT_UPDATES: True})
+
     session: ClientSession = async_get_clientsession(hass)
 
     coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
