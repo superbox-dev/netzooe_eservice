@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated `netzooe_eservice_api` to 1.1.2b2. Timeouts and unexpected HTTP status codes of the portal are now handled
+- Updated `netzooe_eservice_api` to 1.2.0b1. Timeouts and unexpected HTTP status codes of the portal are now handled
   as API errors, so the previous data is kept instead of failing the update.
 - Renamed "(letzter Monat)" to "(Vormonat)" in the German sensor names and "(last month)" to "(previous month)" in
   the English sensor names. Existing entity IDs are not changed.
