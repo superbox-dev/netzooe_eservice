@@ -1,8 +1,7 @@
 # AGENTS.md
 
-- Home Assistant custom integration (HACS)
-- For the unofficial Netz Oberösterreich eService portal (`eservice.netzooe.at`)
-- All portal access goes through the separate PyPI library `netzooe_eservice_api`
+Home Assistant custom integration (HACS) for the unofficial Netz Oberösterreich eService portal
+(`eservice.netzooe.at`), with all portal access going through the separate PyPI library `netzooe_eservice_api`.
 
 ## Commands
 
