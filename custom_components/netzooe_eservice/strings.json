@@ -14,6 +14,27 @@
         },
         "flow_title": "{name}",
         "step": {
+            "reauth_confirm": {
+                "data": {
+                    "password": "Password"
+                },
+                "data_description": {
+                    "password": "The new password of your {name} portal account."
+                },
+                "description": "The {name} portal rejected the password of {username}. Please enter the new password.",
+                "title": "Re-authenticate"
+            },
+            "reconfigure": {
+                "data": {
+                    "password": "Password",
+                    "username": "Username"
+                },
+                "data_description": {
+                    "password": "The password of your {name} portal account.",
+                    "username": "The username of your {name} portal account."
+                },
+                "description": "Please enter the new credentials."
+            },
             "user": {
                 "data": {
                     "password": "Password",
@@ -124,9 +145,6 @@
         }
     },
     "options": {
-        "abort": {
-            "options_not_ready": "Integration not fully loaded"
-        },
         "step": {
             "init": {
                 "data": {

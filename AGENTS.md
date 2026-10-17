@@ -92,6 +92,11 @@ Code lives in `custom_components/netzooe_eservice/`.
   - on `APIError` the entities keep their last values and stay available
   - the values change rarely, the portal is often briefly unavailable
   - do not change this
+- Intended deviation, own `entity_id`:
+  - `sensor.py` sets `entity_id` to `sensor.netzooe_eservice_<unique_id>`
+  - Home Assistant only treats it as a suggestion, the entity registry wins
+  - keeps the IDs stable, e.g. when a removed device comes back
+  - do not change this, it breaks the entity IDs in automations
 - Keep these rules satisfied:
   - `exception-translations`: exceptions use `translation_domain` and `translation_key`
   - `icon-translations`: icons in `icons.json`
@@ -104,7 +109,13 @@ Code lives in `custom_components/netzooe_eservice/`.
   - `log-when-unavailable`: log an outage once and log the recovery
   - `parallel-updates`: every platform sets `PARALLEL_UPDATES`
   - `reauthentication-flow` / `reconfiguration-flow`: keep both working
+    - `reauth_confirm` only asks for the password, `reconfigure` for username and password
   - `test-coverage`: 100%, see [Tests](#tests)
+- Also keep:
+  - the coordinator gets `config_entry` explicitly
+  - large or growing attributes go into `_unrecorded_attributes`
+  - repeated warnings are logged once until the cause is gone
+  - the options flow works without a loaded config entry
 - Documentation (`README.md`) covers:
   - installation parameters, options, removal
   - supported devices, entities, data updates

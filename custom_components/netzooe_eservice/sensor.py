@@ -55,6 +55,8 @@ class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
     """Netz OÖ eService sensor entity."""
 
     entity_description: NetzOOEeServiceSensorEntityDescription
+    # The timeline grows with every timeslice, so it is not stored in the database.
+    _unrecorded_attributes: frozenset[str] = frozenset({"timeline"})
 
     def __init__(
         self,

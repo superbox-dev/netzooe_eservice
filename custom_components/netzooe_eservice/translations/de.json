@@ -14,6 +14,27 @@
         },
         "flow_title": "{name}",
         "step": {
+            "reauth_confirm": {
+                "data": {
+                    "password": "Passwort"
+                },
+                "data_description": {
+                    "password": "Das neue Passwort deines {name}-Portalkontos."
+                },
+                "description": "Das {name}-Portal hat das Passwort von {username} abgelehnt. Bitte gib das neue Passwort ein.",
+                "title": "Erneut authentifizieren"
+            },
+            "reconfigure": {
+                "data": {
+                    "password": "Passwort",
+                    "username": "Benutzername"
+                },
+                "data_description": {
+                    "password": "Das Passwort deines {name}-Portalkontos.",
+                    "username": "Der Benutzername deines {name}-Portalkontos."
+                },
+                "description": "Bitte gib die neuen Anmeldedaten ein."
+            },
             "user": {
                 "data": {
                     "password": "Passwort",
@@ -124,9 +145,6 @@
         }
     },
     "options": {
-        "abort": {
-            "options_not_ready": "Integration nicht vollständig geladen"
-        },
         "step": {
             "init": {
                 "data": {

@@ -650,6 +650,31 @@ async def test_missing_consent_logged_once(
         assert warnings() == 2 * logged
 
 
+async def test_meter_point_without_active_contract_logged_once(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    aioclient_mock: AiohttpClientMocker,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Test that a meter point without an active contract is logged only once, not on every update."""
+
+    def warnings() -> int:
+        return sum("no active contract for meter point" in record.getMessage() for record in caplog.records)
+
+    with caplog.at_level(logging.WARNING, logger="custom_components.netzooe_eservice.coordinator"):
+        await _setup(hass, config_entry, fake_api)
+        assert warnings() == 1
+
+        aioclient_mock.clear_requests()
+        fake_api.register_auth_request()
+        fake_api.register_requests()
+        await _refresh(hass, config_entry)
+
+        assert _contract_account_requested(aioclient_mock)
+        assert warnings() == 1
+
+
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_consent_matched_by_service_provider_position(
     hass: HomeAssistant,

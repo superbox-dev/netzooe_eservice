@@ -132,6 +132,8 @@ def _valid_through(consent: dict[str, Any]) -> tuple[date, date]:
 class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Coordinator to fetch the data of all meter points and energy communities from the eService portal."""
 
+    config_entry: NetzOOEeServiceConfigEntry
+
     def __init__(
         self,
         hass: HomeAssistant,
@@ -143,8 +145,6 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         session: ClientSession,
     ) -> None:
         """Initialize the coordinator."""
-        self.config_entry: NetzOOEeServiceConfigEntry = entry
-
         self.api: NetzOOEeServiceAPI = NetzOOEeServiceAPI(
             username=username,
             password=password,
@@ -154,6 +154,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         self._last_full_update: datetime | None = None
         self._api_error_logged: bool = False
         self._missing_consents_logged: set[str] = set()
+        self._inactive_meter_points_logged: set[str] = set()
 
         self.frequent_updates: bool = entry.options.get(CONF_FREQUENT_UPDATES, DEFAULT_FREQUENT_UPDATES)
         self.show_revoked_energy_communities: bool = entry.options.get(
@@ -172,6 +173,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         super().__init__(
             hass,
             _LOGGER,
+            config_entry=entry,
             name=DOMAIN,
             update_interval=SCAN_INTERVAL if self.frequent_updates else SCAN_INTERVAL_FULL,
         )
@@ -373,11 +375,16 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
         if active_contract is None:
             if not self.show_inactive_meter_points:
-                _LOGGER.warning(
-                    "Skipping %d contract(s) because no active contract for meter point %s was returned by the API.",
-                    len(contracts),
-                    mpan,
-                )
+                # Log only once until an active contract is returned again.
+                if mpan not in self._inactive_meter_points_logged:
+                    _LOGGER.warning(
+                        "Skipping %d contract(s) because no active contract for meter point %s "
+                        "was returned by the API.",
+                        len(contracts),
+                        mpan,
+                    )
+                    self._inactive_meter_points_logged.add(mpan)
+
                 return None
 
             most_recent_contract: dict[str, Any] = max(
@@ -393,6 +400,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             )
 
             return ActiveContractData(active_contract=most_recent_contract, contracts_to_use=contracts)
+
+        self._inactive_meter_points_logged.discard(mpan)
 
         return ActiveContractData(
             active_contract=active_contract,

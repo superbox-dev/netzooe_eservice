@@ -35,6 +35,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Translated the error message if the first update fails.
 - Documented the installation parameters, options, update intervals, sensors, use cases, known limitations,
   troubleshooting and removal in the README.
+- Changed the reauthentication to only ask for the new password of the configured account.
+- Gave the reconfiguration flow its own form with a matching description.
+- Excluded the `timeline` attribute from the recorder database, because it grows with every timeslice.
+- Logged a meter point without an active contract only once until it has an active contract again.
 
 ### Fixed
 
@@ -46,6 +50,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   skipped and a warning is logged once.
 - Fixed energy communities getting the consent of another service provider whose code also appears in their ID.
 - Fixed the "already configured" message of the config flow.
+- Fixed the options not being changeable while the integration is not loaded.
+- Fixed the HTTP session of each login attempt in the config flow staying open until Home Assistant stops.
 
 ## [1.1.1] - 2026-09-28
 
