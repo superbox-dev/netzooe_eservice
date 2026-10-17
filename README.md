@@ -80,8 +80,9 @@ Meter point:
 | Maximum Import/Export Power (previous month)      | Peak power of the previous month in kW                                              |
 | Monthly/Yearly trend (current/previous period)    | Energy of the current and previous period in kWh                                    |
 | Monthly/Yearly trend                              | Change between the current and previous period in %                                 |
-| Supplier                                          | Name of the energy supplier                                                         |
+| Supplier                                          | Supplier name, market partner ID in `id`, contract start in `contract_start`        |
 | Type                                              | Type of the meter point, e.g. "EEG 7ngem"                                           |
+| Profile data available until                      | Last day with profile data in the portal (diagnostic)                               |
 | Energy community / Supplier import/export (total) | Total of all energy communities of the meter point (disabled by default, see below) |
 
 Energy community:
@@ -93,7 +94,7 @@ Energy community:
 | Energy community import/export L2 (prev. month) | Energy shared with the energy community in the previous month               |
 | Supplier import/export L1/L2/L3, L1/L2, L2      | Energy imported from or exported to the energy supplier for the same ranges |
 | Contribution factor                             | Contribution factor (Teilnahmefaktor) of the meter point in %               |
-| Status                                          | Status of the participation, e.g. active, active (unchangeable) or revoked  |
+| Status                                          | Participation status, e.g. active or revoked, start date in `valid_from`    |
 
 The total sensors of the meter point are disabled by default. Enable them in the entity settings if your meter
 point takes part in several energy communities. They only include energy communities with the status "active",

@@ -113,6 +113,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status',
@@ -297,6 +298,18 @@
       'last_updated': <ANY>,
       'state': '701.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Profildaten verfügbar bis',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Teilnahmefaktor',
@@ -395,6 +408,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2024-05-04',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_status',
@@ -555,6 +569,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status',
@@ -616,7 +631,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2023-10-05',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energielieferant',
+        'id': 'AT113820',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier',
@@ -817,6 +834,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status',
@@ -1005,6 +1023,18 @@
       'last_updated': <ANY>,
       'state': '0.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Profildaten verfügbar bis',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Teilnahmefaktor',
@@ -1111,6 +1141,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2024-09-10',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_status',
@@ -1283,6 +1314,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status',
@@ -1348,7 +1380,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2026-06-17',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energielieferant',
+        'id': 'AT110191',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier',
@@ -1549,6 +1583,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status',
@@ -1733,6 +1768,18 @@
       'last_updated': <ANY>,
       'state': '701.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Profile data available until',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Contribution factor',
@@ -1831,6 +1878,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2024-05-04',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_status',
@@ -1991,6 +2039,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status',
@@ -2052,7 +2101,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2023-10-05',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Supplier',
+        'id': 'AT113820',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier',
@@ -2253,6 +2304,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status',
@@ -2441,6 +2493,18 @@
       'last_updated': <ANY>,
       'state': '0.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Profile data available until',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: wseg 07614 0523 UW Partenstein (11111112) Contribution factor',
@@ -2547,6 +2611,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2024-09-10',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_status',
@@ -2719,6 +2784,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status',
@@ -2784,7 +2850,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2026-06-17',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Supplier',
+        'id': 'AT110191',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier',
@@ -2985,6 +3053,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status',
@@ -3169,6 +3238,18 @@
       'last_updated': <ANY>,
       'state': '701.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Profildaten verfügbar bis',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Teilnahmefaktor',
@@ -3267,6 +3348,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2024-05-04',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_status',
@@ -3427,6 +3509,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status',
@@ -3488,7 +3571,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2023-10-05',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energielieferant',
+        'id': 'AT113820',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier',
@@ -3663,6 +3748,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status',
@@ -3841,6 +3927,18 @@
       'last_updated': <ANY>,
       'state': '0.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Profildaten verfügbar bis',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Teilnahmefaktor',
@@ -3931,6 +4029,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status',
@@ -3986,7 +4085,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2026-06-17',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energielieferant',
+        'id': 'AT110191',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier',
@@ -4187,6 +4288,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status',
@@ -4371,6 +4473,18 @@
       'last_updated': <ANY>,
       'state': '701.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Profile data available until',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: wseg 07614 0523 UW Partenstein (11111111) Contribution factor',
@@ -4469,6 +4583,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2024-05-04',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_status',
@@ -4629,6 +4744,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status',
@@ -4690,7 +4806,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2023-10-05',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Supplier',
+        'id': 'AT113820',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier',
@@ -4865,6 +4983,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status',
@@ -5043,6 +5162,18 @@
       'last_updated': <ANY>,
       'state': '0.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Profile data available until',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Contribution factor',
@@ -5133,6 +5264,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status',
@@ -5188,7 +5320,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2026-06-17',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Supplier',
+        'id': 'AT110191',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier',
@@ -5389,6 +5523,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status',
@@ -5573,6 +5708,18 @@
       'last_updated': <ANY>,
       'state': '701.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Profildaten verfügbar bis',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Teilnahmefaktor',
@@ -5685,6 +5832,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status',
@@ -5746,7 +5894,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2023-10-05',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energielieferant',
+        'id': 'AT113820',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier',
@@ -5917,6 +6067,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status',
@@ -6091,6 +6242,18 @@
       'last_updated': <ANY>,
       'state': '0.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Profildaten verfügbar bis',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Teilnahmefaktor',
@@ -6181,6 +6344,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status',
@@ -6236,7 +6400,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2026-06-17',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energielieferant',
+        'id': 'AT110191',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier',
@@ -6437,6 +6603,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status',
@@ -6621,6 +6788,18 @@
       'last_updated': <ANY>,
       'state': '701.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Profile data available until',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Contribution factor',
@@ -6733,6 +6912,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status',
@@ -6794,7 +6974,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2023-10-05',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Supplier',
+        'id': 'AT113820',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier',
@@ -6965,6 +7147,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status',
@@ -7139,6 +7322,18 @@
       'last_updated': <ANY>,
       'state': '0.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Profile data available until',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Contribution factor',
@@ -7229,6 +7424,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status',
@@ -7284,7 +7480,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2026-06-17',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Supplier',
+        'id': 'AT110191',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier',
@@ -7485,6 +7683,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status',
@@ -7669,6 +7868,18 @@
       'last_updated': <ANY>,
       'state': '701.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Profildaten verfügbar bis',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Teilnahmefaktor',
@@ -7781,6 +7992,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status',
@@ -7842,7 +8054,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2023-10-05',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Energielieferant',
+        'id': 'AT113820',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier',
@@ -8039,6 +8253,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status',
@@ -8223,6 +8438,18 @@
       'last_updated': <ANY>,
       'state': '0.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Profildaten verfügbar bis',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Teilnahmefaktor',
@@ -8339,6 +8566,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status',
@@ -8404,7 +8632,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2026-06-17',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Energielieferant',
+        'id': 'AT110191',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier',
@@ -8605,6 +8835,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status',
@@ -8789,6 +9020,18 @@
       'last_updated': <ANY>,
       'state': '701.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Profile data available until',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik: EEG Oberösterreich RID-11 (11111111) Contribution factor',
@@ -8901,6 +9144,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status',
@@ -8962,7 +9206,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2023-10-05',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Supplier',
+        'id': 'AT113820',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier',
@@ -9159,6 +9405,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-01-26',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status',
@@ -9343,6 +9590,18 @@
       'last_updated': <ANY>,
       'state': '0.0',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to': StateSnapshot({
+      'attributes': ReadOnlyDict({
+        <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'date',
+        <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Profile data available until',
+      }),
+      'context': <ANY>,
+      'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_profile_data_available_to',
+      'last_changed': <ANY>,
+      'last_reported': <ANY>,
+      'last_updated': <ANY>,
+      'state': '2026-06-27',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_contribution_factor': StateSnapshot({
       'attributes': ReadOnlyDict({
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: EEG Oberösterreich RID-11 (11111112) Contribution factor',
@@ -9459,6 +9718,7 @@
           'revoked',
           'concluded',
         ]),
+        'valid_from': '2026-05-21',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status',
@@ -9524,7 +9784,9 @@
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier': StateSnapshot({
       'attributes': ReadOnlyDict({
+        'contract_start': '2026-06-17',
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Supplier',
+        'id': 'AT110191',
       }),
       'context': <ANY>,
       'entity_id': 'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier',

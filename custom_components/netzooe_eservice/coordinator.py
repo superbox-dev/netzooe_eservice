@@ -310,6 +310,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             data[device_identifier] = device_data | {
                 "contributionPercentage": consent.get("contributionPercentage"),
                 "status": consent.get("status"),
+                "validFrom": consent["validThrough"]["from"],
             }
 
         _LOGGER.debug("Updated energy community data")
@@ -442,7 +443,9 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             "monthlyTrend": point_of_delivery["monthlyTrend"],
             "yearlyTrend": point_of_delivery["yearlyTrend"],
             "supplier": contract["supplier"],
+            "contractStart": contract.get("moveInDate"),
             "meterNumber": meter_number,
+            "profileDataAvailableTo": point_of_delivery.get("availableTimeRange", {}).get("to"),
             "meterReading": last_reading(METER_READING_REFERENCE_NUMBERS),
             "lastMonthPeakPower": last_reading(PEAK_POWER_REFERENCE_NUMBERS),
         }
@@ -524,6 +527,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 "totalL3": [],
                 "contributionPercentage": consent.get("contributionPercentage"),
                 "status": consent.get("status"),
+                "validFrom": consent["validThrough"]["from"],
             },
         )
         return energy_community

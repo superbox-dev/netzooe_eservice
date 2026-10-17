@@ -169,6 +169,7 @@ CONTRACT_ACCOUNT_DATA_1: dict[str, Any] = {
             "branch": "STROM",
             "scaleType": "Gem.Erz. / Erzeugung",
             "active": True,
+            "moveInDate": "2023-10-05",
             "moveOutDate": "9999-12-31",
             "pointOfDelivery": {
                 "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
@@ -214,6 +215,10 @@ CONTRACT_ACCOUNT_DATA_1: dict[str, Any] = {
                         "from": "2025-05-31T00:00:00",
                         "to": "2026-05-31T23:59:59",
                     },
+                },
+                "availableTimeRange": {
+                    "from": "2023-10-18",
+                    "to": "2026-06-27",
                 },
                 "lastReadings": {
                     "values": [
@@ -330,6 +335,7 @@ CONTRACT_ACCOUNT_DATA_2: dict[str, Any] = {
             "branch": "STROM",
             "scaleType": "EEG 7ngem",
             "active": True,
+            "moveInDate": "2026-06-17",
             "moveOutDate": "9999-12-31",
             "pointOfDelivery": {
                 "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
@@ -375,6 +381,10 @@ CONTRACT_ACCOUNT_DATA_2: dict[str, Any] = {
                         "from": "2026-06-28T17:07:11.908041578",
                         "to": "2026-06-29T17:07:11.908041679",
                     },
+                },
+                "availableTimeRange": {
+                    "from": "2023-10-18",
+                    "to": "2026-06-27",
                 },
                 "lastReadings": {
                     "values": [
@@ -469,6 +479,7 @@ CONTRACT_ACCOUNT_DATA_3: dict[str, Any] = {
             "branch": "STROM",
             "scaleType": "EEG 7ngem",
             "active": False,
+            "moveInDate": "2020-06-08",
             "moveOutDate": "2026-06-16",
             "pointOfDelivery": {
                 "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
@@ -514,6 +525,10 @@ CONTRACT_ACCOUNT_DATA_3: dict[str, Any] = {
                         "from": "2026-06-28T17:11:06.851206505",
                         "to": "2026-06-29T17:11:06.85120663",
                     },
+                },
+                "availableTimeRange": {
+                    "from": "2023-10-18",
+                    "to": "2026-06-16",
                 },
                 "lastReadings": {},
             },
@@ -635,6 +650,7 @@ CONTRACT_ACCOUNT_DATA_4: dict[str, Any] = {
             "branch": "STROM",
             "scaleType": "EEG 7ngem",
             "active": False,
+            "moveInDate": "2021-03-01",
             "moveOutDate": "2026-05-15",
             "pointOfDelivery": {
                 "meterPointAdministrationNumber": "AT0000000000000000000000011111113",

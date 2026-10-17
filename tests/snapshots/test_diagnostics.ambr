@@ -3,6 +3,7 @@
   dict({
     'devices': list([
       dict({
+        'contractStart': '2023-10-05',
         'deviceName': 'Photovoltaik',
         'deviceType': 'PHOTOVOLTAICS',
         'lastMonthPeakPower': dict({
@@ -42,6 +43,7 @@
             'to': '2026-05-28T23:59:59',
           }),
         }),
+        'profileDataAvailableTo': '2026-06-27',
         'scaleType': 'Gem.Erz. / Erzeugung',
         'supplier': dict({
           'id': 'AT113820',
@@ -160,6 +162,7 @@
             'type': 'ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR',
           }),
         ]),
+        'validFrom': '2026-01-26',
       }),
       dict({
         'contributionPercentage': '7',
@@ -253,8 +256,10 @@
             'type': 'ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR',
           }),
         ]),
+        'validFrom': '2026-05-21',
       }),
       dict({
+        'contractStart': '2026-06-17',
         'deviceName': 'Haushalt',
         'deviceType': 'HOUSEHOLD',
         'lastMonthPeakPower': dict({
@@ -294,6 +299,7 @@
             'to': '2026-06-29T17:07:11.908038675',
           }),
         }),
+        'profileDataAvailableTo': '2026-06-27',
         'scaleType': 'EEG 7ngem',
         'supplier': dict({
           'id': 'AT110191',
@@ -438,6 +444,7 @@
             'type': 'ENERGY_COMMUNITY_OWN_COVERAGE',
           }),
         ]),
+        'validFrom': '2026-01-26',
       }),
       dict({
         'contributionPercentage': '5',
@@ -556,6 +563,7 @@
             'type': 'ENERGY_COMMUNITY_OWN_COVERAGE',
           }),
         ]),
+        'validFrom': '2026-05-21',
       }),
     ]),
     'entry': dict({

@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import replace
+from datetime import date
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
@@ -78,7 +79,7 @@ class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
         self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
     @property
-    def native_value(self) -> StateType:
+    def native_value(self) -> StateType | date:
         """Return the state of the sensor."""
         return self.entity_description.value_fn(self.data)
 
@@ -141,7 +142,7 @@ class NetzOOEeServiceSensorEntityDescription(SensorEntityDescription):
     """Class describing Netz OÖ eService sensor entities."""
 
     entity_class: type[NetzOOEeServiceSensorEntity] = NetzOOEeServiceSensorEntity
-    value_fn: Callable[[Mapping[str, Any]], StateType]
+    value_fn: Callable[[Mapping[str, Any]], StateType | date]
     """Return the state from the device data."""
     extra_state_attributes_fn: Callable[[Mapping[str, Any]], Mapping[str, Any] | None] = _no_attributes
     """Return the extra state attributes from the device data."""
@@ -151,6 +152,11 @@ def _status(data: Mapping[str, Any]) -> str | None:
     """Return the status of the consent, or `None` if it is missing or unknown."""
     status: str = (data["status"] or "").lower()
     return status if status in STATUS_OPTIONS else None
+
+
+def _date(value: str | None) -> date | None:
+    """Return the date of an ISO date string, or `None` if it is missing."""
+    return date.fromisoformat(value) if value else None
 
 
 def _sum_by_type(items: list[dict[str, Any]], target_type: str) -> float:
@@ -312,6 +318,17 @@ SENSOR_DEFAULT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
         key="supplier",
         translation_key="supplier",
         value_fn=lambda data: data["supplier"]["name"],
+        extra_state_attributes_fn=lambda data: {
+            "id": data["supplier"].get("id"),
+            "contract_start": data["contractStart"],
+        },
+    ),
+    NetzOOEeServiceSensorEntityDescription(
+        device_class=SensorDeviceClass.DATE,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        key="profile_data_available_to",
+        translation_key="profile_data_available_to",
+        value_fn=lambda data: _date(data["profileDataAvailableTo"]),
     ),
     *_trend_descriptions("monthly"),
     *_trend_descriptions("yearly"),
@@ -326,6 +343,7 @@ SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES: Final[list[NetzOOEeServiceSensorEntityDes
         options=STATUS_OPTIONS,
         translation_key="status",
         value_fn=_status,
+        extra_state_attributes_fn=lambda data: {"valid_from": data["validFrom"]},
     ),
     NetzOOEeServiceSensorEntityDescription(
         entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,

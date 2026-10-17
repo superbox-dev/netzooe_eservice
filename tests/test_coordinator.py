@@ -79,6 +79,12 @@ def _contribution_factor(hass: HomeAssistant) -> str:
     return _state(hass, CONTRIBUTION_FACTOR_ENTITY_ID)
 
 
+def _status_valid_from(hass: HomeAssistant) -> str:
+    state: State | None = hass.states.get(STATUS_ENTITY_ID)
+    assert state is not None
+    return state.attributes["valid_from"]
+
+
 async def _refresh(hass: HomeAssistant, config_entry: MockConfigEntry, now: datetime | None = NOW) -> None:
     coordinator: NetzOOEeServiceDataUpdateCoordinator = config_entry.runtime_data
 
@@ -176,9 +182,12 @@ async def test_frequent_updates_only_refresh_energy_community_data(
     await _setup(hass, config_entry, fake_api)
 
     assert _contribution_factor(hass) == "93"
+    assert _status_valid_from(hass) == "2026-01-26"
 
     consents: list[dict[str, Any]] = [
-        consent | {"contributionPercentage": "50"} if consent["contributionPercentage"] == "93" else consent
+        consent | {"contributionPercentage": "50", "validThrough": {"from": "2026-06-01", "to": "9999-12-31"}}
+        if consent["contributionPercentage"] == "93"
+        else consent
         for consent in CONSENTS_DATA
     ]
 
@@ -190,6 +199,7 @@ async def test_frequent_updates_only_refresh_energy_community_data(
     await _refresh(hass, config_entry)
 
     assert _contribution_factor(hass) == "50"
+    assert _status_valid_from(hass) == "2026-06-01"
     assert not _contract_account_requested(aioclient_mock)
 
 

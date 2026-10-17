@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added sensors for the maximum import and export power from the previous month.
+- Added the diagnostic sensor "Profile data available until" with the last day of profile data of a meter point.
+- Added the market partner ID of the energy supplier and the contract start as attributes `id` and `contract_start`
+  to the `supplier` sensor.
+- Added the start date of the consent as attribute `valid_from` to the `status` sensor of an energy community.
 - Added the "Frequent updates" option. Disabled by default. When enabled, the energy community contribution
   factors and statuses are refreshed every 15 minutes, while the full data refresh stays at 3-hour intervals.
 - Added reauthentication. If the portal rejects the credentials, Home Assistant now asks for the new password.

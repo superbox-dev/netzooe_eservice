@@ -107,6 +107,9 @@
             "monthly_trend_old": {
                 "name": "Monthly trend (previous period)"
             },
+            "profile_data_available_to": {
+                "name": "Profile data available until"
+            },
             "scale_type": {
                 "name": "Type"
             },

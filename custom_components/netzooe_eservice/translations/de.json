@@ -107,6 +107,9 @@
             "monthly_trend_old": {
                 "name": "vorheriger 30-Tage-Trend"
             },
+            "profile_data_available_to": {
+                "name": "Profildaten verfügbar bis"
+            },
             "scale_type": {
                 "name": "Typ"
             },
