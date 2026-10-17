@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added reauthentication. If the portal rejects the credentials, Home Assistant now asks for the new password.
 - Added diagnostics. Credentials and customer numbers are removed.
 - Added the sensors of new meter points and energy communities after an update, without reloading the integration.
+- Added the "wrong account" message to the reconfiguration flow.
 
 ### Changed
 
@@ -22,18 +23,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   as API errors, so the previous data is kept instead of failing the update.
 - Renamed "(letzter Monat)" to "(Vormonat)" in the German sensor names and "(last month)" to "(previous month)" in
   the English sensor names. Existing entity IDs are not changed.
-- Documented the options and update intervals in the README.
 - Requested the contract accounts and consumption profiles in parallel (at most 4 requests at the same time), which
   makes a full update about 3 times faster.
+- Cancelled the remaining requests of an update if one request fails, so rejected credentials no longer cause
+  further login attempts.
 - Fetched the dashboard on every full update, so the contract accounts are no longer only read at startup.
-- Logged API errors with cached data as a single warning instead of an error and a warning.
-- Logged API errors with cached data only once until the portal is available again.
+- Logged API errors with cached data as a single warning, and only once until the portal is available again.
 - Changed the `status` sensor to an enum sensor with translated states, including `requested`, `qr_code_sent`,
   `timeout` and `concluded`. Unknown statuses are shown as unknown.
 - Moved the sensor icons to `icons.json`.
 - Translated the error message if the first update fails.
-- Documented the installation parameters, sensors, use cases, known limitations, troubleshooting and removal in the
-  README.
+- Documented the installation parameters, options, update intervals, sensors, use cases, known limitations,
+  troubleshooting and removal in the README.
 
 ### Fixed
 
@@ -44,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed the update failing if the portal returns an energy community without a consent. The energy community is now
   skipped and a warning is logged once.
 - Fixed energy communities getting the consent of another service provider whose code also appears in their ID.
-- Fixed the "already configured" message and added the missing "wrong account" message of the config flow.
+- Fixed the "already configured" message of the config flow.
 
 ## [1.1.1] - 2026-09-28
 
@@ -58,6 +59,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed meter reading selection when the API returns multiple registers for the same meter. Energy readings are now
   selected by the valid OBIS references 1.8.1 or 2.8.1 instead of relying on the order returned
   by the API. ([Issue #25][issue-25])
+
+[issue-25]: https://github.com/superbox-dev/netzooe_eservice/issues/25
 
 ## [1.1.0] - 2026-08-17
 
@@ -79,23 +82,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Required Home Assistant 2026.7.0 or newer.
 - Updated `netzooe_eservice_api` to 1.1.1.
 
+[issue-20]: https://github.com/superbox-dev/netzooe_eservice/issues/20
+[issue-21]: https://github.com/superbox-dev/netzooe_eservice/issues/21
+
 ## [1.0.1] - 2026-08-03
 
 ### Fixed
 
-- Fixed the issue where meter points with non-active contracts triggered an exception.
-  Thank you [fabSteininger](https://github.com/fabSteininger) for your contribution. ([PR #19][pr-19])
+- Fixed the update failing if a meter point has no active contract. Its contracts are now skipped and a warning is
+  logged. Thank you [fabSteininger](https://github.com/fabSteininger) for your contribution. ([PR #19][pr-19])
+
+[pr-19]: https://github.com/superbox-dev/netzooe_eservice/pull/19
 
 ## [1.0.0] - 2026-05-30
 
-Initial release
+### Added
+
+- Added the config flow with the username and password of the eService portal, and the reconfiguration flow.
+- Added a device for each meter point and for each energy community of a meter point.
+- Added the meter point sensors: type, meter reading, supplier, monthly and yearly trend (current and previous
+  period), energy community import or export (L2, L3 and previous month), supplier import or export (L2, L3 and
+  previous month).
+- Added the energy community sensors: status, contribution factor, energy community import or export and supplier
+  import or export (L2, L3 and previous month).
+- Added English and German translations.
+- Added the data update every 3 hours.
 
 [Unreleased]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.1.1...HEAD
 [1.1.1]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/superbox-dev/netzooe_eservice/releases/tag/v1.0.0
-[issue-20]: https://github.com/superbox-dev/netzooe_eservice/issues/20
-[issue-21]: https://github.com/superbox-dev/netzooe_eservice/issues/21
-[issue-25]: https://github.com/superbox-dev/netzooe_eservice/issues/25
-[pr-19]: https://github.com/superbox-dev/netzooe_eservice/pull/19
