@@ -111,9 +111,9 @@ class FakeNetzOOEeServiceAPI:
                 "User-Agent": "Mozilla/5.0",
                 "Accept": "application/json, text/plain, */*",
                 "client-id": "netzonline",
-                "Set-Cookie": "XSRF-TOKEN=mocked-token; Path=/",
             },
             status=200,
+            cookies={"XSRF-TOKEN": "mocked-token"},
         )
 
     def register_consents_request(

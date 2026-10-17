@@ -28,7 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fetched the dashboard on every full update, so the contract accounts are no longer only read at startup.
 - Logged API errors with cached data as a single warning instead of an error and a warning.
 - Logged API errors with cached data only once until the portal is available again.
-- Changed the `status` sensor to an enum sensor with translated states. Unknown statuses are shown as unknown.
+- Changed the `status` sensor to an enum sensor with translated states, including `requested`, `qr_code_sent`,
+  `timeout` and `concluded`. Unknown statuses are shown as unknown.
 - Moved the sensor icons to `icons.json`.
 - Translated the error message if the first update fails.
 - Documented the installation parameters, sensors, use cases, known limitations, troubleshooting and removal in the

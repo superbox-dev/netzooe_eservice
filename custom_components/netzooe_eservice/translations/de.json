@@ -94,7 +94,11 @@
                 "state": {
                     "active": "Aktiv",
                     "active_unchangeable": "Aktiv (nicht änderbar)",
-                    "revoked": "Widerrufen"
+                    "concluded": "Beendet",
+                    "qr_code_sent": "QR-Code gesendet",
+                    "requested": "Angefragt",
+                    "revoked": "Widerrufen",
+                    "timeout": "Abgelaufen"
                 }
             },
             "supplier": {
