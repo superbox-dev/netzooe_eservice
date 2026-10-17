@@ -10,6 +10,7 @@ from collections import defaultdict
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
+from functools import partial
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
@@ -44,7 +45,8 @@ from .const import SCAN_INTERVAL_FULL
 from .const import DeviceType
 
 if TYPE_CHECKING:
-    from collections.abc import Coroutine
+    from collections.abc import Awaitable
+    from collections.abc import Callable
     from collections.abc import Iterable
 
     from aiohttp import ClientSession
@@ -225,19 +227,17 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         _LOGGER.debug("data: %s", data)
         return data
 
-    async def _async_gather[T](self, coroutines: Iterable[Coroutine[Any, Any, T]], /) -> list[T]:
+    async def _async_gather[T](self, requests: Iterable[Callable[[], Awaitable[T]]], /) -> list[T]:
         """Run the requests concurrently, but at most MAX_PARALLEL_REQUESTS at the same time."""
         semaphore: asyncio.Semaphore = asyncio.Semaphore(MAX_PARALLEL_REQUESTS)
 
-        async def limited(coroutine: Coroutine[Any, Any, T]) -> T:
-            try:
-                async with semaphore:
-                    return await coroutine
-            finally:
-                # Close the coroutine if it was cancelled before it started (avoids "never awaited").
-                coroutine.close()
+        # Create the coroutine only when the request starts, a task cancelled before it started
+        # would otherwise leave the coroutine unawaited.
+        async def limited(request: Callable[[], Awaitable[T]]) -> T:
+            async with semaphore:
+                return await request()
 
-        tasks: list[asyncio.Task[T]] = [asyncio.create_task(limited(coroutine)) for coroutine in coroutines]
+        tasks: list[asyncio.Task[T]] = [asyncio.create_task(limited(request)) for request in requests]
 
         try:
             return await asyncio.gather(*tasks)
@@ -280,7 +280,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             )
 
         profiles: list[list[dict[str, Any]]] = await self._async_gather(
-            self._async_fetch_consumptions_profile(request) for request in profile_requests
+            partial(self._async_fetch_consumptions_profile, request) for request in profile_requests
         )
 
         for request, profile in zip(profile_requests, profiles, strict=True):
@@ -322,7 +322,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         _LOGGER.debug("dashboard: %s", dashboard)
 
         all_contract_accounts: list[dict[str, Any]] = await self._async_gather(
-            self.api.contract_accounts(
+            partial(
+                self.api.contract_accounts,
                 business_partner_number=account["businessPartnerNumber"],
                 contract_account_number=account["contractAccountNumber"],
             )

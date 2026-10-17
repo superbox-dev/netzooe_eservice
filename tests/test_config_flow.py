@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 import pytest
 from homeassistant import setup
 from homeassistant.config_entries import SOURCE_USER
+from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_USERNAME
 from homeassistant.data_entry_flow import FlowResultType
@@ -264,6 +265,9 @@ async def test_option_flow(
     assert result_init["step_id"] == "init"
     assert result_init["data_schema"]
 
+    # The changed options reload the config entry, which fetches the consumption profiles again.
+    fake_api.register_contract_account_requests()
+
     assert list(result_init["data_schema"].schema.keys()) == [
         "frequent_updates",
         "show_revoked_energy_communities",
@@ -280,6 +284,7 @@ async def test_option_flow(
             "show_inactive_meter_points": True,
         },
     )
+    await hass.async_block_till_done()
 
     assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
     assert result_create_entry["data"] == {
@@ -288,6 +293,7 @@ async def test_option_flow(
         "include_inactive_contract_account_data": False,
         "show_inactive_meter_points": True,
     }
+    assert config_entry.state is ConfigEntryState.LOADED
 
 
 async def test_option_flow_defaults(
@@ -310,6 +316,7 @@ async def test_option_flow_defaults(
         result_init["flow_id"],
         user_input={},
     )
+    await hass.async_block_till_done()
 
     assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
     assert result_create_entry["data"] == {
@@ -318,13 +325,19 @@ async def test_option_flow_defaults(
         "include_inactive_contract_account_data": True,
         "show_inactive_meter_points": False,
     }
+    assert config_entry.state is ConfigEntryState.LOADED
 
 
 async def test_option_flow_when_integration_not_loaded(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that the options flow also works if the integration is not loaded."""
+    # The changed options set up the config entry.
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
     config_entry.add_to_hass(hass)
 
     result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
@@ -339,6 +352,8 @@ async def test_option_flow_when_integration_not_loaded(
         result_init["flow_id"],
         user_input={"show_inactive_meter_points": True},
     )
+    await hass.async_block_till_done()
 
     assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
     assert result_create_entry["data"]["show_inactive_meter_points"] is True
+    assert config_entry.state is ConfigEntryState.LOADED
