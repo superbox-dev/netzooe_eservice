@@ -8,5 +8,8 @@ select = ["ALL"]
     "S101",    # assert, pytest checks results with assert
 ]
 
+[lint.pydocstyle]
+convention = "numpy"
+
 [lint.isort]
 force-single-line = true

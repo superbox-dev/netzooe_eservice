@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
 from typing import Literal
-from typing import cast
 
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.components.sensor import SensorDeviceClass
@@ -120,10 +119,11 @@ class NetzOOEeServiceAggregatedSensorEntity(NetzOOEeServiceSensorEntity):
 
         return sum(
             (
-                cast("float", self.entity_description.value_fn(data))
+                value
                 for device_identifier, data in self.coordinator.data.items()
                 if device_identifier.startswith(prefix)
                 and (data["status"] == ConsentsStatus.ACTIVE.value or self.coordinator.show_revoked_energy_communities)
+                and isinstance(value := self.entity_description.value_fn(data), float)
             ),
             start=0.0,
         )
