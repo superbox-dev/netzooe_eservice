@@ -161,7 +161,8 @@ def _date(value: str | None) -> date | None:
 
 def _sum_by_type(items: list[dict[str, Any]], target_type: str) -> float:
     """Return the sum of all profile values of the given type."""
-    total: float = sum(item["sum"]["value"] for item in items if item["type"] == target_type)
+    # Start with a float, the portal may return whole numbers as integers.
+    total: float = sum((item["sum"]["value"] for item in items if item["type"] == target_type), start=0.0)
     return total
 
 
@@ -175,6 +176,7 @@ def _trend_descriptions(key: Literal["monthly", "yearly"], /) -> list[NetzOOEeSe
     trend: str = f"{key}Trend"
 
     def period(name: str, consumption: str, timerange: str) -> NetzOOEeServiceSensorEntityDescription:
+        """Return the consumption sensor of one period of the trend."""
         return NetzOOEeServiceSensorEntityDescription(
             device_class=SensorDeviceClass.ENERGY,
             key=f"{key}_trend_{name}",
@@ -191,6 +193,7 @@ def _trend_descriptions(key: Literal["monthly", "yearly"], /) -> list[NetzOOEeSe
         )
 
     def change(data: Mapping[str, Any]) -> float:
+        """Return the change of the new period compared to the old one in percent."""
         new: float = data[trend]["consumptionNew"]["sum"]
         old: float = data[trend]["consumptionOld"]["sum"]
         return (new - old) / old * 100 if old > 0 else 0
@@ -229,13 +232,16 @@ def _energy_community_descriptions(
         *,
         with_name: bool,
     ) -> NetzOOEeServiceSensorEntityDescription:
+        """Return the sensor with the sum of the given profile types of a profile."""
         positive_type, negative_type = types
 
         def value(data: Mapping[str, Any]) -> float:
+            """Return the sum of the positive profile type minus the negative one."""
             total: float = _sum_by_type(data[profile], positive_type)
             return total - _sum_by_type(data[profile], negative_type) if negative_type else total
 
         def attributes(data: Mapping[str, Any]) -> Mapping[str, Any]:
+            """Return the timeline and, for energy community sensors, the name and ID of the energy community."""
             items: list[dict[str, Any]] = data[profile]
 
             if not items:

@@ -11,12 +11,14 @@ from unittest.mock import patch
 import pytest
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.util import dt as dt_util
 
 from custom_components.netzooe_eservice.const import DOMAIN
 from tests import setup_integration
 
 if TYPE_CHECKING:
+    from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant_custom_component.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
@@ -159,3 +161,37 @@ async def test_stale_device_removed_on_setup(
 
     assert config_entry.state is ConfigEntryState.LOADED
     assert device_registry.async_get(stale_device.id) is None
+
+
+async def test_session_closed_on_unload(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+) -> None:
+    """Test that the session of the config entry is closed when the entry is unloaded."""
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    sessions: list[ClientSession] = []
+
+    def create_session(hass: HomeAssistant) -> ClientSession:
+        """Create the session and remember it."""
+        session: ClientSession = async_create_clientsession(hass)
+        sessions.append(session)
+        return session
+
+    with patch(
+        "custom_components.netzooe_eservice.async_create_clientsession",
+        side_effect=create_session,
+    ):
+        await setup_integration(hass, config_entry)
+
+    assert len(sessions) == 1
+    session: ClientSession = sessions[0]
+    assert not session.closed
+
+    assert await hass.config_entries.async_unload(config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    assert config_entry.state is ConfigEntryState.NOT_LOADED
+    assert session.closed

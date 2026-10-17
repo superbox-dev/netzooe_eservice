@@ -52,7 +52,7 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: logging.Logger = logging.getLogger(__name__)
 
 type NetzOOEeServiceConfigEntry = ConfigEntry[NetzOOEeServiceDataUpdateCoordinator]
 type ConsentsMap = dict[str, list[dict[str, Any]]]
@@ -241,6 +241,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         # Create the coroutine only when the request starts, a task cancelled before it started
         # would otherwise leave the coroutine unawaited.
         async def limited(request: Callable[[], Awaitable[T]]) -> T:
+            """Run a request as soon as the semaphore allows it."""
             async with semaphore:
                 return await request()
 
@@ -405,18 +406,15 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
     @staticmethod
     def _get_consent(consents_map: ConsentsMap, mpan: str, energy_community_id: str, /) -> dict[str, Any]:
         """Return the consent of an energy community at a meter point, or an empty dict if there is none."""
-        # The energy community ID contains the service provider code of the consent, usually at a fixed position.
-        # Prefer an exact match there, so a code that also appears elsewhere in the ID does not match.
-        consents: list[dict[str, Any]] = [
-            consent for consent in consents_map.get(mpan, []) if consent["serviceProvider"] in energy_community_id
-        ]
+        # The energy community ID contains the service provider code of the consent at a fixed position.
+        # Only match there, so a code that also appears elsewhere in the ID does not match.
         return next(
             (
                 consent
-                for consent in consents
+                for consent in consents_map.get(mpan, [])
                 if energy_community_id[ENERGY_COMMUNITY_ID_SERVICE_PROVIDER] == consent["serviceProvider"]
             ),
-            consents[0] if consents else {},
+            {},
         )
 
     @staticmethod
@@ -427,6 +425,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         last_readings: list[dict[str, Any]] = point_of_delivery["lastReadings"].get("values", [])
 
         def last_reading(reference_numbers: set[str]) -> dict[str, Any]:
+            """Return the last reading of the meter for one of the reference numbers, or an empty dict."""
             return next(
                 (
                     item

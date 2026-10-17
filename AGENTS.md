@@ -41,8 +41,8 @@ Before finishing a change, run all of them except the snapshot update and `devel
   ```
 
 - NumPy-style docstrings everywhere, also in tests
-- No lint or type suppressions (inline or in config). Fix the code instead
-  - only exception: `# noqa` for `ARG00x` in required signatures
+- No lint or type suppressions (inline or in config), except the existing ignores in `ruff.toml`. Fix the code instead
+  - only inline exception: `# noqa` for `ARG00x` in required signatures
 - Avoid `cast()`: narrow types with checks that also run at runtime (e.g. `isinstance`) or with generics
 - No real credentials or customer data, use placeholders like `"test"`
 - Portal access:

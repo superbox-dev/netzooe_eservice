@@ -56,6 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed the "already configured" message of the config flow.
 - Fixed the options not being changeable while the integration is not loaded.
 - Fixed the HTTP session of each login attempt in the config flow staying open until Home Assistant stops.
+- Fixed the HTTP session of the integration staying open until Home Assistant stops after a reload, e.g. after
+  changing the options or reauthenticating.
 
 ## [1.1.1] - 2026-09-28
 

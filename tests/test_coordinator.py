@@ -66,26 +66,31 @@ FREQUENT_UPDATES_DISABLED: dict[str, Any] = {
 
 
 def _contract_account_requested(aioclient_mock: AiohttpClientMocker) -> bool:
+    """Return whether a contract account was requested."""
     return any("/contract-accounts/" in str(url) for _method, url, _data, _headers in aioclient_mock.mock_calls)
 
 
 def _state(hass: HomeAssistant, entity_id: str) -> str:
+    """Return the state of an entity."""
     state: State | None = hass.states.get(entity_id)
     assert state is not None
     return state.state
 
 
 def _contribution_factor(hass: HomeAssistant) -> str:
+    """Return the state of the contribution factor sensor."""
     return _state(hass, CONTRIBUTION_FACTOR_ENTITY_ID)
 
 
 def _status_valid_from(hass: HomeAssistant) -> str:
+    """Return the `valid_from` attribute of the status sensor."""
     state: State | None = hass.states.get(STATUS_ENTITY_ID)
     assert state is not None
     return state.attributes["valid_from"]
 
 
 async def _refresh(hass: HomeAssistant, config_entry: MockConfigEntry, now: datetime | None = NOW) -> None:
+    """Refresh the coordinator at the given time."""
     coordinator: NetzOOEeServiceDataUpdateCoordinator = config_entry.runtime_data
 
     with patch(
@@ -97,6 +102,7 @@ async def _refresh(hass: HomeAssistant, config_entry: MockConfigEntry, now: date
 
 
 async def _setup(hass: HomeAssistant, config_entry: MockConfigEntry, fake_api: FakeNetzOOEeServiceAPI) -> None:
+    """Set up the integration with the default API responses."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
@@ -570,6 +576,7 @@ async def test_failed_request_cancels_remaining_requests(
     cancelled: int = 0
 
     async def profile_side_effect(method: str, url: URL, *args: object) -> AiohttpClientMockResponse:  # noqa: ARG001
+        """Fail the first profile request and keep the others waiting until they are cancelled."""
         nonlocal failed, waiting, cancelled
 
         # The first request fails, the others wait until they are cancelled.
@@ -637,9 +644,11 @@ async def test_missing_consent_logged_once(
     """Test that a missing consent is logged only once until the consent is returned again."""
 
     def warnings() -> int:
+        """Return the number of logged warnings."""
         return sum("No consent found for energy community" in record.getMessage() for record in caplog.records)
 
     async def refresh(consents: list[dict[str, Any]] | None) -> None:
+        """Refresh the coordinator with the given consents."""
         aioclient_mock.clear_requests()
         fake_api.register_auth_request()
         fake_api.register_requests(consents=consents)
@@ -670,6 +679,7 @@ async def test_meter_point_without_active_contract_logged_once(
     """Test that a meter point without an active contract is logged only once, not on every update."""
 
     def warnings() -> int:
+        """Return the number of logged warnings."""
         return sum("no active contract for meter point" in record.getMessage() for record in caplog.records)
 
     with caplog.at_level(logging.WARNING, logger="custom_components.netzooe_eservice.coordinator"):
