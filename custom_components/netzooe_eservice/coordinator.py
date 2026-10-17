@@ -154,9 +154,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         )
 
         self._last_full_update: datetime | None = None
-        self._api_error_logged: bool = False
-        self._missing_consents_logged: set[str] = set()
-        self._inactive_meter_points_logged: set[str] = set()
+        self._logged_warnings: set[str] = set()
 
         self.frequent_updates: bool = entry.options.get(CONF_FREQUENT_UPDATES, DEFAULT_FREQUENT_UPDATES)
         self.show_revoked_energy_communities: bool = entry.options.get(
@@ -213,19 +211,28 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                     translation_placeholders={"error": str(error)},
                 ) from error
 
-            # Log only once until the portal is available again.
-            if not self._api_error_logged:
-                _LOGGER.warning("Update failed, using cached data: %s", error)
-                self._api_error_logged = True
-
+            self._warn_once("api_error", "Update failed, using cached data: %s", error)
             return self.data
 
-        if self._api_error_logged:
+        if self._warning_resolved("api_error"):
             _LOGGER.info("The eService portal is available again")
-            self._api_error_logged = False
 
         _LOGGER.debug("data: %s", data)
         return data
+
+    def _warn_once(self, key: str, msg: str, /, *args: object) -> None:
+        """Log a warning only once until its cause is gone (see `_warning_resolved`)."""
+        if key not in self._logged_warnings:
+            _LOGGER.warning(msg, *args)
+            self._logged_warnings.add(key)
+
+    def _warning_resolved(self, key: str, /) -> bool:
+        """Mark the cause of a warning as gone and return whether the warning was logged."""
+        if key not in self._logged_warnings:
+            return False
+
+        self._logged_warnings.discard(key)
+        return True
 
     async def _async_gather[T](self, requests: Iterable[Callable[[], Awaitable[T]]], /) -> list[T]:
         """Run the requests concurrently, but at most MAX_PARALLEL_REQUESTS at the same time."""
@@ -248,19 +255,11 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
     async def _async_fetch_all_data(self, periods: ProfilePeriods, /) -> dict[str, Any]:
         """Fetch the data of all meter points and their energy communities."""
-        consents_task: asyncio.Task[ConsentsMap] = asyncio.create_task(self._async_fetch_consents_map())
-        contracts_task: asyncio.Task[dict[str, list[dict[str, Any]]]] = asyncio.create_task(
-            self._async_fetch_contracts_by_mpan(),
+        consents_map: ConsentsMap
+        contracts_by_mpan: dict[str, list[dict[str, Any]]]
+        consents_map, contracts_by_mpan = await self._async_gather(
+            [self._async_fetch_consents_map, self._async_fetch_contracts_by_mpan],
         )
-
-        try:
-            await asyncio.gather(consents_task, contracts_task)
-        finally:
-            consents_task.cancel()
-            contracts_task.cancel()
-
-        consents_map: ConsentsMap = consents_task.result()
-        contracts_by_mpan: dict[str, list[dict[str, Any]]] = contracts_task.result()
 
         data: dict[str, Any] = {}
         profile_requests: list[ProfileRequest] = []
@@ -350,12 +349,9 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         """Fetch the most recent consent per energy community, grouped by meter point."""
         latest_consents: dict[tuple[str, str], dict[str, Any]] = {}
 
-        for consent in await self.api.consents():
-            key: tuple[str, str] = (consent["pod"], consent["serviceProvider"])
-
-            # The API returns the consent history, keep only the most recent consent.
-            if key not in latest_consents or _valid_through(consent) > _valid_through(latest_consents[key]):
-                latest_consents[key] = consent
+        # The API returns the consent history, keep only the most recent consent.
+        for consent in sorted(await self.api.consents(), key=_valid_through, reverse=True):
+            latest_consents.setdefault((consent["pod"], consent["serviceProvider"]), consent)
 
         consents_map: ConsentsMap = defaultdict(list)
 
@@ -376,16 +372,12 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
         if active_contract is None:
             if not self.show_inactive_meter_points:
-                # Log only once until an active contract is returned again.
-                if mpan not in self._inactive_meter_points_logged:
-                    _LOGGER.warning(
-                        "Skipping %d contract(s) because no active contract for meter point %s "
-                        "was returned by the API.",
-                        len(contracts),
-                        mpan,
-                    )
-                    self._inactive_meter_points_logged.add(mpan)
-
+                self._warn_once(
+                    f"inactive_meter_point_{mpan}",
+                    "Skipping %d contract(s) because no active contract for meter point %s was returned by the API.",
+                    len(contracts),
+                    mpan,
+                )
                 return None
 
             most_recent_contract: dict[str, Any] = max(
@@ -402,7 +394,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
             return ActiveContractData(active_contract=most_recent_contract, contracts_to_use=contracts)
 
-        self._inactive_meter_points_logged.discard(mpan)
+        self._warning_resolved(f"inactive_meter_point_{mpan}")
 
         return ActiveContractData(
             active_contract=active_contract,
@@ -506,23 +498,22 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         consent: dict[str, Any] = self._get_consent(consents_map, mpan, timeslice["energyCommunityId"])
 
         if not consent:
-            # Log only once until the consent is returned again.
-            if timeslice["energyCommunityId"] not in self._missing_consents_logged:
-                _LOGGER.warning("No consent found for energy community %s", timeslice["energyCommunityId"])
-                self._missing_consents_logged.add(timeslice["energyCommunityId"])
-
+            self._warn_once(
+                f"missing_consent_{timeslice['energyCommunityId']}",
+                "No consent found for energy community %s",
+                timeslice["energyCommunityId"],
+            )
             return None
 
-        self._missing_consents_logged.discard(timeslice["energyCommunityId"])
+        self._warning_resolved(f"missing_consent_{timeslice['energyCommunityId']}")
 
         if consent["status"] == ConsentsStatus.REVOKED.value and not self.show_revoked_energy_communities:
             _LOGGER.debug("  Skipping revoked energy community %s", timeslice["energyCommunityName"])
             return None
 
-        device_identifier: str = f"{mpan}_{consent['serviceProvider']}"
-
-        if device_identifier not in data:
-            data[device_identifier] = {
+        energy_community: dict[str, Any] = data.setdefault(
+            f"{mpan}_{consent['serviceProvider']}",
+            {
                 "synthProfile": contract["synthProfile"],
                 "meterPointAdministrationNumber": mpan,
                 "deviceId": timeslice["energyCommunityId"],
@@ -533,9 +524,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 "totalL3": [],
                 "contributionPercentage": consent.get("contributionPercentage"),
                 "status": consent.get("status"),
-            }
-
-        energy_community: dict[str, Any] = data[device_identifier]
+            },
+        )
         return energy_community
 
     @staticmethod
