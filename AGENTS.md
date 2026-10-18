@@ -42,13 +42,15 @@ Before finishing a change, run all of them except the snapshot update, `develop.
   ```
 
 - NumPy-style docstrings everywhere, also in tests
-- No lint or type suppressions (inline or in config), except the existing ignores in `ruff.toml`. Fix the code instead
+- No lint or type suppressions (inline or in config), except the existing ignores in `ruff.toml` and `ty.toml`.
+  Fix the code instead
   - only inline exception: `# noqa` for `ARG00x` in required signatures
+  - no `# pragma: no cover`, test the code or remove it
 - Avoid `cast()`: narrow types with checks that also run at runtime (e.g. `isinstance`) or with generics
-- No real credentials or customer data, use placeholders like `"test"`
+- No real credentials or customer data, use the fake data in `tests/api_data.py`
 - Portal access:
   - never call the portal directly
-  - missing endpoints belong in `netzooe_eservice_api`
+  - missing endpoints or values belong in `netzooe_eservice_api`
 - `git add` new files, CI only checks tracked files
 - Never edit generated or CI-managed files (`coverage-badge.svg`)
 - Never edit `config/`, except `config/configuration.yaml` (local dev instance, may contain real credentials)
@@ -74,7 +76,7 @@ Code lives in `custom_components/netzooe_eservice/`.
   - renaming a `key` creates new entities and orphans the old ones
 - Translations:
   - `strings.json` and `translations/en.json` must be **identical**
-  - all other translations have the same keys
+  - `translations/de.json` has the same keys
   - user-visible texts always use `translation_key`
   - exceptions use `translation_domain` and `translation_key` (`exceptions` in `strings.json`)
   - icons are in `icons.json`, never `icon=` in descriptions
@@ -94,7 +96,7 @@ Code lives in `custom_components/netzooe_eservice/`.
   - the values change rarely, the portal is often briefly unavailable
   - do not change this
 - Intended deviation, own `entity_id`:
-  - `sensor.py` sets `entity_id` to `sensor.netzooe_eservice_<unique_id>`
+  - every platform sets `entity_id` to `<platform>.netzooe_eservice_<unique_id>`
   - Home Assistant only treats it as a suggestion, the entity registry wins
   - keeps the IDs stable, e.g. when a removed device comes back
   - do not change this, it breaks the entity IDs in automations
@@ -123,13 +125,15 @@ Code lives in `custom_components/netzooe_eservice/`.
   - use cases, examples, known limitations, troubleshooting
   - update it when entities, options or behaviour change
 
-## Adding a sensor
+## Adding an entity
 
-1. `sensor.py`: add an entity description to the matching list
-2. `strings.json` and all translations: add the name under `entity.sensor.<key>`
-3. `icons.json`: add the icon under `entity.sensor.<key>`, if it has no device class
+1. Platform module (e.g. `sensor.py`): add an entity description to the matching list
+   - the device type decides which list is used
+2. `strings.json` and all translations: add the name under `entity.<platform>.<key>`
+3. `icons.json`: add the icon under `entity.<platform>.<key>`, if it has no device class
 4. `coordinator.py`: fetch the data, if it is not in `coordinator.data` yet
-5. Tests: see [Tests](#tests)
+5. `website/content/index.md`: add it to the supported functionality
+6. Tests: see [Tests](#tests)
 
 ## Adding an option
 
@@ -140,7 +144,8 @@ Code lives in `custom_components/netzooe_eservice/`.
 
 ## Documentation
 
-- Docusaurus website in `website/`, deployed to GitHub Pages from `main` (`.github/workflows/page.yml`)
+- Docusaurus website in `website/`, deployed to <https://superbox-dev.github.io/netzooe_eservice/> from `main`
+  (`.github/workflows/page.yml`)
 - `scripts/generate-docs.py` writes all pages into `website/docs/` (not tracked, run by `scripts/docs.sh`):
   - hand-written pages from `website/content/`
   - donation, contributing and changelog from the `<!--start-…-->` / `<!--end-…-->` markers
@@ -148,6 +153,7 @@ Code lives in `custom_components/netzooe_eservice/`.
 - `website/content/index.md` is the integration page:
   - sections in the order of the home-assistant.io integration pages
   - examples use placeholder entity IDs, no real meter point numbers
+- Images are in `assets/` (also used by `README.md`)
 - Keep `README.md` short (install, links to the sections), details go to `website/content/index.md`
 - Design after home-assistant.io:
   - `website/src/css/custom.css` and the wrapped `website/src/theme/TOC/`
@@ -158,20 +164,23 @@ Code lives in `custom_components/netzooe_eservice/`.
 
 - **100% test coverage** (lines and branches) is enforced
   - every new code path needs a test
-- Mock HTTP with the fake API client in `tests/conftest.py` and the responses in `tests/api_data.py`
+- Warnings fail the tests (`filterwarnings = ["error"]`)
+- Mock HTTP with `FakeNetzOOEeServiceAPI` (`fake_api` fixture) in `tests/conftest.py` and the responses in
+  `tests/api_data.py`
 - Assert the entities with snapshots in `tests/snapshots/`:
   - regenerate them serially (`-n 0`), parallel runs drop snapshots
   - always review the diff
-- New sensor:
-  - add the API response to `tests/api_data.py`
+- New entity:
+  - add the values to the responses in `tests/api_data.py`
   - regenerate the snapshots and review the new entities
 - The `config_entry` fixture is parametrized indirectly with `data` / `options`
 - Patch `dt_util.now` in the module under test for date-dependent values
+- At most 5 arguments per test: split the test or use the fixtures above
 - Test only through Home Assistant:
-  - never call, patch or inspect `_`-prefixed methods or attributes
+  - never call, patch or inspect `_`-prefixed methods or attributes, or the API library
   - set up the integration and drive it through the mocked HTTP responses
   - trigger updates with `coordinator.async_refresh()`
-  - assert entity states, `ConfigEntryState` or the requested URLs
+  - assert entity states, `ConfigEntryState`, the device registry or the requested URLs
 
 ## Changelog, versions and git
 
@@ -181,10 +190,12 @@ Code lives in `custom_components/netzooe_eservice/`.
   - identifiers in backticks
   - issues as `([Issue #25][issue-25])`, pull requests as `([PR #19][pr-19])`
   - issue and PR links are defined at the end of their release section, not at the bottom
+    - a link that an older section already defines is reused, not defined again
   - releases are linked at the bottom, before `<!--end-->`:
     - `[Unreleased]` compares the latest release tag (no pre-release) with `HEAD`
     - each release compares its tag with the previous one
     - the first release links to its release tag
+  - the release workflow links the release notes to the section of the tag, so a release needs its section
 - Versions:
   - the version is in `pyproject.toml` and `manifest.json`
   - only change it when asked
@@ -193,5 +204,5 @@ Code lives in `custom_components/netzooe_eservice/`.
 - Branches:
   - work on `develop`
   - `main` is the release branch
-  - `v*` tags create a GitHub release for HACS
+  - `v*` tags create a GitHub release for HACS, `v*b*` tags a pre-release
 - Only commit or push when asked
