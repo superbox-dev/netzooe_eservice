@@ -28,7 +28,7 @@ Before finishing a change, run all of them except the snapshot update, `develop.
   - option keys (`CONF_*`) and their default behaviour
   - `translation_key`s
 - **Minimum versions**:
-  - Python and Home Assistant as in `pyproject.toml`
+  - Python as in `pyproject.toml`, Home Assistant as in `hacs.json`
   - no deprecated Home Assistant APIs
 - Code style:
   - line length 120
