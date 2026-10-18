@@ -48,6 +48,10 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
         },
         blog: false,
+        sitemap: {
+          // The search page has no content of its own
+          ignorePatterns: ['/netzooe_eservice/search'],
+        },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -68,6 +72,7 @@ const config: Config = {
   ],
 
   themeConfig: {
+    image: 'img/social-card.png',
     colorMode: {
       respectPrefersColorScheme: true,
     },

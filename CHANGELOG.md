@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+<!--start-->
+
+## [1.2.0] - 2026-10-18
+
 ### Added
 
 - Added sensors for the maximum import and export power from the previous month.
@@ -22,10 +26,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the "wrong account" message to the reconfiguration flow.
 - Added the documentation with Docusaurus on GitHub Pages (<https://superbox-dev.github.io/netzooe_eservice/>),
   styled after the integration pages of Home Assistant, with an example automation.
+- Added a preview image to the documentation for links shared on social media and removed the search page
+  from the documentation sitemap.
 
 ### Changed
 
-- Updated `netzooe_eservice_api` to 1.2.0b1. Timeouts and unexpected HTTP status codes of the portal are now handled
+- Updated `netzooe_eservice_api` to 1.2.0. Timeouts and unexpected HTTP status codes of the portal are now handled
   as API errors, so the previous data is kept instead of failing the update.
 - Renamed "(letzter Monat)" to "(Vormonat)" in the German sensor names and "(last month)" to "(previous month)" in
   the English sensor names. Existing entity IDs are not changed.
@@ -62,8 +68,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed the HTTP session of each login attempt in the config flow staying open until Home Assistant stops.
 - Fixed the HTTP session of the integration staying open until Home Assistant stops after a reload, e.g. after
   changing the options or reauthenticating.
-
-<!--start-->
 
 ## [1.1.1] - 2026-09-28
 
@@ -126,7 +130,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added English and German translations.
 - Added the data update every 3 hours.
 
-[Unreleased]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.0.0...v1.0.1
