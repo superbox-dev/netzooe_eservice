@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added diagnostics. Credentials and customer numbers are removed.
 - Added the sensors of new meter points and energy communities after an update, without reloading the integration.
 - Added the "wrong account" message to the reconfiguration flow.
+- Added the documentation with Docusaurus on GitHub Pages (<https://superbox-dev.github.io/netzooe_eservice/>),
+  styled after the integration pages of Home Assistant, with an example automation.
 
 ### Changed
 
@@ -39,6 +41,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Translated the error message if the first update fails.
 - Documented the installation parameters, options, update intervals, sensors, use cases, known limitations,
   troubleshooting and removal in the README.
+- Shortened the `README.md` to the installation and moved the details to the documentation.
+- Changed the `documentation` link in `manifest.json` to the documentation.
 - Changed the reauthentication to only ask for the new password of the configured account.
 - Gave the reconfiguration flow its own form with a matching description.
 - Excluded the `timeline` attribute from the recorder database, because it grows with every timeslice.
@@ -58,6 +62,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed the HTTP session of each login attempt in the config flow staying open until Home Assistant stops.
 - Fixed the HTTP session of the integration staying open until Home Assistant stops after a reload, e.g. after
   changing the options or reauthenticating.
+
+<!--start-->
 
 ## [1.1.1] - 2026-09-28
 
@@ -125,3 +131,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.1.0]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/superbox-dev/netzooe_eservice/releases/tag/v1.0.0
+
+<!--end-->

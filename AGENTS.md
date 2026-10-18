@@ -14,9 +14,11 @@ uv run ruff format                   # format (lint.sh only checks)
 uv run pytest                        # tests + coverage
 uv run pytest --snapshot-update -n 0 # regenerate snapshots (serial only), then review the diff
 ./scripts/develop.sh                 # start a local Home Assistant instance with ./config
+./scripts/docs.sh                    # docs (Docusaurus, needs Node.js)
+./scripts/docs.sh start              # docs with live reload
 ```
 
-Before finishing a change, run all of them except the snapshot update and `develop.sh`.
+Before finishing a change, run all of them except the snapshot update, `develop.sh` and the live reload.
 
 ## Rules
 
@@ -32,7 +34,7 @@ Before finishing a change, run all of them except the snapshot update and `devel
   - line length 120
   - single-line imports
   - full type annotations, including local variables
-- Every `.py` file starts with:
+- Every `.py` file starts with (after the shebang of an executable script):
 
   ```python
   # Copyright 2026 Michael Hacker
@@ -115,10 +117,10 @@ Code lives in `custom_components/netzooe_eservice/`.
   - large or growing attributes go into `_unrecorded_attributes`
   - repeated warnings are logged once until the cause is gone
   - the options flow works without a loaded config entry
-- Documentation (`README.md`) covers:
+- Documentation (`website/content/index.md`, see [Documentation](#documentation)) covers:
   - installation parameters, options, removal
   - supported devices, entities, data updates
-  - use cases with an example, known limitations, troubleshooting
+  - use cases, examples, known limitations, troubleshooting
   - update it when entities, options or behaviour change
 
 ## Adding a sensor
@@ -134,7 +136,23 @@ Code lives in `custom_components/netzooe_eservice/`.
 1. `const.py`: add `CONF_*` and `DEFAULT_*`
 2. `config_flow.py`: add it to the options schema
 3. `strings.json` and all translations: add `data` and `data_description`
-4. `README.md`: add it to the options table
+4. `website/content/index.md`: add it to the options table
+
+## Documentation
+
+- Docusaurus website in `website/`, deployed to GitHub Pages from `main` (`.github/workflows/page.yml`)
+- `scripts/generate-docs.py` writes all pages into `website/docs/` (not tracked, run by `scripts/docs.sh`):
+  - hand-written pages from `website/content/`
+  - donation, contributing and changelog from the `<!--start-…-->` / `<!--end-…-->` markers
+    in `README.md`, `CONTRIBUTING.md` and `CHANGELOG.md`, so keep the markers
+- `website/content/index.md` is the integration page:
+  - sections in the order of the home-assistant.io integration pages
+  - examples use placeholder entity IDs, no real meter point numbers
+- Keep `README.md` short (install, links to the sections), details go to `website/content/index.md`
+- Design after home-assistant.io:
+  - `website/src/css/custom.css` and the wrapped `website/src/theme/TOC/`
+  - the integration card in `website/src/components/ProjectInfo/` reads `manifest.json` and `hacs.json`
+  - the brand images in `custom_components/netzooe_eservice/brand/` are served from the website root
 
 ## Tests
 
@@ -163,7 +181,7 @@ Code lives in `custom_components/netzooe_eservice/`.
   - identifiers in backticks
   - issues as `([Issue #25][issue-25])`, pull requests as `([PR #19][pr-19])`
   - issue and PR links are defined at the end of their release section, not at the bottom
-  - releases are linked at the bottom:
+  - releases are linked at the bottom, before `<!--end-->`:
     - `[Unreleased]` compares the latest release tag (no pre-release) with `HEAD`
     - each release compares its tag with the previous one
     - the first release links to its release tag

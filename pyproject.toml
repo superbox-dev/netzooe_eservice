@@ -47,6 +47,7 @@ version = "1.2.0b4"
 
 [project.urls]
 "Repository" = "https://github.com/superbox-dev/netzooe_eservice"
+"Documentation" = "https://superbox-dev.github.io/netzooe_eservice/"
 "Issues" = "https://github.com/superbox-dev/netzooe_eservice/issues"
 
 [dependency-groups]
