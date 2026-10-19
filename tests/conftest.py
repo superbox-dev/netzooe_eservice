@@ -51,6 +51,7 @@ from tests.api_data import WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1
 from tests.api_data import WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2
 
 if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
     from collections.abc import Generator
 
     from _pytest.fixtures import SubRequest
@@ -143,6 +144,8 @@ class FakeNetzOOEeServiceAPI:
         """Initialize the fake API with the consumption profiles of the requests."""
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
         self.profile_responses: dict[ProfileRequestKey, list[dict[str, Any]]] = dict(PROFILE_RESPONSES)
+        self.allow_unknown_profile_requests: bool = False
+        self.unknown_profile_requests: list[ProfileRequestKey] = []
 
     def register_auth_request(self, /, *, status: int = 200, exc: Exception | None = None) -> None:
         """Register the login request."""
@@ -196,20 +199,32 @@ class FakeNetzOOEeServiceAPI:
         url: URL,
         data: dict[str, Any],
     ) -> AiohttpClientMockResponse:
-        """Return the consumption profile of the request, or no values for an unknown request."""
-        return AiohttpClientMockResponse(
-            method,
-            url=url,
-            json=self.profile_responses.get(profile_request_key(data), []),
-        )
+        """Return the consumption profile of the request, or no values for an unknown request.
+
+        Unknown requests are recorded, the `fake_api` fixture fails the test if there are any.
+        """
+        key: ProfileRequestKey = profile_request_key(data)
+
+        if key not in self.profile_responses:
+            self.unknown_profile_requests.append(key)
+
+        return AiohttpClientMockResponse(method, url=url, json=self.profile_responses.get(key, []))
 
 
 @pytest.fixture(autouse=True)
 async def fake_api(
     aioclient_mock: AiohttpClientMocker,
-) -> FakeNetzOOEeServiceAPI:
-    """Return the fake eService portal API."""
-    return FakeNetzOOEeServiceAPI(aioclient_mock)
+) -> AsyncGenerator[FakeNetzOOEeServiceAPI]:
+    """Return the fake eService portal API and check that no unknown consumption profile was requested.
+
+    A test that checks the requests itself sets `allow_unknown_profile_requests`.
+    """
+    api: FakeNetzOOEeServiceAPI = FakeNetzOOEeServiceAPI(aioclient_mock)
+
+    yield api
+
+    if not api.allow_unknown_profile_requests:
+        assert api.unknown_profile_requests == []
 
 
 @pytest.fixture

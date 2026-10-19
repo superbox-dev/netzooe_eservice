@@ -436,6 +436,8 @@ async def test_profile_request_time_ranges(
     expected: list[ProfileRequestKey],
 ) -> None:
     """Test the time ranges of the consumption profile requests of an energy community."""
+    # Other dates request other time ranges than the consumption profiles in the responses.
+    fake_api.allow_unknown_profile_requests = True
     fake_api.register_auth_request()
     fake_api.register_requests()
 
