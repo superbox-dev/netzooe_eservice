@@ -1803,7 +1803,7 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "homeassistant", specifier = ">=2026.9.4" },
-    { name = "netzooe-eservice-api", specifier = "~=1.2.1b1" },
+    { name = "netzooe-eservice-api", specifier = "~=1.2.1b2" },
 ]
 
 [package.metadata.requires-dev]
@@ -1836,14 +1836,14 @@ test = [
 
 [[package]]
 name = "netzooe-eservice-api"
-version = "1.2.1b1"
+version = "1.2.1b2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c8/a9/0b84347888ee83b6182a8151fceb90cdc3e1518a43b3be3671b8ed5621ce/netzooe_eservice_api-1.2.1b1.tar.gz", hash = "sha256:fe8e90036fb8c1db3d46b381b3dbb273977df8d1d83f8f5fedf19c136055bd6b", size = 347254, upload-time = "2026-10-19T19:07:45.972Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ee/88/1b363d05fc4ca92268bcb99ee2ef5560c12750255a2aa34b38ca4028792d/netzooe_eservice_api-1.2.1b2.tar.gz", hash = "sha256:2ffa1f58b8570af0449e67167e0270d9b722b9c5c4ef39e3cf0f48f07dc488f1", size = 348919, upload-time = "2026-10-19T19:41:49.419Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/45/e8/63c04848bc2db9ffe3351fa1c1de71a9a95b2d56c3487707550dccc3172c/netzooe_eservice_api-1.2.1b1-py3-none-any.whl", hash = "sha256:504c121149cd6b9eb1c454ff3f6f4b9379ffdd4745c0e48878cd7ce96ea9529c", size = 15326, upload-time = "2026-10-19T19:07:44.947Z" },
+    { url = "https://files.pythonhosted.org/packages/df/85/4f9e0b49875d3e3046e0b1fafc3bc4fbef368a9bc21e876a4aa3a18cc64b/netzooe_eservice_api-1.2.1b2-py3-none-any.whl", hash = "sha256:a5f50db38fbb8ccdfd7727749efa0749c597fb3a45856e1f5a4083c9d8ff858f", size = 16036, upload-time = "2026-10-19T19:41:48.165Z" },
 ]
 
 [[package]]
