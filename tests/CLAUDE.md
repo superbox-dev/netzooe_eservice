@@ -14,3 +14,4 @@
   - set up the integration and drive it through the mocked HTTP responses
   - trigger updates with `coordinator.async_refresh()`
   - assert entity states, `ConfigEntryState`, the device registry or the requested URLs
+- `pytest.mark.parametrize` with `ids=` naming each case
