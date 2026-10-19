@@ -8,7 +8,9 @@
   - regenerate the snapshots and review the new entities
 - Patch `dt_util.now` in the module under test for date-dependent values
 - Test only through Home Assistant:
-  - never call, patch or inspect `_`-prefixed methods or attributes, or the API library
+  - exception: static checks of files (e.g. `test_translations.py`), with `_`-prefixed helpers in the test module
+  - never call, patch or inspect `_`-prefixed methods or attributes of the integration
+  - never patch the API library, mock its HTTP requests instead
   - set up the integration and drive it through the mocked HTTP responses
   - trigger updates with `coordinator.async_refresh()`
   - assert entity states, `ConfigEntryState`, the device registry or the requested URLs
