@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed the "Include data from inactive contract accounts" option being ignored for meter points without an active
   contract. When disabled, their energy communities now only use the most recently ended contract instead of all
   contracts of the meter point.
+- Updated `netzooe_eservice_api` to 1.2.1b1. Unloading the integration while a login is still running no longer
+  fails with an unexpected error.
 
 ## [1.2.0] - 2026-10-18
 
