@@ -54,6 +54,9 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 ## Architecture
 
 - Follow the Home Assistant integration conventions, code in `custom_components/netzooe_eservice/`
+- Class member order: `__init__`, dunder methods, properties, public methods (also Home Assistant overrides)
+  grouped by topic, helpers directly below their first caller
+  - applies to new methods, existing ones only moved when asked
 
 ## Quality scale
 
