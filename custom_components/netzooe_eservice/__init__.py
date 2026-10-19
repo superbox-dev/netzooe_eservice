@@ -32,9 +32,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: NetzOOEeServiceConfigEnt
     username: str = entry.data[CONF_USERNAME]
     password: str = entry.data[CONF_PASSWORD]
 
-    # Each config entry needs its own session (cookie jar), close it when the entry is unloaded or reloaded.
+    # Each config entry needs its own session (cookie jar).
+    # Home Assistant detaches it when the entry is unloaded or reloaded, closing it here would raise an error.
     session: ClientSession = async_create_clientsession(hass)
-    entry.async_on_unload(session.close)
 
     coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
         hass,

@@ -12,9 +12,9 @@ from typing import Final
 from unittest.mock import patch
 
 import pytest
+from aiohttp import ClientSession
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.helpers import device_registry as dr
-from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
 from custom_components.netzooe_eservice.const import DOMAIN
 from tests import options
@@ -23,7 +23,6 @@ from tests import setup_integration
 from tests.api_data import CONTRACT_ACCOUNT_DATA_4
 
 if TYPE_CHECKING:
-    from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant_custom_component.common import MockConfigEntry
     from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
@@ -209,35 +208,23 @@ async def test_device_name_with_unknown_meter_point_format(
     assert device.name == "Haushalt (XX-11111113)"
 
 
-async def test_session_closed_on_unload(
+async def test_session_not_closed_on_unload(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
-    """Test that the session of the config entry is closed when the entry is unloaded."""
+    """Test that the session of the config entry is not closed on unload.
+
+    Home Assistant detaches the session itself and raises an error if an integration closes it.
+    """
     fake_api.register_auth_request()
     fake_api.register_requests()
 
-    sessions: list[ClientSession] = []
-
-    def create_session(hass: HomeAssistant) -> ClientSession:
-        """Create the session and remember it."""
-        session: ClientSession = async_create_clientsession(hass)
-        sessions.append(session)
-        return session
-
-    with patch(
-        "custom_components.netzooe_eservice.async_create_clientsession",
-        side_effect=create_session,
-    ):
+    with patch.object(ClientSession, "close", autospec=True) as close:
         await setup_integration(hass, config_entry)
 
-    assert len(sessions) == 1
-    session: ClientSession = sessions[0]
-    assert not session.closed
-
-    assert await hass.config_entries.async_unload(config_entry.entry_id)
-    await hass.async_block_till_done()
+        assert await hass.config_entries.async_unload(config_entry.entry_id)
+        await hass.async_block_till_done()
 
     assert config_entry.state is ConfigEntryState.NOT_LOADED
-    assert session.closed
+    close.assert_not_called()
