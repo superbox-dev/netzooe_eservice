@@ -5466,7 +5466,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '200.0',
+      'state': '600.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5488,7 +5488,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1000.0',
+      'state': '200.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_supplier_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5508,7 +5508,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1000.0',
+      'state': '500.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5550,7 +5550,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '7000.0',
+      'state': '1000.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5570,7 +5570,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '500.0',
+      'state': '1400.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5584,7 +5584,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1600.0',
+      'state': '1010.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5598,7 +5598,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '203.0',
+      'state': '610.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5612,7 +5612,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1010.0',
+      'state': '203.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5642,7 +5642,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1020.0',
+      'state': '512.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5753,7 +5753,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '600.0',
+      'state': '10.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5775,7 +5775,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '3.0',
+      'state': '10.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5797,7 +5797,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '10.0',
+      'state': '3.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_supplier_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5817,7 +5817,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '20.0',
+      'state': '12.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5859,7 +5859,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1400.0',
+      'state': '20.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5879,7 +5879,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '12.0',
+      'state': '40.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_scale_type': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5917,7 +5917,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '8400.0',
+      'state': '1020.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -5931,7 +5931,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '512.0',
+      'state': '1440.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6016,6 +6016,10 @@
         'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
         <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
         'timeline': list([
+          dict({
+            'from': '2026-06-17',
+            'to': '2026-06-28',
+          }),
         ]),
         <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
       }),
@@ -6024,7 +6028,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '0.0',
+      'state': '10.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6096,6 +6100,10 @@
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energielieferant Netzbezug L1/L2/L3',
         <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
         'timeline': list([
+          dict({
+            'from': '2026-06-17',
+            'to': '2026-06-28',
+          }),
         ]),
         <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
       }),
@@ -6104,7 +6112,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '0.0',
+      'state': '20.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6132,7 +6140,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '10.0',
+      'state': '11.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6301,7 +6309,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '10.0',
+      'state': '1.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6385,7 +6393,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '20.0',
+      'state': '1.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_scale_type': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6437,7 +6445,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '20.0',
+      'state': '21.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6546,7 +6554,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '200.0',
+      'state': '600.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6568,7 +6576,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1000.0',
+      'state': '200.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_supplier_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6588,7 +6596,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1000.0',
+      'state': '500.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6630,7 +6638,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '7000.0',
+      'state': '1000.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6650,7 +6658,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '500.0',
+      'state': '1400.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6664,7 +6672,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1600.0',
+      'state': '1010.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6678,7 +6686,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '203.0',
+      'state': '610.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6692,7 +6700,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1010.0',
+      'state': '203.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6722,7 +6730,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1020.0',
+      'state': '512.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6833,7 +6841,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '600.0',
+      'state': '10.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6855,7 +6863,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '3.0',
+      'state': '10.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6877,7 +6885,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '10.0',
+      'state': '3.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_supplier_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6897,7 +6905,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '20.0',
+      'state': '12.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6939,7 +6947,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1400.0',
+      'state': '20.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6959,7 +6967,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '12.0',
+      'state': '40.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_scale_type': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -6997,7 +7005,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '8400.0',
+      'state': '1020.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7011,7 +7019,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '512.0',
+      'state': '1440.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7096,6 +7104,10 @@
         'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
         <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
         'timeline': list([
+          dict({
+            'from': '2026-06-17',
+            'to': '2026-06-28',
+          }),
         ]),
         <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
       }),
@@ -7104,7 +7116,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '0.0',
+      'state': '10.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7176,6 +7188,10 @@
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Supplier import L1/L2/L3',
         <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
         'timeline': list([
+          dict({
+            'from': '2026-06-17',
+            'to': '2026-06-28',
+          }),
         ]),
         <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfEnergy.KILO_WATT_HOUR: 'kWh'>,
       }),
@@ -7184,7 +7200,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '0.0',
+      'state': '20.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7212,7 +7228,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '10.0',
+      'state': '11.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7381,7 +7397,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '10.0',
+      'state': '1.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7465,7 +7481,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '20.0',
+      'state': '1.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_scale_type': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7517,7 +7533,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '20.0',
+      'state': '21.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7626,7 +7642,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '200.0',
+      'state': '600.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7648,7 +7664,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1000.0',
+      'state': '200.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_supplier_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7668,7 +7684,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1000.0',
+      'state': '500.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7710,7 +7726,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '7000.0',
+      'state': '1000.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7730,7 +7746,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '500.0',
+      'state': '1400.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7744,7 +7760,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1600.0',
+      'state': '1010.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7758,7 +7774,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '203.0',
+      'state': '610.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7772,7 +7788,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1010.0',
+      'state': '203.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7802,7 +7818,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1020.0',
+      'state': '512.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7913,7 +7929,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '600.0',
+      'state': '10.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7935,7 +7951,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '3.0',
+      'state': '10.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7957,7 +7973,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '10.0',
+      'state': '3.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_supplier_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -7977,7 +7993,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '20.0',
+      'state': '12.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8019,7 +8035,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1400.0',
+      'state': '20.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8039,7 +8055,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '12.0',
+      'state': '40.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_scale_type': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8077,7 +8093,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '8400.0',
+      'state': '1020.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8091,7 +8107,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '512.0',
+      'state': '1440.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8174,7 +8190,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1.0',
+      'state': '600.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8184,6 +8200,10 @@
         'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
         <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
         'timeline': list([
+          dict({
+            'from': '2026-06-17',
+            'to': '2026-06-28',
+          }),
           dict({
             'from': '2026-01-26',
             'to': '2026-06-16',
@@ -8196,7 +8216,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '350.0',
+      'state': '610.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8218,7 +8238,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '2.0',
+      'state': '80.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_supplier_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8238,7 +8258,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '5.0',
+      'state': '20.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8280,7 +8300,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1.0',
+      'state': '900.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_supplier_import_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8288,6 +8308,10 @@
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Energielieferant Netzbezug L1/L2/L3',
         <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
         'timeline': list([
+          dict({
+            'from': '2026-06-17',
+            'to': '2026-06-28',
+          }),
           dict({
             'from': '2026-01-26',
             'to': '2026-06-16',
@@ -8300,7 +8324,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '3650.0',
+      'state': '920.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8314,7 +8338,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '601.0',
+      'state': '602.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8328,7 +8352,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '960.0',
+      'state': '614.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8342,7 +8366,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '82.0',
+      'state': '81.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8372,7 +8396,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '25.0',
+      'state': '34.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8483,7 +8507,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '600.0',
+      'state': '2.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_energy_community_import_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8509,7 +8533,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '610.0',
+      'state': '4.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8531,7 +8555,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '80.0',
+      'state': '1.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_supplier_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8551,7 +8575,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '20.0',
+      'state': '14.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8593,7 +8617,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '900.0',
+      'state': '28.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_supplier_import_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8617,7 +8641,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '920.0',
+      'state': '26.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_scale_type': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8655,7 +8679,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '901.0',
+      'state': '928.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier_import_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8669,7 +8693,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '4570.0',
+      'state': '946.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8778,7 +8802,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '200.0',
+      'state': '600.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8800,7 +8824,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1000.0',
+      'state': '200.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_supplier_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8820,7 +8844,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1000.0',
+      'state': '500.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8862,7 +8886,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '7000.0',
+      'state': '1000.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_supplier_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8882,7 +8906,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '500.0',
+      'state': '1400.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8896,7 +8920,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1600.0',
+      'state': '1010.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8910,7 +8934,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '203.0',
+      'state': '610.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8924,7 +8948,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1010.0',
+      'state': '203.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -8954,7 +8978,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1020.0',
+      'state': '512.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9065,7 +9089,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '600.0',
+      'state': '10.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9087,7 +9111,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '3.0',
+      'state': '10.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_energy_community_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9109,7 +9133,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '10.0',
+      'state': '3.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_supplier_export_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9129,7 +9153,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '20.0',
+      'state': '12.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9171,7 +9195,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1400.0',
+      'state': '20.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_supplier_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9191,7 +9215,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '12.0',
+      'state': '40.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_scale_type': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9229,7 +9253,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '8400.0',
+      'state': '1020.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9243,7 +9267,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '512.0',
+      'state': '1440.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9326,7 +9350,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1.0',
+      'state': '600.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9336,6 +9360,10 @@
         'name': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
         <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
         'timeline': list([
+          dict({
+            'from': '2026-06-17',
+            'to': '2026-06-28',
+          }),
           dict({
             'from': '2026-01-26',
             'to': '2026-06-16',
@@ -9348,7 +9376,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '350.0',
+      'state': '610.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9370,7 +9398,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '2.0',
+      'state': '80.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_supplier_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9390,7 +9418,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '5.0',
+      'state': '20.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9432,7 +9460,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '1.0',
+      'state': '900.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_supplier_import_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9440,6 +9468,10 @@
         <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112) Supplier import L1/L2/L3',
         <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.TOTAL: 'total'>,
         'timeline': list([
+          dict({
+            'from': '2026-06-17',
+            'to': '2026-06-28',
+          }),
           dict({
             'from': '2026-01-26',
             'to': '2026-06-16',
@@ -9452,7 +9484,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '3650.0',
+      'state': '920.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9466,7 +9498,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '601.0',
+      'state': '602.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9480,7 +9512,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '960.0',
+      'state': '614.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9494,7 +9526,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '82.0',
+      'state': '81.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9524,7 +9556,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '25.0',
+      'state': '34.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9635,7 +9667,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '600.0',
+      'state': '2.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_energy_community_import_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9661,7 +9693,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '610.0',
+      'state': '4.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_energy_community_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9683,7 +9715,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '80.0',
+      'state': '1.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_supplier_import_l2': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9703,7 +9735,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '20.0',
+      'state': '14.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9745,7 +9777,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '900.0',
+      'state': '28.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_supplier_import_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9769,7 +9801,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '920.0',
+      'state': '26.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_scale_type': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9807,7 +9839,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '901.0',
+      'state': '928.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_supplier_import_l3': StateSnapshot({
       'attributes': ReadOnlyDict({
@@ -9821,7 +9853,7 @@
       'last_changed': <ANY>,
       'last_reported': <ANY>,
       'last_updated': <ANY>,
-      'state': '4570.0',
+      'state': '946.0',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_yearly_trend': StateSnapshot({
       'attributes': ReadOnlyDict({
