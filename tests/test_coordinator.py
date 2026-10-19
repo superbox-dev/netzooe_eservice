@@ -833,27 +833,33 @@ async def test_meter_point_without_active_contract_logged_once(
 
 @pytest.mark.parametrize("config_entry", [options(show_inactive_meter_points=True)], indirect=["config_entry"])
 @pytest.mark.parametrize(
-    ("move_out_date", "supplier"),
+    ("changes", "supplier"),
     [
-        ("2026-06-20", "EP Energie Plus GmbH"),
-        ("2026-06-10", "easy green energy GmbH & Co KG"),
-        # Same day: the contract that the portal returns first.
-        ("2026-06-16", "EP Energie Plus GmbH"),
+        ({"moveOutDate": "2026-06-20"}, "EP Energie Plus GmbH"),
+        ({"moveOutDate": "2026-06-10"}, "easy green energy GmbH & Co KG"),
+        # No move-out date: the other contract.
+        ({"moveOutDate": None}, "easy green energy GmbH & Co KG"),
+        # Same day: the contract that started last, not the one that the portal returns first.
+        ({"moveOutDate": "2026-06-16"}, "EP Energie Plus GmbH"),
+        ({"moveOutDate": "2026-06-16", "moveInDate": "2019-01-01"}, "easy green energy GmbH & Co KG"),
+        # Same start: the contract with the higher contract account number.
+        ({"moveOutDate": "2026-06-16", "moveInDate": "2020-06-08"}, "easy green energy GmbH & Co KG"),
     ],
 )
 async def test_inactive_meter_point_uses_most_recently_ended_contract(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    move_out_date: str,
+    changes: dict[str, Any],
     supplier: str,
 ) -> None:
     """Test that a meter point without an active contract uses the contract that ended last."""
     # Both contracts of the meter point have ended, the one of contract account 003 on 2026-06-16.
+    # The portal returns contract account 002 before 003.
     contract_account: dict[str, Any] = _contract_account_with(
         CONTRACT_ACCOUNT_DATA_2,
         "AT0000000000000000000000011111112",
-        {"active": False, "moveOutDate": move_out_date},
+        {"active": False} | changes,
     )
 
     fake_api.register_auth_request()

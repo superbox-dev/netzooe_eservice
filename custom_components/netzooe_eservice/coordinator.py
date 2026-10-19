@@ -123,14 +123,6 @@ class ProfileRequest(NamedTuple):
     date_to: date
 
 
-def _valid_through(consent: dict[str, Any]) -> tuple[date, date]:
-    """Return the validity period of a consent."""
-    return (
-        date.fromisoformat(consent["validThrough"]["from"]),
-        date.fromisoformat(consent["validThrough"]["to"]),
-    )
-
-
 class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Coordinator to fetch the data of all meter points and energy communities from the eService portal."""
 
@@ -352,7 +344,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         latest_consents: dict[tuple[str, str], dict[str, Any]] = {}
 
         # The API returns the consent history, keep only the most recent consent.
-        for consent in sorted(await self.api.consents(), key=_valid_through, reverse=True):
+        for consent in sorted(await self.api.consents(), key=self._valid_through, reverse=True):
             latest_consents.setdefault((consent["pod"], consent["serviceProvider"]), consent)
 
         consents_map: ConsentsMap = defaultdict(list)
@@ -361,6 +353,14 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             consents_map[consent["pod"]].append(consent)
 
         return consents_map
+
+    @staticmethod
+    def _valid_through(consent: dict[str, Any], /) -> tuple[date, date]:
+        """Return the validity period of a consent."""
+        return (
+            date.fromisoformat(consent["validThrough"]["from"]),
+            date.fromisoformat(consent["validThrough"]["to"]),
+        )
 
     def _get_active_contract_data(self, mpan: str, contracts: list[dict[str, Any]], /) -> ActiveContractData | None:
         """Return the active contract and the contracts to use for the given meter point.
@@ -384,28 +384,38 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 )
                 return None
 
-            most_recent_contract: dict[str, Any] = max(
-                contracts,
-                key=lambda item: date.fromisoformat(item["contract"]["moveOutDate"]),
-            )
+            active_contract = max(contracts, key=self._contract_end)
 
             _LOGGER.debug(
                 "No active contract for meter point %s, "
                 "using most recently ended contract (moveOutDate=%s) as fallback.",
                 mpan,
-                most_recent_contract["contract"]["moveOutDate"],
+                active_contract["contract"].get("moveOutDate"),
             )
-
-            return ActiveContractData(
-                active_contract=most_recent_contract,
-                contracts_to_use=contracts if self.include_inactive_contract_account_data else [most_recent_contract],
-            )
-
-        self._warning_resolved(f"inactive_meter_point_{mpan}")
+        else:
+            self._warning_resolved(f"inactive_meter_point_{mpan}")
 
         return ActiveContractData(
             active_contract=active_contract,
             contracts_to_use=contracts if self.include_inactive_contract_account_data else [active_contract],
+        )
+
+    @staticmethod
+    def _contract_date(item: dict[str, Any], key: str, /) -> date:
+        """Return a date of a contract, the earliest date if the API returns none."""
+        value: str | None = item["contract"].get(key)
+        return date.fromisoformat(value) if value else date.min
+
+    @classmethod
+    def _contract_end(cls, item: dict[str, Any], /) -> tuple[date, date, str]:
+        """Return the sort key of a contract by its end, independent of the order returned by the API.
+
+        Contracts that end on the same day are sorted by their start, then by their contract account number.
+        """
+        return (
+            cls._contract_date(item, "moveOutDate"),
+            cls._contract_date(item, "moveInDate"),
+            item["contractAccounts"]["contractAccountNumber"],
         )
 
     @staticmethod
