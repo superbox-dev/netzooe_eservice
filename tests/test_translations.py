@@ -53,9 +53,13 @@ def test_english_translation_identical_to_strings() -> None:
     )
 
 
-@pytest.mark.parametrize("path", TRANSLATIONS, ids=lambda path: path.name)
+@pytest.mark.parametrize(
+    "path",
+    [path for path in TRANSLATIONS if path.name != "en.json"],
+    ids=lambda path: path.name,
+)
 def test_translation_has_all_keys(path: Path) -> None:
-    """Test that every translation has exactly the texts of `strings.json`."""
+    """Test that every other translation has exactly the texts of `strings.json`."""
     expected: set[str] = _key_paths(_load(STRINGS))
     actual: set[str] = _key_paths(_load(path))
 
