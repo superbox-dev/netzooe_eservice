@@ -853,6 +853,63 @@ async def test_inactive_meter_point_uses_most_recently_ended_contract(
     assert _state(hass, SUPPLIER_ENTITY_ID) == supplier
 
 
+ENDED_CONTRACT_ACCOUNTS: Final[dict[str, dict[str, Any]]] = {
+    # The active contract of the meter point ends, so both of its contracts have ended.
+    "002": _contract_account_with(
+        CONTRACT_ACCOUNT_DATA_2,
+        "AT0000000000000000000000011111112",
+        {"active": False, "moveOutDate": "2026-06-20"},
+    ),
+}
+LAST_CONTRACT: Final[tuple[str, list[dict[str, str]]]] = ("10.0", [{"from": "2026-06-17", "to": "2026-06-28"}])
+ALL_CONTRACTS: Final[tuple[str, list[dict[str, str]]]] = (
+    "610.0",
+    [{"from": "2026-06-17", "to": "2026-06-28"}, {"from": "2026-01-26", "to": "2026-06-16"}],
+)
+
+
+@pytest.mark.parametrize(
+    ("config_entry", "contract_accounts", "expected"),
+    [
+        (options(show_inactive_meter_points=True, include_inactive_contract_account_data=False), None, LAST_CONTRACT),
+        (options(show_inactive_meter_points=True, include_inactive_contract_account_data=True), None, ALL_CONTRACTS),
+        (
+            options(show_inactive_meter_points=True, include_inactive_contract_account_data=False),
+            ENDED_CONTRACT_ACCOUNTS,
+            LAST_CONTRACT,
+        ),
+        (
+            options(show_inactive_meter_points=True, include_inactive_contract_account_data=True),
+            ENDED_CONTRACT_ACCOUNTS,
+            ALL_CONTRACTS,
+        ),
+    ],
+    indirect=["config_entry"],
+)
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_energy_community_data_of_inactive_contract_accounts(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    contract_accounts: dict[str, dict[str, Any]] | None,
+    expected: tuple[str, list[dict[str, str]]],
+) -> None:
+    """Test that the energy communities include ended contracts only if inactive contract account data is included.
+
+    This also applies to a meter point without an active contract, which uses the most recently ended one.
+    """
+    fake_api.register_auth_request()
+    fake_api.register_requests(contract_accounts=contract_accounts)
+
+    await setup_integration(hass, config_entry)
+
+    state: State | None = hass.states.get(
+        "sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l3",
+    )
+    assert state is not None
+    assert (state.state, state.attributes["timeline"]) == expected
+
+
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_consent_matched_by_service_provider_position(
     hass: HomeAssistant,

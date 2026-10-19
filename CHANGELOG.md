@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+### Fixed
+
+- Fixed the "Include data from inactive contract accounts" option being ignored for meter points without an active
+  contract. When disabled, their energy communities now only use the most recently ended contract instead of all
+  contracts of the meter point.
+
 ## [1.2.0] - 2026-10-18
 
 ### Added

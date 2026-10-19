@@ -366,6 +366,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         """Return the active contract and the contracts to use for the given meter point.
 
         Without an active contract, the most recently ended contract is used if inactive meter points are shown.
+        As with an active contract, the other contracts of the meter point are only used if the data of inactive
+        contract accounts is included.
         """
         active_contract: dict[str, Any] | None = next(
             (item for item in contracts if item["contract"].get("active")),
@@ -394,7 +396,10 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 most_recent_contract["contract"]["moveOutDate"],
             )
 
-            return ActiveContractData(active_contract=most_recent_contract, contracts_to_use=contracts)
+            return ActiveContractData(
+                active_contract=most_recent_contract,
+                contracts_to_use=contracts if self.include_inactive_contract_account_data else [most_recent_contract],
+            )
 
         self._warning_resolved(f"inactive_meter_point_{mpan}")
 
