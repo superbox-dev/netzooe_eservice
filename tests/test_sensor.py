@@ -24,10 +24,13 @@ if TYPE_CHECKING:
 @pytest.mark.parametrize(
     "config_entry",
     [
-        options(show_revoked_energy_communities=True, include_inactive_contract_account_data=True),
-        options(show_revoked_energy_communities=True, include_inactive_contract_account_data=False),
-        options(show_revoked_energy_communities=False, include_inactive_contract_account_data=False),
-        options(show_revoked_energy_communities=False, include_inactive_contract_account_data=True),
+        options(
+            show_revoked_energy_communities=show_revoked,
+            include_inactive_contract_account_data=include_inactive,
+            show_inactive_meter_points=show_inactive,
+        )
+        for show_inactive in (False, True)
+        for show_revoked, include_inactive in ((True, True), (True, False), (False, False), (False, True))
     ],
     indirect=["config_entry"],
 )

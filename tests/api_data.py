@@ -135,6 +135,45 @@ CONSENTS_DATA: list[dict[str, Any]] = [
         "contributionPercentage": "0",
         "energyCommunityConsent": False,
     },
+    {
+        "validThrough": {
+            "from": "2026-03-01",
+            "to": "9999-12-31",
+        },
+        "serviceProvider": "RC103550",
+        "serviceProviderName": "EEG Oberösterreich RID-11",
+        "pod": "AT0000000000000000000000011111113",
+        "status": "ACTIVE",
+        "contributionPercentage": "40",
+        "energyDirection": "CONSUMPTION",
+        "energyCommunityConsent": True,
+    },
+    {
+        "validThrough": {
+            "from": "2026-05-16",
+            "to": "9999-12-31",
+        },
+        "serviceProvider": "CC100087",
+        "serviceProviderName": "7Energy - Bürgerenergiegemeinschaft für",
+        "pod": "AT0000000000000000000000011111113",
+        "status": "ACTIVE",
+        "contributionPercentage": "60",
+        "energyDirection": "CONSUMPTION",
+        "energyCommunityConsent": True,
+    },
+    {
+        "validThrough": {
+            "from": "2026-02-01",
+            "to": "9999-12-31",
+        },
+        "serviceProvider": "CC100087",
+        "serviceProviderName": "7Energy - Bürgerenergiegemeinschaft für",
+        "pod": "AT0000000000000000000000011111114",
+        "status": "ACTIVE",
+        "contributionPercentage": "80",
+        "energyDirection": "GENERATION",
+        "energyCommunityConsent": True,
+    },
 ]
 
 
@@ -154,6 +193,14 @@ DASHBOARD_DATA: dict[str, Any] = {
         },
         {
             "contractAccountNumber": "004",
+            "businessPartnerNumber": "100",
+        },
+        {
+            "contractAccountNumber": "005",
+            "businessPartnerNumber": "100",
+        },
+        {
+            "contractAccountNumber": "006",
             "businessPartnerNumber": "100",
         },
     ],
@@ -702,7 +749,31 @@ CONTRACT_ACCOUNT_DATA_4: dict[str, Any] = {
             "powerGenerationUnit": False,
             "energyCommunityData": {
                 "status": "HISTORICAL",
-                "timeslices": [],
+                "timeslices": [
+                    {
+                        "energyCommunityId": "AT00300000000RC103550000000985681",
+                        "energyCommunityName": "EEG Oberösterreich RID-11",
+                        "from": "2026-03-01",
+                        "to": "2026-05-15",
+                        "status": "ACTIVE",
+                        "profiles": [
+                            {
+                                "from": "2026-03-01",
+                                "to": "2026-05-15",
+                                "granularity": "QUARTER_OF_AN_HOUR",
+                                "profileType": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+                            },
+                            {
+                                "from": "2026-03-01",
+                                "to": "2026-05-15",
+                                "granularity": "QUARTER_OF_AN_HOUR",
+                                "profileType": "ENERGY_COMMUNITY_OWN_COVERAGE",
+                            },
+                        ],
+                        "profileDataAvailableFrom": "2026-03-01",
+                        "profileDataAvailableTo": "2026-05-15",
+                    },
+                ],
                 "energyCommunityActive": True,
             },
             "supplier": {
@@ -718,6 +789,249 @@ CONTRACT_ACCOUNT_DATA_4: dict[str, Any] = {
         },
     ],
 }
+
+CONTRACT_ACCOUNT_DATA_5: dict[str, Any] = {
+    "contractAccountNumber": "005",
+    "businessPartnerNumber": "200",
+    "active": False,
+    "branch": "STROM",
+    "contracts": [
+        {
+            "branch": "STROM",
+            "scaleType": "EEG 7ngem",
+            "active": False,
+            "moveInDate": "2026-05-16",
+            "moveOutDate": "2026-06-10",
+            "pointOfDelivery": {
+                "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+                "meter": {
+                    "meterNumber": "5000000",
+                },
+                "monthlyTrend": {
+                    "consumptionOld": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "consumptionNew": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "timerangeOld": {
+                        "from": "2026-06-28T17:11:06.851202621",
+                        "to": "2026-06-29T17:11:06.851203478",
+                    },
+                    "timerangeNew": {
+                        "from": "2026-06-28T17:11:06.85120513",
+                        "to": "2026-06-29T17:11:06.851205241",
+                    },
+                },
+                "yearlyTrend": {
+                    "consumptionOld": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "consumptionNew": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "timerangeOld": {
+                        "from": "2026-06-28T17:11:06.851202621",
+                        "to": "2026-06-29T17:11:06.851203478",
+                    },
+                    "timerangeNew": {
+                        "from": "2026-06-28T17:11:06.85120513",
+                        "to": "2026-06-29T17:11:06.851205241",
+                    },
+                },
+                "availableTimeRange": {
+                    "from": "2026-05-16",
+                    "to": "2026-06-10",
+                },
+                "lastReadings": {
+                    "values": [
+                        {
+                            "meternumber": "5000000",
+                            "referenceNumber": "1.8.1",
+                            "newResult": {
+                                "timestamp": "2026-06-10T00:00:00",
+                                "readingValue": 1500.000,
+                            },
+                        },
+                        {
+                            "meternumber": "5000000",
+                            "referenceNumber": "1.6.0",
+                            "newResult": {
+                                "timestamp": "2026-06-01T00:00:00",
+                                "readingValue": 2.500,
+                            },
+                        },
+                    ],
+                },
+            },
+            "powerGenerationUnit": False,
+            "energyCommunityData": {
+                "status": "HISTORICAL",
+                "timeslices": [
+                    {
+                        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+                        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+                        "from": "2026-05-16",
+                        "to": "2026-06-10",
+                        "status": "ACTIVE",
+                        "profiles": [
+                            {
+                                "from": "2026-05-16",
+                                "to": "2026-06-10",
+                                "granularity": "QUARTER_OF_AN_HOUR",
+                                "profileType": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+                            },
+                            {
+                                "from": "2026-05-16",
+                                "to": "2026-06-10",
+                                "granularity": "QUARTER_OF_AN_HOUR",
+                                "profileType": "ENERGY_COMMUNITY_OWN_COVERAGE",
+                            },
+                        ],
+                        "profileDataAvailableFrom": "2026-05-16",
+                        "profileDataAvailableTo": "2026-06-10",
+                    },
+                ],
+                "energyCommunityActive": True,
+            },
+            "supplier": {
+                "id": "AT110191",
+                "name": "EP Energie Plus GmbH",
+            },
+            "synthProfile": "Haushalt",
+        },
+    ],
+}
+
+CONTRACT_ACCOUNT_DATA_6: dict[str, Any] = {
+    "contractAccountNumber": "006",
+    "businessPartnerNumber": "200",
+    "active": False,
+    "branch": "STROM",
+    "contracts": [
+        {
+            "branch": "STROM",
+            "scaleType": "Gem.Erz. / Erzeugung",
+            "active": False,
+            "moveInDate": "2025-01-01",
+            "moveOutDate": "2026-06-01",
+            "pointOfDelivery": {
+                "meterPointAdministrationNumber": "AT0000000000000000000000011111114",
+                "meter": {
+                    "meterNumber": "6000000",
+                },
+                "monthlyTrend": {
+                    "consumptionOld": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "consumptionNew": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "timerangeOld": {
+                        "from": "2026-06-28T17:11:06.851202621",
+                        "to": "2026-06-29T17:11:06.851203478",
+                    },
+                    "timerangeNew": {
+                        "from": "2026-06-28T17:11:06.85120513",
+                        "to": "2026-06-29T17:11:06.851205241",
+                    },
+                },
+                "yearlyTrend": {
+                    "consumptionOld": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "consumptionNew": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "timerangeOld": {
+                        "from": "2026-06-28T17:11:06.851202621",
+                        "to": "2026-06-29T17:11:06.851203478",
+                    },
+                    "timerangeNew": {
+                        "from": "2026-06-28T17:11:06.85120513",
+                        "to": "2026-06-29T17:11:06.851205241",
+                    },
+                },
+                "availableTimeRange": {
+                    "from": "2025-01-01",
+                    "to": "2026-06-01",
+                },
+                "lastReadings": {
+                    "values": [
+                        {
+                            "meternumber": "6000000",
+                            "referenceNumber": "2.8.1",
+                            "newResult": {
+                                "timestamp": "2026-06-01T00:00:00",
+                                "readingValue": 2500.000,
+                            },
+                        },
+                        {
+                            "meternumber": "6000000",
+                            "referenceNumber": "2.6.0",
+                            "newResult": {
+                                "timestamp": "2026-05-01T00:00:00",
+                                "readingValue": 4.200,
+                            },
+                        },
+                    ],
+                },
+            },
+            "powerGenerationUnit": True,
+            "energyCommunityData": {
+                "status": "HISTORICAL",
+                "timeslices": [
+                    {
+                        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+                        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+                        "from": "2026-02-01",
+                        "to": "2026-06-01",
+                        "status": "ACTIVE",
+                        "profiles": [
+                            {
+                                "from": "2026-02-01",
+                                "to": "2026-06-01",
+                                "granularity": "QUARTER_OF_AN_HOUR",
+                                "profileType": "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+                            },
+                            {
+                                "from": "2026-02-01",
+                                "to": "2026-06-01",
+                                "granularity": "QUARTER_OF_AN_HOUR",
+                                "profileType": "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+                            },
+                        ],
+                        "profileDataAvailableFrom": "2026-02-01",
+                        "profileDataAvailableTo": "2026-06-01",
+                    },
+                ],
+                "energyCommunityActive": True,
+            },
+            "supplier": {
+                "id": "AT113820",
+                "name": "OeMAG Abwicklungsstelle für Ökostrom AG",
+            },
+            "synthProfile": "Photovoltaik",
+        },
+    ],
+}
+
 
 WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: list[dict[str, Any]] = [
     {
@@ -1209,5 +1523,179 @@ EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4: list[dict[str, Any]] = [
         },
         "energyCommunityId": "AT00300000000RC103550000000985681",
         "energyCommunityName": "EEG Oberösterreich RID-11",
+    },
+]
+
+EEG_OOE_PROFILE_DATA_TOTAL_L2_L3_004_1: list[dict[str, Any]] = [
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-03-01T00:00:00",
+        "to": "2026-05-15T23:59:59",
+        "type": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 40.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "AT00300000000RC103550000000985681",
+        "energyCommunityName": "EEG Oberösterreich RID-11",
+    },
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-03-01T00:00:00",
+        "to": "2026-05-15T23:59:59",
+        "type": "ENERGY_COMMUNITY_OWN_COVERAGE",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 10.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "AT00300000000RC103550000000985681",
+        "energyCommunityName": "EEG Oberösterreich RID-11",
+    },
+]
+
+EEG_OOE_PROFILE_DATA_MONTHLY_L2_004_1: list[dict[str, Any]] = [
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-05-01T00:00:00",
+        "to": "2026-05-15T23:59:59",
+        "type": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 8.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "AT00300000000RC103550000000985681",
+        "energyCommunityName": "EEG Oberösterreich RID-11",
+    },
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-05-01T00:00:00",
+        "to": "2026-05-15T23:59:59",
+        "type": "ENERGY_COMMUNITY_OWN_COVERAGE",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 2.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "AT00300000000RC103550000000985681",
+        "energyCommunityName": "EEG Oberösterreich RID-11",
+    },
+]
+
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_005_1: list[dict[str, Any]] = [
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-05-16T00:00:00",
+        "to": "2026-06-10T23:59:59",
+        "type": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 50.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-05-16T00:00:00",
+        "to": "2026-06-10T23:59:59",
+        "type": "ENERGY_COMMUNITY_OWN_COVERAGE",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 20.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+]
+
+SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_005_1: list[dict[str, Any]] = [
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-05-16T00:00:00",
+        "to": "2026-05-31T23:59:59",
+        "type": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 30.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-05-16T00:00:00",
+        "to": "2026-05-31T23:59:59",
+        "type": "ENERGY_COMMUNITY_OWN_COVERAGE",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 12.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+]
+
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_006_1: list[dict[str, Any]] = [
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111114",
+        "from": "2026-02-01T00:00:00",
+        "to": "2026-06-01T23:59:59",
+        "type": "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "GENERATION",
+        "sum": {
+            "value": 300.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111114",
+        "from": "2026-02-01T00:00:00",
+        "to": "2026-06-01T23:59:59",
+        "type": "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "GENERATION",
+        "sum": {
+            "value": 100.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+]
+
+SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_006_1: list[dict[str, Any]] = [
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111114",
+        "from": "2026-05-01T00:00:00",
+        "to": "2026-05-31T23:59:59",
+        "type": "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "GENERATION",
+        "sum": {
+            "value": 90.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111114",
+        "from": "2026-05-01T00:00:00",
+        "to": "2026-05-31T23:59:59",
+        "type": "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "GENERATION",
+        "sum": {
+            "value": 30.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
     },
 ]

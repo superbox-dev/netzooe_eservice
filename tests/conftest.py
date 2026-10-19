@@ -23,18 +23,26 @@ from tests.api_data import CONTRACT_ACCOUNT_DATA_1
 from tests.api_data import CONTRACT_ACCOUNT_DATA_2
 from tests.api_data import CONTRACT_ACCOUNT_DATA_3
 from tests.api_data import CONTRACT_ACCOUNT_DATA_4
+from tests.api_data import CONTRACT_ACCOUNT_DATA_5
+from tests.api_data import CONTRACT_ACCOUNT_DATA_6
 from tests.api_data import DASHBOARD_DATA
 from tests.api_data import EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3
 from tests.api_data import EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4
+from tests.api_data import EEG_OOE_PROFILE_DATA_MONTHLY_L2_004_1
 from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3
 from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4
+from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L2_L3_004_1
 from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3
 from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2
 from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4
 from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2
 from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3
+from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_005_1
+from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_006_1
 from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2
 from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3
+from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_005_1
+from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_006_1
 from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2
 from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1
 from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3
@@ -64,6 +72,8 @@ CONTRACT_ACCOUNTS: Final[dict[str, dict[str, Any]]] = {
     "002": CONTRACT_ACCOUNT_DATA_2,
     "003": CONTRACT_ACCOUNT_DATA_3,
     "004": CONTRACT_ACCOUNT_DATA_4,
+    "005": CONTRACT_ACCOUNT_DATA_5,
+    "006": CONTRACT_ACCOUNT_DATA_6,
 }
 
 # Consumption profiles by request, for the full update at tests.NOW (cutoff 2026-06-12, previous month May 2026).
@@ -85,6 +95,12 @@ PROFILE_RESPONSES: Final[dict[ProfileRequestKey, list[dict[str, Any]]]] = {
     ("003", EEG_OOE, "2026-05-21", "2026-06-12"): EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4,
     ("003", EEG_OOE, "2026-05-21", "2026-05-31"): EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4,
     ("003", EEG_OOE, "2026-05-21", "2026-06-16"): EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4,
+    ("004", EEG_OOE, "2026-03-01", "2026-05-15"): EEG_OOE_PROFILE_DATA_TOTAL_L2_L3_004_1,
+    ("004", EEG_OOE, "2026-05-01", "2026-05-15"): EEG_OOE_PROFILE_DATA_MONTHLY_L2_004_1,
+    ("005", SEVEN_ENERGY, "2026-05-16", "2026-06-10"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_005_1,
+    ("005", SEVEN_ENERGY, "2026-05-16", "2026-05-31"): SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_005_1,
+    ("006", SEVEN_ENERGY, "2026-02-01", "2026-06-01"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_006_1,
+    ("006", SEVEN_ENERGY, "2026-05-01", "2026-05-31"): SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_006_1,
 }
 
 

@@ -336,7 +336,13 @@ async def test_update_interval(
 
 @pytest.mark.parametrize(
     "config_entry",
-    [options(show_revoked_energy_communities=True, include_inactive_contract_account_data=True)],
+    [
+        options(
+            show_revoked_energy_communities=True,
+            include_inactive_contract_account_data=True,
+            show_inactive_meter_points=True,
+        ),
+    ],
     indirect=["config_entry"],
 )
 async def test_profile_requests(
@@ -793,8 +799,11 @@ async def test_meter_point_without_active_contract_logged_once(
     """Test that a meter point without an active contract is logged once, and again after it was active again."""
 
     def warnings() -> int:
-        """Return the number of logged warnings."""
-        return sum("no active contract for meter point" in record.getMessage() for record in caplog.records)
+        """Return the number of logged warnings for the meter point."""
+        return sum(
+            f"no active contract for meter point {INACTIVE_METER_POINT}" in record.getMessage()
+            for record in caplog.records
+        )
 
     with caplog.at_level(logging.WARNING, logger="custom_components.netzooe_eservice.coordinator"):
         await _setup(hass, config_entry, fake_api)
@@ -828,6 +837,8 @@ async def test_meter_point_without_active_contract_logged_once(
     [
         ("2026-06-20", "EP Energie Plus GmbH"),
         ("2026-06-10", "easy green energy GmbH & Co KG"),
+        # Same day: the contract that the portal returns first.
+        ("2026-06-16", "EP Energie Plus GmbH"),
     ],
 )
 async def test_inactive_meter_point_uses_most_recently_ended_contract(
@@ -853,35 +864,31 @@ async def test_inactive_meter_point_uses_most_recently_ended_contract(
     assert _state(hass, SUPPLIER_ENTITY_ID) == supplier
 
 
-ENDED_CONTRACT_ACCOUNTS: Final[dict[str, dict[str, Any]]] = {
-    # The active contract of the meter point ends, so both of its contracts have ended.
-    "002": _contract_account_with(
-        CONTRACT_ACCOUNT_DATA_2,
-        "AT0000000000000000000000011111112",
-        {"active": False, "moveOutDate": "2026-06-20"},
-    ),
-}
-LAST_CONTRACT: Final[tuple[str, list[dict[str, str]]]] = ("10.0", [{"from": "2026-06-17", "to": "2026-06-28"}])
-ALL_CONTRACTS: Final[tuple[str, list[dict[str, str]]]] = (
-    "610.0",
-    [{"from": "2026-06-17", "to": "2026-06-28"}, {"from": "2026-01-26", "to": "2026-06-16"}],
-)
-
-
 @pytest.mark.parametrize(
-    ("config_entry", "contract_accounts", "expected"),
+    ("config_entry", "expected"),
     [
-        (options(show_inactive_meter_points=True, include_inactive_contract_account_data=False), None, LAST_CONTRACT),
-        (options(show_inactive_meter_points=True, include_inactive_contract_account_data=True), None, ALL_CONTRACTS),
         (
             options(show_inactive_meter_points=True, include_inactive_contract_account_data=False),
-            ENDED_CONTRACT_ACCOUNTS,
-            LAST_CONTRACT,
+            {
+                # Active contract: only its own energy communities.
+                "11111112_cc100087_energy_community_import_l3": "10.0",
+                # No active contract: only the most recently ended contract (005), so the energy community of the
+                # older contract (004) is not shown.
+                "11111113_cc100087_energy_community_import_l3": "20.0",
+                "11111113_rc103550_energy_community_import_l3": None,
+                "11111113_energy_community_import_l3": "20.0",
+            },
         ),
         (
             options(show_inactive_meter_points=True, include_inactive_contract_account_data=True),
-            ENDED_CONTRACT_ACCOUNTS,
-            ALL_CONTRACTS,
+            {
+                # Active contract: also the energy communities of the ended contract (003).
+                "11111112_cc100087_energy_community_import_l3": "610.0",
+                # No active contract: all ended contracts.
+                "11111113_cc100087_energy_community_import_l3": "20.0",
+                "11111113_rc103550_energy_community_import_l3": "10.0",
+                "11111113_energy_community_import_l3": "30.0",
+            },
         ),
     ],
     indirect=["config_entry"],
@@ -891,23 +898,21 @@ async def test_energy_community_data_of_inactive_contract_accounts(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    contract_accounts: dict[str, dict[str, Any]] | None,
-    expected: tuple[str, list[dict[str, str]]],
+    expected: dict[str, str | None],
 ) -> None:
-    """Test that the energy communities include ended contracts only if inactive contract account data is included.
+    """Test that ended contracts are only included if the data of inactive contract accounts is included.
 
-    This also applies to a meter point without an active contract, which uses the most recently ended one.
+    This also applies to a meter point without an active contract, which uses the most recently ended contract.
     """
-    fake_api.register_auth_request()
-    fake_api.register_requests(contract_accounts=contract_accounts)
+    await _setup(hass, config_entry, fake_api)
 
-    await setup_integration(hass, config_entry)
+    states: dict[str, str | None] = {}
 
-    state: State | None = hass.states.get(
-        "sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_energy_community_import_l3",
-    )
-    assert state is not None
-    assert (state.state, state.attributes["timeline"]) == expected
+    for key in expected:
+        state: State | None = hass.states.get(f"sensor.netzooe_eservice_at00000000000000000000000{key}")
+        states[key] = state.state if state else None
+
+    assert states == expected
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")

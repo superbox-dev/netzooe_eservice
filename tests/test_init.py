@@ -80,12 +80,27 @@ async def test_load_entry_with_disabled_inactive_meter_points(
     assert set(hass.states.async_entity_ids()) == snapshot
 
     assert (
-        "Skipping 1 contract(s) because no active contract for meter point "
+        "Skipping 2 contract(s) because no active contract for meter point "
         "AT0000000000000000000000011111113 was returned by the API." in caplog.text
+    )
+    assert (
+        "Skipping 1 contract(s) because no active contract for meter point "
+        "AT0000000000000000000000011111114 was returned by the API." in caplog.text
     )
 
 
-@pytest.mark.parametrize("config_entry", [options(show_inactive_meter_points=True)], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry",
+    [
+        options(
+            show_revoked_energy_communities=show_revoked,
+            include_inactive_contract_account_data=include_inactive,
+            show_inactive_meter_points=True,
+        )
+        for show_revoked, include_inactive in ((True, True), (True, False), (False, False), (False, True))
+    ],
+    indirect=["config_entry"],
+)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_load_entry_with_enabled_inactive_meter_points(
     hass: HomeAssistant,
