@@ -60,6 +60,7 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 - No real credentials or customer data, use the fake data in `tests/api_data.py`
 - Missing portal endpoints or values belong in `netzooe_eservice_api`, stop and ask how to proceed
   - values calculated from existing ones are fine in the integration
+- No new dependencies (`pyproject.toml`, `manifest.json`, also dev dependencies) without asking first
 - `git add` new files, the pre-commit hooks only check tracked files
 - Never edit generated files (`coverage-badge.svg`) or `config/` (except `config/configuration.yaml`)
 - **Never edit `CLAUDE.md` files or `.claude/skills/` on your own**, only when asked
