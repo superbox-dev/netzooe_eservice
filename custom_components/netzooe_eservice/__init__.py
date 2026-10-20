@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Final
 
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_USERNAME
@@ -22,7 +23,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.device_registry import DeviceRegistry
 
-PLATFORMS: list[Platform] = [
+PLATFORMS: Final[list[Platform]] = [
     Platform.SENSOR,
 ]
 

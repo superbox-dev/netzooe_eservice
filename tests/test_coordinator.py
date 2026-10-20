@@ -208,7 +208,9 @@ async def test_first_update_authentication_error_starts_reauth(
     ]
 
 
-@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"], ids=["frequent_updates_disabled"]
+)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_full_update_api_error_keeps_data(
     hass: HomeAssistant,
@@ -228,7 +230,9 @@ async def test_full_update_api_error_keeps_data(
     assert "Update failed, using cached data" in caplog.text
 
 
-@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"], ids=["frequent_updates_enabled"]
+)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_frequent_updates_only_refresh_energy_community_data(
     hass: HomeAssistant,
@@ -256,7 +260,9 @@ async def test_frequent_updates_only_refresh_energy_community_data(
     assert not _contract_account_requested(aioclient_mock)
 
 
-@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"], ids=["frequent_updates_enabled"]
+)
 async def test_frequent_updates_full_update_after_full_scan_interval(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -277,7 +283,9 @@ async def test_frequent_updates_full_update_after_full_scan_interval(
     assert _contract_account_requested(aioclient_mock)
 
 
-@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"], ids=["frequent_updates_disabled"]
+)
 async def test_without_frequent_updates_always_full_update(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -294,7 +302,9 @@ async def test_without_frequent_updates_always_full_update(
     assert _contract_account_requested(aioclient_mock)
 
 
-@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"], ids=["frequent_updates_enabled"]
+)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_energy_community_update_api_error_keeps_data(
     hass: HomeAssistant,
@@ -321,6 +331,7 @@ async def test_energy_community_update_api_error_keeps_data(
         (FREQUENT_UPDATES_DISABLED, SCAN_INTERVAL_FULL),
     ],
     indirect=["config_entry"],
+    ids=["frequent_updates_enabled", "frequent_updates_disabled"],
 )
 async def test_update_interval(
     hass: HomeAssistant,
@@ -344,6 +355,7 @@ async def test_update_interval(
         ),
     ],
     indirect=["config_entry"],
+    ids=["revoked_inactive_contracts_inactive_meter_points"],
 )
 async def test_profile_requests(
     hass: HomeAssistant,
@@ -361,6 +373,7 @@ async def test_profile_requests(
     "config_entry",
     [options(show_revoked_energy_communities=True, include_inactive_contract_account_data=True)],
     indirect=["config_entry"],
+    ids=["revoked_inactive_contracts"],
 )
 @pytest.mark.parametrize(
     ("now", "expected"),
@@ -427,6 +440,15 @@ async def test_profile_requests(
             ],
         ),
     ],
+    ids=[
+        "cutoff_in_timeslice",
+        "cutoff_in_previous_month",
+        "cutoff_day_before_timeslice_end",
+        "cutoff_on_timeslice_end",
+        "cutoff_on_timeslice_start",
+        "cutoff_before_timeslice",
+        "previous_month_in_previous_year",
+    ],
 )
 async def test_profile_request_time_ranges(
     hass: HomeAssistant,
@@ -491,7 +513,9 @@ async def test_energy_community_without_consent(
     assert "No consent found for energy community" in caplog.text
 
 
-@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"], ids=["frequent_updates_disabled"]
+)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_removed_energy_community_sensors_update_without_errors(
     hass: HomeAssistant,
@@ -512,7 +536,9 @@ async def test_removed_energy_community_sensors_update_without_errors(
     assert not [record for record in caplog.records if record.levelno >= logging.ERROR]
 
 
-@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"], ids=["frequent_updates_disabled"]
+)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_full_update_removes_revoked_energy_community(
     hass: HomeAssistant,
@@ -582,6 +608,7 @@ async def test_only_most_recent_consent_is_used(
         (FREQUENT_UPDATES_ENABLED, "active_unchangeable"),
     ],
     indirect=["config_entry"],
+    ids=["revoked", "active_unchangeable"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_totals_only_include_active_energy_communities(
@@ -605,7 +632,9 @@ async def test_totals_only_include_active_energy_communities(
     assert float(_state(hass, TOTAL_EXPORT_ENTITY_ID)) == pytest.approx(total_before - energy_community_export)
 
 
-@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"], ids=["frequent_updates_enabled"]
+)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_frequent_updates_keep_data_of_energy_community_without_consent(
     hass: HomeAssistant,
@@ -626,7 +655,9 @@ async def test_frequent_updates_keep_data_of_energy_community_without_consent(
     assert _state(hass, TOTAL_EXPORT_ENTITY_ID) == total_before
 
 
-@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"], ids=["frequent_updates_disabled"]
+)
 async def test_api_error_logged_once_until_available_again(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -651,7 +682,9 @@ async def test_api_error_logged_once_until_available_again(
     assert "The eService portal is available again" in caplog.text
 
 
-@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"], ids=["frequent_updates_disabled"]
+)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_new_energy_community_sensors_added_without_reload(
     hass: HomeAssistant,
@@ -673,7 +706,9 @@ async def test_new_energy_community_sensors_added_without_reload(
     assert _contribution_factor(hass) == "93"
 
 
-@pytest.mark.parametrize(("status", "expected"), [("NEW_STATUS", "unknown"), (None, "unknown")])
+@pytest.mark.parametrize(
+    ("status", "expected"), [("NEW_STATUS", "unknown"), (None, "unknown")], ids=["unknown_status", "missing_status"]
+)
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_unknown_status(
     hass: HomeAssistant,
@@ -734,7 +769,9 @@ async def test_failed_request_cancels_remaining_requests(
     assert cancelled == waiting
 
 
-@pytest.mark.parametrize("config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"], ids=["frequent_updates_enabled"]
+)
 async def test_frequent_updates_full_update_across_dst_change(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
@@ -833,7 +870,9 @@ async def test_meter_point_without_active_contract_logged_once(
         assert warnings() == logged + 1
 
 
-@pytest.mark.parametrize("config_entry", [options(show_inactive_meter_points=True)], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry", [options(show_inactive_meter_points=True)], indirect=["config_entry"], ids=["inactive_meter_points"]
+)
 @pytest.mark.parametrize(
     ("changes", "supplier"),
     [
@@ -846,6 +885,14 @@ async def test_meter_point_without_active_contract_logged_once(
         ({"moveOutDate": "2026-06-16", "moveInDate": "2019-01-01"}, "easy green energy GmbH & Co KG"),
         # Same start: the contract with the higher contract account number.
         ({"moveOutDate": "2026-06-16", "moveInDate": "2020-06-08"}, "easy green energy GmbH & Co KG"),
+    ],
+    ids=[
+        "later_move_out",
+        "earlier_move_out",
+        "no_move_out",
+        "same_day_later_move_in",
+        "same_day_earlier_move_in",
+        "same_move_in_higher_account_number",
     ],
 )
 async def test_inactive_meter_point_uses_most_recently_ended_contract(
@@ -900,6 +947,7 @@ async def test_inactive_meter_point_uses_most_recently_ended_contract(
         ),
     ],
     indirect=["config_entry"],
+    ids=["active_contracts_only", "inactive_contracts"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_energy_community_data_of_inactive_contract_accounts(

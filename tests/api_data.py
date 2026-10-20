@@ -5,8 +5,9 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Final
 
-CONSENTS_DATA: list[dict[str, Any]] = [
+CONSENTS_DATA: Final[list[dict[str, Any]]] = [
     {
         "validThrough": {
             "from": "2024-05-04",
@@ -177,7 +178,7 @@ CONSENTS_DATA: list[dict[str, Any]] = [
 ]
 
 
-DASHBOARD_DATA: dict[str, Any] = {
+DASHBOARD_DATA: Final[dict[str, Any]] = {
     "contractAccounts": [
         {
             "contractAccountNumber": "001",
@@ -206,7 +207,7 @@ DASHBOARD_DATA: dict[str, Any] = {
     ],
 }
 
-CONTRACT_ACCOUNT_DATA_1: dict[str, Any] = {
+CONTRACT_ACCOUNT_DATA_1: Final[dict[str, Any]] = {
     "contractAccountNumber": "001",
     "businessPartnerNumber": "200",
     "active": True,
@@ -372,7 +373,7 @@ CONTRACT_ACCOUNT_DATA_1: dict[str, Any] = {
     ],
 }
 
-CONTRACT_ACCOUNT_DATA_2: dict[str, Any] = {
+CONTRACT_ACCOUNT_DATA_2: Final[dict[str, Any]] = {
     "contractAccountNumber": "002",
     "businessPartnerNumber": "200",
     "active": True,
@@ -516,7 +517,7 @@ CONTRACT_ACCOUNT_DATA_2: dict[str, Any] = {
     ],
 }
 
-CONTRACT_ACCOUNT_DATA_3: dict[str, Any] = {
+CONTRACT_ACCOUNT_DATA_3: Final[dict[str, Any]] = {
     "contractAccountNumber": "003",
     "businessPartnerNumber": "200",
     "active": False,
@@ -687,7 +688,7 @@ CONTRACT_ACCOUNT_DATA_3: dict[str, Any] = {
     ],
 }
 
-CONTRACT_ACCOUNT_DATA_4: dict[str, Any] = {
+CONTRACT_ACCOUNT_DATA_4: Final[dict[str, Any]] = {
     "contractAccountNumber": "004",
     "businessPartnerNumber": "200",
     "active": False,
@@ -790,7 +791,7 @@ CONTRACT_ACCOUNT_DATA_4: dict[str, Any] = {
     ],
 }
 
-CONTRACT_ACCOUNT_DATA_5: dict[str, Any] = {
+CONTRACT_ACCOUNT_DATA_5: Final[dict[str, Any]] = {
     "contractAccountNumber": "005",
     "businessPartnerNumber": "200",
     "active": False,
@@ -911,7 +912,7 @@ CONTRACT_ACCOUNT_DATA_5: dict[str, Any] = {
     ],
 }
 
-CONTRACT_ACCOUNT_DATA_6: dict[str, Any] = {
+CONTRACT_ACCOUNT_DATA_6: Final[dict[str, Any]] = {
     "contractAccountNumber": "006",
     "businessPartnerNumber": "200",
     "active": False,
@@ -1033,7 +1034,7 @@ CONTRACT_ACCOUNT_DATA_6: dict[str, Any] = {
 }
 
 
-WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: list[dict[str, Any]] = [
+WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2024-10-07T00:00:00",
@@ -1062,7 +1063,7 @@ WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-01-26T00:00:00",
@@ -1091,7 +1092,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-05-01T00:00:00",
@@ -1120,7 +1121,7 @@ SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-01-26T00:00:00",
@@ -1149,7 +1150,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-05-21T00:00:00",
@@ -1178,7 +1179,7 @@ EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-05-21T00:00:00",
@@ -1207,7 +1208,7 @@ EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-05-21T00:00:00",
@@ -1236,7 +1237,7 @@ EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-06-17T00:00:00",
@@ -1265,7 +1266,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-06-17T00:00:00",
@@ -1294,7 +1295,7 @@ EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2: list[dict[str, Any]] = [
     },
 ]
 
-WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1: list[dict[str, Any]] = [
+WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2024-05-06T00:00:00",
@@ -1323,7 +1324,7 @@ WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1: list[dict[str, Any]] = [
     },
 ]
 
-WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2: list[dict[str, Any]] = [
+WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2024-10-07T00:00:00",
@@ -1352,7 +1353,7 @@ WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-01-26T00:00:00",
@@ -1380,7 +1381,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-05-01T00:00:00",
@@ -1409,7 +1410,7 @@ SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-01-26T00:00:00",
@@ -1438,7 +1439,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-05-21T00:00:00",
@@ -1467,7 +1468,7 @@ EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-05-21T00:00:00",
@@ -1496,7 +1497,7 @@ EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-05-21T00:00:00",
@@ -1526,7 +1527,7 @@ EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_TOTAL_L2_L3_004_1: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L2_L3_004_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
         "from": "2026-03-01T00:00:00",
@@ -1555,7 +1556,7 @@ EEG_OOE_PROFILE_DATA_TOTAL_L2_L3_004_1: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_MONTHLY_L2_004_1: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_MONTHLY_L2_004_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
         "from": "2026-05-01T00:00:00",
@@ -1584,7 +1585,7 @@ EEG_OOE_PROFILE_DATA_MONTHLY_L2_004_1: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_005_1: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_005_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
         "from": "2026-05-16T00:00:00",
@@ -1613,7 +1614,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_005_1: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_005_1: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_005_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
         "from": "2026-05-16T00:00:00",
@@ -1642,7 +1643,7 @@ SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_005_1: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_006_1: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_006_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111114",
         "from": "2026-02-01T00:00:00",
@@ -1671,7 +1672,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_006_1: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_006_1: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_006_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111114",
         "from": "2026-05-01T00:00:00",

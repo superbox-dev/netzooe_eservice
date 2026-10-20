@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from tests.conftest import FakeNetzOOEeServiceAPI
 
 
-@pytest.mark.parametrize("language", ["de", "en"])
+@pytest.mark.parametrize("language", ["de", "en"], ids=["de", "en"])
 @pytest.mark.parametrize(
     "config_entry",
     [
@@ -33,6 +33,11 @@ if TYPE_CHECKING:
         for show_revoked, include_inactive in ((True, True), (True, False), (False, False), (False, True))
     ],
     indirect=["config_entry"],
+    ids=[
+        f"{meter_points}-{options}"
+        for meter_points in ("active_meter_points", "inactive_meter_points")
+        for options in ("revoked_inactive_contracts", "revoked", "default", "inactive_contracts")
+    ],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_sensors(

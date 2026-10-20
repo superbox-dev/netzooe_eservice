@@ -57,6 +57,7 @@ def _device(hass: HomeAssistant, config_entry: MockConfigEntry, identifier: str)
         options(show_revoked_energy_communities=False, include_inactive_contract_account_data=True),
     ],
     indirect=["config_entry"],
+    ids=["revoked_inactive_contracts", "revoked", "default", "inactive_contracts"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_load_entry_with_disabled_inactive_meter_points(
@@ -80,11 +81,11 @@ async def test_load_entry_with_disabled_inactive_meter_points(
 
     assert (
         "Skipping 2 contract(s) because no active contract for meter point "
-        "AT0000000000000000000000011111113 was returned by the API." in caplog.text
+        "AT0000000000000000000000011111113 was returned by the API" in caplog.text
     )
     assert (
         "Skipping 1 contract(s) because no active contract for meter point "
-        "AT0000000000000000000000011111114 was returned by the API." in caplog.text
+        "AT0000000000000000000000011111114 was returned by the API" in caplog.text
     )
 
 
@@ -99,6 +100,7 @@ async def test_load_entry_with_disabled_inactive_meter_points(
         for show_revoked, include_inactive in ((True, True), (True, False), (False, False), (False, True))
     ],
     indirect=["config_entry"],
+    ids=["revoked_inactive_contracts", "revoked", "default", "inactive_contracts"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_load_entry_with_enabled_inactive_meter_points(
@@ -182,7 +184,9 @@ async def test_removed_energy_community_device_comes_back(
     assert hass.states.get(CONTRIBUTION_FACTOR_ENTITY_ID) is not None
 
 
-@pytest.mark.parametrize("config_entry", [options(show_inactive_meter_points=True)], indirect=["config_entry"])
+@pytest.mark.parametrize(
+    "config_entry", [options(show_inactive_meter_points=True)], indirect=["config_entry"], ids=["inactive_meter_points"]
+)
 async def test_device_name_with_unknown_meter_point_format(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,

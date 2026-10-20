@@ -71,6 +71,7 @@ async def test_user_flow(
         (APIError("mocked api error", status=HTTPStatus.UNAUTHORIZED), "invalid_auth"),
         (Exception("mocked client error"), "unknown"),
     ],
+    ids=["cannot_connect", "invalid_auth", "unknown"],
 )
 async def test_user_flow_failed(
     hass: HomeAssistant,

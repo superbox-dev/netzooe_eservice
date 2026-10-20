@@ -44,7 +44,7 @@ if TYPE_CHECKING:
 
     from .coordinator import NetzOOEeServiceConfigEntry
 
-_LOGGER: logging.Logger = logging.getLogger(__name__)
+_LOGGER: Final[logging.Logger] = logging.getLogger(__name__)
 
 # Options with their defaults, in the order of the options form.
 OPTIONS: Final[dict[str, bool]] = {

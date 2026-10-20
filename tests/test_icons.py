@@ -29,6 +29,7 @@ if TYPE_CHECKING:
         options(show_revoked_energy_communities=True, include_inactive_contract_account_data=True),
     ],
     indirect=["config_entry"],
+    ids=["revoked_inactive_contracts"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_icons(

@@ -52,7 +52,7 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
 
-_LOGGER: logging.Logger = logging.getLogger(__name__)
+_LOGGER: Final[logging.Logger] = logging.getLogger(__name__)
 
 type NetzOOEeServiceConfigEntry = ConfigEntry[NetzOOEeServiceDataUpdateCoordinator]
 type ConsentsMap = dict[str, list[dict[str, Any]]]
@@ -209,7 +209,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         if self._warning_resolved("api_error"):
             _LOGGER.info("The eService portal is available again")
 
-        _LOGGER.debug("data: %s", data)
+        _LOGGER.debug("Data: %s", data)
         return data
 
     def _warn_once(self, key: str, msg: str, /, *args: object) -> None:
@@ -312,7 +312,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
     async def _async_fetch_contracts_by_mpan(self) -> dict[str, list[dict[str, Any]]]:
         """Fetch all contract accounts and group their electricity contracts by meter point."""
         dashboard: dict[str, Any] = await self.api.dashboard()
-        _LOGGER.debug("dashboard: %s", dashboard)
+        _LOGGER.debug("Dashboard: %s", dashboard)
 
         all_contract_accounts: list[dict[str, Any]] = await self._async_gather(
             partial(
@@ -326,7 +326,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         contracts_by_mpan: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
         for contract_accounts in all_contract_accounts:
-            _LOGGER.debug("contract_accounts: %s", contract_accounts)
+            _LOGGER.debug("Contract accounts: %s", contract_accounts)
 
             for contract in contract_accounts["contracts"]:
                 if (
@@ -378,7 +378,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             if not self.show_inactive_meter_points:
                 self._warn_once(
                     f"inactive_meter_point_{mpan}",
-                    "Skipping %d contract(s) because no active contract for meter point %s was returned by the API.",
+                    "Skipping %d contract(s) because no active contract for meter point %s was returned by the API",
                     len(contracts),
                     mpan,
                 )
@@ -388,7 +388,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
             _LOGGER.debug(
                 "No active contract for meter point %s, "
-                "using most recently ended contract (moveOutDate=%s) as fallback.",
+                "using most recently ended contract (moveOutDate=%s) as fallback",
                 mpan,
                 active_contract["contract"].get("moveOutDate"),
             )
