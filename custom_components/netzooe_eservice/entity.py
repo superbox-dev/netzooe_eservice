@@ -52,6 +52,12 @@ class NetzOOEeServiceEntity(CoordinatorEntity[NetzOOEeServiceDataUpdateCoordinat
         """Return the name of the device."""
         return f"{self.data['deviceName']} ({self._short_device_id(self.device_identifier)})"
 
+    @staticmethod
+    def _short_device_id(device_id: str) -> str:
+        """Return the short form of a meter point or energy community ID, e.g. for device names."""
+        match: re.Match[str] | None = SHORT_DEVICE_ID_PATTERN.search(device_id)
+        return match.group(1) if match else device_id
+
     @property
     def device_info(self) -> DeviceInfo:
         """Return the device info."""
@@ -61,9 +67,3 @@ class NetzOOEeServiceEntity(CoordinatorEntity[NetzOOEeServiceDataUpdateCoordinat
             model=NAME,
             manufacturer=MANUFACTURER,
         )
-
-    @staticmethod
-    def _short_device_id(device_id: str) -> str:
-        """Return the short form of a meter point or energy community ID, e.g. for device names."""
-        match: re.Match[str] | None = SHORT_DEVICE_ID_PATTERN.search(device_id)
-        return match.group(1) if match else device_id
