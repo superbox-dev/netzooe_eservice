@@ -4,23 +4,23 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Final
 from unittest.mock import patch
-from zoneinfo import ZoneInfo
 
 from homeassistant.helpers.translation import async_get_translations
 
+from tests.api_data import NOW
+
 if TYPE_CHECKING:
+    from datetime import datetime
+
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant_custom_component.common import MockConfigEntry
 
     from custom_components.netzooe_eservice.coordinator import NetzOOEeServiceDataUpdateCoordinator
 
-NOW: Final[datetime] = datetime(2026, 6, 28, 12, 0, tzinfo=ZoneInfo("Europe/Vienna"))
-"""Time of the updates, the consumption profiles in `tests.conftest.PROFILE_RESPONSES` are requested for it."""
+"""Time of the updates, the consumption profiles in `tests.api_data.PROFILE_RESPONSES` are requested for it."""
 
 
 def options(**overrides: bool) -> dict[str, Any]:

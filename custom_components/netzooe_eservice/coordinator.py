@@ -25,7 +25,6 @@ from netzooe_eservice_api.api import NetzOOEeServiceAPI
 from netzooe_eservice_api.api import Pod
 from netzooe_eservice_api.constants import ConsentsStatus
 from netzooe_eservice_api.constants import ConsumptionsProfilesBranch
-from netzooe_eservice_api.constants import SynthProfile
 from netzooe_eservice_api.error import APIError
 from netzooe_eservice_api.error import AuthenticationError
 
@@ -38,11 +37,16 @@ from .const import DEFAULT_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
 from .const import DEFAULT_SHOW_INACTIVE_METER_POINTS
 from .const import DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES
 from .const import DOMAIN
+from .const import ELECTRICITY_SYNTH_PROFILES
+from .const import ENERGY_COMMUNITY_DEVICE_TYPES
+from .const import ENERGY_COMMUNITY_ID_SERVICE_PROVIDER
 from .const import MAX_PARALLEL_REQUESTS
+from .const import METER_POINT_DEVICE_TYPES
+from .const import METER_READING_REFERENCE_NUMBERS
+from .const import PEAK_POWER_REFERENCE_NUMBERS
 from .const import PROFILE_DATA_DELAY
 from .const import SCAN_INTERVAL
 from .const import SCAN_INTERVAL_FULL
-from .const import DeviceType
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable
@@ -57,21 +61,6 @@ _LOGGER: Final[logging.Logger] = logging.getLogger(__name__)
 type NetzOOEeServiceConfigEntry = ConfigEntry[NetzOOEeServiceDataUpdateCoordinator]
 type ConsentsMap = dict[str, list[dict[str, Any]]]
 
-ELECTRICITY_SYNTH_PROFILES: Final[set[str]] = {
-    SynthProfile.HOUSEHOLD.value,
-    SynthProfile.PHOTOVOLTAICS.value,
-}
-METER_POINT_DEVICE_TYPES: Final[dict[str, str]] = {
-    SynthProfile.HOUSEHOLD.value: DeviceType.HOUSEHOLD.value,
-    SynthProfile.PHOTOVOLTAICS.value: DeviceType.PHOTOVOLTAICS.value,
-}
-ENERGY_COMMUNITY_DEVICE_TYPES: Final[dict[str, str]] = {
-    SynthProfile.HOUSEHOLD.value: DeviceType.ENERGY_COMMUNITY_IMPORT.value,
-    SynthProfile.PHOTOVOLTAICS.value: DeviceType.ENERGY_COMMUNITY_EXPORT.value,
-}
-METER_READING_REFERENCE_NUMBERS: Final[set[str]] = {"1.8.1", "2.8.1"}
-PEAK_POWER_REFERENCE_NUMBERS: Final[set[str]] = {"1.6.0", "2.6.0"}
-ENERGY_COMMUNITY_ID_SERVICE_PROVIDER: Final[slice] = slice(13, 21)
 """Position of the service provider code in the energy community ID, e.g. `AT00300000000RC100930000000965743`."""
 
 

@@ -6,15 +6,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Final
 
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_USERNAME
-from homeassistant.const import Platform
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
 from .const import DOMAIN
+from .const import PLATFORMS
 from .coordinator import NetzOOEeServiceConfigEntry
 from .coordinator import NetzOOEeServiceDataUpdateCoordinator
 
@@ -22,10 +21,6 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.device_registry import DeviceRegistry
-
-PLATFORMS: Final[list[Platform]] = [
-    Platform.SENSOR,
-]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: NetzOOEeServiceConfigEntry) -> bool:

@@ -6,29 +6,16 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Final
 
 from homeassistant.components.diagnostics import async_redact_data
-from homeassistant.const import CONF_PASSWORD
-from homeassistant.const import CONF_USERNAME
+
+from .const import TO_REDACT
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
 
     from .coordinator import NetzOOEeServiceConfigEntry
     from .coordinator import NetzOOEeServiceDataUpdateCoordinator
-
-TO_REDACT: Final[set[str]] = {
-    CONF_PASSWORD,
-    CONF_USERNAME,
-    "businessPartnerNumber",
-    "contractAccountNumber",
-    "meterNumber",
-    "meternumber",
-    "meterPointAdministrationNumber",
-    "title",
-    "unique_id",
-}
 
 
 async def async_get_config_entry_diagnostics(

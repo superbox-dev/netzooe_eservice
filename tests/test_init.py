@@ -8,7 +8,6 @@ import logging
 from copy import deepcopy
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Final
 from unittest.mock import patch
 
 import pytest
@@ -21,6 +20,8 @@ from tests import options
 from tests import refresh
 from tests import setup_integration
 from tests.api_data import CONTRACT_ACCOUNT_DATA_4
+from tests.api_data import CONTRIBUTION_FACTOR_ENTITY_ID
+from tests.test_init_data import ENERGY_COMMUNITY_DEVICE_IDENTIFIER
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -29,11 +30,6 @@ if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeNetzOOEeServiceAPI
-
-ENERGY_COMMUNITY_DEVICE_IDENTIFIER: Final[str] = "AT0000000000000000000000011111111_CC100087"
-CONTRIBUTION_FACTOR_ENTITY_ID: Final[str] = (
-    "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_contribution_factor"
-)
 
 
 def _device(hass: HomeAssistant, config_entry: MockConfigEntry, identifier: str) -> dr.DeviceEntry | None:

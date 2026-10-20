@@ -6,7 +6,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Final
 from unittest.mock import patch
 
 import pytest
@@ -18,37 +17,13 @@ from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClien
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 
 from custom_components.netzooe_eservice.const import DOMAIN
+from tests.api_data import API_URL
 from tests.api_data import CONSENTS_DATA
-from tests.api_data import CONTRACT_ACCOUNT_DATA_1
-from tests.api_data import CONTRACT_ACCOUNT_DATA_2
-from tests.api_data import CONTRACT_ACCOUNT_DATA_3
-from tests.api_data import CONTRACT_ACCOUNT_DATA_4
-from tests.api_data import CONTRACT_ACCOUNT_DATA_5
-from tests.api_data import CONTRACT_ACCOUNT_DATA_6
+from tests.api_data import CONTRACT_ACCOUNTS
 from tests.api_data import DASHBOARD_DATA
-from tests.api_data import EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3
-from tests.api_data import EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4
-from tests.api_data import EEG_OOE_PROFILE_DATA_MONTHLY_L2_004_1
-from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3
-from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4
-from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L2_L3_004_1
-from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3
-from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2
-from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_005_1
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_006_1
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_005_1
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_006_1
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3
-from tests.api_data import WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1
-from tests.api_data import WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1
-from tests.api_data import WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2
+from tests.api_data import PROFILE_RESPONSES
+from tests.api_data import PROFILE_URL
+from tests.api_data import ProfileRequestKey
 
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator
@@ -58,51 +33,7 @@ if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
     from yarl import URL
 
-type ProfileRequestKey = tuple[str, str, str, str]
 """Contract account number, energy community ID, first and last day of a consumption profile request."""
-
-API_URL: Final[str] = "https://eservice.netzooe.at/service"
-PROFILE_URL: Final[str] = f"{API_URL}/v1.0/consumptions/profile/active"
-
-WSEG: Final[str] = "AT00300000000RC100930000000965743"
-SEVEN_ENERGY: Final[str] = "ATCC9999DYNAMCC100087000000000002"
-EEG_OOE: Final[str] = "AT00300000000RC103550000000985681"
-
-CONTRACT_ACCOUNTS: Final[dict[str, dict[str, Any]]] = {
-    "001": CONTRACT_ACCOUNT_DATA_1,
-    "002": CONTRACT_ACCOUNT_DATA_2,
-    "003": CONTRACT_ACCOUNT_DATA_3,
-    "004": CONTRACT_ACCOUNT_DATA_4,
-    "005": CONTRACT_ACCOUNT_DATA_5,
-    "006": CONTRACT_ACCOUNT_DATA_6,
-}
-
-# Consumption profiles by request, for the full update at tests.NOW (cutoff 2026-06-12, previous month May 2026).
-PROFILE_RESPONSES: Final[dict[ProfileRequestKey, list[dict[str, Any]]]] = {
-    ("001", WSEG, "2024-05-06", "2025-09-30"): WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1,
-    ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-12"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2,
-    ("001", SEVEN_ENERGY, "2026-05-01", "2026-05-31"): SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2,
-    ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2,
-    ("001", EEG_OOE, "2026-05-21", "2026-06-12"): EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3,
-    ("001", EEG_OOE, "2026-05-21", "2026-05-31"): EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3,
-    ("001", EEG_OOE, "2026-05-21", "2026-06-28"): EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3,
-    ("002", SEVEN_ENERGY, "2026-06-17", "2026-06-28"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1,
-    ("002", EEG_OOE, "2026-06-17", "2026-06-28"): EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2,
-    ("003", WSEG, "2024-05-06", "2024-05-07"): WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1,
-    ("003", WSEG, "2024-09-10", "2025-09-30"): WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2,
-    ("003", SEVEN_ENERGY, "2026-01-26", "2026-06-12"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3,
-    ("003", SEVEN_ENERGY, "2026-05-01", "2026-05-31"): SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3,
-    ("003", SEVEN_ENERGY, "2026-01-26", "2026-06-16"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3,
-    ("003", EEG_OOE, "2026-05-21", "2026-06-12"): EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4,
-    ("003", EEG_OOE, "2026-05-21", "2026-05-31"): EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4,
-    ("003", EEG_OOE, "2026-05-21", "2026-06-16"): EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4,
-    ("004", EEG_OOE, "2026-03-01", "2026-05-15"): EEG_OOE_PROFILE_DATA_TOTAL_L2_L3_004_1,
-    ("004", EEG_OOE, "2026-05-01", "2026-05-15"): EEG_OOE_PROFILE_DATA_MONTHLY_L2_004_1,
-    ("005", SEVEN_ENERGY, "2026-05-16", "2026-06-10"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_005_1,
-    ("005", SEVEN_ENERGY, "2026-05-16", "2026-05-31"): SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_005_1,
-    ("006", SEVEN_ENERGY, "2026-02-01", "2026-06-01"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_006_1,
-    ("006", SEVEN_ENERGY, "2026-05-01", "2026-05-31"): SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_006_1,
-}
 
 
 @pytest.fixture

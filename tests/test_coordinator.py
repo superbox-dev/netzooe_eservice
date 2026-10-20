@@ -12,8 +12,6 @@ from datetime import timedelta
 from http import HTTPStatus
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Final
-from zoneinfo import ZoneInfo
 
 import pytest
 from homeassistant.config_entries import SOURCE_REAUTH
@@ -22,19 +20,29 @@ from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClien
 
 from custom_components.netzooe_eservice.const import SCAN_INTERVAL
 from custom_components.netzooe_eservice.const import SCAN_INTERVAL_FULL
-from tests import NOW
 from tests import options
 from tests import refresh
 from tests import setup_integration
 from tests.api_data import CONSENTS_DATA
 from tests.api_data import CONTRACT_ACCOUNT_DATA_2
 from tests.api_data import CONTRACT_ACCOUNT_DATA_4
+from tests.api_data import CONTRIBUTION_FACTOR_ENTITY_ID
+from tests.api_data import NOW
+from tests.api_data import PROFILE_RESPONSES
+from tests.api_data import PROFILE_URL
+from tests.api_data import SEVEN_ENERGY
 from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2
-from tests.conftest import PROFILE_RESPONSES
-from tests.conftest import PROFILE_URL
-from tests.conftest import SEVEN_ENERGY
-from tests.conftest import WSEG
+from tests.api_data import WSEG
 from tests.conftest import profile_request_keys
+from tests.test_coordinator_data import ENERGY_COMMUNITY_EXPORT_ENTITY_ID
+from tests.test_coordinator_data import FREQUENT_UPDATES_DISABLED
+from tests.test_coordinator_data import FREQUENT_UPDATES_ENABLED
+from tests.test_coordinator_data import INACTIVE_METER_POINT
+from tests.test_coordinator_data import OTHER_ENERGY_COMMUNITY_EXPORT_ENTITY_ID
+from tests.test_coordinator_data import STATUS_ENTITY_ID
+from tests.test_coordinator_data import SUPPLIER_ENTITY_ID
+from tests.test_coordinator_data import TOTAL_EXPORT_ENTITY_ID
+from tests.test_coordinator_data import VIENNA
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -45,27 +53,6 @@ if TYPE_CHECKING:
 
     from tests.conftest import FakeNetzOOEeServiceAPI
     from tests.conftest import ProfileRequestKey
-
-VIENNA: Final[ZoneInfo] = ZoneInfo("Europe/Vienna")
-
-CONTRIBUTION_FACTOR_ENTITY_ID: Final[str] = (
-    "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_contribution_factor"
-)
-STATUS_ENTITY_ID: Final[str] = "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status"
-ENERGY_COMMUNITY_EXPORT_ENTITY_ID: Final[str] = (
-    "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l3"
-)
-OTHER_ENERGY_COMMUNITY_EXPORT_ENTITY_ID: Final[str] = (
-    "sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_energy_community_export_l3"
-)
-TOTAL_EXPORT_ENTITY_ID: Final[str] = (
-    "sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3"
-)
-SUPPLIER_ENTITY_ID: Final[str] = "sensor.netzooe_eservice_at0000000000000000000000011111112_supplier"
-INACTIVE_METER_POINT: Final[str] = "AT0000000000000000000000011111113"
-
-FREQUENT_UPDATES_ENABLED: Final[dict[str, Any]] = options(frequent_updates=True)
-FREQUENT_UPDATES_DISABLED: Final[dict[str, Any]] = options(frequent_updates=False)
 
 
 def _contract_account_requested(aioclient_mock: AiohttpClientMocker) -> bool:
