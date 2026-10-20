@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+### Changed
+
+- Showed the documentation in the light mode by default and kept the right column readable on smaller screens.
+
 ### Fixed
 
 - Fixed the "Include data from inactive contract accounts" option being ignored for meter points without an active
