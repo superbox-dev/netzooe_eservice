@@ -7,6 +7,7 @@ from __future__ import annotations
 import asyncio
 import logging
 from collections import defaultdict
+from dataclasses import dataclass
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
@@ -14,7 +15,6 @@ from functools import partial
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
-from typing import NamedTuple
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import ConfigEntryAuthFailed
@@ -75,14 +75,16 @@ ENERGY_COMMUNITY_ID_SERVICE_PROVIDER: Final[slice] = slice(13, 21)
 """Position of the service provider code in the energy community ID, e.g. `AT00300000000RC100930000000965743`."""
 
 
-class ActiveContractData(NamedTuple):
+@dataclass(frozen=True, kw_only=True)
+class ActiveContractData:
     """Active contract and the contracts to use for a meter point."""
 
     active_contract: dict[str, Any]
     contracts_to_use: list[dict[str, Any]]
 
 
-class ProfilePeriods(NamedTuple):
+@dataclass(frozen=True, kw_only=True)
+class ProfilePeriods:
     """Date ranges of the consumption profiles that are requested in a full update."""
 
     cutoff: date
@@ -105,7 +107,8 @@ class ProfilePeriods(NamedTuple):
         )
 
 
-class Timeslice(NamedTuple):
+@dataclass(frozen=True, kw_only=True)
+class Timeslice:
     """Energy community timeslice of a contract account at a meter point."""
 
     contract_account_number: str
@@ -113,7 +116,8 @@ class Timeslice(NamedTuple):
     data: dict[str, Any]
 
 
-class ProfileRequest(NamedTuple):
+@dataclass(frozen=True, kw_only=True)
+class ProfileRequest:
     """Consumption profile request of an energy community timeslice."""
 
     targets: tuple[list[dict[str, Any]], ...]
@@ -453,7 +457,11 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 if energy_community is not None:
                     profile_requests += self._get_profile_requests(
                         energy_community,
-                        Timeslice(contract_account_number, mpan, timeslice),
+                        Timeslice(
+                            contract_account_number=contract_account_number,
+                            meter_point_administration_number=mpan,
+                            data=timeslice,
+                        ),
                         periods=periods,
                     )
 
