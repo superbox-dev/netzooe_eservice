@@ -16,6 +16,7 @@ from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
 
+from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
@@ -47,6 +48,7 @@ from .const import PEAK_POWER_REFERENCE_NUMBERS
 from .const import PROFILE_DATA_DELAY
 from .const import SCAN_INTERVAL
 from .const import SCAN_INTERVAL_FULL
+from .const import TO_REDACT
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable
@@ -202,7 +204,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         if self._warning_resolved("api_error"):
             _LOGGER.info("The eService portal is available again")
 
-        _LOGGER.debug("Data: %s", data)
+        _LOGGER.debug("Data: %s", async_redact_data(data, TO_REDACT))
         return data
 
     async def _async_fetch_all_data(self, periods: ProfilePeriods, /) -> dict[str, Any]:
@@ -286,7 +288,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
     async def _async_fetch_contracts_by_mpan(self) -> dict[str, list[dict[str, Any]]]:
         """Fetch all contract accounts and group their electricity contracts by meter point."""
         dashboard: dict[str, Any] = await self.api.dashboard()
-        _LOGGER.debug("Dashboard: %s", dashboard)
+        _LOGGER.debug("Dashboard: %s", async_redact_data(dashboard, TO_REDACT))
 
         all_contract_accounts: list[dict[str, Any]] = await self._async_gather(
             partial(
@@ -300,7 +302,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         contracts_by_mpan: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
         for contract_accounts in all_contract_accounts:
-            _LOGGER.debug("Contract accounts: %s", contract_accounts)
+            _LOGGER.debug("Contract accounts: %s", async_redact_data(contract_accounts, TO_REDACT))
 
             for contract in contract_accounts["contracts"]:
                 if (

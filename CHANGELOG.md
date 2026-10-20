@@ -19,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed the error `Detected code that closes the Home Assistant aiohttp session` that was logged each time the
   integration was unloaded or reloaded, e.g. after changing the options.
 
+### Security
+
+- Redacted the business partner, contract account, meter and meter point numbers in the debug log of the portal
+  data.
+
 ## [1.2.0] - 2026-10-18
 
 ### Added
