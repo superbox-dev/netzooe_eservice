@@ -9,21 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
-### Changed
-
-- Showed the documentation only in the light theme with the colors of the integration pages on home-assistant.io,
-  the "My Home Assistant" button to add the integration below the logo and a wider right column on smaller
-  screens.
-- Focused the search of the documentation with `/` instead of `Ctrl`/`Cmd` + `K`, styled the search like
-  home-assistant.io and made the header translucent.
+## [1.2.1] - 2026-10-24
 
 ### Fixed
 
 - Fixed the "Include data from inactive contract accounts" option being ignored for meter points without an active
   contract. When disabled, their energy communities now only use the most recently ended contract instead of all
   contracts of the meter point.
-- Updated `netzooe_eservice_api` to 1.2.1b3. Unloading the integration while a login is still running no longer
-  fails with an unexpected error.
+- Updated `netzooe_eservice_api` to 1.3.0. Unloading the integration while a login is still running no longer
+  fails with an unexpected error, and a request without an answer of the portal now fails after 30 seconds instead
+  of 5 minutes.
 - Fixed the error `Detected code that closes the Home Assistant aiohttp session` that was logged each time the
   integration was unloaded or reloaded, e.g. after changing the options.
 
@@ -153,7 +148,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added English and German translations.
 - Added the data update every 3 hours.
 
-[Unreleased]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.0.1...v1.1.0
