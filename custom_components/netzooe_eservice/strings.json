@@ -65,18 +65,6 @@
             "energy_community_import_l3": {
                 "name": "Energy community import L1/L2/L3"
             },
-            "supplier_export_l2": {
-                "name": "Supplier export L1/L2 (16-day delay)"
-            },
-            "supplier_export_l3": {
-                "name": "Supplier export L1/L2/L3"
-            },
-            "supplier_import_l2": {
-                "name": "Supplier import L1/L2 (16-day delay)"
-            },
-            "supplier_import_l3": {
-                "name": "Supplier import L1/L2/L3"
-            },
             "last_month_energy_community_export_l2": {
                 "name": "Energy community export L2 (previous month)"
             },
@@ -128,6 +116,18 @@
             "supplier": {
                 "name": "Supplier"
             },
+            "supplier_export_l2": {
+                "name": "Supplier export L1/L2 (16-day delay)"
+            },
+            "supplier_export_l3": {
+                "name": "Supplier export L1/L2/L3"
+            },
+            "supplier_import_l2": {
+                "name": "Supplier import L1/L2 (16-day delay)"
+            },
+            "supplier_import_l3": {
+                "name": "Supplier import L1/L2/L3"
+            },
             "yearly_trend": {
                 "name": "Yearly trend"
             },
@@ -153,14 +153,14 @@
                 "data": {
                     "frequent_updates": "Frequent updates (every 15 minutes)",
                     "include_inactive_contract_account_data": "Include data from inactive contract accounts (same meter point)",
-                    "show_revoked_energy_communities": "Show revoked energy communities",
-                    "show_inactive_meter_points": "Show inactive meter points"
+                    "show_inactive_meter_points": "Show inactive meter points",
+                    "show_revoked_energy_communities": "Show revoked energy communities"
                 },
                 "data_description": {
                     "frequent_updates": "When enabled, the energy community status and contribution factor are refreshed every 15 minutes. When disabled, all data is refreshed only every 3 hours.",
-                    "include_inactive_contract_account_data": "When enabled, data from contract accounts with inactive suppliers at the same meter point is merged into the active account's data. This affects both the individual energy community sensors and the total import/export sensors for the meter point.",
-                    "show_revoked_energy_communities": "When enabled, energy communities with revoked participation are shown as separate devices with their own sensors, instead of only active memberships. Their consumption/production data is also added to the total import/export sensors for the meter point.",
-                    "show_inactive_meter_points": "When enabled, meter points where all contract accounts are inactive are also shown."
+                    "include_inactive_contract_account_data": "When enabled, data from contract accounts with inactive suppliers at the same meter point is merged into the active account's data (for inactive meter points into the data of the most recently ended contract). This affects both the individual energy community sensors and the total import/export sensors for the meter point.",
+                    "show_inactive_meter_points": "When enabled, meter points where all contract accounts are inactive are also shown.",
+                    "show_revoked_energy_communities": "When enabled, energy communities with revoked participation are shown as separate devices with their own sensors, instead of only active memberships. Their consumption/production data is also added to the total import/export sensors for the meter point."
                 }
             }
         }

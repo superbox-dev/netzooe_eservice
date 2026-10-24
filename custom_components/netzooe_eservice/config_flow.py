@@ -23,18 +23,12 @@ from homeassistant.helpers.selector import BooleanSelector
 from netzooe_eservice_api.api import NetzOOEeServiceAPI
 from netzooe_eservice_api.error import APIError
 
-from .const import CONF_FREQUENT_UPDATES
-from .const import CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
-from .const import CONF_SHOW_INACTIVE_METER_POINTS
-from .const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
 from .const import CONFIG_ENTRY_VERSION
-from .const import DEFAULT_FREQUENT_UPDATES
-from .const import DEFAULT_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
-from .const import DEFAULT_SHOW_INACTIVE_METER_POINTS
-from .const import DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES
+from .const import DESCRIPTION_PLACEHOLDERS
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .const import NAME
+from .const import OPTIONS
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -44,18 +38,7 @@ if TYPE_CHECKING:
 
     from .coordinator import NetzOOEeServiceConfigEntry
 
-_LOGGER: logging.Logger = logging.getLogger(__name__)
-
-# Options with their defaults, in the order of the options form.
-OPTIONS: Final[dict[str, bool]] = {
-    CONF_FREQUENT_UPDATES: DEFAULT_FREQUENT_UPDATES,
-    CONF_SHOW_REVOKED_ENERGY_COMMUNITIES: DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES,
-    CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: DEFAULT_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA,
-    CONF_SHOW_INACTIVE_METER_POINTS: DEFAULT_SHOW_INACTIVE_METER_POINTS,
-}
-DESCRIPTION_PLACEHOLDERS: Final[dict[str, str]] = {
-    "name": f"{MANUFACTURER} {NAME}",
-}
+_LOGGER: Final[logging.Logger] = logging.getLogger(__name__)
 
 
 async def validate_input(hass: HomeAssistant, /, *, data: Mapping[str, Any]) -> None:
@@ -111,6 +94,32 @@ class NetzOOEeServiceConfigFlow(ConfigFlow, domain=DOMAIN):
             description_placeholders=DESCRIPTION_PLACEHOLDERS,
         )
 
+    async def _async_validate_or_error(self, data: Mapping[str, Any]) -> dict[str, str]:
+        """Validate the credentials and return the errors for the form."""
+        errors: dict[str, str] = {}
+
+        try:
+            await validate_input(self.hass, data=data)
+        except CannotConnectError:
+            errors["base"] = "cannot_connect"
+        except InvalidAuthError:
+            errors["base"] = "invalid_auth"
+        except Exception:
+            errors["base"] = "unknown"
+            _LOGGER.exception("Unexpected exception")
+
+        return errors
+
+    @staticmethod
+    def _credentials_schema(*, username: str) -> vol.Schema:
+        """Return the schema of the username and password form."""
+        return vol.Schema(
+            {
+                vol.Required(CONF_USERNAME, default=username): str,
+                vol.Required(CONF_PASSWORD): str,
+            },
+        )
+
     async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle reconfiguration of the credentials."""
         entry: NetzOOEeServiceConfigEntry = self._get_reconfigure_entry()
@@ -155,32 +164,6 @@ class NetzOOEeServiceConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
             description_placeholders=DESCRIPTION_PLACEHOLDERS | {CONF_USERNAME: entry.data[CONF_USERNAME]},
         )
-
-    @staticmethod
-    def _credentials_schema(*, username: str) -> vol.Schema:
-        """Return the schema of the username and password form."""
-        return vol.Schema(
-            {
-                vol.Required(CONF_USERNAME, default=username): str,
-                vol.Required(CONF_PASSWORD): str,
-            },
-        )
-
-    async def _async_validate_or_error(self, data: Mapping[str, Any]) -> dict[str, str]:
-        """Validate the credentials and return the errors for the form."""
-        errors: dict[str, str] = {}
-
-        try:
-            await validate_input(self.hass, data=data)
-        except CannotConnectError:
-            errors["base"] = "cannot_connect"
-        except InvalidAuthError:
-            errors["base"] = "invalid_auth"
-        except Exception:
-            errors["base"] = "unknown"
-            _LOGGER.exception("Unexpected exception")
-
-        return errors
 
     @staticmethod
     @callback

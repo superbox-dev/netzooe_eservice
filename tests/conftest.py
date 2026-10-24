@@ -17,36 +17,23 @@ from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClien
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 
 from custom_components.netzooe_eservice.const import DOMAIN
+from tests.api_data import API_URL
 from tests.api_data import CONSENTS_DATA
-from tests.api_data import CONTRACT_ACCOUNT_DATA_1
-from tests.api_data import CONTRACT_ACCOUNT_DATA_2
-from tests.api_data import CONTRACT_ACCOUNT_DATA_3
-from tests.api_data import CONTRACT_ACCOUNT_DATA_4
+from tests.api_data import CONTRACT_ACCOUNTS
 from tests.api_data import DASHBOARD_DATA
-from tests.api_data import EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3
-from tests.api_data import EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4
-from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3
-from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4
-from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3
-from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2
-from tests.api_data import EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3
-from tests.api_data import WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1
-from tests.api_data import WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1
-from tests.api_data import WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2
+from tests.api_data import PROFILE_RESPONSES
+from tests.api_data import PROFILE_URL
+from tests.api_data import ProfileRequestKey
 
 if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
     from collections.abc import Generator
 
     from _pytest.fixtures import SubRequest
     from syrupy.assertion import SnapshotAssertion
     from yarl import URL
+
+"""Contract account number, energy community ID, first and last day of a consumption profile request."""
 
 
 @pytest.fixture
@@ -61,60 +48,43 @@ def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:  
     return
 
 
+def profile_request_key(data: dict[str, Any]) -> ProfileRequestKey:
+    """Return the key of a consumption profile request body."""
+    pod: dict[str, Any] = data["pods"][0]
+    return (
+        pod["contractAccountNumber"],
+        pod["energyCommunityId"],
+        pod["timerange"]["from"],
+        pod["timerange"]["to"],
+    )
+
+
+def profile_request_keys(aioclient_mock: AiohttpClientMocker) -> list[ProfileRequestKey]:
+    """Return the keys of all requested consumption profiles."""
+    return [
+        profile_request_key(data)
+        for _method, url, data, _headers in aioclient_mock.mock_calls
+        if str(url) == PROFILE_URL
+    ]
+
+
 class FakeNetzOOEeServiceAPI:
     """Fake eService portal API that registers the mocked HTTP responses."""
 
     def __init__(self, aioclient_mock: AiohttpClientMocker) -> None:
-        """Initialize the fake API with the consumption profiles in the order of the requests."""
+        """Initialize the fake API with the consumption profiles of the requests."""
         self.aioclient_mock: AiohttpClientMocker = aioclient_mock
-
-        self.profile_data_queue: list[list[dict[str, Any]]] = []
-        self.profile_data: list[list[dict[str, Any]]] = [
-            WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1,
-            SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2,
-            SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2,
-            SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2,
-            EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3,
-            EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3,
-            EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3,
-            SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1,
-            EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2,
-            WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1,
-            WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2,
-            SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3,
-            SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3,
-            SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3,
-            EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4,
-            EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4,
-            EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4,
-        ]
+        self.profile_responses: dict[ProfileRequestKey, list[dict[str, Any]]] = dict(PROFILE_RESPONSES)
+        self.allow_unknown_profile_requests: bool = False
+        self.unknown_profile_requests: list[ProfileRequestKey] = []
 
     def register_auth_request(self, /, *, status: int = 200, exc: Exception | None = None) -> None:
         """Register the login request."""
-        self.aioclient_mock.post(
-            "https://eservice.netzooe.at/service/j_security_check",
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept": "application/json, text/plain, */*",
-                "client-id": "netzonline",
-                "Content-Type": "application/json",
-            },
-            status=status,
-            exc=exc,
-        )
+        self.aioclient_mock.post(f"{API_URL}/j_security_check", status=status, exc=exc)
 
     def register_session_request(self) -> None:
         """Register the session request."""
-        self.aioclient_mock.get(
-            "https://eservice.netzooe.at/service/v1.0/session",
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept": "application/json, text/plain, */*",
-                "client-id": "netzonline",
-            },
-            status=200,
-            cookies={"XSRF-TOKEN": "mocked-token"},
-        )
+        self.aioclient_mock.get(f"{API_URL}/v1.0/session", cookies={"XSRF-TOKEN": "mocked-token"})
 
     def register_consents_request(
         self,
@@ -125,131 +95,67 @@ class FakeNetzOOEeServiceAPI:
     ) -> None:
         """Register the consents request."""
         self.aioclient_mock.get(
-            "https://eservice.netzooe.at/service/v1.0/consents",
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept": "application/json, text/plain, */*",
-                "client-id": "netzonline",
-                "Content-Type": "application/json",
-                "x-xsrf-token": "mocked-token",
-            },
+            f"{API_URL}/v1.0/consents",
             status=status,
             json=CONSENTS_DATA if consents is None else consents,
         )
 
     def register_dashboard_request(self, /, *, status: int = 200) -> None:
         """Register the dashboard request."""
-        self.aioclient_mock.get(
-            "https://eservice.netzooe.at/service/v1.0/dashboard",
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept": "application/json, text/plain, */*",
-                "client-id": "netzonline",
-                "Content-Type": "application/json",
-                "x-xsrf-token": "mocked-token",
-            },
-            status=status,
-            json=DASHBOARD_DATA,
-        )
+        self.aioclient_mock.get(f"{API_URL}/v1.0/dashboard", status=status, json=DASHBOARD_DATA)
 
-    def register_requests(self, /, *, consents: list[dict[str, Any]] | None = None) -> None:
-        """Register all requests of a full update except the login."""
+    def register_requests(
+        self,
+        /,
+        *,
+        consents: list[dict[str, Any]] | None = None,
+        contract_accounts: dict[str, dict[str, Any]] | None = None,
+    ) -> None:
+        """Register all requests of a full update except the login.
+
+        ``contract_accounts`` replaces the data of the given contract account numbers.
+        """
         self.register_session_request()
         self.register_consents_request(consents=consents)
         self.register_dashboard_request()
-        self.register_contract_account_requests()
 
-    def register_contract_account_requests(self) -> None:
-        """Register the contract account and consumption profile requests."""
-        self.profile_data_queue = list(self.profile_data)
+        for number, data in (CONTRACT_ACCOUNTS | (contract_accounts or {})).items():
+            self.aioclient_mock.get(f"{API_URL}/v1.0/contract-accounts/100/{number}", json=data)
 
-        self.aioclient_mock.get(
-            "https://eservice.netzooe.at/service/v1.0/contract-accounts/100/001",
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept": "application/json, text/plain, */*",
-                "client-id": "netzonline",
-                "Content-Type": "application/json",
-                "x-xsrf-token": "mocked-token",
-            },
-            status=200,
-            json=CONTRACT_ACCOUNT_DATA_1,
-        )
-
-        self.aioclient_mock.get(
-            "https://eservice.netzooe.at/service/v1.0/contract-accounts/100/002",
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept": "application/json, text/plain, */*",
-                "client-id": "netzonline",
-                "Content-Type": "application/json",
-                "x-xsrf-token": "mocked-token",
-            },
-            status=200,
-            json=CONTRACT_ACCOUNT_DATA_2,
-        )
-
-        self.aioclient_mock.get(
-            "https://eservice.netzooe.at/service/v1.0/contract-accounts/100/003",
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept": "application/json, text/plain, */*",
-                "client-id": "netzonline",
-                "Content-Type": "application/json",
-                "x-xsrf-token": "mocked-token",
-            },
-            status=200,
-            json=CONTRACT_ACCOUNT_DATA_3,
-        )
-
-        self.aioclient_mock.get(
-            "https://eservice.netzooe.at/service/v1.0/contract-accounts/100/004",
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept": "application/json, text/plain, */*",
-                "client-id": "netzonline",
-                "Content-Type": "application/json",
-                "x-xsrf-token": "mocked-token",
-            },
-            status=200,
-            json=CONTRACT_ACCOUNT_DATA_4,
-        )
-
-        self.aioclient_mock.post(
-            "https://eservice.netzooe.at/service/v1.0/consumptions/profile/active",
-            headers={
-                "User-Agent": "Mozilla/5.0",
-                "Accept": "application/json, text/plain, */*",
-                "client-id": "netzonline",
-                "Content-Type": "application/json",
-            },
-            status=200,
-            side_effect=self.profile_data_side_effect,
-        )
+        self.aioclient_mock.post(PROFILE_URL, side_effect=self.profile_data_side_effect)
 
     async def profile_data_side_effect(
         self,
         method: str,
         url: URL,
-        *args: object,  # noqa: ARG002
+        data: dict[str, Any],
     ) -> AiohttpClientMockResponse:
-        """Return the next consumption profile in the order of the requests."""
-        response = self.profile_data_queue.pop(0)
+        """Return the consumption profile of the request, or no values for an unknown request.
 
-        return AiohttpClientMockResponse(
-            method,
-            url=url,
-            json=response,
-            headers={"Content-Type": "application/json"},
-        )
+        Unknown requests are recorded, the `fake_api` fixture fails the test if there are any.
+        """
+        key: ProfileRequestKey = profile_request_key(data)
+
+        if key not in self.profile_responses:
+            self.unknown_profile_requests.append(key)
+
+        return AiohttpClientMockResponse(method, url=url, json=self.profile_responses.get(key, []))
 
 
 @pytest.fixture(autouse=True)
 async def fake_api(
     aioclient_mock: AiohttpClientMocker,
-) -> FakeNetzOOEeServiceAPI:
-    """Return the fake eService portal API."""
-    return FakeNetzOOEeServiceAPI(aioclient_mock)
+) -> AsyncGenerator[FakeNetzOOEeServiceAPI]:
+    """Return the fake eService portal API and check that no unknown consumption profile was requested.
+
+    A test that checks the requests itself sets `allow_unknown_profile_requests`.
+    """
+    api: FakeNetzOOEeServiceAPI = FakeNetzOOEeServiceAPI(aioclient_mock)
+
+    yield api
+
+    if not api.allow_unknown_profile_requests:
+        assert api.unknown_profile_requests == []
 
 
 @pytest.fixture

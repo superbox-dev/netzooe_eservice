@@ -4,10 +4,8 @@
 
 from __future__ import annotations
 
-import re
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Final
 
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -15,14 +13,13 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .const import NAME
+from .const import SHORT_DEVICE_ID_PATTERN
 from .coordinator import NetzOOEeServiceConfigEntry
 from .coordinator import NetzOOEeServiceDataUpdateCoordinator
 
 if TYPE_CHECKING:
+    import re
     from collections.abc import Mapping
-
-# Matches IDs like "AT0031000000000000000000000012345" and captures the number without leading zeros, e.g. "12345".
-SHORT_DEVICE_ID_PATTERN: Final[re.Pattern[str]] = re.compile(r"^[A-Z]{2}\d{4}0*([1-9][0-9]*)$")
 
 
 class NetzOOEeServiceEntity(CoordinatorEntity[NetzOOEeServiceDataUpdateCoordinator]):
@@ -52,6 +49,12 @@ class NetzOOEeServiceEntity(CoordinatorEntity[NetzOOEeServiceDataUpdateCoordinat
         """Return the name of the device."""
         return f"{self.data['deviceName']} ({self._short_device_id(self.device_identifier)})"
 
+    @staticmethod
+    def _short_device_id(device_id: str) -> str:
+        """Return the short form of a meter point or energy community ID, e.g. for device names."""
+        match: re.Match[str] | None = SHORT_DEVICE_ID_PATTERN.search(device_id)
+        return match.group(1) if match else device_id
+
     @property
     def device_info(self) -> DeviceInfo:
         """Return the device info."""
@@ -61,9 +64,3 @@ class NetzOOEeServiceEntity(CoordinatorEntity[NetzOOEeServiceDataUpdateCoordinat
             model=NAME,
             manufacturer=MANUFACTURER,
         )
-
-    @staticmethod
-    def _short_device_id(device_id: str) -> str:
-        """Return the short form of a meter point or energy community ID, e.g. for device names."""
-        match: re.Match[str] | None = SHORT_DEVICE_ID_PATTERN.search(device_id)
-        return match.group(1) if match else device_id

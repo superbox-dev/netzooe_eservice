@@ -9,11 +9,11 @@ from typing import Any
 
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_USERNAME
-from homeassistant.const import Platform
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
 from .const import DOMAIN
+from .const import PLATFORMS
 from .coordinator import NetzOOEeServiceConfigEntry
 from .coordinator import NetzOOEeServiceDataUpdateCoordinator
 
@@ -22,19 +22,15 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.device_registry import DeviceRegistry
 
-PLATFORMS: list[Platform] = [
-    Platform.SENSOR,
-]
-
 
 async def async_setup_entry(hass: HomeAssistant, entry: NetzOOEeServiceConfigEntry) -> bool:
     """Set up Netz OÖ eService from a config entry."""
     username: str = entry.data[CONF_USERNAME]
     password: str = entry.data[CONF_PASSWORD]
 
-    # Each config entry needs its own session (cookie jar), close it when the entry is unloaded or reloaded.
+    # Each config entry needs its own session (cookie jar).
+    # Home Assistant detaches it when the entry is unloaded or reloaded, closing it here would raise an error.
     session: ClientSession = async_create_clientsession(hass)
-    entry.async_on_unload(session.close)
 
     coordinator: NetzOOEeServiceDataUpdateCoordinator = NetzOOEeServiceDataUpdateCoordinator(
         hass,

@@ -67,14 +67,21 @@ const config: Config = {
         docsRouteBasePath: '/',
         indexBlog: false,
         highlightSearchTermsOnTargetPage: true,
+        // "/" is handled in src/searchShortcut.ts, independent of the keyboard layout
+        searchBarShortcut: false,
+        searchBarShortcutHint: false,
       },
     ],
   ],
 
+  clientModules: ['./src/searchShortcut.ts'],
+
   themeConfig: {
     image: 'img/social-card.png',
     colorMode: {
-      respectPrefersColorScheme: true,
+      defaultMode: 'light',
+      disableSwitch: true,
+      respectPrefersColorScheme: false,
     },
     docs: {
       sidebar: {

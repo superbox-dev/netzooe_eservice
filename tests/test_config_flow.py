@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigFlowResult
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant_custom_component.common import MockConfigEntry
+    from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
 
     from tests.conftest import FakeNetzOOEeServiceAPI
 
@@ -70,14 +71,16 @@ async def test_user_flow(
         (APIError("mocked api error", status=HTTPStatus.UNAUTHORIZED), "invalid_auth"),
         (Exception("mocked client error"), "unknown"),
     ],
+    ids=["cannot_connect", "invalid_auth", "unknown"],
 )
 async def test_user_flow_failed(
     hass: HomeAssistant,
     fake_api: FakeNetzOOEeServiceAPI,
+    aioclient_mock: AiohttpClientMocker,
     side_effect: Exception,
     expected_error: str,
 ) -> None:
-    """Test that the user flow shows an error if the login fails."""
+    """Test that the user flow shows an error if the login fails and creates the entry after a successful retry."""
     fake_api.register_auth_request(exc=side_effect)
     fake_api.register_requests()
 
@@ -104,13 +107,51 @@ async def test_user_flow_failed(
         "base": expected_error,
     }
 
+    aioclient_mock.clear_requests()
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    result_retry: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result_create_entry["flow_id"],
+        user_input={
+            CONF_USERNAME: "test",
+            CONF_PASSWORD: "test",
+        },
+    )
+
+    assert result_retry["type"] == FlowResultType.CREATE_ENTRY
+
+
+async def test_user_flow_already_configured(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+) -> None:
+    """Test that the user flow aborts if the account is already configured."""
+    config_entry.add_to_hass(hass)
+
+    result_user_step: ConfigFlowResult = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": SOURCE_USER},
+    )
+
+    result_abort: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result_user_step["flow_id"],
+        user_input={
+            CONF_USERNAME: "test",
+            CONF_PASSWORD: "other",
+        },
+    )
+
+    assert result_abort["type"] == FlowResultType.ABORT
+    assert result_abort["reason"] == "already_configured"
+
 
 async def test_reconfigure_flow(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
-    """Test that the reconfigure flow updates the config entry."""
+    """Test that the reconfigure flow updates the credentials."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
@@ -125,7 +166,7 @@ async def test_reconfigure_flow(
         result["flow_id"],
         {
             "username": "test",
-            "password": "test",
+            "password": "new-password",
         },
     )
 
@@ -133,14 +174,16 @@ async def test_reconfigure_flow(
 
     assert result_user_step["type"] == FlowResultType.ABORT
     assert result_user_step["reason"] == "reconfigure_successful"
+    assert config_entry.data == {CONF_USERNAME: "test", CONF_PASSWORD: "new-password"}
 
 
 async def test_reconfigure_flow_failed(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
+    aioclient_mock: AiohttpClientMocker,
 ) -> None:
-    """Test that the reconfigure flow shows an error if the login fails."""
+    """Test that the reconfigure flow shows an error if the login fails and succeeds after a retry."""
     fake_api.register_auth_request(exc=APIError("mocked api error"))
     fake_api.register_requests()
 
@@ -159,6 +202,22 @@ async def test_reconfigure_flow_failed(
     assert result_reconfigure_step["type"] == FlowResultType.FORM
     assert result_reconfigure_step["step_id"] == "reconfigure"
     assert result_reconfigure_step["errors"] == {"base": "cannot_connect"}
+
+    aioclient_mock.clear_requests()
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    result_retry: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {
+            "username": "test",
+            "password": "test",
+        },
+    )
+    await hass.async_block_till_done()
+
+    assert result_retry["type"] == FlowResultType.ABORT
+    assert result_retry["reason"] == "reconfigure_successful"
 
 
 async def test_reconfigure_flow_wrong_account(
@@ -223,8 +282,9 @@ async def test_reauth_flow_failed(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
+    aioclient_mock: AiohttpClientMocker,
 ) -> None:
-    """Test that the reauth flow shows an error and keeps the password if the login fails."""
+    """Test that the reauth flow shows an error and keeps the password if the login fails, until a retry works."""
     fake_api.register_auth_request(exc=APIError("mocked api error", status=HTTPStatus.UNAUTHORIZED))
     fake_api.register_requests()
 
@@ -243,6 +303,22 @@ async def test_reauth_flow_failed(
     assert result_confirm_step["step_id"] == "reauth_confirm"
     assert result_confirm_step["errors"] == {"base": "invalid_auth"}
     assert config_entry.data == {CONF_USERNAME: "test", CONF_PASSWORD: "test"}
+
+    aioclient_mock.clear_requests()
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    result_retry: ConfigFlowResult = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {
+            "password": "new-password",
+        },
+    )
+    await hass.async_block_till_done()
+
+    assert result_retry["type"] == FlowResultType.ABORT
+    assert result_retry["reason"] == "reauth_successful"
+    assert config_entry.data == {CONF_USERNAME: "test", CONF_PASSWORD: "new-password"}
 
 
 async def test_option_flow(
@@ -264,9 +340,6 @@ async def test_option_flow(
     assert result_init["type"] is FlowResultType.FORM
     assert result_init["step_id"] == "init"
     assert result_init["data_schema"]
-
-    # The changed options reload the config entry, which fetches the consumption profiles again.
-    fake_api.register_contract_account_requests()
 
     assert list(result_init["data_schema"].schema.keys()) == [
         "frequent_updates",

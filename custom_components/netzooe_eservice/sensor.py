@@ -26,6 +26,11 @@ from homeassistant.helpers import device_registry as dr
 from netzooe_eservice_api.constants import ConsentsStatus
 
 from .const import DOMAIN
+from .const import ENERGY_COMMUNITY_CONSUMPTION
+from .const import ENERGY_COMMUNITY_GENERATION
+from .const import ENERGY_COMMUNITY_OVER_COVERAGE
+from .const import ENERGY_COMMUNITY_OWN_COVERAGE
+from .const import STATUS_OPTIONS
 from .const import DeviceType
 from .entity import NetzOOEeServiceEntity
 
@@ -43,11 +48,6 @@ if TYPE_CHECKING:
 
 PARALLEL_UPDATES: Final[int] = 0
 
-ENERGY_COMMUNITY_OWN_COVERAGE: Final[str] = "ENERGY_COMMUNITY_OWN_COVERAGE"
-ENERGY_COMMUNITY_CONSUMPTION: Final[str] = "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR"
-ENERGY_COMMUNITY_GENERATION: Final[str] = "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR"
-ENERGY_COMMUNITY_OVER_COVERAGE: Final[str] = "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR"
-STATUS_OPTIONS: Final[list[str]] = [status.value.lower() for status in ConsentsStatus]
 
 type Direction = Literal["import", "export"]
 

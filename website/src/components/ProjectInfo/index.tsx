@@ -2,16 +2,7 @@ import type {ReactNode} from 'react';
 import Link from '@docusaurus/Link';
 import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import {
-  mdiAccountGroup,
-  mdiBug,
-  mdiCloudDownload,
-  mdiGithub,
-  mdiHistory,
-  mdiHomeAssistant,
-  mdiLightbulbQuestion,
-  mdiShape,
-} from '@mdi/js';
+import {Bug, CloudDownload, Github, Lightbulb, Shapes, Users} from 'lucide-react';
 
 import hacs from '@site/../hacs.json';
 import manifest from '@site/../custom_components/netzooe_eservice/manifest.json';
@@ -22,14 +13,6 @@ const repository = 'https://github.com/superbox-dev/netzooe_eservice';
 // Explanation of the IoT classes in the Home Assistant blog
 const iotClasses = 'https://www.home-assistant.io/blog/2016/02/12/classifying-the-internet-of-things/';
 const categories = ['Energy', 'Sensor'];
-
-function Icon({path}: {path: string}): ReactNode {
-  return (
-    <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true">
-      <path d={path} />
-    </svg>
-  );
-}
 
 // "cloud_polling" -> "Cloud Polling", the anchor in the blog is "#cloud-polling"
 function iotClass(): {label: string; anchor: string} {
@@ -55,6 +38,14 @@ export default function ProjectInfo(): ReactNode {
             width={891}
             height={256}
           />
+          {/* The "My Home Assistant" badge of the integration pages on home-assistant.io */}
+          <Link href={`https://my.home-assistant.io/redirect/config_flow_start/?domain=${manifest.domain}`}>
+            <img
+              src="https://my.home-assistant.io/badges/config_flow_start.svg"
+              alt="Add integration to my Home Assistant"
+              height={37}
+            />
+          </Link>
           <Link href={`${repository}/releases`}>
             <img
               src="https://img.shields.io/github/v/release/superbox-dev/netzooe_eservice?label=Release"
@@ -72,33 +63,25 @@ export default function ProjectInfo(): ReactNode {
           owner.
         </p>
         <p className={styles.section}>
-          <Icon path={mdiCloudDownload} /> Its IoT class is <Link href={`${iotClasses}#${anchor}`}>{label}</Link>.
+          <CloudDownload className={styles.icon} aria-hidden="true" /> Its IoT class is <Link href={`${iotClasses}#${anchor}`}>{label}</Link>.
         </p>
         <p className={styles.section}>
           <Link href={repository}>
-            <Icon path={mdiGithub} /> View source on GitHub
+            <Github className={styles.icon} aria-hidden="true" /> View source on GitHub
           </Link>
           <br />
           <Link href={`${repository}/issues?q=is%3Aissue+is%3Aopen+label%3Abug`}>
-            <Icon path={mdiBug} /> View known issues
+            <Bug className={styles.icon} aria-hidden="true" /> View known issues
           </Link>
           <br />
           <Link href={`${repository}/issues/new/choose`}>
-            <Icon path={mdiLightbulbQuestion} /> Request a feature
-          </Link>
-          <br />
-          <Link href={`https://my.home-assistant.io/redirect/config_flow_start/?domain=${manifest.domain}`}>
-            <Icon path={mdiHomeAssistant} /> Add to Home Assistant
-          </Link>
-          <br />
-          <Link to="/changelog">
-            <Icon path={mdiHistory} /> Changelog
+            <Lightbulb className={styles.icon} aria-hidden="true" /> Request a feature
           </Link>
         </p>
       </section>
       <section className={styles.module}>
         <h2 className={styles.title}>
-          <Icon path={mdiShape} /> Categories
+          <Shapes className={styles.icon} aria-hidden="true" /> Categories
         </h2>
         <ul className={styles.list}>
           {categories.map((category) => (
@@ -108,7 +91,7 @@ export default function ProjectInfo(): ReactNode {
       </section>
       <section className={styles.module}>
         <h2 className={styles.title}>
-          <Icon path={mdiAccountGroup} /> Code owners
+          <Users className={styles.icon} aria-hidden="true" /> Code owners
         </h2>
         {manifest.codeowners.map((codeowner) => {
           const user = codeowner.replace(/^@/, '');

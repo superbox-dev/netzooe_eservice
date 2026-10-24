@@ -5,9 +5,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from unittest.mock import patch
 
-from homeassistant.util import dt as dt_util
 from pytest_homeassistant_custom_component.components.diagnostics import get_diagnostics_for_config_entry
 from syrupy.filters import props
 
@@ -34,11 +32,7 @@ async def test_diagnostics(
     fake_api.register_auth_request()
     fake_api.register_requests()
 
-    with patch(
-        "custom_components.netzooe_eservice.coordinator.dt_util.now",
-        return_value=dt_util.parse_datetime("2026-06-28T12:00:00+02:00"),
-    ):
-        await setup_integration(hass, config_entry)
+    await setup_integration(hass, config_entry)
 
     diagnostics: JsonObjectType = await get_diagnostics_for_config_entry(hass, hass_client, config_entry)
 

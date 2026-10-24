@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_icons[config_entry0]
+# name: test_icons[revoked_inactive_contracts]
   dict({
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_contribution_factor': None,
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l2': dict({

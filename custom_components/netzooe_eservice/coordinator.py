@@ -7,6 +7,7 @@ from __future__ import annotations
 import asyncio
 import logging
 from collections import defaultdict
+from dataclasses import dataclass
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
@@ -14,8 +15,8 @@ from functools import partial
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
-from typing import NamedTuple
 
+from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
@@ -25,7 +26,6 @@ from netzooe_eservice_api.api import NetzOOEeServiceAPI
 from netzooe_eservice_api.api import Pod
 from netzooe_eservice_api.constants import ConsentsStatus
 from netzooe_eservice_api.constants import ConsumptionsProfilesBranch
-from netzooe_eservice_api.constants import SynthProfile
 from netzooe_eservice_api.error import APIError
 from netzooe_eservice_api.error import AuthenticationError
 
@@ -38,11 +38,17 @@ from .const import DEFAULT_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
 from .const import DEFAULT_SHOW_INACTIVE_METER_POINTS
 from .const import DEFAULT_SHOW_REVOKED_ENERGY_COMMUNITIES
 from .const import DOMAIN
+from .const import ELECTRICITY_SYNTH_PROFILES
+from .const import ENERGY_COMMUNITY_DEVICE_TYPES
+from .const import ENERGY_COMMUNITY_ID_SERVICE_PROVIDER
 from .const import MAX_PARALLEL_REQUESTS
+from .const import METER_POINT_DEVICE_TYPES
+from .const import METER_READING_REFERENCE_NUMBERS
+from .const import PEAK_POWER_REFERENCE_NUMBERS
 from .const import PROFILE_DATA_DELAY
 from .const import SCAN_INTERVAL
 from .const import SCAN_INTERVAL_FULL
-from .const import DeviceType
+from .const import TO_REDACT
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable
@@ -52,37 +58,24 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
 
-_LOGGER: logging.Logger = logging.getLogger(__name__)
+_LOGGER: Final[logging.Logger] = logging.getLogger(__name__)
 
 type NetzOOEeServiceConfigEntry = ConfigEntry[NetzOOEeServiceDataUpdateCoordinator]
 type ConsentsMap = dict[str, list[dict[str, Any]]]
 
-ELECTRICITY_SYNTH_PROFILES: Final[set[str]] = {
-    SynthProfile.HOUSEHOLD.value,
-    SynthProfile.PHOTOVOLTAICS.value,
-}
-METER_POINT_DEVICE_TYPES: Final[dict[str, str]] = {
-    SynthProfile.HOUSEHOLD.value: DeviceType.HOUSEHOLD.value,
-    SynthProfile.PHOTOVOLTAICS.value: DeviceType.PHOTOVOLTAICS.value,
-}
-ENERGY_COMMUNITY_DEVICE_TYPES: Final[dict[str, str]] = {
-    SynthProfile.HOUSEHOLD.value: DeviceType.ENERGY_COMMUNITY_IMPORT.value,
-    SynthProfile.PHOTOVOLTAICS.value: DeviceType.ENERGY_COMMUNITY_EXPORT.value,
-}
-METER_READING_REFERENCE_NUMBERS: Final[set[str]] = {"1.8.1", "2.8.1"}
-PEAK_POWER_REFERENCE_NUMBERS: Final[set[str]] = {"1.6.0", "2.6.0"}
-ENERGY_COMMUNITY_ID_SERVICE_PROVIDER: Final[slice] = slice(13, 21)
 """Position of the service provider code in the energy community ID, e.g. `AT00300000000RC100930000000965743`."""
 
 
-class ActiveContractData(NamedTuple):
+@dataclass(frozen=True, kw_only=True)
+class ActiveContractData:
     """Active contract and the contracts to use for a meter point."""
 
     active_contract: dict[str, Any]
     contracts_to_use: list[dict[str, Any]]
 
 
-class ProfilePeriods(NamedTuple):
+@dataclass(frozen=True, kw_only=True)
+class ProfilePeriods:
     """Date ranges of the consumption profiles that are requested in a full update."""
 
     cutoff: date
@@ -105,7 +98,8 @@ class ProfilePeriods(NamedTuple):
         )
 
 
-class Timeslice(NamedTuple):
+@dataclass(frozen=True, kw_only=True)
+class Timeslice:
     """Energy community timeslice of a contract account at a meter point."""
 
     contract_account_number: str
@@ -113,7 +107,8 @@ class Timeslice(NamedTuple):
     data: dict[str, Any]
 
 
-class ProfileRequest(NamedTuple):
+@dataclass(frozen=True, kw_only=True)
+class ProfileRequest:
     """Consumption profile request of an energy community timeslice."""
 
     targets: tuple[list[dict[str, Any]], ...]
@@ -121,14 +116,6 @@ class ProfileRequest(NamedTuple):
     timeslice: Timeslice
     date_from: date
     date_to: date
-
-
-def _valid_through(consent: dict[str, Any]) -> tuple[date, date]:
-    """Return the validity period of a consent."""
-    return (
-        date.fromisoformat(consent["validThrough"]["from"]),
-        date.fromisoformat(consent["validThrough"]["to"]),
-    )
 
 
 class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
@@ -217,42 +204,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         if self._warning_resolved("api_error"):
             _LOGGER.info("The eService portal is available again")
 
-        _LOGGER.debug("data: %s", data)
+        _LOGGER.debug("Data: %s", async_redact_data(data, TO_REDACT))
         return data
-
-    def _warn_once(self, key: str, msg: str, /, *args: object) -> None:
-        """Log a warning only once until its cause is gone (see `_warning_resolved`)."""
-        if key not in self._logged_warnings:
-            _LOGGER.warning(msg, *args)
-            self._logged_warnings.add(key)
-
-    def _warning_resolved(self, key: str, /) -> bool:
-        """Mark the cause of a warning as gone and return whether the warning was logged."""
-        if key not in self._logged_warnings:
-            return False
-
-        self._logged_warnings.discard(key)
-        return True
-
-    async def _async_gather[T](self, requests: Iterable[Callable[[], Awaitable[T]]], /) -> list[T]:
-        """Run the requests concurrently, but at most MAX_PARALLEL_REQUESTS at the same time."""
-        semaphore: asyncio.Semaphore = asyncio.Semaphore(MAX_PARALLEL_REQUESTS)
-
-        # Create the coroutine only when the request starts, a task cancelled before it started
-        # would otherwise leave the coroutine unawaited.
-        async def limited(request: Callable[[], Awaitable[T]]) -> T:
-            """Run a request as soon as the semaphore allows it."""
-            async with semaphore:
-                return await request()
-
-        tasks: list[asyncio.Task[T]] = [asyncio.create_task(limited(request)) for request in requests]
-
-        try:
-            return await asyncio.gather(*tasks)
-        finally:
-            # If a request fails, cancel the remaining ones (e.g. no further logins with rejected credentials).
-            for task in tasks:
-                task.cancel()
 
     async def _async_fetch_all_data(self, periods: ProfilePeriods, /) -> dict[str, Any]:
         """Fetch the data of all meter points and their energy communities."""
@@ -289,38 +242,53 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
         return data
 
-    async def _async_fetch_energy_community_data(self) -> dict[str, Any]:
-        """Return the previous data with the current contribution factors and statuses of the energy communities."""
-        consents_map: ConsentsMap = await self._async_fetch_consents_map()
-        data: dict[str, Any] = dict(self.data)
+    async def _async_gather[T](self, requests: Iterable[Callable[[], Awaitable[T]]], /) -> list[T]:
+        """Run the requests concurrently, but at most MAX_PARALLEL_REQUESTS at the same time."""
+        semaphore: asyncio.Semaphore = asyncio.Semaphore(MAX_PARALLEL_REQUESTS)
 
-        for device_identifier, device_data in self.data.items():
-            if device_data["deviceType"] not in ENERGY_COMMUNITY_DEVICE_TYPES.values():
-                continue
+        # Create the coroutine only when the request starts, a task cancelled before it started
+        # would otherwise leave the coroutine unawaited.
+        async def limited(request: Callable[[], Awaitable[T]]) -> T:
+            """Run a request as soon as the semaphore allows it."""
+            async with semaphore:
+                return await request()
 
-            consent: dict[str, Any] = self._get_consent(
-                consents_map,
-                device_data["meterPointAdministrationNumber"],
-                device_data["deviceId"],
-            )
+        tasks: list[asyncio.Task[T]] = [asyncio.create_task(limited(request)) for request in requests]
 
-            # Keep the previous values, the next full update removes the energy community if its consent is gone.
-            if not consent:
-                continue
+        try:
+            return await asyncio.gather(*tasks)
+        finally:
+            # If a request fails, cancel the remaining ones (e.g. no further logins with rejected credentials).
+            for task in tasks:
+                task.cancel()
 
-            data[device_identifier] = device_data | {
-                "contributionPercentage": consent.get("contributionPercentage"),
-                "status": consent.get("status"),
-                "validFrom": consent["validThrough"]["from"],
-            }
+    async def _async_fetch_consents_map(self) -> ConsentsMap:
+        """Fetch the most recent consent per energy community, grouped by meter point."""
+        latest_consents: dict[tuple[str, str], dict[str, Any]] = {}
 
-        _LOGGER.debug("Updated energy community data")
-        return data
+        # The API returns the consent history, keep only the most recent consent.
+        for consent in sorted(await self.api.consents(), key=self._valid_through, reverse=True):
+            latest_consents.setdefault((consent["pod"], consent["serviceProvider"]), consent)
+
+        consents_map: ConsentsMap = defaultdict(list)
+
+        for consent in latest_consents.values():
+            consents_map[consent["pod"]].append(consent)
+
+        return consents_map
+
+    @staticmethod
+    def _valid_through(consent: dict[str, Any], /) -> tuple[date, date]:
+        """Return the validity period of a consent."""
+        return (
+            date.fromisoformat(consent["validThrough"]["from"]),
+            date.fromisoformat(consent["validThrough"]["to"]),
+        )
 
     async def _async_fetch_contracts_by_mpan(self) -> dict[str, list[dict[str, Any]]]:
         """Fetch all contract accounts and group their electricity contracts by meter point."""
         dashboard: dict[str, Any] = await self.api.dashboard()
-        _LOGGER.debug("dashboard: %s", dashboard)
+        _LOGGER.debug("Dashboard: %s", async_redact_data(dashboard, TO_REDACT))
 
         all_contract_accounts: list[dict[str, Any]] = await self._async_gather(
             partial(
@@ -334,7 +302,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         contracts_by_mpan: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
         for contract_accounts in all_contract_accounts:
-            _LOGGER.debug("contract_accounts: %s", contract_accounts)
+            _LOGGER.debug("Contract accounts: %s", async_redact_data(contract_accounts, TO_REDACT))
 
             for contract in contract_accounts["contracts"]:
                 if (
@@ -347,25 +315,12 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
         return contracts_by_mpan
 
-    async def _async_fetch_consents_map(self) -> ConsentsMap:
-        """Fetch the most recent consent per energy community, grouped by meter point."""
-        latest_consents: dict[tuple[str, str], dict[str, Any]] = {}
-
-        # The API returns the consent history, keep only the most recent consent.
-        for consent in sorted(await self.api.consents(), key=_valid_through, reverse=True):
-            latest_consents.setdefault((consent["pod"], consent["serviceProvider"]), consent)
-
-        consents_map: ConsentsMap = defaultdict(list)
-
-        for consent in latest_consents.values():
-            consents_map[consent["pod"]].append(consent)
-
-        return consents_map
-
     def _get_active_contract_data(self, mpan: str, contracts: list[dict[str, Any]], /) -> ActiveContractData | None:
         """Return the active contract and the contracts to use for the given meter point.
 
         Without an active contract, the most recently ended contract is used if inactive meter points are shown.
+        As with an active contract, the other contracts of the meter point are only used if the data of inactive
+        contract accounts is included.
         """
         active_contract: dict[str, Any] | None = next(
             (item for item in contracts if item["contract"].get("active")),
@@ -376,46 +331,59 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             if not self.show_inactive_meter_points:
                 self._warn_once(
                     f"inactive_meter_point_{mpan}",
-                    "Skipping %d contract(s) because no active contract for meter point %s was returned by the API.",
+                    "Skipping %d contract(s) because no active contract for meter point %s was returned by the API",
                     len(contracts),
                     mpan,
                 )
                 return None
 
-            most_recent_contract: dict[str, Any] = max(
-                contracts,
-                key=lambda item: date.fromisoformat(item["contract"]["moveOutDate"]),
-            )
+            active_contract = max(contracts, key=self._contract_end)
 
             _LOGGER.debug(
                 "No active contract for meter point %s, "
-                "using most recently ended contract (moveOutDate=%s) as fallback.",
+                "using most recently ended contract (moveOutDate=%s) as fallback",
                 mpan,
-                most_recent_contract["contract"]["moveOutDate"],
+                active_contract["contract"].get("moveOutDate"),
             )
-
-            return ActiveContractData(active_contract=most_recent_contract, contracts_to_use=contracts)
-
-        self._warning_resolved(f"inactive_meter_point_{mpan}")
+        else:
+            self._warning_resolved(f"inactive_meter_point_{mpan}")
 
         return ActiveContractData(
             active_contract=active_contract,
             contracts_to_use=contracts if self.include_inactive_contract_account_data else [active_contract],
         )
 
-    @staticmethod
-    def _get_consent(consents_map: ConsentsMap, mpan: str, energy_community_id: str, /) -> dict[str, Any]:
-        """Return the consent of an energy community at a meter point, or an empty dict if there is none."""
-        # The energy community ID contains the service provider code of the consent at a fixed position.
-        # Only match there, so a code that also appears elsewhere in the ID does not match.
-        return next(
-            (
-                consent
-                for consent in consents_map.get(mpan, [])
-                if energy_community_id[ENERGY_COMMUNITY_ID_SERVICE_PROVIDER] == consent["serviceProvider"]
-            ),
-            {},
+    def _warn_once(self, key: str, msg: str, /, *args: object) -> None:
+        """Log a warning only once until its cause is gone (see `_warning_resolved`)."""
+        if key not in self._logged_warnings:
+            _LOGGER.warning(msg, *args)
+            self._logged_warnings.add(key)
+
+    @classmethod
+    def _contract_end(cls, item: dict[str, Any], /) -> tuple[date, date, str]:
+        """Return the sort key of a contract by its end, independent of the order returned by the API.
+
+        Contracts that end on the same day are sorted by their start, then by their contract account number.
+        """
+        return (
+            cls._contract_date(item, "moveOutDate"),
+            cls._contract_date(item, "moveInDate"),
+            item["contractAccounts"]["contractAccountNumber"],
         )
+
+    @staticmethod
+    def _contract_date(item: dict[str, Any], key: str, /) -> date:
+        """Return a date of a contract, the earliest date if the API returns none."""
+        value: str | None = item["contract"].get(key)
+        return date.fromisoformat(value) if value else date.min
+
+    def _warning_resolved(self, key: str, /) -> bool:
+        """Mark the cause of a warning as gone and return whether the warning was logged."""
+        if key not in self._logged_warnings:
+            return False
+
+        self._logged_warnings.discard(key)
+        return True
 
     @staticmethod
     def _append_meter_point_data(data: dict[str, Any], /, *, contract: dict[str, Any]) -> None:
@@ -480,7 +448,11 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 if energy_community is not None:
                     profile_requests += self._get_profile_requests(
                         energy_community,
-                        Timeslice(contract_account_number, mpan, timeslice),
+                        Timeslice(
+                            contract_account_number=contract_account_number,
+                            meter_point_administration_number=mpan,
+                            data=timeslice,
+                        ),
                         periods=periods,
                     )
 
@@ -530,6 +502,20 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             },
         )
         return energy_community
+
+    @staticmethod
+    def _get_consent(consents_map: ConsentsMap, mpan: str, energy_community_id: str, /) -> dict[str, Any]:
+        """Return the consent of an energy community at a meter point, or an empty dict if there is none."""
+        # The energy community ID contains the service provider code of the consent at a fixed position.
+        # Only match there, so a code that also appears elsewhere in the ID does not match.
+        return next(
+            (
+                consent
+                for consent in consents_map.get(mpan, [])
+                if energy_community_id[ENERGY_COMMUNITY_ID_SERVICE_PROVIDER] == consent["serviceProvider"]
+            ),
+            {},
+        )
 
     @staticmethod
     def _get_profile_requests(
@@ -617,3 +603,31 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             item["to"] = date_to
 
         return consumptions_profile
+
+    async def _async_fetch_energy_community_data(self) -> dict[str, Any]:
+        """Return the previous data with the current contribution factors and statuses of the energy communities."""
+        consents_map: ConsentsMap = await self._async_fetch_consents_map()
+        data: dict[str, Any] = dict(self.data)
+
+        for device_identifier, device_data in self.data.items():
+            if device_data["deviceType"] not in ENERGY_COMMUNITY_DEVICE_TYPES.values():
+                continue
+
+            consent: dict[str, Any] = self._get_consent(
+                consents_map,
+                device_data["meterPointAdministrationNumber"],
+                device_data["deviceId"],
+            )
+
+            # Keep the previous values, the next full update removes the energy community if its consent is gone.
+            if not consent:
+                continue
+
+            data[device_identifier] = device_data | {
+                "contributionPercentage": consent.get("contributionPercentage"),
+                "status": consent.get("status"),
+                "validFrom": consent["validThrough"]["from"],
+            }
+
+        _LOGGER.debug("Updated energy community data")
+        return data

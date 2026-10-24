@@ -4,9 +4,12 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any
+from typing import Final
+from zoneinfo import ZoneInfo
 
-CONSENTS_DATA: list[dict[str, Any]] = [
+CONSENTS_DATA: Final[list[dict[str, Any]]] = [
     {
         "validThrough": {
             "from": "2024-05-04",
@@ -135,10 +138,49 @@ CONSENTS_DATA: list[dict[str, Any]] = [
         "contributionPercentage": "0",
         "energyCommunityConsent": False,
     },
+    {
+        "validThrough": {
+            "from": "2026-03-01",
+            "to": "9999-12-31",
+        },
+        "serviceProvider": "RC103550",
+        "serviceProviderName": "EEG Oberösterreich RID-11",
+        "pod": "AT0000000000000000000000011111113",
+        "status": "ACTIVE",
+        "contributionPercentage": "40",
+        "energyDirection": "CONSUMPTION",
+        "energyCommunityConsent": True,
+    },
+    {
+        "validThrough": {
+            "from": "2026-05-16",
+            "to": "9999-12-31",
+        },
+        "serviceProvider": "CC100087",
+        "serviceProviderName": "7Energy - Bürgerenergiegemeinschaft für",
+        "pod": "AT0000000000000000000000011111113",
+        "status": "ACTIVE",
+        "contributionPercentage": "60",
+        "energyDirection": "CONSUMPTION",
+        "energyCommunityConsent": True,
+    },
+    {
+        "validThrough": {
+            "from": "2026-02-01",
+            "to": "9999-12-31",
+        },
+        "serviceProvider": "CC100087",
+        "serviceProviderName": "7Energy - Bürgerenergiegemeinschaft für",
+        "pod": "AT0000000000000000000000011111114",
+        "status": "ACTIVE",
+        "contributionPercentage": "80",
+        "energyDirection": "GENERATION",
+        "energyCommunityConsent": True,
+    },
 ]
 
 
-DASHBOARD_DATA: dict[str, Any] = {
+DASHBOARD_DATA: Final[dict[str, Any]] = {
     "contractAccounts": [
         {
             "contractAccountNumber": "001",
@@ -156,10 +198,18 @@ DASHBOARD_DATA: dict[str, Any] = {
             "contractAccountNumber": "004",
             "businessPartnerNumber": "100",
         },
+        {
+            "contractAccountNumber": "005",
+            "businessPartnerNumber": "100",
+        },
+        {
+            "contractAccountNumber": "006",
+            "businessPartnerNumber": "100",
+        },
     ],
 }
 
-CONTRACT_ACCOUNT_DATA_1: dict[str, Any] = {
+CONTRACT_ACCOUNT_DATA_1: Final[dict[str, Any]] = {
     "contractAccountNumber": "001",
     "businessPartnerNumber": "200",
     "active": True,
@@ -325,7 +375,7 @@ CONTRACT_ACCOUNT_DATA_1: dict[str, Any] = {
     ],
 }
 
-CONTRACT_ACCOUNT_DATA_2: dict[str, Any] = {
+CONTRACT_ACCOUNT_DATA_2: Final[dict[str, Any]] = {
     "contractAccountNumber": "002",
     "businessPartnerNumber": "200",
     "active": True,
@@ -469,7 +519,7 @@ CONTRACT_ACCOUNT_DATA_2: dict[str, Any] = {
     ],
 }
 
-CONTRACT_ACCOUNT_DATA_3: dict[str, Any] = {
+CONTRACT_ACCOUNT_DATA_3: Final[dict[str, Any]] = {
     "contractAccountNumber": "003",
     "businessPartnerNumber": "200",
     "active": False,
@@ -640,7 +690,7 @@ CONTRACT_ACCOUNT_DATA_3: dict[str, Any] = {
     ],
 }
 
-CONTRACT_ACCOUNT_DATA_4: dict[str, Any] = {
+CONTRACT_ACCOUNT_DATA_4: Final[dict[str, Any]] = {
     "contractAccountNumber": "004",
     "businessPartnerNumber": "200",
     "active": False,
@@ -702,7 +752,31 @@ CONTRACT_ACCOUNT_DATA_4: dict[str, Any] = {
             "powerGenerationUnit": False,
             "energyCommunityData": {
                 "status": "HISTORICAL",
-                "timeslices": [],
+                "timeslices": [
+                    {
+                        "energyCommunityId": "AT00300000000RC103550000000985681",
+                        "energyCommunityName": "EEG Oberösterreich RID-11",
+                        "from": "2026-03-01",
+                        "to": "2026-05-15",
+                        "status": "ACTIVE",
+                        "profiles": [
+                            {
+                                "from": "2026-03-01",
+                                "to": "2026-05-15",
+                                "granularity": "QUARTER_OF_AN_HOUR",
+                                "profileType": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+                            },
+                            {
+                                "from": "2026-03-01",
+                                "to": "2026-05-15",
+                                "granularity": "QUARTER_OF_AN_HOUR",
+                                "profileType": "ENERGY_COMMUNITY_OWN_COVERAGE",
+                            },
+                        ],
+                        "profileDataAvailableFrom": "2026-03-01",
+                        "profileDataAvailableTo": "2026-05-15",
+                    },
+                ],
                 "energyCommunityActive": True,
             },
             "supplier": {
@@ -719,7 +793,250 @@ CONTRACT_ACCOUNT_DATA_4: dict[str, Any] = {
     ],
 }
 
-WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: list[dict[str, Any]] = [
+CONTRACT_ACCOUNT_DATA_5: Final[dict[str, Any]] = {
+    "contractAccountNumber": "005",
+    "businessPartnerNumber": "200",
+    "active": False,
+    "branch": "STROM",
+    "contracts": [
+        {
+            "branch": "STROM",
+            "scaleType": "EEG 7ngem",
+            "active": False,
+            "moveInDate": "2026-05-16",
+            "moveOutDate": "2026-06-10",
+            "pointOfDelivery": {
+                "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+                "meter": {
+                    "meterNumber": "5000000",
+                },
+                "monthlyTrend": {
+                    "consumptionOld": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "consumptionNew": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "timerangeOld": {
+                        "from": "2026-06-28T17:11:06.851202621",
+                        "to": "2026-06-29T17:11:06.851203478",
+                    },
+                    "timerangeNew": {
+                        "from": "2026-06-28T17:11:06.85120513",
+                        "to": "2026-06-29T17:11:06.851205241",
+                    },
+                },
+                "yearlyTrend": {
+                    "consumptionOld": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "consumptionNew": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "timerangeOld": {
+                        "from": "2026-06-28T17:11:06.851202621",
+                        "to": "2026-06-29T17:11:06.851203478",
+                    },
+                    "timerangeNew": {
+                        "from": "2026-06-28T17:11:06.85120513",
+                        "to": "2026-06-29T17:11:06.851205241",
+                    },
+                },
+                "availableTimeRange": {
+                    "from": "2026-05-16",
+                    "to": "2026-06-10",
+                },
+                "lastReadings": {
+                    "values": [
+                        {
+                            "meternumber": "5000000",
+                            "referenceNumber": "1.8.1",
+                            "newResult": {
+                                "timestamp": "2026-06-10T00:00:00",
+                                "readingValue": 1500.000,
+                            },
+                        },
+                        {
+                            "meternumber": "5000000",
+                            "referenceNumber": "1.6.0",
+                            "newResult": {
+                                "timestamp": "2026-06-01T00:00:00",
+                                "readingValue": 2.500,
+                            },
+                        },
+                    ],
+                },
+            },
+            "powerGenerationUnit": False,
+            "energyCommunityData": {
+                "status": "HISTORICAL",
+                "timeslices": [
+                    {
+                        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+                        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+                        "from": "2026-05-16",
+                        "to": "2026-06-10",
+                        "status": "ACTIVE",
+                        "profiles": [
+                            {
+                                "from": "2026-05-16",
+                                "to": "2026-06-10",
+                                "granularity": "QUARTER_OF_AN_HOUR",
+                                "profileType": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+                            },
+                            {
+                                "from": "2026-05-16",
+                                "to": "2026-06-10",
+                                "granularity": "QUARTER_OF_AN_HOUR",
+                                "profileType": "ENERGY_COMMUNITY_OWN_COVERAGE",
+                            },
+                        ],
+                        "profileDataAvailableFrom": "2026-05-16",
+                        "profileDataAvailableTo": "2026-06-10",
+                    },
+                ],
+                "energyCommunityActive": True,
+            },
+            "supplier": {
+                "id": "AT110191",
+                "name": "EP Energie Plus GmbH",
+            },
+            "synthProfile": "Haushalt",
+        },
+    ],
+}
+
+CONTRACT_ACCOUNT_DATA_6: Final[dict[str, Any]] = {
+    "contractAccountNumber": "006",
+    "businessPartnerNumber": "200",
+    "active": False,
+    "branch": "STROM",
+    "contracts": [
+        {
+            "branch": "STROM",
+            "scaleType": "Gem.Erz. / Erzeugung",
+            "active": False,
+            "moveInDate": "2025-01-01",
+            "moveOutDate": "2026-06-01",
+            "pointOfDelivery": {
+                "meterPointAdministrationNumber": "AT0000000000000000000000011111114",
+                "meter": {
+                    "meterNumber": "6000000",
+                },
+                "monthlyTrend": {
+                    "consumptionOld": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "consumptionNew": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "timerangeOld": {
+                        "from": "2026-06-28T17:11:06.851202621",
+                        "to": "2026-06-29T17:11:06.851203478",
+                    },
+                    "timerangeNew": {
+                        "from": "2026-06-28T17:11:06.85120513",
+                        "to": "2026-06-29T17:11:06.851205241",
+                    },
+                },
+                "yearlyTrend": {
+                    "consumptionOld": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "consumptionNew": {
+                        "sum": 0.000,
+                        "perDay": 0.000,
+                        "days": 0,
+                    },
+                    "timerangeOld": {
+                        "from": "2026-06-28T17:11:06.851202621",
+                        "to": "2026-06-29T17:11:06.851203478",
+                    },
+                    "timerangeNew": {
+                        "from": "2026-06-28T17:11:06.85120513",
+                        "to": "2026-06-29T17:11:06.851205241",
+                    },
+                },
+                "availableTimeRange": {
+                    "from": "2025-01-01",
+                    "to": "2026-06-01",
+                },
+                "lastReadings": {
+                    "values": [
+                        {
+                            "meternumber": "6000000",
+                            "referenceNumber": "2.8.1",
+                            "newResult": {
+                                "timestamp": "2026-06-01T00:00:00",
+                                "readingValue": 2500.000,
+                            },
+                        },
+                        {
+                            "meternumber": "6000000",
+                            "referenceNumber": "2.6.0",
+                            "newResult": {
+                                "timestamp": "2026-05-01T00:00:00",
+                                "readingValue": 4.200,
+                            },
+                        },
+                    ],
+                },
+            },
+            "powerGenerationUnit": True,
+            "energyCommunityData": {
+                "status": "HISTORICAL",
+                "timeslices": [
+                    {
+                        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+                        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+                        "from": "2026-02-01",
+                        "to": "2026-06-01",
+                        "status": "ACTIVE",
+                        "profiles": [
+                            {
+                                "from": "2026-02-01",
+                                "to": "2026-06-01",
+                                "granularity": "QUARTER_OF_AN_HOUR",
+                                "profileType": "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+                            },
+                            {
+                                "from": "2026-02-01",
+                                "to": "2026-06-01",
+                                "granularity": "QUARTER_OF_AN_HOUR",
+                                "profileType": "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+                            },
+                        ],
+                        "profileDataAvailableFrom": "2026-02-01",
+                        "profileDataAvailableTo": "2026-06-01",
+                    },
+                ],
+                "energyCommunityActive": True,
+            },
+            "supplier": {
+                "id": "AT113820",
+                "name": "OeMAG Abwicklungsstelle für Ökostrom AG",
+            },
+            "synthProfile": "Photovoltaik",
+        },
+    ],
+}
+
+
+WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2024-10-07T00:00:00",
@@ -748,7 +1065,7 @@ WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-01-26T00:00:00",
@@ -777,7 +1094,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-05-01T00:00:00",
@@ -806,7 +1123,7 @@ SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-01-26T00:00:00",
@@ -835,7 +1152,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-05-21T00:00:00",
@@ -864,7 +1181,7 @@ EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-05-21T00:00:00",
@@ -893,7 +1210,7 @@ EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
         "from": "2026-05-21T00:00:00",
@@ -922,7 +1239,7 @@ EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-06-17T00:00:00",
@@ -951,7 +1268,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-06-17T00:00:00",
@@ -980,7 +1297,7 @@ EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2: list[dict[str, Any]] = [
     },
 ]
 
-WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1: list[dict[str, Any]] = [
+WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2024-05-06T00:00:00",
@@ -1009,7 +1326,7 @@ WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1: list[dict[str, Any]] = [
     },
 ]
 
-WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2: list[dict[str, Any]] = [
+WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2024-10-07T00:00:00",
@@ -1038,7 +1355,7 @@ WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-01-26T00:00:00",
@@ -1066,7 +1383,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-05-01T00:00:00",
@@ -1095,7 +1412,7 @@ SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3: list[dict[str, Any]] = [
     },
 ]
 
-SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3: list[dict[str, Any]] = [
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-01-26T00:00:00",
@@ -1124,7 +1441,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-05-21T00:00:00",
@@ -1153,7 +1470,7 @@ EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-05-21T00:00:00",
@@ -1182,7 +1499,7 @@ EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4: list[dict[str, Any]] = [
     },
 ]
 
-EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4: list[dict[str, Any]] = [
+EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
         "from": "2026-05-21T00:00:00",
@@ -1211,3 +1528,228 @@ EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4: list[dict[str, Any]] = [
         "energyCommunityName": "EEG Oberösterreich RID-11",
     },
 ]
+
+EEG_OOE_PROFILE_DATA_TOTAL_L2_L3_004_1: Final[list[dict[str, Any]]] = [
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-03-01T00:00:00",
+        "to": "2026-05-15T23:59:59",
+        "type": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 40.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "AT00300000000RC103550000000985681",
+        "energyCommunityName": "EEG Oberösterreich RID-11",
+    },
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-03-01T00:00:00",
+        "to": "2026-05-15T23:59:59",
+        "type": "ENERGY_COMMUNITY_OWN_COVERAGE",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 10.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "AT00300000000RC103550000000985681",
+        "energyCommunityName": "EEG Oberösterreich RID-11",
+    },
+]
+
+EEG_OOE_PROFILE_DATA_MONTHLY_L2_004_1: Final[list[dict[str, Any]]] = [
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-05-01T00:00:00",
+        "to": "2026-05-15T23:59:59",
+        "type": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 8.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "AT00300000000RC103550000000985681",
+        "energyCommunityName": "EEG Oberösterreich RID-11",
+    },
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-05-01T00:00:00",
+        "to": "2026-05-15T23:59:59",
+        "type": "ENERGY_COMMUNITY_OWN_COVERAGE",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 2.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "AT00300000000RC103550000000985681",
+        "energyCommunityName": "EEG Oberösterreich RID-11",
+    },
+]
+
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_005_1: Final[list[dict[str, Any]]] = [
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-05-16T00:00:00",
+        "to": "2026-06-10T23:59:59",
+        "type": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 50.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-05-16T00:00:00",
+        "to": "2026-06-10T23:59:59",
+        "type": "ENERGY_COMMUNITY_OWN_COVERAGE",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 20.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+]
+
+SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_005_1: Final[list[dict[str, Any]]] = [
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-05-16T00:00:00",
+        "to": "2026-05-31T23:59:59",
+        "type": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 30.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "from": "2026-05-16T00:00:00",
+        "to": "2026-05-31T23:59:59",
+        "type": "ENERGY_COMMUNITY_OWN_COVERAGE",
+        "energyDirection": "CONSUMPTION",
+        "sum": {
+            "value": 12.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+]
+
+SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_006_1: Final[list[dict[str, Any]]] = [
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111114",
+        "from": "2026-02-01T00:00:00",
+        "to": "2026-06-01T23:59:59",
+        "type": "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "GENERATION",
+        "sum": {
+            "value": 300.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111114",
+        "from": "2026-02-01T00:00:00",
+        "to": "2026-06-01T23:59:59",
+        "type": "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "GENERATION",
+        "sum": {
+            "value": 100.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+]
+
+SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_006_1: Final[list[dict[str, Any]]] = [
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111114",
+        "from": "2026-05-01T00:00:00",
+        "to": "2026-05-31T23:59:59",
+        "type": "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "GENERATION",
+        "sum": {
+            "value": 90.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+    {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111114",
+        "from": "2026-05-01T00:00:00",
+        "to": "2026-05-31T23:59:59",
+        "type": "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+        "energyDirection": "GENERATION",
+        "sum": {
+            "value": 30.000,
+            "unit": "KWH",
+        },
+        "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+        "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    },
+]
+
+type ProfileRequestKey = tuple[str, str, str, str]
+
+API_URL: Final[str] = "https://eservice.netzooe.at/service"
+PROFILE_URL: Final[str] = f"{API_URL}/v1.0/consumptions/profile/active"
+
+WSEG: Final[str] = "AT00300000000RC100930000000965743"
+SEVEN_ENERGY: Final[str] = "ATCC9999DYNAMCC100087000000000002"
+EEG_OOE: Final[str] = "AT00300000000RC103550000000985681"
+
+CONTRACT_ACCOUNTS: Final[dict[str, dict[str, Any]]] = {
+    "001": CONTRACT_ACCOUNT_DATA_1,
+    "002": CONTRACT_ACCOUNT_DATA_2,
+    "003": CONTRACT_ACCOUNT_DATA_3,
+    "004": CONTRACT_ACCOUNT_DATA_4,
+    "005": CONTRACT_ACCOUNT_DATA_5,
+    "006": CONTRACT_ACCOUNT_DATA_6,
+}
+
+# Consumption profiles by request, for the full update at tests.NOW (cutoff 2026-06-12, previous month May 2026).
+PROFILE_RESPONSES: Final[dict[ProfileRequestKey, list[dict[str, Any]]]] = {
+    ("001", WSEG, "2024-05-06", "2025-09-30"): WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1,
+    ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-12"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2,
+    ("001", SEVEN_ENERGY, "2026-05-01", "2026-05-31"): SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2,
+    ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2,
+    ("001", EEG_OOE, "2026-05-21", "2026-06-12"): EEG_OOE_PROFILE_DATA_TOTAL_L2_001_3,
+    ("001", EEG_OOE, "2026-05-21", "2026-05-31"): EEG_OOE_PROFILE_DATA_MONTHLY_L2_001_3,
+    ("001", EEG_OOE, "2026-05-21", "2026-06-28"): EEG_OOE_PROFILE_DATA_TOTAL_L3_001_3,
+    ("002", SEVEN_ENERGY, "2026-06-17", "2026-06-28"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_002_1,
+    ("002", EEG_OOE, "2026-06-17", "2026-06-28"): EEG_OOE_PROFILE_DATA_TOTAL_L3_002_2,
+    ("003", WSEG, "2024-05-06", "2024-05-07"): WSEG_PROFILE_DATA_TOTAL_L2_L3_003_1,
+    ("003", WSEG, "2024-09-10", "2025-09-30"): WSEG_PROFILE_DATA_TOTAL_L2_L3_003_2,
+    ("003", SEVEN_ENERGY, "2026-01-26", "2026-06-12"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_003_3,
+    ("003", SEVEN_ENERGY, "2026-05-01", "2026-05-31"): SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_003_3,
+    ("003", SEVEN_ENERGY, "2026-01-26", "2026-06-16"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_003_3,
+    ("003", EEG_OOE, "2026-05-21", "2026-06-12"): EEG_OOE_PROFILE_DATA_TOTAL_L2_003_4,
+    ("003", EEG_OOE, "2026-05-21", "2026-05-31"): EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4,
+    ("003", EEG_OOE, "2026-05-21", "2026-06-16"): EEG_OOE_PROFILE_DATA_TOTAL_L3_003_4,
+    ("004", EEG_OOE, "2026-03-01", "2026-05-15"): EEG_OOE_PROFILE_DATA_TOTAL_L2_L3_004_1,
+    ("004", EEG_OOE, "2026-05-01", "2026-05-15"): EEG_OOE_PROFILE_DATA_MONTHLY_L2_004_1,
+    ("005", SEVEN_ENERGY, "2026-05-16", "2026-06-10"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_005_1,
+    ("005", SEVEN_ENERGY, "2026-05-16", "2026-05-31"): SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_005_1,
+    ("006", SEVEN_ENERGY, "2026-02-01", "2026-06-01"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_006_1,
+    ("006", SEVEN_ENERGY, "2026-05-01", "2026-05-31"): SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_006_1,
+}
+
+NOW: Final[datetime] = datetime(2026, 6, 28, 12, 0, tzinfo=ZoneInfo("Europe/Vienna"))
+
+CONTRIBUTION_FACTOR_ENTITY_ID: Final[str] = (
+    "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_contribution_factor"
+)

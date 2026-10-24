@@ -79,12 +79,12 @@ the credentials, e.g. after a password change, Home Assistant asks you to enter 
 To change the options, go to **Settings** → **Devices & services** → **Netz OÖ eService** and select
 **Configure**.
 
-| Option                                                          | Default  | Description                                                                                                                               |
-|-----------------------------------------------------------------|----------|-------------------------------------------------------------------------------------------------------------------------------------------|
-| Frequent updates (every 15 minutes)                             | Disabled | Refresh the energy community contribution factors and statuses every 15 minutes. When disabled, all data is refreshed every 3 hours only. |
-| Show revoked energy communities                                 | Disabled | Show revoked energy communities as separate devices and include their values in the total sensors.                                        |
-| Include data from inactive contract accounts (same meter point) | Enabled  | Merge data from contract accounts with inactive suppliers at the same meter point into the active account's data.                         |
-| Show inactive meter points                                      | Disabled | Show meter points where all contract accounts are inactive, using the data of the most recently ended contract.                           |
+| Option                                                          | Default  | Description                                                                                                                                    |
+|-----------------------------------------------------------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| Frequent updates (every 15 minutes)                             | Disabled | Refresh the energy community contribution factors and statuses every 15 minutes. When disabled, all data is refreshed every 3 hours only.      |
+| Show revoked energy communities                                 | Disabled | Show revoked energy communities as separate devices and include their values in the total sensors.                                             |
+| Include data from inactive contract accounts (same meter point) | Enabled  | Merge data from contract accounts with inactive suppliers at the same meter point into the data of the active or most recently ended contract. |
+| Show inactive meter points                                      | Disabled | Show meter points where all contract accounts are inactive, using the data of the most recently ended contract.                                |
 
 ## Supported functionality
 

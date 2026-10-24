@@ -13,11 +13,12 @@ import re
 import shutil
 from pathlib import Path
 from typing import ClassVar
+from typing import Final
 
-ROOT: Path = Path(__file__).resolve().parent.parent
-OUTPUT: Path = ROOT / "website" / "docs"
-CONTENT: Path = ROOT / "website" / "content"
-REPOSITORY: str = "https://github.com/superbox-dev/netzooe_eservice"
+ROOT: Final[Path] = Path(__file__).resolve().parent.parent
+OUTPUT: Final[Path] = ROOT / "website" / "docs"
+CONTENT: Final[Path] = ROOT / "website" / "content"
+REPOSITORY: Final[str] = "https://github.com/superbox-dev/netzooe_eservice"
 
 
 class DocsGenerator:
