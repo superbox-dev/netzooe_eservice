@@ -1,66 +1,66 @@
 {
-    "entity": {
-        "sensor": {
-            "energy_community_export_l2": {
-                "default": "mdi:transmission-tower-import"
-            },
-            "energy_community_export_l3": {
-                "default": "mdi:transmission-tower-import"
-            },
-            "energy_community_import_l2": {
-                "default": "mdi:transmission-tower-export"
-            },
-            "energy_community_import_l3": {
-                "default": "mdi:transmission-tower-export"
-            },
-            "last_month_energy_community_export_l2": {
-                "default": "mdi:transmission-tower-import"
-            },
-            "last_month_energy_community_import_l2": {
-                "default": "mdi:transmission-tower-export"
-            },
-            "last_month_supplier_export_l2": {
-                "default": "mdi:transmission-tower-import"
-            },
-            "last_month_supplier_import_l2": {
-                "default": "mdi:transmission-tower-export"
-            },
-            "monthly_trend": {
-                "default": "mdi:chart-areaspline"
-            },
-            "monthly_trend_new": {
-                "default": "mdi:transmission-tower-export"
-            },
-            "monthly_trend_old": {
-                "default": "mdi:transmission-tower-export"
-            },
-            "status": {
-                "default": "mdi:account-check",
-                "state": {
-                    "revoked": "mdi:account-cancel"
-                }
-            },
-            "supplier_export_l2": {
-                "default": "mdi:transmission-tower-import"
-            },
-            "supplier_export_l3": {
-                "default": "mdi:transmission-tower-import"
-            },
-            "supplier_import_l2": {
-                "default": "mdi:transmission-tower-export"
-            },
-            "supplier_import_l3": {
-                "default": "mdi:transmission-tower-export"
-            },
-            "yearly_trend": {
-                "default": "mdi:chart-areaspline"
-            },
-            "yearly_trend_new": {
-                "default": "mdi:transmission-tower-export"
-            },
-            "yearly_trend_old": {
-                "default": "mdi:transmission-tower-export"
-            }
+  "entity": {
+    "sensor": {
+      "energy_community_export_l2": {
+        "default": "mdi:transmission-tower-import"
+      },
+      "energy_community_export_l3": {
+        "default": "mdi:transmission-tower-import"
+      },
+      "energy_community_import_l2": {
+        "default": "mdi:transmission-tower-export"
+      },
+      "energy_community_import_l3": {
+        "default": "mdi:transmission-tower-export"
+      },
+      "last_month_energy_community_export_l2": {
+        "default": "mdi:transmission-tower-import"
+      },
+      "last_month_energy_community_import_l2": {
+        "default": "mdi:transmission-tower-export"
+      },
+      "last_month_supplier_export_l2": {
+        "default": "mdi:transmission-tower-import"
+      },
+      "last_month_supplier_import_l2": {
+        "default": "mdi:transmission-tower-export"
+      },
+      "monthly_trend": {
+        "default": "mdi:chart-areaspline"
+      },
+      "monthly_trend_new": {
+        "default": "mdi:transmission-tower-export"
+      },
+      "monthly_trend_old": {
+        "default": "mdi:transmission-tower-export"
+      },
+      "status": {
+        "default": "mdi:account-check",
+        "state": {
+          "revoked": "mdi:account-cancel"
         }
+      },
+      "supplier_export_l2": {
+        "default": "mdi:transmission-tower-import"
+      },
+      "supplier_export_l3": {
+        "default": "mdi:transmission-tower-import"
+      },
+      "supplier_import_l2": {
+        "default": "mdi:transmission-tower-export"
+      },
+      "supplier_import_l3": {
+        "default": "mdi:transmission-tower-export"
+      },
+      "yearly_trend": {
+        "default": "mdi:chart-areaspline"
+      },
+      "yearly_trend_new": {
+        "default": "mdi:transmission-tower-export"
+      },
+      "yearly_trend_old": {
+        "default": "mdi:transmission-tower-export"
+      }
     }
+  }
 }

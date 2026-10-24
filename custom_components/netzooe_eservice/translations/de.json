@@ -1,168 +1,168 @@
 {
-    "config": {
-        "abort": {
-            "already_configured": "Dieses Konto ist bereits konfiguriert",
-            "already_in_progress": "Konfigurationsvorgang läuft bereits",
-            "reauth_successful": "Die erneute Authentifizierung war erfolgreich",
-            "reconfigure_successful": "Die Neukonfiguration war erfolgreich",
-            "wrong_account": "Der Benutzername passt nicht zum konfigurierten {name}-Konto"
-        },
-        "error": {
-            "cannot_connect": "Verbindung fehlgeschlagen",
-            "invalid_auth": "Ungültige Authentifizierung",
-            "unknown": "Unerwarteter Fehler"
-        },
-        "flow_title": "{name}",
-        "step": {
-            "reauth_confirm": {
-                "data": {
-                    "password": "Passwort"
-                },
-                "data_description": {
-                    "password": "Das neue Passwort deines {name}-Portalkontos."
-                },
-                "description": "Das {name}-Portal hat das Passwort von {username} abgelehnt. Bitte gib das neue Passwort ein.",
-                "title": "Erneut authentifizieren"
-            },
-            "reconfigure": {
-                "data": {
-                    "password": "Passwort",
-                    "username": "Benutzername"
-                },
-                "data_description": {
-                    "password": "Das Passwort deines {name}-Portalkontos.",
-                    "username": "Der Benutzername deines {name}-Portalkontos."
-                },
-                "description": "Bitte gib die neuen Anmeldedaten ein."
-            },
-            "user": {
-                "data": {
-                    "password": "Passwort",
-                    "username": "Benutzername"
-                },
-                "data_description": {
-                    "password": "Das Passwort deines {name}-Portalkontos.",
-                    "username": "Der Benutzername deines {name}-Portalkontos."
-                },
-                "description": "Bitte gib den Benutzernamen und das Passwort ein."
-            }
-        }
+  "config": {
+    "abort": {
+      "already_configured": "Dieses Konto ist bereits konfiguriert",
+      "already_in_progress": "Konfigurationsvorgang läuft bereits",
+      "reauth_successful": "Die erneute Authentifizierung war erfolgreich",
+      "reconfigure_successful": "Die Neukonfiguration war erfolgreich",
+      "wrong_account": "Der Benutzername passt nicht zum konfigurierten {name}-Konto"
     },
-    "entity": {
-        "sensor": {
-            "contribution_factor": {
-                "name": "Teilnahmefaktor"
-            },
-            "energy_community_export_l2": {
-                "name": "Energiegemeinschaft Einspeisung L1/L2 (Stand: vor 16 Tagen)"
-            },
-            "energy_community_export_l3": {
-                "name": "Energiegemeinschaft Einspeisung L1/L2/L3"
-            },
-            "energy_community_import_l2": {
-                "name": "Energiegemeinschaft Bezug L1/L2 (Stand: vor 16 Tagen)"
-            },
-            "energy_community_import_l3": {
-                "name": "Energiegemeinschaft Bezug L1/L2/L3"
-            },
-            "last_month_energy_community_export_l2": {
-                "name": "Energiegemeinschaft Einspeisung L2 (Vormonat)"
-            },
-            "last_month_energy_community_import_l2": {
-                "name": "Energiegemeinschaft Bezug L2 (Vormonat)"
-            },
-            "last_month_peak_export_power": {
-                "name": "Maximale Einspeiseleistung (Vormonat)"
-            },
-            "last_month_peak_import_power": {
-                "name": "Maximale Bezugsleistung (Vormonat)"
-            },
-            "last_month_supplier_export_l2": {
-                "name": "Energielieferant Einspeisung L2 (Vormonat)"
-            },
-            "last_month_supplier_import_l2": {
-                "name": "Energielieferant Netzbezug L2 (Vormonat)"
-            },
-            "meter_reading": {
-                "name": "Zählerstand"
-            },
-            "monthly_trend": {
-                "name": "30-Tage-Trend"
-            },
-            "monthly_trend_new": {
-                "name": "aktueller 30-Tage-Trend"
-            },
-            "monthly_trend_old": {
-                "name": "vorheriger 30-Tage-Trend"
-            },
-            "profile_data_available_to": {
-                "name": "Profildaten verfügbar bis"
-            },
-            "scale_type": {
-                "name": "Typ"
-            },
-            "status": {
-                "name": "Status",
-                "state": {
-                    "active": "Aktiv",
-                    "active_unchangeable": "Aktiv (nicht änderbar)",
-                    "concluded": "Beendet",
-                    "qr_code_sent": "QR-Code gesendet",
-                    "requested": "Angefragt",
-                    "revoked": "Widerrufen",
-                    "timeout": "Abgelaufen"
-                }
-            },
-            "supplier": {
-                "name": "Energielieferant"
-            },
-            "supplier_export_l2": {
-                "name": "Energielieferant Einspeisung L1/L2 (Stand: vor 16 Tagen)"
-            },
-            "supplier_export_l3": {
-                "name": "Energielieferant Einspeisung L1/L2/L3"
-            },
-            "supplier_import_l2": {
-                "name": "Energielieferant Netzbezug L1/L2 (Stand: vor 16 Tagen)"
-            },
-            "supplier_import_l3": {
-                "name": "Energielieferant Netzbezug L1/L2/L3"
-            },
-            "yearly_trend": {
-                "name": "Jahres-Trend"
-            },
-            "yearly_trend_new": {
-                "name": "aktueller Jahres-Trend"
-            },
-            "yearly_trend_old": {
-                "name": "vorheriger Jahres-Trend"
-            }
-        }
+    "error": {
+      "cannot_connect": "Verbindung fehlgeschlagen",
+      "invalid_auth": "Ungültige Authentifizierung",
+      "unknown": "Unerwarteter Fehler"
     },
-    "exceptions": {
-        "authentication_error": {
-            "message": "Authentifizierung fehlgeschlagen. Bitte überprüfe deine Anmeldedaten."
+    "flow_title": "{name}",
+    "step": {
+      "reauth_confirm": {
+        "data": {
+          "password": "Passwort"
         },
-        "update_failed": {
-            "message": "Die Daten konnten nicht vom eService-Portal abgerufen werden: {error}"
-        }
-    },
-    "options": {
-        "step": {
-            "init": {
-                "data": {
-                    "frequent_updates": "Häufige Updates (alle 15 Minuten)",
-                    "include_inactive_contract_account_data": "Daten von inaktiven Vertragskonten einbeziehen (gleicher Zählpunkt)",
-                    "show_inactive_meter_points": "Inaktive Zählpunkte anzeigen",
-                    "show_revoked_energy_communities": "Widerrufene Energiegemeinschaften anzeigen"
-                },
-                "data_description": {
-                    "frequent_updates": "Wenn aktiviert, werden Status und Teilnahmefaktor der Energiegemeinschaften alle 15 Minuten aktualisiert. Wenn deaktiviert, werden alle Daten nur alle 3 Stunden aktualisiert.",
-                    "include_inactive_contract_account_data": "Wenn aktiviert, werden Daten von Vertragskonten mit inaktiven Stromanbietern am gleichen Zählpunkt mit den Daten des aktiven Kontos zusammengeführt (bei inaktiven Zählpunkten mit den Daten des zuletzt beendeten Vertrags). Dies betrifft sowohl die einzelnen Energiegemeinschafts-Sensoren als auch die Gesamt-Bezugs-/Einspeisungssensoren des Zählpunkts.",
-                    "show_inactive_meter_points": "Wenn aktiviert, werden auch Zählpunkte angezeigt, deren Vertragskonten alle inaktiv sind.",
-                    "show_revoked_energy_communities": "Wenn aktiviert, werden Energiegemeinschaften mit widerrufener Teilnahme als eigene Geräte mit eigenen Sensoren angezeigt, anstatt nur aktive Mitgliedschaften. Ihre Verbrauchs-/Erzeugungsdaten werden außerdem in die Gesamt-Bezugs-/Einspeisungssensoren des Zählpunkts mit eingerechnet."
-                }
-            }
-        }
+        "data_description": {
+          "password": "Das neue Passwort deines {name}-Portalkontos."
+        },
+        "description": "Das {name}-Portal hat das Passwort von {username} abgelehnt. Bitte gib das neue Passwort ein.",
+        "title": "Erneut authentifizieren"
+      },
+      "reconfigure": {
+        "data": {
+          "password": "Passwort",
+          "username": "Benutzername"
+        },
+        "data_description": {
+          "password": "Das Passwort deines {name}-Portalkontos.",
+          "username": "Der Benutzername deines {name}-Portalkontos."
+        },
+        "description": "Bitte gib die neuen Anmeldedaten ein."
+      },
+      "user": {
+        "data": {
+          "password": "Passwort",
+          "username": "Benutzername"
+        },
+        "data_description": {
+          "password": "Das Passwort deines {name}-Portalkontos.",
+          "username": "Der Benutzername deines {name}-Portalkontos."
+        },
+        "description": "Bitte gib den Benutzernamen und das Passwort ein."
+      }
     }
+  },
+  "entity": {
+    "sensor": {
+      "contribution_factor": {
+        "name": "Teilnahmefaktor"
+      },
+      "energy_community_export_l2": {
+        "name": "Energiegemeinschaft Einspeisung L1/L2 (Stand: vor 16 Tagen)"
+      },
+      "energy_community_export_l3": {
+        "name": "Energiegemeinschaft Einspeisung L1/L2/L3"
+      },
+      "energy_community_import_l2": {
+        "name": "Energiegemeinschaft Bezug L1/L2 (Stand: vor 16 Tagen)"
+      },
+      "energy_community_import_l3": {
+        "name": "Energiegemeinschaft Bezug L1/L2/L3"
+      },
+      "last_month_energy_community_export_l2": {
+        "name": "Energiegemeinschaft Einspeisung L2 (Vormonat)"
+      },
+      "last_month_energy_community_import_l2": {
+        "name": "Energiegemeinschaft Bezug L2 (Vormonat)"
+      },
+      "last_month_peak_export_power": {
+        "name": "Maximale Einspeiseleistung (Vormonat)"
+      },
+      "last_month_peak_import_power": {
+        "name": "Maximale Bezugsleistung (Vormonat)"
+      },
+      "last_month_supplier_export_l2": {
+        "name": "Energielieferant Einspeisung L2 (Vormonat)"
+      },
+      "last_month_supplier_import_l2": {
+        "name": "Energielieferant Netzbezug L2 (Vormonat)"
+      },
+      "meter_reading": {
+        "name": "Zählerstand"
+      },
+      "monthly_trend": {
+        "name": "30-Tage-Trend"
+      },
+      "monthly_trend_new": {
+        "name": "aktueller 30-Tage-Trend"
+      },
+      "monthly_trend_old": {
+        "name": "vorheriger 30-Tage-Trend"
+      },
+      "profile_data_available_to": {
+        "name": "Profildaten verfügbar bis"
+      },
+      "scale_type": {
+        "name": "Typ"
+      },
+      "status": {
+        "name": "Status",
+        "state": {
+          "active": "Aktiv",
+          "active_unchangeable": "Aktiv (nicht änderbar)",
+          "concluded": "Beendet",
+          "qr_code_sent": "QR-Code gesendet",
+          "requested": "Angefragt",
+          "revoked": "Widerrufen",
+          "timeout": "Abgelaufen"
+        }
+      },
+      "supplier": {
+        "name": "Energielieferant"
+      },
+      "supplier_export_l2": {
+        "name": "Energielieferant Einspeisung L1/L2 (Stand: vor 16 Tagen)"
+      },
+      "supplier_export_l3": {
+        "name": "Energielieferant Einspeisung L1/L2/L3"
+      },
+      "supplier_import_l2": {
+        "name": "Energielieferant Netzbezug L1/L2 (Stand: vor 16 Tagen)"
+      },
+      "supplier_import_l3": {
+        "name": "Energielieferant Netzbezug L1/L2/L3"
+      },
+      "yearly_trend": {
+        "name": "Jahres-Trend"
+      },
+      "yearly_trend_new": {
+        "name": "aktueller Jahres-Trend"
+      },
+      "yearly_trend_old": {
+        "name": "vorheriger Jahres-Trend"
+      }
+    }
+  },
+  "exceptions": {
+    "authentication_error": {
+      "message": "Authentifizierung fehlgeschlagen. Bitte überprüfe deine Anmeldedaten."
+    },
+    "update_failed": {
+      "message": "Die Daten konnten nicht vom eService-Portal abgerufen werden: {error}"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "frequent_updates": "Häufige Updates (alle 15 Minuten)",
+          "include_inactive_contract_account_data": "Daten von inaktiven Vertragskonten einbeziehen (gleicher Zählpunkt)",
+          "show_inactive_meter_points": "Inaktive Zählpunkte anzeigen",
+          "show_revoked_energy_communities": "Widerrufene Energiegemeinschaften anzeigen"
+        },
+        "data_description": {
+          "frequent_updates": "Wenn aktiviert, werden Status und Teilnahmefaktor der Energiegemeinschaften alle 15 Minuten aktualisiert. Wenn deaktiviert, werden alle Daten nur alle 3 Stunden aktualisiert.",
+          "include_inactive_contract_account_data": "Wenn aktiviert, werden Daten von Vertragskonten mit inaktiven Stromanbietern am gleichen Zählpunkt mit den Daten des aktiven Kontos zusammengeführt (bei inaktiven Zählpunkten mit den Daten des zuletzt beendeten Vertrags). Dies betrifft sowohl die einzelnen Energiegemeinschafts-Sensoren als auch die Gesamt-Bezugs-/Einspeisungssensoren des Zählpunkts.",
+          "show_inactive_meter_points": "Wenn aktiviert, werden auch Zählpunkte angezeigt, deren Vertragskonten alle inaktiv sind.",
+          "show_revoked_energy_communities": "Wenn aktiviert, werden Energiegemeinschaften mit widerrufener Teilnahme als eigene Geräte mit eigenen Sensoren angezeigt, anstatt nur aktive Mitgliedschaften. Ihre Verbrauchs-/Erzeugungsdaten werden außerdem in die Gesamt-Bezugs-/Einspeisungssensoren des Zählpunkts mit eingerechnet."
+        }
+      }
+    }
+  }
 }

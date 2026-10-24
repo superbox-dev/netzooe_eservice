@@ -1,8 +1,8 @@
 {
-    "name": "Netz OÖ eService",
-    "filename": "netzooe_eservice.zip",
-    "country": ["AT"],
-    "render_readme": true,
-    "homeassistant": "2026.9.4",
-    "zip_release": true
+  "name": "Netz OÖ eService",
+  "filename": "netzooe_eservice.zip",
+  "country": ["AT"],
+  "render_readme": true,
+  "homeassistant": "2026.9.4",
+  "zip_release": true
 }
