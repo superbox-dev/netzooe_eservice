@@ -15,6 +15,7 @@ from functools import partial
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
+from typing import NamedTuple
 
 from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.config_entries import ConfigEntry
@@ -26,6 +27,8 @@ from netzooe_eservice_api.api import NetzOOEeServiceAPI
 from netzooe_eservice_api.api import Pod
 from netzooe_eservice_api.constants import ConsentsStatus
 from netzooe_eservice_api.constants import ConsumptionsProfilesBranch
+from netzooe_eservice_api.constants import Granularity
+from netzooe_eservice_api.constants import ProfileType
 from netzooe_eservice_api.error import APIError
 from netzooe_eservice_api.error import AuthenticationError
 
@@ -74,27 +77,36 @@ class ActiveContractData:
     contracts_to_use: list[dict[str, Any]]
 
 
+class DateRange(NamedTuple):
+    """First and last day of a time range."""
+
+    date_from: date
+    date_to: date
+
+    def intersection(self, other: DateRange) -> DateRange | None:
+        """Return the days of both time ranges, or `None` if they have no day in common."""
+        date_from: date = max(self.date_from, other.date_from)
+        date_to: date = min(self.date_to, other.date_to)
+        return DateRange(date_from, date_to) if date_from <= date_to else None
+
+
 @dataclass(frozen=True, kw_only=True)
 class ProfilePeriods:
     """Date ranges of the consumption profiles that are requested in a full update."""
 
     cutoff: date
-    """Last day with L1/L2 profile data."""
-    last_month_from: date
-    """First day of the previous month."""
-    last_month_to: date
-    """Last day of the previous month with L1/L2 profile data."""
+    """Last day with L1/L2 profile data of the energy communities."""
+    last_month: DateRange
+    """All days of the previous month."""
 
     @classmethod
     def from_today(cls, today: date, /) -> ProfilePeriods:
         """Return the date ranges for the given day."""
-        cutoff: date = today - PROFILE_DATA_DELAY
         last_day_of_last_month: date = today.replace(day=1) - timedelta(days=1)
 
         return cls(
-            cutoff=cutoff,
-            last_month_from=last_day_of_last_month.replace(day=1),
-            last_month_to=min(last_day_of_last_month, cutoff),
+            cutoff=today - PROFILE_DATA_DELAY,
+            last_month=DateRange(last_day_of_last_month.replace(day=1), last_day_of_last_month),
         )
 
 
@@ -109,13 +121,26 @@ class Timeslice:
 
 @dataclass(frozen=True, kw_only=True)
 class ProfileRequest:
-    """Consumption profile request of an energy community timeslice."""
+    """Consumption profile request of a time range."""
 
     targets: tuple[list[dict[str, Any]], ...]
-    """Lists of the energy community device data the profile is appended to."""
+    """Lists of the device data the profile is appended to."""
+    date_range: DateRange
+
+
+@dataclass(frozen=True, kw_only=True)
+class EnergyCommunityProfileRequest(ProfileRequest):
+    """Consumption profile request of an energy community timeslice."""
+
     timeslice: Timeslice
-    date_from: date
-    date_to: date
+
+
+@dataclass(frozen=True, kw_only=True)
+class MeterPointProfileRequest(ProfileRequest):
+    """L1 consumption profile request of a contract account at a meter point."""
+
+    contract_account_number: str
+    meter_point_administration_number: str
 
 
 class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
@@ -216,7 +241,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         )
 
         data: dict[str, Any] = {}
-        profile_requests: list[ProfileRequest] = []
+        energy_community_requests: list[EnergyCommunityProfileRequest] = []
+        meter_point_requests: list[MeterPointProfileRequest] = []
 
         for mpan, contracts in contracts_by_mpan.items():
             active_contract_data: ActiveContractData | None = self._get_active_contract_data(mpan, contracts)
@@ -224,19 +250,35 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             if active_contract_data is None:
                 continue
 
-            self._append_meter_point_data(data, contract=active_contract_data.active_contract["contract"])
-            profile_requests += self._append_energy_communities(
+            meter_point: dict[str, Any] = self._append_meter_point_data(
+                data,
+                contract=active_contract_data.active_contract["contract"],
+            )
+            meter_point_requests += self._get_meter_point_profile_requests(
+                meter_point,
+                active_contract_data,
+                periods=periods,
+            )
+            energy_community_requests += self._append_energy_communities(
                 data,
                 active_contract_data,
                 consents_map=consents_map,
                 periods=periods,
             )
 
+        # Request the profiles of the energy communities and meter points together, within the same limit.
         profiles: list[list[dict[str, Any]]] = await self._async_gather(
-            partial(self._async_fetch_consumptions_profile, request) for request in profile_requests
+            [
+                *(
+                    partial(self._async_fetch_energy_community_profile, request)
+                    for request in energy_community_requests
+                ),
+                *(partial(self._async_fetch_meter_point_profile, request) for request in meter_point_requests),
+            ],
         )
+        requests: list[ProfileRequest] = [*energy_community_requests, *meter_point_requests]
 
-        for request, profile in zip(profile_requests, profiles, strict=True):
+        for request, profile in zip(requests, profiles, strict=True):
             for target in request.targets:
                 target.extend(profile)
 
@@ -386,8 +428,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         return True
 
     @staticmethod
-    def _append_meter_point_data(data: dict[str, Any], /, *, contract: dict[str, Any]) -> None:
-        """Add the device data of the meter point of a contract."""
+    def _append_meter_point_data(data: dict[str, Any], /, *, contract: dict[str, Any]) -> dict[str, Any]:
+        """Add the device data of the meter point of a contract and return it."""
         point_of_delivery: dict[str, Any] = contract["pointOfDelivery"]
         meter_number: str = point_of_delivery["meter"]["meterNumber"]
         last_readings: list[dict[str, Any]] = point_of_delivery["lastReadings"].get("values", [])
@@ -403,7 +445,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 {},
             )
 
-        data[point_of_delivery["meterPointAdministrationNumber"]] = {
+        meter_point: dict[str, Any] = {
             "deviceName": contract["synthProfile"],
             "deviceType": METER_POINT_DEVICE_TYPES[contract["synthProfile"]],
             "scaleType": contract["scaleType"],
@@ -415,7 +457,82 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             "profileDataAvailableTo": point_of_delivery.get("availableTimeRange", {}).get("to"),
             "meterReading": last_reading(METER_READING_REFERENCE_NUMBERS),
             "lastMonthPeakPower": last_reading(PEAK_POWER_REFERENCE_NUMBERS),
+            "totalL1": [],
+            "monthlyL1": [],
+            "dailyL1": [],
         }
+        data[point_of_delivery["meterPointAdministrationNumber"]] = meter_point
+        return meter_point
+
+    @classmethod
+    def _get_meter_point_profile_requests(
+        cls,
+        meter_point: dict[str, Any],
+        active_contract_data: ActiveContractData,
+        /,
+        *,
+        periods: ProfilePeriods,
+    ) -> list[MeterPointProfileRequest]:
+        """Return the L1 profile requests of all used contracts of a meter point.
+
+        - ``totalL1``: all profile data
+        - ``monthlyL1``: profile data of the previous month
+        - ``dailyL1``: profile data of the last day with data of the meter point
+
+        Each contract only requests its own time range, so data of the meter point is not counted twice.
+        """
+        mpan: str = active_contract_data.active_contract["contract"]["pointOfDelivery"][
+            "meterPointAdministrationNumber"
+        ]
+        contract_ranges: list[tuple[str, DateRange]] = [
+            (item["contractAccounts"]["contractAccountNumber"], date_range)
+            for item in active_contract_data.contracts_to_use
+            if (date_range := cls._available_range(item)) is not None
+        ]
+
+        last_day: date = max((date_range.date_to for _number, date_range in contract_ranges), default=date.min)
+        profile_requests: list[MeterPointProfileRequest] = []
+
+        for contract_account_number, date_range in contract_ranges:
+            for target, period in (
+                (meter_point["totalL1"], date_range),
+                (meter_point["monthlyL1"], periods.last_month),
+                (meter_point["dailyL1"], DateRange(last_day, last_day)),
+            ):
+                request_range: DateRange | None = date_range.intersection(period)
+
+                if request_range is not None:
+                    profile_requests.append(
+                        MeterPointProfileRequest(
+                            targets=(target,),
+                            date_range=request_range,
+                            contract_account_number=contract_account_number,
+                            meter_point_administration_number=mpan,
+                        ),
+                    )
+
+        return profile_requests
+
+    @staticmethod
+    def _available_range(item: dict[str, Any], /) -> DateRange | None:
+        """Return the time range with profile data of a contract, or `None` if there is none.
+
+        The time range of the portal is the one of the meter point, so it is limited to the contract.
+        """
+        available: dict[str, Any] | None = item["contract"]["pointOfDelivery"].get("availableTimeRange")
+
+        if not available:
+            return None
+
+        move_in: str | None = item["contract"].get("moveInDate")
+        move_out: str | None = item["contract"].get("moveOutDate")
+
+        return DateRange(date.fromisoformat(available["from"]), date.fromisoformat(available["to"])).intersection(
+            DateRange(
+                date.fromisoformat(move_in) if move_in else date.min,
+                date.fromisoformat(move_out) if move_out else date.max,
+            ),
+        )
 
     def _append_energy_communities(
         self,
@@ -425,11 +542,11 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         *,
         consents_map: ConsentsMap,
         periods: ProfilePeriods,
-    ) -> list[ProfileRequest]:
+    ) -> list[EnergyCommunityProfileRequest]:
         """Add the energy communities of a meter point and return the requests for their consumption profiles."""
         active_contract: dict[str, Any] = active_contract_data.active_contract["contract"]
         mpan: str = active_contract["pointOfDelivery"]["meterPointAdministrationNumber"]
-        profile_requests: list[ProfileRequest] = []
+        profile_requests: list[EnergyCommunityProfileRequest] = []
 
         for item in active_contract_data.contracts_to_use:
             contract_account_number: str = item["contractAccounts"]["contractAccountNumber"]
@@ -446,7 +563,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 )
 
                 if energy_community is not None:
-                    profile_requests += self._get_profile_requests(
+                    profile_requests += self._get_energy_community_profile_requests(
                         energy_community,
                         Timeslice(
                             contract_account_number=contract_account_number,
@@ -518,65 +635,71 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         )
 
     @staticmethod
-    def _get_profile_requests(
+    def _get_energy_community_profile_requests(
         energy_community: dict[str, Any],
         timeslice: Timeslice,
         /,
         *,
         periods: ProfilePeriods,
-    ) -> list[ProfileRequest]:
+    ) -> list[EnergyCommunityProfileRequest]:
         """Return the profile requests of a timeslice.
 
         - ``totalL2``: L1/L2 profile up to the cutoff
         - ``monthlyL2``: L1/L2 profile of the previous month
         - ``totalL3``: complete L1/L2/L3 profile
         """
-        available_from: date = date.fromisoformat(timeslice.data["profileDataAvailableFrom"])
-        available_to: date = date.fromisoformat(timeslice.data["profileDataAvailableTo"])
-        profile_requests: list[ProfileRequest] = []
+        available: DateRange = DateRange(
+            date.fromisoformat(timeslice.data["profileDataAvailableFrom"]),
+            date.fromisoformat(timeslice.data["profileDataAvailableTo"]),
+        )
+        up_to_cutoff: DateRange | None = available.intersection(DateRange(date.min, periods.cutoff))
+        # The previous month also ends at the cutoff, the L1/L2 data after it is not available yet.
+        last_month: DateRange | None = up_to_cutoff.intersection(periods.last_month) if up_to_cutoff else None
+        profile_requests: list[EnergyCommunityProfileRequest] = []
 
-        if available_from <= periods.cutoff:
+        if up_to_cutoff is not None:
             # If all data is older than the cutoff, the L1/L2 profile is also the complete profile.
             profile_requests.append(
-                ProfileRequest(
+                EnergyCommunityProfileRequest(
                     timeslice=timeslice,
                     targets=(
                         (energy_community["totalL2"], energy_community["totalL3"])
-                        if available_to <= periods.cutoff
+                        if up_to_cutoff == available
                         else (energy_community["totalL2"],)
                     ),
-                    date_from=available_from,
-                    date_to=min(available_to, periods.cutoff),
+                    date_range=up_to_cutoff,
                 ),
             )
 
-        if available_from <= periods.last_month_to and available_to >= periods.last_month_from:
+        if last_month is not None:
             profile_requests.append(
-                ProfileRequest(
+                EnergyCommunityProfileRequest(
                     timeslice=timeslice,
                     targets=(energy_community["monthlyL2"],),
-                    date_from=max(periods.last_month_from, available_from),
-                    date_to=min(periods.last_month_to, available_to),
+                    date_range=last_month,
                 ),
             )
 
-        if available_to > periods.cutoff:
+        if available.date_to > periods.cutoff:
             profile_requests.append(
-                ProfileRequest(
+                EnergyCommunityProfileRequest(
                     timeslice=timeslice,
                     targets=(energy_community["totalL3"],),
-                    date_from=available_from,
-                    date_to=available_to,
+                    date_range=available,
                 ),
             )
 
         return profile_requests
 
-    async def _async_fetch_consumptions_profile(self, request: ProfileRequest, /) -> list[dict[str, Any]]:
+    async def _async_fetch_energy_community_profile(
+        self,
+        request: EnergyCommunityProfileRequest,
+        /,
+    ) -> list[dict[str, Any]]:
         """Fetch the consumption profile of an energy community timeslice."""
         timeslice: Timeslice = request.timeslice
-        date_from: str = request.date_from.isoformat()
-        date_to: str = request.date_to.isoformat()
+        date_from: str = request.date_range.date_from.isoformat()
+        date_to: str = request.date_range.date_to.isoformat()
 
         consumptions_profile: list[dict[str, Any]] = await self.api.consumptions_profile(
             pods=[
@@ -603,6 +726,25 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             item["to"] = date_to
 
         return consumptions_profile
+
+    async def _async_fetch_meter_point_profile(self, request: MeterPointProfileRequest, /) -> list[dict[str, Any]]:
+        """Fetch the L1 consumption profile of a contract account at a meter point."""
+        consumptions_profile: list[dict[str, Any]] = await self.api.consumptions_profile(
+            pods=[
+                Pod(
+                    contract_account_number=request.contract_account_number,
+                    profile_type=ProfileType.ACTIVE_CURRENT,
+                    # The portal chooses the resolution from the length of the time range.
+                    best_available_granularity=Granularity.QUARTER_OF_AN_HOUR,
+                    meter_point_administration_number=request.meter_point_administration_number,
+                    date_from=request.date_range.date_from.isoformat(),
+                    date_to=request.date_range.date_to.isoformat(),
+                ),
+            ],
+        )
+
+        # The single values of the profile are not used and would make the data large.
+        return [{key: value for key, value in item.items() if key != "profileValues"} for item in consumptions_profile]
 
     async def _async_fetch_energy_community_data(self) -> dict[str, Any]:
         """Return the previous data with the current contribution factors and statuses of the energy communities."""

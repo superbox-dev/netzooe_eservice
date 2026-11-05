@@ -65,11 +65,29 @@
       "energy_community_import_l3": {
         "name": "Energy community import L1/L2/L3"
       },
+      "export_l1": {
+        "name": "Export L1"
+      },
+      "import_l1": {
+        "name": "Import L1"
+      },
+      "last_day_export_l1": {
+        "name": "Export L1 (last day)"
+      },
+      "last_day_import_l1": {
+        "name": "Import L1 (last day)"
+      },
       "last_month_energy_community_export_l2": {
         "name": "Energy community export L2 (previous month)"
       },
       "last_month_energy_community_import_l2": {
         "name": "Energy community import L2 (previous month)"
+      },
+      "last_month_export_l1": {
+        "name": "Export L1 (previous month)"
+      },
+      "last_month_import_l1": {
+        "name": "Import L1 (previous month)"
       },
       "last_month_peak_export_power": {
         "name": "Maximum Export Power (previous month)"

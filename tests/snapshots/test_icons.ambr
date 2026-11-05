@@ -32,7 +32,16 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3': dict({
       'default': 'mdi:transmission-tower-import',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_export_l1': dict({
+      'default': 'mdi:transmission-tower-import',
+    }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_last_day_export_l1': dict({
+      'default': 'mdi:transmission-tower-import',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2': dict({
+      'default': 'mdi:transmission-tower-import',
+    }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_export_l1': dict({
       'default': 'mdi:transmission-tower-import',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power': None,
@@ -148,7 +157,16 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111112_energy_community_import_l3': dict({
       'default': 'mdi:transmission-tower-export',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_import_l1': dict({
+      'default': 'mdi:transmission-tower-export',
+    }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_last_day_import_l1': dict({
+      'default': 'mdi:transmission-tower-export',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2': dict({
+      'default': 'mdi:transmission-tower-export',
+    }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_import_l1': dict({
       'default': 'mdi:transmission-tower-export',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power': None,

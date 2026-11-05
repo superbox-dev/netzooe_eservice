@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!--start-->
 
+### Added
+
+- Added the sensors "Import/Export L1", "Import/Export L1 (previous month)" and "Import/Export L1 (last day)" with
+  the energy of all profile data, the previous month and the last day with data of a meter point. The
+  attribute `timeline` has one entry per section of the profile with the sum, average, maximum and minimum
+  ([Issue #40][issue-40]).
+
+[issue-40]: https://github.com/superbox-dev/netzooe_eservice/issues/40
+
 ## [1.2.1] - 2026-10-24
 
 ### Fixed

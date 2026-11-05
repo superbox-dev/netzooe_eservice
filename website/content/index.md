@@ -104,10 +104,31 @@ To change the options, go to **Settings** → **Devices & services** → **Netz 
 | Type                                              | Type of the meter point, e.g. "EEG 7ngem"                                           |
 | Profile data available until                      | Last day with profile data in the portal (diagnostic)                               |
 | Energy community / Supplier import/export (total) | Total of all energy communities of the meter point (disabled by default, see below) |
+| Import/Export L1                                  | Energy of all profile data of the meter point in kWh                                |
+| Import/Export L1 (previous month)                 | Energy of the previous calendar month in kWh                                        |
+| Import/Export L1 (last day)                       | Energy of the last day with profile data (usually yesterday) in kWh                 |
 
-The total sensors of the meter point are disabled by default. Enable them in the entity settings if your meter
-point takes part in several energy communities. They only include energy communities with the status "active",
-unless **Show revoked energy communities** is enabled.
+The L1 sensors include all contracts of the meter point, the data of inactive contract accounts only if
+**Include data from inactive contract accounts** is enabled. They are unavailable if the portal has no profile data
+for their time range. The `timeline` attribute has one entry per section of the profile, like the
+"Zählpunktinformationen" boxes in the portal, e.g. after a change from daily to quarter-hourly values:
+
+| Attribute                                | Description                                                                         |
+|------------------------------------------|-------------------------------------------------------------------------------------|
+| `from`, `to`                             | First and last day of the section                                                   |
+| `resolution`                             | Resolution of the average, maximum and minimum, e.g. `year`, `month`, `day`         |
+| `sum`                                    | Energy of the section in kWh                                                        |
+| `average`                                | Average energy per resolution in kWh                                                |
+| `maximum`, `minimum`                     | Highest and lowest energy per resolution in kWh                                     |
+| `maximum_timestamp`, `minimum_timestamp` | Start of the highest and lowest value in local time                                 |
+
+The portal chooses the resolution from the length of the time range: all profile data has `year` (or `month` if the
+data is shorter), the previous month `day` and the last day `quarter_of_an_hour`. The state is the sum of all sections.
+This timeline is small and recorded in the database, so the values stay in the history.
+
+The energy community and supplier totals of the meter point are disabled by default. Enable them in the entity
+settings if your meter point takes part in several energy communities. They only include energy communities with
+the status "active", unless **Show revoked energy communities** is enabled.
 
 ### Sensors of an energy community
 
@@ -128,6 +149,15 @@ The energy community and supplier sensors count the energy since the start of th
 The entity IDs start with `sensor.netzooe_eservice_` followed by the meter point number, the energy community ID for
 the sensors of an energy community, and the sensor key. Replace the ID in the example with the one of your
 device, you find it in the entity settings.
+
+### Maximum of the last day
+
+This template returns the highest quarter-hourly value of the last day with data:
+
+```jinja
+{% set entity_id = 'sensor.netzooe_eservice_at0000000000000000000000000000001_last_day_import_l1' %}
+{{ state_attr(entity_id, 'timeline')[-1].maximum }}
+```
 
 ### Notification when a participation ends
 
@@ -167,6 +197,8 @@ are no longer returned by the portal are removed.
 - The portal provides the L1/L2 values of the energy communities with a delay of about 16 days. Sensors with
   "16-day delay" in their name only contain these final values.
 - The meter readings and trends are only updated by the portal once a day.
+- The L1 profile data is usually available up to yesterday, so the L1 sensors show the last complete day and the
+  previous month, not today.
 - If the portal is not available, the sensors keep their last values until the next successful update.
 - The portal is not designed for automated access. The integration can stop working if Netz Oberösterreich changes
   the portal.

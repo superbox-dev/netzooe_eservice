@@ -4,6 +4,40 @@
     'devices': list([
       dict({
         'contractStart': '2023-10-05',
+        'dailyL1': list([
+          dict({
+            'average': dict({
+              'unit': 'KWH',
+              'value': 0.1,
+            }),
+            'contractPower': 4.0,
+            'from': '2026-06-27T00:00:00',
+            'granularity': 'QUARTER_OF_AN_HOUR',
+            'maximum': dict({
+              'dateTime': '2026-06-27T10:15:00Z',
+              'unit': 'KWH',
+              'value': 0.6,
+            }),
+            'meterPointAdministrationNumber': '**REDACTED**',
+            'minimum': dict({
+              'dateTime': '2026-06-27T01:30:00Z',
+              'unit': 'KWH',
+              'value': 0.02,
+            }),
+            'profileTypeContent': dict({
+              'body': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'bodyText': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'header': 'Wirkenergie',
+            }),
+            'sum': dict({
+              'unit': 'KWH',
+              'value': 9.6,
+            }),
+            'to': '2026-06-27T23:59:59',
+            'type': 'ACTIVE_CURRENT',
+            'unit': 'KWH',
+          }),
+        ]),
         'deviceName': 'Photovoltaik',
         'deviceType': 'PHOTOVOLTAICS',
         'lastMonthPeakPower': dict({
@@ -23,6 +57,40 @@
           }),
           'referenceNumber': '1.8.1',
         }),
+        'monthlyL1': list([
+          dict({
+            'average': dict({
+              'unit': 'KWH',
+              'value': 10.0,
+            }),
+            'contractPower': 4.0,
+            'from': '2026-05-01T00:00:00',
+            'granularity': 'DAY',
+            'maximum': dict({
+              'dateTime': '2026-05-26T22:00:00Z',
+              'unit': 'KWH',
+              'value': 15.0,
+            }),
+            'meterPointAdministrationNumber': '**REDACTED**',
+            'minimum': dict({
+              'dateTime': '2026-05-03T22:00:00Z',
+              'unit': 'KWH',
+              'value': 6.0,
+            }),
+            'profileTypeContent': dict({
+              'body': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'bodyText': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'header': 'Wirkenergie',
+            }),
+            'sum': dict({
+              'unit': 'KWH',
+              'value': 310.0,
+            }),
+            'to': '2026-05-31T23:59:59',
+            'type': 'ACTIVE_CURRENT',
+            'unit': 'KWH',
+          }),
+        ]),
         'monthlyTrend': dict({
           'consumptionNew': dict({
             'days': 30,
@@ -49,6 +117,72 @@
           'id': 'AT113820',
           'name': 'OeMAG Abwicklungsstelle für Ökostrom AG',
         }),
+        'totalL1': list([
+          dict({
+            'average': dict({
+              'unit': 'KWH',
+              'value': 500.0,
+            }),
+            'contractPower': 4.0,
+            'from': '2023-10-18T00:00:00',
+            'granularity': 'YEAR',
+            'maximum': dict({
+              'dateTime': '2023-12-31T23:00:00Z',
+              'unit': 'KWH',
+              'value': 800.0,
+            }),
+            'meterPointAdministrationNumber': '**REDACTED**',
+            'minimum': dict({
+              'dateTime': '2023-10-17T22:00:00Z',
+              'unit': 'KWH',
+              'value': 200.0,
+            }),
+            'profileTypeContent': dict({
+              'body': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'bodyText': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'header': 'Wirkenergie',
+            }),
+            'sum': dict({
+              'unit': 'KWH',
+              'value': 1000,
+            }),
+            'to': '2024-05-02T23:59:59',
+            'type': 'ACTIVE_CURRENT',
+            'unit': 'KWH',
+          }),
+          dict({
+            'average': dict({
+              'unit': 'KWH',
+              'value': 3166.83,
+            }),
+            'contractPower': 4.0,
+            'from': '2024-05-03T00:00:00',
+            'granularity': 'YEAR',
+            'maximum': dict({
+              'dateTime': '2024-12-31T23:00:00Z',
+              'unit': 'KWH',
+              'value': 4000.0,
+            }),
+            'meterPointAdministrationNumber': '**REDACTED**',
+            'minimum': dict({
+              'dateTime': '2024-05-02T22:00:00Z',
+              'unit': 'KWH',
+              'value': 2500.5,
+            }),
+            'profileTypeContent': dict({
+              'body': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'bodyText': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'header': 'Wirkenergie',
+            }),
+            'sum': dict({
+              'unit': 'KWH',
+              'value': 9500.5,
+            }),
+            'to': '2026-06-27T23:59:59',
+            'type': 'ACTIVE_CURRENT',
+            'unit': 'KWH',
+          }),
+        ]),
         'yearlyTrend': dict({
           'consumptionNew': dict({
             'days': 365,
@@ -260,6 +394,40 @@
       }),
       dict({
         'contractStart': '2026-06-17',
+        'dailyL1': list([
+          dict({
+            'average': dict({
+              'unit': 'KWH',
+              'value': 0.125,
+            }),
+            'contractPower': 4.0,
+            'from': '2026-06-27T00:00:00',
+            'granularity': 'QUARTER_OF_AN_HOUR',
+            'maximum': dict({
+              'dateTime': '2026-06-27T17:00:00Z',
+              'unit': 'KWH',
+              'value': 0.8,
+            }),
+            'meterPointAdministrationNumber': '**REDACTED**',
+            'minimum': dict({
+              'dateTime': '2026-06-27T02:45:00Z',
+              'unit': 'KWH',
+              'value': 0.05,
+            }),
+            'profileTypeContent': dict({
+              'body': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'bodyText': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'header': 'Wirkenergie',
+            }),
+            'sum': dict({
+              'unit': 'KWH',
+              'value': 12.0,
+            }),
+            'to': '2026-06-27T23:59:59',
+            'type': 'ACTIVE_CURRENT',
+            'unit': 'KWH',
+          }),
+        ]),
         'deviceName': 'Haushalt',
         'deviceType': 'HOUSEHOLD',
         'lastMonthPeakPower': dict({
@@ -279,6 +447,72 @@
           }),
           'referenceNumber': '2.8.1',
         }),
+        'monthlyL1': list([
+          dict({
+            'average': dict({
+              'unit': 'KWH',
+              'value': 10.0,
+            }),
+            'contractPower': 4.0,
+            'from': '2026-05-13T00:00:00',
+            'granularity': 'DAY',
+            'maximum': dict({
+              'dateTime': '2026-05-20T22:00:00Z',
+              'unit': 'KWH',
+              'value': 14.0,
+            }),
+            'meterPointAdministrationNumber': '**REDACTED**',
+            'minimum': dict({
+              'dateTime': '2026-05-30T22:00:00Z',
+              'unit': 'KWH',
+              'value': 7.0,
+            }),
+            'profileTypeContent': dict({
+              'body': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'bodyText': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'header': 'Wirkenergie',
+            }),
+            'sum': dict({
+              'unit': 'KWH',
+              'value': 190.0,
+            }),
+            'to': '2026-05-31T23:59:59',
+            'type': 'ACTIVE_CURRENT',
+            'unit': 'KWH',
+          }),
+          dict({
+            'average': dict({
+              'unit': 'KWH',
+              'value': 10.0,
+            }),
+            'contractPower': 4.0,
+            'from': '2026-05-01T00:00:00',
+            'granularity': 'DAY',
+            'maximum': dict({
+              'dateTime': '2026-05-01T22:00:00Z',
+              'unit': 'KWH',
+              'value': 12.0,
+            }),
+            'meterPointAdministrationNumber': '**REDACTED**',
+            'minimum': dict({
+              'dateTime': '2026-05-05T22:00:00Z',
+              'unit': 'KWH',
+              'value': 8.0,
+            }),
+            'profileTypeContent': dict({
+              'body': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'bodyText': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'header': 'Wirkenergie',
+            }),
+            'sum': dict({
+              'unit': 'KWH',
+              'value': 120.0,
+            }),
+            'to': '2026-05-12T23:59:59',
+            'type': 'ACTIVE_CURRENT',
+            'unit': 'KWH',
+          }),
+        ]),
         'monthlyTrend': dict({
           'consumptionNew': dict({
             'days': 0,
@@ -305,6 +539,72 @@
           'id': 'AT110191',
           'name': 'EP Energie Plus GmbH',
         }),
+        'totalL1': list([
+          dict({
+            'average': dict({
+              'unit': 'KWH',
+              'value': 10.0,
+            }),
+            'contractPower': 4.0,
+            'from': '2026-06-17T00:00:00',
+            'granularity': 'DAY',
+            'maximum': dict({
+              'dateTime': '2026-06-20T22:00:00Z',
+              'unit': 'KWH',
+              'value': 20.0,
+            }),
+            'meterPointAdministrationNumber': '**REDACTED**',
+            'minimum': dict({
+              'dateTime': '2026-06-16T22:00:00Z',
+              'unit': 'KWH',
+              'value': 5.0,
+            }),
+            'profileTypeContent': dict({
+              'body': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'bodyText': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'header': 'Wirkenergie',
+            }),
+            'sum': dict({
+              'unit': 'KWH',
+              'value': 110.0,
+            }),
+            'to': '2026-06-27T23:59:59',
+            'type': 'ACTIVE_CURRENT',
+            'unit': 'KWH',
+          }),
+          dict({
+            'average': dict({
+              'unit': 'KWH',
+              'value': 2666.67,
+            }),
+            'contractPower': 4.0,
+            'from': '2023-10-18T00:00:00',
+            'granularity': 'YEAR',
+            'maximum': dict({
+              'dateTime': '2024-12-31T23:00:00Z',
+              'unit': 'KWH',
+              'value': 3500.0,
+            }),
+            'meterPointAdministrationNumber': '**REDACTED**',
+            'minimum': dict({
+              'dateTime': '2023-10-17T22:00:00Z',
+              'unit': 'KWH',
+              'value': 1500.0,
+            }),
+            'profileTypeContent': dict({
+              'body': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'bodyText': 'Bezogene oder eingespeiste Wirkenergie des Zählpunkts.',
+              'header': 'Wirkenergie',
+            }),
+            'sum': dict({
+              'unit': 'KWH',
+              'value': 8000.0,
+            }),
+            'to': '2026-06-16T23:59:59',
+            'type': 'ACTIVE_CURRENT',
+            'unit': 'KWH',
+          }),
+        ]),
         'yearlyTrend': dict({
           'consumptionNew': dict({
             'days': 0,
