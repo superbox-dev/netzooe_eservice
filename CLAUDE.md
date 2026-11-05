@@ -59,6 +59,9 @@ Before finishing a change, run `ruff format`, `lint.sh` and `pytest`, in this or
 - No inline lint/type suppressions, no new ones in the config, no `# pragma: no cover`, fix or test the code
   - only exception: `# noqa: ARG00x` in required signatures
 - No real credentials or customer data, use the fake data in `tests/api_data.py`
+- Test account: login in `.env` (`NETZOOE_USER`, `NETZOOE_PASS`, git-ignored)
+  - **only** read-only requests (besides login/logout), few requests, certificate check on
+  - never print, log or commit its values, never copy them into code, tests or docs
 - Missing portal endpoints or values belong in `netzooe_eservice_api`, stop and ask how to proceed
   - values calculated from existing ones are fine in the integration
 - No new dependencies (`pyproject.toml`, `manifest.json`, also dev dependencies) without asking first

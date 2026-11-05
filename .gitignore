@@ -31,3 +31,6 @@ website/docs/
 # Home Assistant configuration
 config/*
 !config/configuration.yaml
+
+# secrets
+.env
