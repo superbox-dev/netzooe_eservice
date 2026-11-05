@@ -1,10 +1,5 @@
 # Netz OÖ eService
 
-[![CI](https://github.com/superbox-dev/netzooe_eservice/actions/workflows/ci.yml/badge.svg?branch=main)][workflow-ci]
-![coverage-badge](https://raw.githubusercontent.com/superbox-dev/netzooe_eservice/main/coverage-badge.svg)
-![Typing: strict][typing-strict]
-![Code style: Ruff][code-ruff]
-
 A Home Assistant integration to read energy data from the [Netz OÖ eService portal](https://eservice.netzooe.at).
 
 > [!NOTE]
@@ -12,19 +7,14 @@ A Home Assistant integration to read energy data from the [Netz OÖ eService por
 
 ![dashboard.png](assets/dashboard.png)
 
-[workflow-ci]: https://github.com/superbox-dev/netzooe_eservice/actions/workflows/ci.yml
-[typing-strict]: https://img.shields.io/badge/typing-strict-green.svg
-[code-ruff]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json
-
 ## Installation
 
-[![Open HACS repository on my Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)][redirect-hacs]
+[![Open the repository in the Marketplace of your Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)][redirect-hacs]
 
-1. Install the integration with [HACS](https://hacs.xyz/) (search for "Netz OÖ eService").
-2. Restart Home Assistant.
-3. Go to **Settings** → **Devices & services**, select **+ Add integration** and search for **Netz OÖ eService**.
+1. Go to **Settings** → **Marketplace**, search for **Netz OÖ eService** and select **Install**.
+2. Follow the setup that starts after the installation.
 
-Requires Home Assistant 2026.9.4 or newer and an account for the Netz OÖ eService portal. See the
+Requires an account for the Netz OÖ eService portal. See the
 [installation](https://superbox-dev.github.io/netzooe_eservice/#installation) and
 [configuration](https://superbox-dev.github.io/netzooe_eservice/#configuration) sections for a manual installation and
 all parameters.
@@ -33,20 +23,28 @@ all parameters.
 
 ## Documentation
 
-Read the full documentation on [superbox-dev.github.io/netzooe_eservice](https://superbox-dev.github.io/netzooe_eservice/):
-[options](https://superbox-dev.github.io/netzooe_eservice/#options),
-[sensors](https://superbox-dev.github.io/netzooe_eservice/#supported-functionality),
-[examples](https://superbox-dev.github.io/netzooe_eservice/#examples),
-[troubleshooting](https://superbox-dev.github.io/netzooe_eservice/#troubleshooting) and more.
+**[Read the documentation](https://superbox-dev.github.io/netzooe_eservice/)** for options, sensors, examples and
+troubleshooting.
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md).
+The [changelog](https://superbox-dev.github.io/netzooe_eservice/changelog) lists the new features, changes and fixes of
+every release. Check it before you update the integration.
 
 ## Get involved
 
-Contributions are welcome: report [issues](https://github.com/superbox-dev/netzooe_eservice/issues/new/choose),
-request features, improve translations or contribute code. Read [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
+[![CI](https://github.com/superbox-dev/netzooe_eservice/actions/workflows/ci.yml/badge.svg?branch=main)][workflow-ci]
+![coverage-badge](https://raw.githubusercontent.com/superbox-dev/netzooe_eservice/main/coverage-badge.svg)
+![Typing: strict][typing-strict]
+![Code style: Ruff][code-ruff]
+
+Found a bug or have an idea? [Open an issue](https://github.com/superbox-dev/netzooe_eservice/issues/new/choose).
+Translations and code are welcome too, the
+[contribution guide](https://superbox-dev.github.io/netzooe_eservice/contributing) shows how to start.
+
+[workflow-ci]: https://github.com/superbox-dev/netzooe_eservice/actions/workflows/ci.yml
+[typing-strict]: https://img.shields.io/badge/typing-strict-green.svg
+[code-ruff]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json
 
 ## Donation
 
