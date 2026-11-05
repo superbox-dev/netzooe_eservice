@@ -2,9 +2,11 @@
 sidebar_position: 0
 sidebar_label: Integration
 slug: /
+title: Home Assistant integration for Netz OÖ eService
+description: >-
+  Show the meter readings, consumption trends, peak power and energy communities of your electricity meter points
+  from the Netz OÖ eService portal in Home Assistant.
 ---
-
-# Netz OÖ eService
 
 The **Netz OÖ eService** integration reads the energy data of your electricity meter points from the
 [Netz OÖ eService portal](https://eservice.netzooe.at) of Netz Oberösterreich, the grid operator in Upper Austria.
