@@ -54,10 +54,12 @@ request features, improve translations or contribute code. Read [CONTRIBUTING.md
 
 I put a lot of time into this project. If you like it, you can support me with a donation.
 
-[![KoFi](https://raw.githubusercontent.com/superbox-dev/.github/refs/heads/main/profile/superbox-kofi.jpg)][kofi]
+[![GitHub Sponsors](https://img.shields.io/badge/GitHub-Sponsor-EA4AAA?style=for-the-badge&logo=githubsponsors&logoColor=white)][sponsors]
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Support-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white)][kofi]
+[![PayPal](https://img.shields.io/badge/PayPal-Donate-003087?style=for-the-badge&logo=paypal&logoColor=white)][paypal]
 
-or [donate with PayPal](https://www.paypal.com/donate?hosted_button_id=34ZFWTH4TNLXS)
-
+[sponsors]: https://github.com/sponsors/superbox-dev
 [kofi]: https://ko-fi.com/F2F0KXO6D
+[paypal]: https://www.paypal.com/donate?hosted_button_id=34ZFWTH4TNLXS
 
 <!--end-donation-->
