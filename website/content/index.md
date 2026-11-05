@@ -40,19 +40,21 @@ Each energy community that a meter point takes part in gets its own device, link
 
 ## Prerequisites
 
-- Home Assistant 2026.9.4 or newer with [HACS](https://hacs.xyz/) installed.
+- Home Assistant 2026.9.4 or newer.
 - An account for the [Netz OÖ eService portal](https://eservice.netzooe.at). Log in once in the browser to make sure
   that your meter points are shown there.
 
 ## Installation
 
-[![Open HACS repository on my Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)][redirect-hacs]
+[![Open the repository in the Marketplace of your Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)][redirect-hacs]
 
-1. Install the integration with HACS (search for "Netz OÖ eService"). For a manual installation, copy the
-   `custom_components/netzooe_eservice` directory of the
-   [latest release](https://github.com/superbox-dev/netzooe_eservice/releases/latest) into the `custom_components`
-   directory of your Home Assistant configuration.
-2. Restart Home Assistant.
+1. Go to **Settings** → **Marketplace**, search for **Netz OÖ eService** and select **Install**.
+2. Follow the setup that starts after the installation.
+
+For a manual installation, copy the `custom_components/netzooe_eservice` directory of the
+[latest release](https://github.com/superbox-dev/netzooe_eservice/releases/latest) into the `custom_components`
+directory of your Home Assistant configuration, restart Home Assistant and add the integration under
+**Settings** → **Devices & services** → **+ Add integration**.
 
 [redirect-hacs]: https://my.home-assistant.io/redirect/hacs_repository/?owner=superbox-dev&repository=netzooe_eservice&category=integration
 
@@ -190,4 +192,4 @@ This integration follows standard integration removal.
 
 1. Go to **Settings** → **Devices & services** and select **Netz OÖ eService**.
 2. Select the three dots ⋮ of the entry and select **Delete**.
-3. To remove the files as well, remove the integration in HACS and restart Home Assistant.
+3. To remove the files as well, remove the integration in the Marketplace and restart Home Assistant.
