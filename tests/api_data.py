@@ -1036,6 +1036,29 @@ CONTRACT_ACCOUNT_DATA_6: Final[dict[str, Any]] = {
 }
 
 
+type Statistics = tuple[float, tuple[float, str], tuple[float, str]]
+
+
+def _statistics(granularity: str, statistics: Statistics, /) -> dict[str, Any]:
+    """Return the resolution, average, maximum, minimum and single values of a profile as returned by the portal.
+
+    ``statistics`` is the average and the value and timestamp (UTC) of the maximum and minimum.
+    """
+    average, maximum, minimum = statistics
+
+    return {
+        "granularity": granularity,
+        "average": {"value": average, "unit": "KWH"},
+        "maximum": {"value": maximum[0], "unit": "KWH", "dateTime": maximum[1]},
+        "minimum": {"value": minimum[0], "unit": "KWH", "dateTime": minimum[1]},
+        "profileValues": [
+            {"datetime": timestamp, "value": value, "status": "VALID"} for value, timestamp in (minimum, maximum)
+        ],
+    }
+
+
+# The portal returns the average, maximum and minimum of each profile type, the energy community sensors only show
+# them for a single profile type, not for a difference of two types.
 WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
@@ -1049,6 +1072,7 @@ WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: Final[list[dict[str, Any]]] = [
         },
         "energyCommunityId": "AT00300000000RC100930000000965743",
         "energyCommunityName": "wseg 07614 0523 UW Partenstein",
+        **_statistics("YEAR", (4000.0, (4500.0, "2024-12-31T23:00:00Z"), (3500.0, "2024-10-06T22:00:00Z"))),
     },
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
@@ -1062,6 +1086,7 @@ WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: Final[list[dict[str, Any]]] = [
         },
         "energyCommunityId": "AT00300000000RC100930000000965743",
         "energyCommunityName": "wseg 07614 0523 UW Partenstein",
+        **_statistics("YEAR", (3500.0, (4000.0, "2024-12-31T23:00:00Z"), (3000.0, "2024-10-06T22:00:00Z"))),
     },
 ]
 
@@ -1091,6 +1116,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2: Final[list[dict[str, Any]]] = [
         },
         "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
         "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+        **_statistics("MONTH", (166.67, (300.0, "2026-04-30T22:00:00Z"), (20.0, "2026-01-25T23:00:00Z"))),
     },
 ]
 
@@ -1120,6 +1146,7 @@ SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2: Final[list[dict[str, Any]]] = [
         },
         "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
         "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+        **_statistics("DAY", (16.13, (30.0, "2026-05-24T22:00:00Z"), (2.0, "2026-05-08T22:00:00Z"))),
     },
 ]
 
@@ -1496,6 +1523,7 @@ EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4: Final[list[dict[str, Any]]] = [
         },
         "energyCommunityId": "AT00300000000RC103550000000985681",
         "energyCommunityName": "EEG Oberösterreich RID-11",
+        **_statistics("DAY", (0.09, (0.4, "2026-05-27T22:00:00Z"), (0.0, "2026-05-20T22:00:00Z"))),
     },
 ]
 
@@ -1704,9 +1732,6 @@ SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_006_1: Final[list[dict[str, Any]]] = [
 ]
 
 
-type L1Statistics = tuple[float, tuple[float, str], tuple[float, str]]
-
-
 def _l1_section(
     mpan: str,
     date_range: tuple[str, str],
@@ -1714,7 +1739,7 @@ def _l1_section(
     total: float,
     /,
     *,
-    statistics: L1Statistics | None = None,
+    statistics: Statistics | None = None,
 ) -> dict[str, Any]:
     """Return a section of an L1 consumption profile as returned by the portal.
 
@@ -1739,13 +1764,7 @@ def _l1_section(
     }
 
     if statistics is not None:
-        average, maximum, minimum = statistics
-        section["average"] = {"value": average, "unit": "KWH"}
-        section["maximum"] = {"value": maximum[0], "unit": "KWH", "dateTime": maximum[1]}
-        section["minimum"] = {"value": minimum[0], "unit": "KWH", "dateTime": minimum[1]}
-        section["profileValues"] = [
-            {"datetime": timestamp, "value": value, "status": "VALID"} for value, timestamp in (minimum, maximum)
-        ]
+        section |= _statistics(granularity, statistics)
 
     return section
 

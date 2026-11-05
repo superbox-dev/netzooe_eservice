@@ -225,11 +225,38 @@
             'type': 'ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
+            'average': dict({
+              'unit': 'KWH',
+              'value': 16.13,
+            }),
             'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
             'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
             'energyDirection': 'GENERATION',
             'from': '2026-05-01',
+            'granularity': 'DAY',
+            'maximum': dict({
+              'dateTime': '2026-05-24T22:00:00Z',
+              'unit': 'KWH',
+              'value': 30.0,
+            }),
             'meterPointAdministrationNumber': '**REDACTED**',
+            'minimum': dict({
+              'dateTime': '2026-05-08T22:00:00Z',
+              'unit': 'KWH',
+              'value': 2.0,
+            }),
+            'profileValues': list([
+              dict({
+                'datetime': '2026-05-08T22:00:00Z',
+                'status': 'VALID',
+                'value': 2.0,
+              }),
+              dict({
+                'datetime': '2026-05-24T22:00:00Z',
+                'status': 'VALID',
+                'value': 30.0,
+              }),
+            ]),
             'sum': dict({
               'unit': 'KWH',
               'value': 500.0,
@@ -255,11 +282,38 @@
             'type': 'ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
+            'average': dict({
+              'unit': 'KWH',
+              'value': 166.67,
+            }),
             'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
             'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
             'energyDirection': 'GENERATION',
             'from': '2026-01-26',
+            'granularity': 'MONTH',
+            'maximum': dict({
+              'dateTime': '2026-04-30T22:00:00Z',
+              'unit': 'KWH',
+              'value': 300.0,
+            }),
             'meterPointAdministrationNumber': '**REDACTED**',
+            'minimum': dict({
+              'dateTime': '2026-01-25T23:00:00Z',
+              'unit': 'KWH',
+              'value': 20.0,
+            }),
+            'profileValues': list([
+              dict({
+                'datetime': '2026-01-25T23:00:00Z',
+                'status': 'VALID',
+                'value': 20.0,
+              }),
+              dict({
+                'datetime': '2026-04-30T22:00:00Z',
+                'status': 'VALID',
+                'value': 300.0,
+              }),
+            ]),
             'sum': dict({
               'unit': 'KWH',
               'value': 1000.0,
@@ -766,11 +820,38 @@
             'type': 'ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
+            'average': dict({
+              'unit': 'KWH',
+              'value': 0.09,
+            }),
             'energyCommunityId': 'AT00300000000RC103550000000985681',
             'energyCommunityName': 'EEG Oberösterreich RID-11',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-05-21',
+            'granularity': 'DAY',
+            'maximum': dict({
+              'dateTime': '2026-05-27T22:00:00Z',
+              'unit': 'KWH',
+              'value': 0.4,
+            }),
             'meterPointAdministrationNumber': '**REDACTED**',
+            'minimum': dict({
+              'dateTime': '2026-05-20T22:00:00Z',
+              'unit': 'KWH',
+              'value': 0.0,
+            }),
+            'profileValues': list([
+              dict({
+                'datetime': '2026-05-20T22:00:00Z',
+                'status': 'VALID',
+                'value': 0.0,
+              }),
+              dict({
+                'datetime': '2026-05-27T22:00:00Z',
+                'status': 'VALID',
+                'value': 0.4,
+              }),
+            ]),
             'sum': dict({
               'unit': 'KWH',
               'value': 1.0,

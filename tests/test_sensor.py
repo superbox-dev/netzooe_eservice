@@ -52,7 +52,7 @@ async def test_sensors(
     fake_api.register_requests()
 
     hass.config.language = language
-    # The portal returns the maximum and minimum in UTC, the L1 timelines show them in the local time of Austria.
+    # The portal returns the maximum and minimum in UTC, the timelines show them in the local time of Austria.
     await hass.config.async_set_time_zone("Europe/Vienna")
 
     await setup_integration(hass, config_entry)

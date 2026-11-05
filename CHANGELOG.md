@@ -15,8 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the energy of all profile data, the previous month and the last day with data of a meter point. The
   attribute `timeline` has one entry per section of the profile with the sum, average, maximum and minimum
   ([Issue #40][issue-40]).
+- Added the resolution, sum, average, maximum and minimum of the portal to the `timeline` entries of the sensors
+  "Energy community import" and "Supplier export". The sensors that are the difference of two profile types keep
+  only `from` and `to`, because the portal returns no values for them ([Issue #41][issue-41]).
 
 [issue-40]: https://github.com/superbox-dev/netzooe_eservice/issues/40
+[issue-41]: https://github.com/superbox-dev/netzooe_eservice/issues/41
 
 ## [1.2.1] - 2026-10-24
 

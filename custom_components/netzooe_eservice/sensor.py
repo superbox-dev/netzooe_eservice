@@ -180,9 +180,19 @@ def _sum_by_type(items: list[dict[str, Any]], target_type: str) -> float:
     return total
 
 
-def _timeline_by_type(items: list[dict[str, Any]], target_type: str) -> list[dict[str, str]]:
-    """Return the time ranges of all profile values of the given type."""
-    return [{"from": item["from"], "to": item["to"]} for item in items if item["type"] == target_type]
+def _timeline_by_type(
+    items: list[dict[str, Any]],
+    target_type: str,
+    /,
+    *,
+    with_statistics: bool,
+) -> list[dict[str, Any]]:
+    """Return the time ranges of all profile values of the given type, optionally with the values of the portal."""
+    return [
+        {"from": item["from"], "to": item["to"]} | (_profile_statistics(item) if with_statistics else {})
+        for item in items
+        if item["type"] == target_type
+    ]
 
 
 def _local_date(value: str) -> str:
@@ -205,12 +215,15 @@ def _resolution(value: str | None) -> str | None:
 
 def _timeline_entry(item: Mapping[str, Any]) -> dict[str, Any]:
     """Return the timeline entry of a section of an L1 profile."""
+    return {"from": _local_date(item["from"]), "to": _local_date(item["to"])} | _profile_statistics(item)
+
+
+def _profile_statistics(item: Mapping[str, Any]) -> dict[str, Any]:
+    """Return the sum, average, maximum and minimum of a profile as returned by the portal."""
     maximum: Mapping[str, Any] = item.get("maximum") or {}
     minimum: Mapping[str, Any] = item.get("minimum") or {}
 
     return {
-        "from": _local_date(item["from"]),
-        "to": _local_date(item["to"]),
         "resolution": _resolution(item.get("granularity")),
         "sum": item["sum"]["value"],
         "average": (item.get("average") or {}).get("value"),
@@ -343,7 +356,10 @@ def _energy_community_descriptions(
             name: dict[str, Any] = (
                 {"name": items[0]["energyCommunityName"], "id": items[0]["energyCommunityId"]} if with_name else {}
             )
-            return name | {"timeline": _timeline_by_type(items, positive_type)}
+            # The portal only returns the average, maximum and minimum of a single profile type, not of a difference.
+            return name | {
+                "timeline": _timeline_by_type(items, positive_type, with_statistics=negative_type is None),
+            }
 
         return NetzOOEeServiceSensorEntityDescription(
             entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
