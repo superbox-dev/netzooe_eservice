@@ -28,7 +28,13 @@
       "last_month_energy_community_export_l2": {
         "default": "mdi:transmission-tower-import"
       },
+      "last_month_energy_community_export_l3": {
+        "default": "mdi:transmission-tower-import"
+      },
       "last_month_energy_community_import_l2": {
+        "default": "mdi:transmission-tower-export"
+      },
+      "last_month_energy_community_import_l3": {
         "default": "mdi:transmission-tower-export"
       },
       "last_month_export_l1": {
@@ -40,7 +46,13 @@
       "last_month_supplier_export_l2": {
         "default": "mdi:transmission-tower-import"
       },
+      "last_month_supplier_export_l3": {
+        "default": "mdi:transmission-tower-import"
+      },
       "last_month_supplier_import_l2": {
+        "default": "mdi:transmission-tower-export"
+      },
+      "last_month_supplier_import_l3": {
         "default": "mdi:transmission-tower-export"
       },
       "monthly_trend": {

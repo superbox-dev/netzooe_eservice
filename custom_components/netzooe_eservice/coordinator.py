@@ -613,6 +613,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
                 "totalL2": [],
                 "monthlyL2": [],
                 "totalL3": [],
+                "monthlyL3": [],
                 "contributionPercentage": consent.get("contributionPercentage"),
                 "status": consent.get("status"),
                 "validFrom": consent["validThrough"]["from"],
@@ -647,14 +648,18 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         - ``totalL2``: L1/L2 profile up to the cutoff
         - ``monthlyL2``: L1/L2 profile of the previous month
         - ``totalL3``: complete L1/L2/L3 profile
+        - ``monthlyL3``: complete L1/L2/L3 profile of the previous month
         """
         available: DateRange = DateRange(
             date.fromisoformat(timeslice.data["profileDataAvailableFrom"]),
             date.fromisoformat(timeslice.data["profileDataAvailableTo"]),
         )
         up_to_cutoff: DateRange | None = available.intersection(DateRange(date.min, periods.cutoff))
-        # The previous month also ends at the cutoff, the L1/L2 data after it is not available yet.
-        last_month: DateRange | None = up_to_cutoff.intersection(periods.last_month) if up_to_cutoff else None
+        whole_last_month: DateRange | None = available.intersection(periods.last_month)
+        # The L1/L2 profile of the previous month also ends at the cutoff, the L1/L2 data after it is not available yet.
+        last_month: DateRange | None = (
+            up_to_cutoff.intersection(whole_last_month) if up_to_cutoff and whole_last_month else None
+        )
         profile_requests: list[EnergyCommunityProfileRequest] = []
 
         if up_to_cutoff is not None:
@@ -672,11 +677,25 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             )
 
         if last_month is not None:
+            # If the whole previous month is older than the cutoff, the L1/L2 profile is also the complete profile.
             profile_requests.append(
                 EnergyCommunityProfileRequest(
                     timeslice=timeslice,
-                    targets=(energy_community["monthlyL2"],),
+                    targets=(
+                        (energy_community["monthlyL2"], energy_community["monthlyL3"])
+                        if last_month == whole_last_month
+                        else (energy_community["monthlyL2"],)
+                    ),
                     date_range=last_month,
+                ),
+            )
+
+        if whole_last_month is not None and whole_last_month != last_month:
+            profile_requests.append(
+                EnergyCommunityProfileRequest(
+                    timeslice=timeslice,
+                    targets=(energy_community["monthlyL3"],),
+                    date_range=whole_last_month,
                 ),
             )
 

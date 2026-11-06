@@ -11,7 +11,13 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_energy_community_export_l2': dict({
       'default': 'mdi:transmission-tower-import',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_energy_community_export_l3': dict({
+      'default': 'mdi:transmission-tower-import',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_supplier_export_l2': dict({
+      'default': 'mdi:transmission-tower-import',
+    }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_supplier_export_l3': dict({
       'default': 'mdi:transmission-tower-import',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_status': dict({
@@ -41,11 +47,17 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2': dict({
       'default': 'mdi:transmission-tower-import',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l3': dict({
+      'default': 'mdi:transmission-tower-import',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_export_l1': dict({
       'default': 'mdi:transmission-tower-import',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power': None,
     'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_supplier_export_l2': dict({
+      'default': 'mdi:transmission-tower-import',
+    }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_supplier_export_l3': dict({
       'default': 'mdi:transmission-tower-import',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_meter_reading': None,
@@ -69,7 +81,13 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_energy_community_export_l2': dict({
       'default': 'mdi:transmission-tower-import',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_energy_community_export_l3': dict({
+      'default': 'mdi:transmission-tower-import',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_supplier_export_l2': dict({
+      'default': 'mdi:transmission-tower-import',
+    }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_last_month_supplier_export_l3': dict({
       'default': 'mdi:transmission-tower-import',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc100930_status': dict({
@@ -94,7 +112,13 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_energy_community_export_l2': dict({
       'default': 'mdi:transmission-tower-import',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_energy_community_export_l3': dict({
+      'default': 'mdi:transmission-tower-import',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_supplier_export_l2': dict({
+      'default': 'mdi:transmission-tower-import',
+    }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_last_month_supplier_export_l3': dict({
       'default': 'mdi:transmission-tower-import',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111111_rc103550_status': dict({
@@ -136,7 +160,13 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_energy_community_import_l2': dict({
       'default': 'mdi:transmission-tower-export',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_energy_community_import_l3': dict({
+      'default': 'mdi:transmission-tower-export',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_supplier_import_l2': dict({
+      'default': 'mdi:transmission-tower-export',
+    }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_last_month_supplier_import_l3': dict({
       'default': 'mdi:transmission-tower-export',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_cc100087_status': dict({
@@ -166,11 +196,17 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l2': dict({
       'default': 'mdi:transmission-tower-export',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_energy_community_import_l3': dict({
+      'default': 'mdi:transmission-tower-export',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_import_l1': dict({
       'default': 'mdi:transmission-tower-export',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power': None,
     'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_supplier_import_l2': dict({
+      'default': 'mdi:transmission-tower-export',
+    }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_last_month_supplier_import_l3': dict({
       'default': 'mdi:transmission-tower-export',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_meter_reading': None,
@@ -194,7 +230,13 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_energy_community_import_l2': dict({
       'default': 'mdi:transmission-tower-export',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_energy_community_import_l3': dict({
+      'default': 'mdi:transmission-tower-export',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_supplier_import_l2': dict({
+      'default': 'mdi:transmission-tower-export',
+    }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_last_month_supplier_import_l3': dict({
       'default': 'mdi:transmission-tower-export',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc100930_status': dict({
@@ -219,7 +261,13 @@
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_energy_community_import_l2': dict({
       'default': 'mdi:transmission-tower-export',
     }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_energy_community_import_l3': dict({
+      'default': 'mdi:transmission-tower-export',
+    }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_supplier_import_l2': dict({
+      'default': 'mdi:transmission-tower-export',
+    }),
+    'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_last_month_supplier_import_l3': dict({
       'default': 'mdi:transmission-tower-export',
     }),
     'sensor.netzooe_eservice_at0000000000000000000000011111112_rc103550_status': dict({

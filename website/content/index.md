@@ -149,16 +149,18 @@ This timeline is small. It is recorded in the database, so the values stay in th
 
 ### Sensors of an energy community
 
-| Sensor                                          | Description                                                          |
-|-------------------------------------------------|----------------------------------------------------------------------|
-| Energy community import/export L1/L2/L3         | Energy shared with the energy community, with the latest L3 data     |
-| Energy community import/export L1/L2            | Energy shared with the energy community, final values (16-day delay) |
-| Energy community import/export L2 (prev. month) | Energy shared with the energy community in the previous month        |
-| Supplier import/export L1/L2/L3, L1/L2, L2      | Energy from or to the energy supplier, for the same time ranges      |
-| Contribution factor                             | Contribution factor (Teilnahmefaktor) of the meter point in %        |
-| Status                                          | Participation status, e.g. active or revoked, start in `valid_from`  |
+| Sensor                                                | Description                                                          |
+|-------------------------------------------------------|----------------------------------------------------------------------|
+| Energy community import/export L1/L2/L3               | Energy shared with the energy community, with the latest L3 data     |
+| Energy community import/export L1/L2                  | Energy shared with the energy community, final values (16-day delay) |
+| Energy community import/export L1/L2/L3 (prev. month) | Same for the whole previous month                                    |
+| Energy community import/export L1/L2 (prev. month)    | Same for the previous month, final values (16-day delay)             |
+| Supplier import/export                                | Energy from or to the energy supplier, for the same time ranges      |
+| Contribution factor                                   | Contribution factor (Teilnahmefaktor) of the meter point in %        |
+| Status                                                | Participation status, e.g. active or revoked, start in `valid_from`  |
 
-The energy sensors count the energy since the start of the participation.
+The energy sensors count the energy since the start of the participation. The energy community and supplier sensors
+"L1/L2/L3 (previous month)" of all energy communities of a meter point add up to "Import/Export L1 (previous month)".
 
 The `timeline` attribute has one entry per timeslice of the energy community:
 
@@ -170,6 +172,22 @@ The `timeline` attribute has one entry per timeslice of the energy community:
 - Each timeslice is requested separately, so the resolution can differ between entries, e.g. `day` for the previous
   month and `month` or `year` for the totals.
 - This timeline grows with every timeslice. It is not recorded in the database.
+
+#### Data levels L1, L2 and L3
+
+The portal marks each value with a level. The sensor names show which levels they can contain.
+
+| Level | Portal                              | Meaning                 |
+|-------|-------------------------------------|-------------------------|
+| L1    | Echtwert gemessen (`VALID`)         | Measured value          |
+| L2    | Ersatzwert belastbar (`CALCULATED`) | Substitute value, final |
+| L3    | `STATUS_98`                         | Provisional value       |
+
+- The measured consumption and generation per contribution factor are L1 without delay.
+- The split of a regional energy community (EEG) is mostly L1 without delay, single days can be L2.
+- The split of a citizen energy community (BEG) is L2 up to 16 days ago and L3 after that.
+- The sensors "L1/L2" end 16 days ago for all energy communities, so all of them cover the same time range.
+- A monthly or yearly value in the portal has the lowest level of its days.
 
 ## Examples
 
@@ -228,8 +246,8 @@ automation:
 
 ## Known limitations
 
-- The portal provides the L1/L2 values of the energy communities with a delay of about 16 days. Sensors with
-  "16-day delay" in their name only contain these final values.
+- The portal provides the final values of citizen energy communities (BEG) with a delay of 16 days. Sensors with
+  "16-day delay" in their name end 16 days ago for all energy communities and only contain final values.
 - The portal updates the meter readings and trends only once a day.
 - The L1 profile data is usually available up to yesterday. The L1 sensors show the last complete day and the
   previous month, not today.

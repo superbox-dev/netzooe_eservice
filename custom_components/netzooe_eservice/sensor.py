@@ -374,7 +374,12 @@ def _energy_community_descriptions(
 
     return [
         description(f"{prefix}{kind}_{direction}_{level}", profile, types, with_name=kind == "energy_community")
-        for prefix, profile, level in (("", "totalL2", "l2"), ("", "totalL3", "l3"), ("last_month_", "monthlyL2", "l2"))
+        for prefix, profile, level in (
+            ("", "totalL2", "l2"),
+            ("", "totalL3", "l3"),
+            ("last_month_", "monthlyL2", "l2"),
+            ("last_month_", "monthlyL3", "l3"),
+        )
         for kind, types in (("energy_community", energy_community), ("supplier", supplier))
     ]
 

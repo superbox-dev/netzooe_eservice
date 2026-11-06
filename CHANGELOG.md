@@ -18,9 +18,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the resolution, sum, average, maximum and minimum of the portal to the `timeline` entries of the sensors
   "Energy community import" and "Supplier export". The sensors that are the difference of two profile types keep
   only `from` and `to`, because the portal returns no values for them ([Issue #41][issue-41]).
+- Added the sensors "Energy community import/export L1/L2/L3 (previous month)" and "Supplier import/export L1/L2/L3
+  (previous month)" with the whole previous month, including the latest L3 data, and their totals at the meter point
+  (disabled by default). Together they match "Import/Export L1 (previous month)" also during the first 16 days of a
+  month ([Issue #42][issue-42]).
+
+### Changed
+
+- Renamed the sensors "Energy community import/export L2 (previous month)" and "Supplier import/export L2 (previous
+  month)" to "… L1/L2 (previous month, 16-day delay)", because they also contain L1 values and end 16 days ago. The
+  entity IDs stay the same. The documentation now explains the data levels L1, L2 and L3 ([Issue #43][issue-43]).
 
 [issue-40]: https://github.com/superbox-dev/netzooe_eservice/issues/40
 [issue-41]: https://github.com/superbox-dev/netzooe_eservice/issues/41
+[issue-42]: https://github.com/superbox-dev/netzooe_eservice/issues/42
+[issue-43]: https://github.com/superbox-dev/netzooe_eservice/issues/43
 
 ## [1.2.1] - 2026-10-24
 

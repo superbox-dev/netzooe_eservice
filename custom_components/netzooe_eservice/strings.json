@@ -78,10 +78,16 @@
         "name": "Import L1 (last day)"
       },
       "last_month_energy_community_export_l2": {
-        "name": "Energy community export L2 (previous month)"
+        "name": "Energy community export L1/L2 (previous month, 16-day delay)"
+      },
+      "last_month_energy_community_export_l3": {
+        "name": "Energy community export L1/L2/L3 (previous month)"
       },
       "last_month_energy_community_import_l2": {
-        "name": "Energy community import L2 (previous month)"
+        "name": "Energy community import L1/L2 (previous month, 16-day delay)"
+      },
+      "last_month_energy_community_import_l3": {
+        "name": "Energy community import L1/L2/L3 (previous month)"
       },
       "last_month_export_l1": {
         "name": "Export L1 (previous month)"
@@ -96,10 +102,16 @@
         "name": "Maximum Import Power (previous month)"
       },
       "last_month_supplier_export_l2": {
-        "name": "Supplier export L2 (previous month)"
+        "name": "Supplier export L1/L2 (previous month, 16-day delay)"
+      },
+      "last_month_supplier_export_l3": {
+        "name": "Supplier export L1/L2/L3 (previous month)"
       },
       "last_month_supplier_import_l2": {
-        "name": "Supplier import L2 (previous month)"
+        "name": "Supplier import L1/L2 (previous month, 16-day delay)"
+      },
+      "last_month_supplier_import_l3": {
+        "name": "Supplier import L1/L2/L3 (previous month)"
       },
       "meter_reading": {
         "name": "Meter reading"

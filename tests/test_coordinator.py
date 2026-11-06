@@ -40,6 +40,9 @@ from tests.test_coordinator_data import ENERGY_COMMUNITY_EXPORT_ENTITY_ID
 from tests.test_coordinator_data import FREQUENT_UPDATES_DISABLED
 from tests.test_coordinator_data import FREQUENT_UPDATES_ENABLED
 from tests.test_coordinator_data import INACTIVE_METER_POINT
+from tests.test_coordinator_data import LAST_MONTH_CUTOFF_NOW
+from tests.test_coordinator_data import LAST_MONTH_ENTITY_ID
+from tests.test_coordinator_data import LAST_MONTH_PROFILE_RESPONSES
 from tests.test_coordinator_data import OTHER_ENERGY_COMMUNITY_EXPORT_ENTITY_ID
 from tests.test_coordinator_data import STATUS_ENTITY_ID
 from tests.test_coordinator_data import SUPPLIER_ENTITY_ID
@@ -376,13 +379,14 @@ async def test_profile_requests(
                 ("001", SEVEN_ENERGY, "2026-05-01", "2026-05-31"),
             ],
         ),
-        # Cutoff in the previous month: the previous month ends at the cutoff.
+        # Cutoff in the previous month: only the L1/L2 profile of the previous month ends at the cutoff.
         (
             datetime(2026, 7, 5, 12, 0, tzinfo=VIENNA),
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-19"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-19"),
+                ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-28"),
             ],
         ),
         # Cutoff one day before the end of the timeslice.
@@ -392,9 +396,10 @@ async def test_profile_requests(
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-27"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-27"),
+                ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-28"),
             ],
         ),
-        # Cutoff on the last day of the timeslice: the L1/L2 profile is also the complete profile.
+        # Cutoff on the last day of the timeslice: the L1/L2 profiles are also the complete profiles.
         (
             datetime(2026, 7, 14, 12, 0, tzinfo=VIENNA),
             [
@@ -408,13 +413,15 @@ async def test_profile_requests(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-26"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-26"),
+                ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-31"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
             ],
         ),
-        # Cutoff one day before the timeslice: only the complete profile.
+        # Cutoff one day before the timeslice: only the complete profiles.
         (
             datetime(2026, 2, 10, 12, 0, tzinfo=VIENNA),
             [
+                ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-31"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
             ],
         ),
@@ -426,6 +433,7 @@ async def test_profile_requests(
                 ("003", WSEG, "2024-09-10", "2024-12-25"),
                 ("003", WSEG, "2024-09-10", "2025-09-30"),
                 ("003", WSEG, "2024-12-01", "2024-12-25"),
+                ("003", WSEG, "2024-12-01", "2024-12-31"),
             ],
         ),
     ],
@@ -461,6 +469,35 @@ async def test_profile_request_time_ranges(
         sorted(key for key in profile_request_keys(fake_api.aioclient_mock) if key[:2] in energy_communities)
         == expected
     )
+
+
+@pytest.mark.parametrize(
+    ("key", "expected"),
+    [
+        ("energy_community_export_l2", "100.0"),
+        ("supplier_export_l2", "200.0"),
+        ("energy_community_export_l3", "170.0"),
+        ("supplier_export_l3", "280.0"),
+    ],
+    ids=["energy_community_l2", "supplier_l2", "energy_community_l3", "supplier_l3"],
+)
+async def test_last_month_profiles_with_cutoff_in_previous_month(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    key: str,
+    expected: str,
+) -> None:
+    """Test that the L1/L2 sensors of the previous month end at the cutoff and the L1/L2/L3 sensors do not."""
+    # The other requests of this date are not in the responses.
+    fake_api.allow_unknown_profile_requests = True
+    fake_api.profile_responses.update(LAST_MONTH_PROFILE_RESPONSES)
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    await setup_integration(hass, config_entry, now=LAST_MONTH_CUTOFF_NOW)
+
+    assert _state(hass, LAST_MONTH_ENTITY_ID.format(key)) == expected
 
 
 @pytest.mark.parametrize(

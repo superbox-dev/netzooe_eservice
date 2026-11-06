@@ -78,10 +78,16 @@
         "name": "Bezug L1 (letzter Tag)"
       },
       "last_month_energy_community_export_l2": {
-        "name": "Energiegemeinschaft Einspeisung L2 (Vormonat)"
+        "name": "Energiegemeinschaft Einspeisung L1/L2 (Vormonat, Stand: vor 16 Tagen)"
+      },
+      "last_month_energy_community_export_l3": {
+        "name": "Energiegemeinschaft Einspeisung L1/L2/L3 (Vormonat)"
       },
       "last_month_energy_community_import_l2": {
-        "name": "Energiegemeinschaft Bezug L2 (Vormonat)"
+        "name": "Energiegemeinschaft Bezug L1/L2 (Vormonat, Stand: vor 16 Tagen)"
+      },
+      "last_month_energy_community_import_l3": {
+        "name": "Energiegemeinschaft Bezug L1/L2/L3 (Vormonat)"
       },
       "last_month_export_l1": {
         "name": "Einspeisung L1 (Vormonat)"
@@ -96,10 +102,16 @@
         "name": "Maximale Bezugsleistung (Vormonat)"
       },
       "last_month_supplier_export_l2": {
-        "name": "Energielieferant Einspeisung L2 (Vormonat)"
+        "name": "Energielieferant Einspeisung L1/L2 (Vormonat, Stand: vor 16 Tagen)"
+      },
+      "last_month_supplier_export_l3": {
+        "name": "Energielieferant Einspeisung L1/L2/L3 (Vormonat)"
       },
       "last_month_supplier_import_l2": {
-        "name": "Energielieferant Netzbezug L2 (Vormonat)"
+        "name": "Energielieferant Netzbezug L1/L2 (Vormonat, Stand: vor 16 Tagen)"
+      },
+      "last_month_supplier_import_l3": {
+        "name": "Energielieferant Netzbezug L1/L2/L3 (Vormonat)"
       },
       "meter_reading": {
         "name": "Zählerstand"
