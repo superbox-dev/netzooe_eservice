@@ -177,15 +177,24 @@ The `timeline` attribute has one entry per timeslice of the energy community:
 
 The portal marks each value with a level. The sensor names show which levels they can contain.
 
-| Level | Portal                              | Meaning                 |
-|-------|-------------------------------------|-------------------------|
-| L1    | Echtwert gemessen (`VALID`)         | Measured value          |
-| L2    | Ersatzwert belastbar (`CALCULATED`) | Substitute value, final |
-| L3    | `STATUS_98`                         | Provisional value       |
+| Level | Portal                                   | Meaning                                       |
+|-------|------------------------------------------|-----------------------------------------------|
+| L1    | Echtwert gemessen (`VALID`)              | Measured value, final                         |
+| L2    | Ersatzwert belastbar (`CALCULATED`)      | Substitute value, final                       |
+| L3    | Ersatzwert nicht belastbar (`STATUS_98`) | Substitute value, not final, likely to change |
+| L0    | Wert nicht vorhanden                     | No value, e.g. the meter does not respond     |
+
+L1 and L2 values are final and are used for billing. They only change in rare cases, e.g. after a measuring error.
 
 - The measured consumption and generation per contribution factor are L1 without delay.
+- The split of an energy community is only final if all values of all members are available for the day. A single
+  missing quarter-hour value of one member makes the whole day of the energy community not final.
+- For the split, missing values count as L3 with the value 0 for at most 15 days. After that, the portal changes
+  their level. This is why the sensors "L1/L2" end 16 days ago.
 - The split of a regional energy community (EEG) is mostly L1 without delay, single days can be L2.
 - The split of a citizen energy community (BEG) is L2 up to 16 days ago and L3 after that.
+- The sensors "L1/L2/L3" include the L3 values. Their split between energy community and supplier can still change
+  during the last 15 days, their sum stays the same.
 - The sensors "L1/L2" end 16 days ago for all energy communities, so all of them cover the same time range.
 - A monthly or yearly value in the portal has the lowest level of its days.
 
@@ -246,8 +255,8 @@ automation:
 
 ## Known limitations
 
-- The portal provides the final values of citizen energy communities (BEG) with a delay of 16 days. Sensors with
-  "16-day delay" in their name end 16 days ago for all energy communities and only contain final values.
+- The portal provides the final split of citizen energy communities (BEG) with a delay of 16 days. Sensors with
+  "16-day delay" in their name end 16 days ago for all energy communities and only contain final values (L1/L2).
 - The portal updates the meter readings and trends only once a day.
 - The L1 profile data is usually available up to yesterday. The L1 sensors show the last complete day and the
   previous month, not today.

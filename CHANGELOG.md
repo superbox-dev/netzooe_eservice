@@ -27,7 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Renamed the sensors "Energy community import/export L2 (previous month)" and "Supplier import/export L2 (previous
   month)" to "… L1/L2 (previous month, 16-day delay)", because they also contain L1 values and end 16 days ago. The
-  entity IDs stay the same. The documentation now explains the data levels L1, L2 and L3 ([Issue #43][issue-43]).
+  entity IDs stay the same. The documentation now explains the data levels L1, L2 and L3 of the portal and why the
+  final split of energy communities has a delay of 16 days ([Issue #43][issue-43]).
 
 [issue-40]: https://github.com/superbox-dev/netzooe_eservice/issues/40
 [issue-41]: https://github.com/superbox-dev/netzooe_eservice/issues/41
