@@ -23,7 +23,9 @@ from homeassistant.const import UnitOfEnergy
 from homeassistant.const import UnitOfPower
 from homeassistant.core import callback
 from homeassistant.helpers import device_registry as dr
+from homeassistant.util import dt as dt_util
 from netzooe_eservice_api.constants import ConsentsStatus
+from netzooe_eservice_api.constants import Granularity
 
 from .const import DOMAIN
 from .const import ENERGY_COMMUNITY_CONSUMPTION
@@ -132,6 +134,18 @@ class NetzOOEeServiceAggregatedSensorEntity(NetzOOEeServiceSensorEntity):
         )
 
 
+class NetzOOEeServiceMeterPointProfileSensorEntity(NetzOOEeServiceSensorEntity):
+    """Meter point sensor entity with the L1 profile of a time range."""
+
+    # The timeline has one entry per section of the profile, so it stays small and is recorded.
+    _unrecorded_attributes: frozenset[str] = frozenset()
+
+    @property
+    def available(self) -> bool:
+        """Return whether the sensor is available, it is not without profile data."""
+        return super().available and self.native_value is not None
+
+
 def _no_attributes(_data: Mapping[str, Any]) -> Mapping[str, Any] | None:
     """Return no extra state attributes."""
     return None
@@ -166,9 +180,101 @@ def _sum_by_type(items: list[dict[str, Any]], target_type: str) -> float:
     return total
 
 
-def _timeline_by_type(items: list[dict[str, Any]], target_type: str) -> list[dict[str, str]]:
-    """Return the time ranges of all profile values of the given type."""
-    return [{"from": item["from"], "to": item["to"]} for item in items if item["type"] == target_type]
+def _timeline_by_type(
+    items: list[dict[str, Any]],
+    target_type: str,
+    /,
+    *,
+    with_statistics: bool,
+) -> list[dict[str, Any]]:
+    """Return the time ranges of all profile values of the given type, optionally with the values of the portal."""
+    return [
+        {"from": item["from"], "to": item["to"]} | (_profile_statistics(item) if with_statistics else {})
+        for item in items
+        if item["type"] == target_type
+    ]
+
+
+def _local_date(value: str) -> str:
+    """Return the local date of an ISO timestamp of the portal, without a time zone it is already local time."""
+    return dt_util.as_local(dt_util.parse_datetime(value, raise_on_error=True)).date().isoformat()
+
+
+def _local_timestamp(value: str | None) -> str | None:
+    """Return the local ISO timestamp of a timestamp of the portal (UTC), or `None` if it is missing."""
+    return dt_util.as_local(dt_util.parse_datetime(value, raise_on_error=True)).isoformat() if value else None
+
+
+def _resolution(value: str | None) -> str | None:
+    """Return the resolution of a profile section, or `None` if it is missing or unknown."""
+    try:
+        return Granularity(value).value.lower()
+    except ValueError:
+        return None
+
+
+def _timeline_entry(item: Mapping[str, Any]) -> dict[str, Any]:
+    """Return the timeline entry of a section of an L1 profile."""
+    return {"from": _local_date(item["from"]), "to": _local_date(item["to"])} | _profile_statistics(item)
+
+
+def _profile_statistics(item: Mapping[str, Any]) -> dict[str, Any]:
+    """Return the sum, average, maximum and minimum of a profile as returned by the portal."""
+    maximum: Mapping[str, Any] = item.get("maximum") or {}
+    minimum: Mapping[str, Any] = item.get("minimum") or {}
+
+    return {
+        "resolution": _resolution(item.get("granularity")),
+        "sum": item["sum"]["value"],
+        "average": (item.get("average") or {}).get("value"),
+        "maximum": maximum.get("value"),
+        "maximum_timestamp": _local_timestamp(maximum.get("dateTime")),
+        "minimum": minimum.get("value"),
+        "minimum_timestamp": _local_timestamp(minimum.get("dateTime")),
+    }
+
+
+def _meter_point_profile_descriptions(direction: Direction, /) -> list[NetzOOEeServiceSensorEntityDescription]:
+    """Return the sensors with the L1 profile of all data, the previous month and the last day of a meter point."""
+
+    def description(key: str, profile: str, /) -> NetzOOEeServiceSensorEntityDescription:
+        """Return the sensor with the sum of all sections of a profile."""
+
+        def value(data: Mapping[str, Any]) -> float | None:
+            """Return the sum of all sections, or `None` without profile data."""
+            items: list[dict[str, Any]] = data[profile]
+
+            if not items:
+                return None
+
+            # Start with a float, the portal may return whole numbers as integers.
+            total: float = sum((item["sum"]["value"] for item in items), start=0.0)
+            return total
+
+        def attributes(data: Mapping[str, Any]) -> Mapping[str, Any]:
+            """Return the timeline with one entry per section of the profile."""
+            timeline: list[dict[str, Any]] = sorted(
+                (_timeline_entry(item) for item in data[profile]),
+                key=lambda entry: entry["from"],
+            )
+            return {"timeline": timeline}
+
+        return NetzOOEeServiceSensorEntityDescription(
+            entity_class=NetzOOEeServiceMeterPointProfileSensorEntity,
+            device_class=SensorDeviceClass.ENERGY,
+            key=key,
+            native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+            state_class=SensorStateClass.TOTAL,
+            translation_key=key,
+            value_fn=value,
+            extra_state_attributes_fn=attributes,
+        )
+
+    return [
+        description(f"{direction}_l1", "totalL1"),
+        description(f"last_month_{direction}_l1", "monthlyL1"),
+        description(f"last_day_{direction}_l1", "dailyL1"),
+    ]
 
 
 def _trend_descriptions(key: Literal["monthly", "yearly"], /) -> list[NetzOOEeServiceSensorEntityDescription]:
@@ -250,7 +356,10 @@ def _energy_community_descriptions(
             name: dict[str, Any] = (
                 {"name": items[0]["energyCommunityName"], "id": items[0]["energyCommunityId"]} if with_name else {}
             )
-            return name | {"timeline": _timeline_by_type(items, positive_type)}
+            # The portal only returns the average, maximum and minimum of a single profile type, not of a difference.
+            return name | {
+                "timeline": _timeline_by_type(items, positive_type, with_statistics=negative_type is None),
+            }
 
         return NetzOOEeServiceSensorEntityDescription(
             entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
@@ -265,7 +374,12 @@ def _energy_community_descriptions(
 
     return [
         description(f"{prefix}{kind}_{direction}_{level}", profile, types, with_name=kind == "energy_community")
-        for prefix, profile, level in (("", "totalL2", "l2"), ("", "totalL3", "l3"), ("last_month_", "monthlyL2", "l2"))
+        for prefix, profile, level in (
+            ("", "totalL2", "l2"),
+            ("", "totalL3", "l3"),
+            ("last_month_", "monthlyL2", "l2"),
+            ("last_month_", "monthlyL3", "l3"),
+        )
         for kind, types in (("energy_community", energy_community), ("supplier", supplier))
     ]
 
@@ -379,11 +493,13 @@ SENSOR_ENERGY_COMMUNITY_EXPORT_TYPES: Final[list[NetzOOEeServiceSensorEntityDesc
 )
 
 SENSOR_HOUSEHOLD_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
+    *_meter_point_profile_descriptions("import"),
     *_aggregated_descriptions(SENSOR_ENERGY_COMMUNITY_IMPORT_TYPES),
     _peak_power_description("import"),
 ]
 
 SENSOR_PHOTOVOLTAICS_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
+    *_meter_point_profile_descriptions("export"),
     *_aggregated_descriptions(SENSOR_ENERGY_COMMUNITY_EXPORT_TYPES),
     _peak_power_description("export"),
 ]

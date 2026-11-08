@@ -52,6 +52,8 @@ async def test_sensors(
     fake_api.register_requests()
 
     hass.config.language = language
+    # The portal returns the maximum and minimum in UTC, the timelines show them in the local time of Austria.
+    await hass.config.async_set_time_zone("Europe/Vienna")
 
     await setup_integration(hass, config_entry)
 
@@ -60,3 +62,32 @@ async def test_sensors(
     }
 
     assert states == snapshot
+
+
+@pytest.mark.parametrize(
+    ("entity_id", "unrecorded"),
+    [
+        ("sensor.netzooe_eservice_at0000000000000000000000011111111_export_l1", False),
+        ("sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_energy_community_export_l3", True),
+    ],
+    ids=["meter_point_l1", "energy_community"],
+)
+async def test_sensor_timeline_recorded(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    entity_id: str,
+    *,
+    unrecorded: bool,
+) -> None:
+    """Test that only the small timeline of the L1 sensors is recorded, not the growing one of energy communities."""
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    await setup_integration(hass, config_entry)
+
+    state: State | None = hass.states.get(entity_id)
+
+    assert state is not None
+    assert state.state_info is not None
+    assert ("timeline" in state.state_info["unrecorded_attributes"]) is unrecorded

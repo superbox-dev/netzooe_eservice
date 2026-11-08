@@ -15,9 +15,7 @@ A Home Assistant integration to read energy data from the [Netz OÖ eService por
 2. Follow the setup that starts after the installation.
 
 Requires an account for the Netz OÖ eService portal. See the
-[installation](https://superbox-dev.github.io/netzooe_eservice/#installation) and
-[configuration](https://superbox-dev.github.io/netzooe_eservice/#configuration) sections for a manual installation and
-all parameters.
+[configuration](https://superbox-dev.github.io/netzooe_eservice/#configuration) section for all parameters.
 
 [redirect-hacs]: https://my.home-assistant.io/redirect/hacs_repository/?owner=superbox-dev&repository=netzooe_eservice&category=integration
 
@@ -57,7 +55,7 @@ I put a lot of time into this project. If you like it, you can support me with a
 [![PayPal](https://img.shields.io/badge/PayPal-Donate-003087?style=for-the-badge&logo=paypal&logoColor=white)][paypal]
 
 [sponsors]: https://github.com/sponsors/superbox-dev
-[kofi]: https://ko-fi.com/F2F0KXO6D
-[paypal]: https://www.paypal.com/donate?hosted_button_id=34ZFWTH4TNLXS
+[kofi]: https://ko-fi.com/superbox
+[paypal]: https://www.paypal.biz/superboxdev
 
 <!--end-donation-->

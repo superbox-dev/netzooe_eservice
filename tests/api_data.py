@@ -1036,6 +1036,29 @@ CONTRACT_ACCOUNT_DATA_6: Final[dict[str, Any]] = {
 }
 
 
+type Statistics = tuple[float, tuple[float, str], tuple[float, str]]
+
+
+def _statistics(granularity: str, statistics: Statistics, /) -> dict[str, Any]:
+    """Return the resolution, average, maximum, minimum and single values of a profile as returned by the portal.
+
+    ``statistics`` is the average and the value and timestamp (UTC) of the maximum and minimum.
+    """
+    average, maximum, minimum = statistics
+
+    return {
+        "granularity": granularity,
+        "average": {"value": average, "unit": "KWH"},
+        "maximum": {"value": maximum[0], "unit": "KWH", "dateTime": maximum[1]},
+        "minimum": {"value": minimum[0], "unit": "KWH", "dateTime": minimum[1]},
+        "profileValues": [
+            {"datetime": timestamp, "value": value, "status": "VALID"} for value, timestamp in (minimum, maximum)
+        ],
+    }
+
+
+# The portal returns the average, maximum and minimum of each profile type, the energy community sensors only show
+# them for a single profile type, not for a difference of two types.
 WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: Final[list[dict[str, Any]]] = [
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
@@ -1049,6 +1072,7 @@ WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: Final[list[dict[str, Any]]] = [
         },
         "energyCommunityId": "AT00300000000RC100930000000965743",
         "energyCommunityName": "wseg 07614 0523 UW Partenstein",
+        **_statistics("YEAR", (4000.0, (4500.0, "2024-12-31T23:00:00Z"), (3500.0, "2024-10-06T22:00:00Z"))),
     },
     {
         "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
@@ -1062,6 +1086,7 @@ WSEG_PROFILE_DATA_TOTAL_L2_L3_001_1: Final[list[dict[str, Any]]] = [
         },
         "energyCommunityId": "AT00300000000RC100930000000965743",
         "energyCommunityName": "wseg 07614 0523 UW Partenstein",
+        **_statistics("YEAR", (3500.0, (4000.0, "2024-12-31T23:00:00Z"), (3000.0, "2024-10-06T22:00:00Z"))),
     },
 ]
 
@@ -1091,6 +1116,7 @@ SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_001_2: Final[list[dict[str, Any]]] = [
         },
         "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
         "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+        **_statistics("MONTH", (166.67, (300.0, "2026-04-30T22:00:00Z"), (20.0, "2026-01-25T23:00:00Z"))),
     },
 ]
 
@@ -1120,6 +1146,7 @@ SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_001_2: Final[list[dict[str, Any]]] = [
         },
         "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
         "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+        **_statistics("DAY", (16.13, (30.0, "2026-05-24T22:00:00Z"), (2.0, "2026-05-08T22:00:00Z"))),
     },
 ]
 
@@ -1496,6 +1523,7 @@ EEG_OOE_PROFILE_DATA_MONTHLY_L2_003_4: Final[list[dict[str, Any]]] = [
         },
         "energyCommunityId": "AT00300000000RC103550000000985681",
         "energyCommunityName": "EEG Oberösterreich RID-11",
+        **_statistics("DAY", (0.09, (0.4, "2026-05-27T22:00:00Z"), (0.0, "2026-05-20T22:00:00Z"))),
     },
 ]
 
@@ -1703,6 +1731,171 @@ SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_006_1: Final[list[dict[str, Any]]] = [
     },
 ]
 
+
+def _l1_section(
+    mpan: str,
+    date_range: tuple[str, str],
+    granularity: str,
+    total: float,
+    /,
+    *,
+    statistics: Statistics | None = None,
+) -> dict[str, Any]:
+    """Return a section of an L1 consumption profile as returned by the portal.
+
+    ``date_range`` is the first and last second of the section in local time without a time zone, the timestamps of
+    ``statistics`` (average, value and timestamp of the maximum and minimum) are in UTC.
+    """
+    section: dict[str, Any] = {
+        "meterPointAdministrationNumber": mpan,
+        "from": date_range[0],
+        "to": date_range[1],
+        "type": "ACTIVE_CURRENT",
+        "unit": "KWH",
+        "granularity": granularity,
+        "contractPower": 4.0,
+        "profileTypeContent": {
+            "header": "Wirkenergie",
+            "body": "Bezogene oder eingespeiste Wirkenergie des Zählpunkts.",
+            "bodyText": "Bezogene oder eingespeiste Wirkenergie des Zählpunkts.",
+        },
+        "sum": {"value": total, "unit": "KWH"},
+        "profileValues": [],
+    }
+
+    if statistics is not None:
+        section |= _statistics(granularity, statistics)
+
+    return section
+
+
+MPAN_1: Final[str] = "AT0000000000000000000000011111111"
+MPAN_2: Final[str] = "AT0000000000000000000000011111112"
+MPAN_3: Final[str] = "AT0000000000000000000000011111113"
+MPAN_4: Final[str] = "AT0000000000000000000000011111114"
+
+# Two sections, e.g. after a change from daily to quarter-hourly values, minimum and maximum across DST changes.
+# Maximum and minimum are at the start of their interval, e.g. of a year.
+L1_PROFILE_DATA_TOTAL_001: Final[list[dict[str, Any]]] = [
+    _l1_section(
+        MPAN_1,
+        ("2023-10-18T00:00:00", "2024-05-02T23:59:59"),
+        "YEAR",
+        1000,
+        statistics=(500.0, (800.0, "2023-12-31T23:00:00Z"), (200.0, "2023-10-17T22:00:00Z")),
+    ),
+    _l1_section(
+        MPAN_1,
+        ("2024-05-03T00:00:00", "2026-06-27T23:59:59"),
+        "YEAR",
+        9500.5,
+        statistics=(3166.83, (4000.0, "2024-12-31T23:00:00Z"), (2500.5, "2024-05-02T22:00:00Z")),
+    ),
+]
+L1_PROFILE_DATA_LAST_MONTH_001: Final[list[dict[str, Any]]] = [
+    _l1_section(
+        MPAN_1,
+        ("2026-05-01T00:00:00", "2026-05-31T23:59:59"),
+        "DAY",
+        310.0,
+        statistics=(10.0, (15.0, "2026-05-26T22:00:00Z"), (6.0, "2026-05-03T22:00:00Z")),
+    ),
+]
+L1_PROFILE_DATA_LAST_DAY_001: Final[list[dict[str, Any]]] = [
+    _l1_section(
+        MPAN_1,
+        ("2026-06-27T00:00:00", "2026-06-27T23:59:59"),
+        "QUARTER_OF_AN_HOUR",
+        9.6,
+        statistics=(0.1, (0.6, "2026-06-27T10:15:00Z"), (0.02, "2026-06-27T01:30:00Z")),
+    ),
+]
+L1_PROFILE_DATA_TOTAL_002: Final[list[dict[str, Any]]] = [
+    _l1_section(
+        MPAN_2,
+        ("2026-06-17T00:00:00", "2026-06-27T23:59:59"),
+        "DAY",
+        110.0,
+        statistics=(10.0, (20.0, "2026-06-20T22:00:00Z"), (5.0, "2026-06-16T22:00:00Z")),
+    ),
+]
+L1_PROFILE_DATA_LAST_DAY_002: Final[list[dict[str, Any]]] = [
+    _l1_section(
+        MPAN_2,
+        ("2026-06-27T00:00:00", "2026-06-27T23:59:59"),
+        "QUARTER_OF_AN_HOUR",
+        12.0,
+        statistics=(0.125, (0.8, "2026-06-27T17:00:00Z"), (0.05, "2026-06-27T02:45:00Z")),
+    ),
+]
+L1_PROFILE_DATA_TOTAL_003: Final[list[dict[str, Any]]] = [
+    _l1_section(
+        MPAN_2,
+        ("2023-10-18T00:00:00", "2026-06-16T23:59:59"),
+        "YEAR",
+        8000.0,
+        statistics=(2666.67, (3500.0, "2024-12-31T23:00:00Z"), (1500.0, "2023-10-17T22:00:00Z")),
+    ),
+]
+# Section change within the month.
+L1_PROFILE_DATA_LAST_MONTH_003: Final[list[dict[str, Any]]] = [
+    _l1_section(
+        MPAN_2,
+        ("2026-05-13T00:00:00", "2026-05-31T23:59:59"),
+        "DAY",
+        190.0,
+        statistics=(10.0, (14.0, "2026-05-20T22:00:00Z"), (7.0, "2026-05-30T22:00:00Z")),
+    ),
+    _l1_section(
+        MPAN_2,
+        ("2026-05-01T00:00:00", "2026-05-12T23:59:59"),
+        "DAY",
+        120.0,
+        statistics=(10.0, (12.0, "2026-05-01T22:00:00Z"), (8.0, "2026-05-05T22:00:00Z")),
+    ),
+]
+L1_PROFILE_DATA_TOTAL_005: Final[list[dict[str, Any]]] = [
+    _l1_section(
+        MPAN_3,
+        ("2026-05-16T00:00:00", "2026-06-10T23:59:59"),
+        "DAY",
+        260,
+        statistics=(10.0, (18.0, "2026-06-01T22:00:00Z"), (4.0, "2026-05-15T22:00:00Z")),
+    ),
+]
+L1_PROFILE_DATA_LAST_MONTH_005: Final[list[dict[str, Any]]] = [
+    _l1_section(
+        MPAN_3,
+        ("2026-05-16T00:00:00", "2026-05-31T23:59:59"),
+        "DAY",
+        160.0,
+        statistics=(10.0, (18.0, "2026-05-20T22:00:00Z"), (4.0, "2026-05-15T22:00:00Z")),
+    ),
+]
+# Not returned by the portal so far: a section without average, maximum, minimum and a known resolution.
+L1_PROFILE_DATA_LAST_DAY_005: Final[list[dict[str, Any]]] = [
+    _l1_section(MPAN_3, ("2026-06-10T00:00:00", "2026-06-10T23:59:59"), "UNKNOWN", 0.0),
+]
+# Monthly values, the portal uses them for a total that is too short for yearly values.
+L1_PROFILE_DATA_TOTAL_006: Final[list[dict[str, Any]]] = [
+    _l1_section(
+        MPAN_4,
+        ("2025-01-01T00:00:00", "2026-06-01T23:59:59"),
+        "MONTH",
+        5000.0,
+        statistics=(294.12, (800.0, "2025-06-30T22:00:00Z"), (50.0, "2025-11-30T23:00:00Z")),
+    ),
+]
+L1_PROFILE_DATA_LAST_MONTH_006: Final[list[dict[str, Any]]] = [
+    _l1_section(
+        MPAN_4,
+        ("2026-05-01T00:00:00", "2026-05-31T23:59:59"),
+        "DAY",
+        500.0,
+        statistics=(16.13, (30.0, "2026-05-24T22:00:00Z"), (2.0, "2026-05-08T22:00:00Z")),
+    ),
+]
+
 type ProfileRequestKey = tuple[str, str, str, str]
 
 API_URL: Final[str] = "https://eservice.netzooe.at/service"
@@ -1746,6 +1939,21 @@ PROFILE_RESPONSES: Final[dict[ProfileRequestKey, list[dict[str, Any]]]] = {
     ("005", SEVEN_ENERGY, "2026-05-16", "2026-05-31"): SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_005_1,
     ("006", SEVEN_ENERGY, "2026-02-01", "2026-06-01"): SEVEN_ENERGY_PROFILE_DATA_TOTAL_L2_L3_006_1,
     ("006", SEVEN_ENERGY, "2026-05-01", "2026-05-31"): SEVEN_ENERGY_PROFILE_DATA_MONTHLY_L2_006_1,
+    # L1 profiles of the meter points, contract account 004 has no profile data.
+    ("001", "", "2023-10-18", "2026-06-27"): L1_PROFILE_DATA_TOTAL_001,
+    ("001", "", "2026-05-01", "2026-05-31"): L1_PROFILE_DATA_LAST_MONTH_001,
+    ("001", "", "2026-06-27", "2026-06-27"): L1_PROFILE_DATA_LAST_DAY_001,
+    ("002", "", "2026-06-17", "2026-06-27"): L1_PROFILE_DATA_TOTAL_002,
+    ("002", "", "2026-06-27", "2026-06-27"): L1_PROFILE_DATA_LAST_DAY_002,
+    ("003", "", "2023-10-18", "2026-06-16"): L1_PROFILE_DATA_TOTAL_003,
+    ("003", "", "2026-05-01", "2026-05-31"): L1_PROFILE_DATA_LAST_MONTH_003,
+    ("005", "", "2026-05-16", "2026-06-10"): L1_PROFILE_DATA_TOTAL_005,
+    ("005", "", "2026-05-16", "2026-05-31"): L1_PROFILE_DATA_LAST_MONTH_005,
+    ("005", "", "2026-06-10", "2026-06-10"): L1_PROFILE_DATA_LAST_DAY_005,
+    ("006", "", "2025-01-01", "2026-06-01"): L1_PROFILE_DATA_TOTAL_006,
+    ("006", "", "2026-05-01", "2026-05-31"): L1_PROFILE_DATA_LAST_MONTH_006,
+    # No data for the last day.
+    ("006", "", "2026-06-01", "2026-06-01"): [],
 }
 
 NOW: Final[datetime] = datetime(2026, 6, 28, 12, 0, tzinfo=ZoneInfo("Europe/Vienna"))

@@ -49,11 +49,11 @@ def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:  
 
 
 def profile_request_key(data: dict[str, Any]) -> ProfileRequestKey:
-    """Return the key of a consumption profile request body."""
+    """Return the key of a consumption profile request body, an L1 profile has an empty energy community ID."""
     pod: dict[str, Any] = data["pods"][0]
     return (
         pod["contractAccountNumber"],
-        pod["energyCommunityId"],
+        pod.get("energyCommunityId", ""),
         pod["timerange"]["from"],
         pod["timerange"]["to"],
     )

@@ -24,9 +24,11 @@ from tests import options
 from tests import refresh
 from tests import setup_integration
 from tests.api_data import CONSENTS_DATA
+from tests.api_data import CONTRACT_ACCOUNT_DATA_1
 from tests.api_data import CONTRACT_ACCOUNT_DATA_2
 from tests.api_data import CONTRACT_ACCOUNT_DATA_4
 from tests.api_data import CONTRIBUTION_FACTOR_ENTITY_ID
+from tests.api_data import MPAN_1
 from tests.api_data import NOW
 from tests.api_data import PROFILE_RESPONSES
 from tests.api_data import PROFILE_URL
@@ -38,6 +40,9 @@ from tests.test_coordinator_data import ENERGY_COMMUNITY_EXPORT_ENTITY_ID
 from tests.test_coordinator_data import FREQUENT_UPDATES_DISABLED
 from tests.test_coordinator_data import FREQUENT_UPDATES_ENABLED
 from tests.test_coordinator_data import INACTIVE_METER_POINT
+from tests.test_coordinator_data import LAST_MONTH_CUTOFF_NOW
+from tests.test_coordinator_data import LAST_MONTH_ENTITY_ID
+from tests.test_coordinator_data import LAST_MONTH_PROFILE_RESPONSES
 from tests.test_coordinator_data import OTHER_ENERGY_COMMUNITY_EXPORT_ENTITY_ID
 from tests.test_coordinator_data import STATUS_ENTITY_ID
 from tests.test_coordinator_data import SUPPLIER_ENTITY_ID
@@ -374,13 +379,14 @@ async def test_profile_requests(
                 ("001", SEVEN_ENERGY, "2026-05-01", "2026-05-31"),
             ],
         ),
-        # Cutoff in the previous month: the previous month ends at the cutoff.
+        # Cutoff in the previous month: only the L1/L2 profile of the previous month ends at the cutoff.
         (
             datetime(2026, 7, 5, 12, 0, tzinfo=VIENNA),
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-19"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-19"),
+                ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-28"),
             ],
         ),
         # Cutoff one day before the end of the timeslice.
@@ -390,9 +396,10 @@ async def test_profile_requests(
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-27"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-27"),
+                ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-28"),
             ],
         ),
-        # Cutoff on the last day of the timeslice: the L1/L2 profile is also the complete profile.
+        # Cutoff on the last day of the timeslice: the L1/L2 profiles are also the complete profiles.
         (
             datetime(2026, 7, 14, 12, 0, tzinfo=VIENNA),
             [
@@ -406,13 +413,15 @@ async def test_profile_requests(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-26"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-26"),
+                ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-31"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
             ],
         ),
-        # Cutoff one day before the timeslice: only the complete profile.
+        # Cutoff one day before the timeslice: only the complete profiles.
         (
             datetime(2026, 2, 10, 12, 0, tzinfo=VIENNA),
             [
+                ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-31"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
             ],
         ),
@@ -424,6 +433,7 @@ async def test_profile_requests(
                 ("003", WSEG, "2024-09-10", "2024-12-25"),
                 ("003", WSEG, "2024-09-10", "2025-09-30"),
                 ("003", WSEG, "2024-12-01", "2024-12-25"),
+                ("003", WSEG, "2024-12-01", "2024-12-31"),
             ],
         ),
     ],
@@ -457,6 +467,180 @@ async def test_profile_request_time_ranges(
     }
     assert (
         sorted(key for key in profile_request_keys(fake_api.aioclient_mock) if key[:2] in energy_communities)
+        == expected
+    )
+
+
+@pytest.mark.parametrize(
+    ("key", "expected"),
+    [
+        ("energy_community_export_l2", "100.0"),
+        ("supplier_export_l2", "200.0"),
+        ("energy_community_export_l3", "170.0"),
+        ("supplier_export_l3", "280.0"),
+    ],
+    ids=["energy_community_l2", "supplier_l2", "energy_community_l3", "supplier_l3"],
+)
+async def test_last_month_profiles_with_cutoff_in_previous_month(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    key: str,
+    expected: str,
+) -> None:
+    """Test that the L1/L2 sensors of the previous month end at the cutoff and the L1/L2/L3 sensors do not."""
+    # The other requests of this date are not in the responses.
+    fake_api.allow_unknown_profile_requests = True
+    fake_api.profile_responses.update(LAST_MONTH_PROFILE_RESPONSES)
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    await setup_integration(hass, config_entry, now=LAST_MONTH_CUTOFF_NOW)
+
+    assert _state(hass, LAST_MONTH_ENTITY_ID.format(key)) == expected
+
+
+@pytest.mark.parametrize(
+    ("config_entry", "now", "expected"),
+    [
+        # All contracts of a meter point, each limited to its own time range, the last day only once.
+        (
+            options(include_inactive_contract_account_data=True),
+            NOW,
+            [
+                ("001", "", "2023-10-18", "2026-06-27"),
+                ("001", "", "2026-05-01", "2026-05-31"),
+                ("001", "", "2026-06-27", "2026-06-27"),
+                ("002", "", "2026-06-17", "2026-06-27"),
+                ("002", "", "2026-06-27", "2026-06-27"),
+                ("003", "", "2023-10-18", "2026-06-16"),
+                ("003", "", "2026-05-01", "2026-05-31"),
+            ],
+        ),
+        # Without the data of inactive contract accounts only the active contracts.
+        (
+            options(include_inactive_contract_account_data=False),
+            NOW,
+            [
+                ("001", "", "2023-10-18", "2026-06-27"),
+                ("001", "", "2026-05-01", "2026-05-31"),
+                ("001", "", "2026-06-27", "2026-06-27"),
+                ("002", "", "2026-06-17", "2026-06-27"),
+                ("002", "", "2026-06-27", "2026-06-27"),
+            ],
+        ),
+        # Contract change within the previous month: both contracts request their part of the month.
+        (
+            options(include_inactive_contract_account_data=True),
+            datetime(2026, 7, 5, 12, 0, tzinfo=VIENNA),
+            [
+                ("001", "", "2023-10-18", "2026-06-27"),
+                ("001", "", "2026-06-01", "2026-06-27"),
+                ("001", "", "2026-06-27", "2026-06-27"),
+                ("002", "", "2026-06-17", "2026-06-27"),
+                ("002", "", "2026-06-17", "2026-06-27"),
+                ("002", "", "2026-06-27", "2026-06-27"),
+                ("003", "", "2023-10-18", "2026-06-16"),
+                ("003", "", "2026-06-01", "2026-06-16"),
+            ],
+        ),
+        # Previous month after the last day with data: no request for the previous month.
+        (
+            options(include_inactive_contract_account_data=True),
+            datetime(2026, 9, 1, 12, 0, tzinfo=VIENNA),
+            [
+                ("001", "", "2023-10-18", "2026-06-27"),
+                ("001", "", "2026-06-27", "2026-06-27"),
+                ("002", "", "2026-06-17", "2026-06-27"),
+                ("002", "", "2026-06-27", "2026-06-27"),
+                ("003", "", "2023-10-18", "2026-06-16"),
+            ],
+        ),
+        # Meter points without an active contract, contract account 004 has no profile data.
+        (
+            options(show_inactive_meter_points=True, include_inactive_contract_account_data=True),
+            NOW,
+            [
+                ("001", "", "2023-10-18", "2026-06-27"),
+                ("001", "", "2026-05-01", "2026-05-31"),
+                ("001", "", "2026-06-27", "2026-06-27"),
+                ("002", "", "2026-06-17", "2026-06-27"),
+                ("002", "", "2026-06-27", "2026-06-27"),
+                ("003", "", "2023-10-18", "2026-06-16"),
+                ("003", "", "2026-05-01", "2026-05-31"),
+                ("005", "", "2026-05-16", "2026-05-31"),
+                ("005", "", "2026-05-16", "2026-06-10"),
+                ("005", "", "2026-06-10", "2026-06-10"),
+                ("006", "", "2025-01-01", "2026-06-01"),
+                ("006", "", "2026-05-01", "2026-05-31"),
+                ("006", "", "2026-06-01", "2026-06-01"),
+            ],
+        ),
+    ],
+    indirect=["config_entry"],
+    ids=[
+        "inactive_contracts",
+        "active_contracts_only",
+        "contract_change_in_previous_month",
+        "previous_month_after_last_day",
+        "inactive_meter_points",
+    ],
+)
+async def test_meter_point_profile_request_time_ranges(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    now: datetime,
+    expected: list[ProfileRequestKey],
+) -> None:
+    """Test the time ranges of the L1 profile requests of the meter points."""
+    # Other dates request other time ranges than the consumption profiles in the responses.
+    fake_api.allow_unknown_profile_requests = True
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    await setup_integration(hass, config_entry, now=now)
+
+    assert sorted(key for key in profile_request_keys(fake_api.aioclient_mock) if not key[1]) == expected
+
+
+@pytest.mark.parametrize(
+    ("changes", "expected"),
+    [
+        # Moved in after the last day with data.
+        ({"moveInDate": "2026-07-01"}, []),
+        # Without move-in and move-out date the whole time range of the meter point.
+        (
+            {"moveInDate": None, "moveOutDate": None},
+            [
+                ("001", "", "2023-10-18", "2026-06-27"),
+                ("001", "", "2026-05-01", "2026-05-31"),
+                ("001", "", "2026-06-27", "2026-06-27"),
+            ],
+        ),
+    ],
+    ids=["move_in_after_data", "no_move_dates"],
+)
+async def test_meter_point_profile_request_time_ranges_of_contract(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+    changes: dict[str, Any],
+    expected: list[ProfileRequestKey],
+) -> None:
+    """Test that the L1 profile requests are limited to the move-in and move-out date of the contract."""
+    fake_api.allow_unknown_profile_requests = True
+    fake_api.register_auth_request()
+    fake_api.register_requests(
+        contract_accounts={
+            "001": _contract_account_with(CONTRACT_ACCOUNT_DATA_1, MPAN_1, changes),
+        },
+    )
+
+    await setup_integration(hass, config_entry)
+
+    assert (
+        sorted(key for key in profile_request_keys(fake_api.aioclient_mock) if key[0] == "001" and not key[1])
         == expected
     )
 
@@ -890,6 +1074,8 @@ async def test_inactive_meter_point_uses_most_recently_ended_contract(
     supplier: str,
 ) -> None:
     """Test that a meter point without an active contract uses the contract that ended last."""
+    # Other contract dates request other time ranges of the L1 profiles than the ones in the responses.
+    fake_api.allow_unknown_profile_requests = True
     # Both contracts of the meter point have ended, the one of contract account 003 on 2026-06-16.
     # The portal returns contract account 002 before 003.
     contract_account: dict[str, Any] = _contract_account_with(
