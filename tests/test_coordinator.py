@@ -16,7 +16,7 @@ from typing import Any
 import pytest
 from homeassistant.config_entries import SOURCE_REAUTH
 from homeassistant.config_entries import ConfigEntryState
-from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
+from pytest_homeassistant.test_util.aiohttp import AiohttpClientMockResponse
 
 from custom_components.netzooe_eservice.const import SCAN_INTERVAL
 from custom_components.netzooe_eservice.const import SCAN_INTERVAL_FULL
@@ -52,8 +52,8 @@ from tests.test_coordinator_data import VIENNA
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
-    from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
+    from pytest_homeassistant.common import MockConfigEntry
+    from pytest_homeassistant.test_util.aiohttp import AiohttpClientMocker
     from yarl import URL
 
     from tests.conftest import FakeNetzOOEeServiceAPI

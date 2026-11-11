@@ -11,10 +11,9 @@ from unittest.mock import patch
 import pytest
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_USERNAME
-from pytest_homeassistant_custom_component.common import MockConfigEntry
-from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
-from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
-from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
+from pytest_homeassistant.common import MockConfigEntry
+from pytest_homeassistant.test_util.aiohttp import AiohttpClientMocker
+from pytest_homeassistant.test_util.aiohttp import AiohttpClientMockResponse
 
 from custom_components.netzooe_eservice.const import DOMAIN
 from tests.api_data import API_URL
@@ -30,22 +29,9 @@ if TYPE_CHECKING:
     from collections.abc import Generator
 
     from _pytest.fixtures import SubRequest
-    from syrupy.assertion import SnapshotAssertion
     from yarl import URL
 
 """Contract account number, energy community ID, first and last day of a consumption profile request."""
-
-
-@pytest.fixture
-def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
-    """Return snapshot assertion fixture with the Home Assistant extension."""
-    return snapshot.use_extension(HomeAssistantSnapshotExtension)
-
-
-@pytest.fixture(autouse=True)
-def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:  # noqa: ARG001
-    """Enable custom integrations in all tests."""
-    return
 
 
 def profile_request_key(data: dict[str, Any]) -> ProfileRequestKey:
