@@ -1,6 +1,7 @@
 {
   "domain": "netzooe_eservice",
   "name": "Netz OÖ eService",
+  "categories": ["energy.meters_monitoring"],
   "codeowners": ["@mh-superbox"],
   "config_flow": true,
   "documentation": "https://superbox-dev.github.io/netzooe_eservice/",

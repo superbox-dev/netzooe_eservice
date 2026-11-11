@@ -25,8 +25,8 @@ from tests.test_init_data import ENERGY_COMMUNITY_DEVICE_IDENTIFIER
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
-    from pytest_homeassistant_custom_component.common import MockConfigEntry
-    from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
+    from pytest_homeassistant.common import MockConfigEntry
+    from pytest_homeassistant.test_util.aiohttp import AiohttpClientMocker
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeNetzOOEeServiceAPI
