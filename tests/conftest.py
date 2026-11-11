@@ -21,10 +21,11 @@ from pytest_homeassistant.common import load_json_object_fixture
 from pytest_homeassistant.test_util.aiohttp import AiohttpClientMocker
 from pytest_homeassistant.test_util.aiohttp import AiohttpClientMockResponse
 
+from custom_components.netzooe_eservice.const import CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
+from custom_components.netzooe_eservice.const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
 from custom_components.netzooe_eservice.const import DOMAIN
 from tests import setup_integration
 from tests.const import API_URL
-from tests.const import NOW
 from tests.const import PROFILE_URL
 from tests.const import ProfileRequestKey
 
@@ -33,8 +34,6 @@ if TYPE_CHECKING:
     from collections.abc import Generator
     from pathlib import Path
 
-    from _pytest.fixtures import SubRequest
-    from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import HomeAssistant
     from yarl import URL
 
@@ -186,22 +185,15 @@ class FakeNetzOOEeServiceAPI:
         return AiohttpClientMockResponse(method, url=url, json=self.profile_responses.get(key, []))
 
 
-@pytest.fixture
-def portal_account(request: SubRequest) -> PortalAccount:
-    """Return the responses of the account `account` in `tests/fixtures/`, or of the indirect parameter."""
-    return PortalAccount.load(getattr(request, "param", "account"))
-
-
 @pytest.fixture(autouse=True)
-async def fake_api(
-    aioclient_mock: AiohttpClientMocker,
-    portal_account: PortalAccount,
-) -> AsyncGenerator[FakeNetzOOEeServiceAPI]:
-    """Return the fake eService portal API and check that no unknown consumption profile was requested.
+async def fake_api(aioclient_mock: AiohttpClientMocker) -> AsyncGenerator[FakeNetzOOEeServiceAPI]:
+    """Return the fake eService portal API with the account in `tests/fixtures/account/`.
+
+    Checks that no unknown consumption profile was requested.
 
     A test that checks the requests itself sets `allow_unknown_profile_requests`.
     """
-    api: FakeNetzOOEeServiceAPI = FakeNetzOOEeServiceAPI(aioclient_mock, portal_account)
+    api: FakeNetzOOEeServiceAPI = FakeNetzOOEeServiceAPI(aioclient_mock, PortalAccount.load("account"))
 
     yield api
 
@@ -209,37 +201,36 @@ async def fake_api(
         assert api.unknown_profile_requests == []
 
 
-@pytest.fixture(autouse=True)
-def frozen_time(freezer: FrozenDateTimeFactory, request: SubRequest) -> None:
-    """Freeze the time at `NOW`, or at the indirect parameter.
+@pytest.fixture
+def mock_portal(fake_api: FakeNetzOOEeServiceAPI) -> FakeNetzOOEeServiceAPI:
+    """Register the responses of the account for the login and a full update."""
+    fake_api.register_auth_request()
+    fake_api.register_requests()
 
-    The consumption profiles of the account are requested for `NOW`.
-    """
-    freezer.move_to(getattr(request, "param", NOW))
+    return fake_api
 
 
 @pytest.fixture
-def mock_config_entry(request: SubRequest) -> MockConfigEntry:
-    """Return a config entry, optionally updated with the indirect parameter."""
-    mock_config_entry_data: dict[str, Any] = {
-        "title": "Netz OÖ eService (test)",
-        "data": {
+def entry_options() -> dict[str, Any]:
+    """Return the options of the config entry, overridden by `parametrize`, missing ones keep their defaults."""
+    return {
+        CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True,
+        CONF_SHOW_REVOKED_ENERGY_COMMUNITIES: False,
+    }
+
+
+@pytest.fixture
+def mock_config_entry(entry_options: dict[str, Any]) -> MockConfigEntry:
+    """Return the config entry with the options."""
+    return MockConfigEntry(
+        domain=DOMAIN,
+        title="Netz OÖ eService (test)",
+        data={
             CONF_USERNAME: "test",
             CONF_PASSWORD: "test",
         },
-        "unique_id": "test",
-        "options": {
-            "include_inactive_contract_account_data": True,
-            "show_revoked_energy_communities": False,
-        },
-    }
-
-    if hasattr(request, "param"):
-        mock_config_entry_data.update(request.param)
-
-    return MockConfigEntry(
-        domain=DOMAIN,
-        **mock_config_entry_data,
+        unique_id="test",
+        options=entry_options,
     )
 
 
@@ -263,15 +254,3 @@ def mock_setup_entry() -> Generator[AsyncMock]:
     """Replace the setup of the config entry, the config flow tests only test the flow."""
     with patch("custom_components.netzooe_eservice.async_setup_entry", return_value=True) as setup_entry:
         yield setup_entry
-
-
-@pytest.fixture
-def entity_registry_enabled_by_default() -> Generator[None]:
-    """Test fixture that ensures all entities are enabled in the registry."""
-    with (
-        patch(
-            "homeassistant.helpers.entity.Entity.entity_registry_enabled_default",
-            return_value=True,
-        ),
-    ):
-        yield

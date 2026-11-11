@@ -6,46 +6,43 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Final
 
 import pytest
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.icon import async_get_icons
 
+from custom_components.netzooe_eservice.const import CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
+from custom_components.netzooe_eservice.const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
 from custom_components.netzooe_eservice.const import DOMAIN
-from tests import options
-from tests import setup_integration
+from tests.const import NOW
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
-    from tests.conftest import FakeNetzOOEeServiceAPI
+
+pytestmark: Final = pytest.mark.freeze_time(NOW)
 
 
 @pytest.mark.parametrize(
-    "mock_config_entry",
+    "entry_options",
     [
-        options(show_revoked_energy_communities=True, include_inactive_contract_account_data=True),
+        {CONF_SHOW_REVOKED_ENERGY_COMMUNITIES: True, CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True},
     ],
-    indirect=["mock_config_entry"],
     ids=["revoked_inactive_contracts"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_icons(
     hass: HomeAssistant,
-    mock_config_entry: MockConfigEntry,
-    fake_api: FakeNetzOOEeServiceAPI,
+    entity_registry: er.EntityRegistry,
+    init_integration: MockConfigEntry,
     snapshot: SnapshotAssertion,
 ) -> None:
     """Test that every icon in icons.json is used and the icons that the entities get."""
-    fake_api.register_auth_request()
-    fake_api.register_requests()
-
-    await setup_integration(hass, mock_config_entry)
-
     icons: dict[str, dict[str, Any]] = (await async_get_icons(hass, "entity", [DOMAIN]))[DOMAIN]
-    entries: list[er.RegistryEntry] = er.async_entries_for_config_entry(er.async_get(hass), mock_config_entry.entry_id)
+    entries: list[er.RegistryEntry] = er.async_entries_for_config_entry(entity_registry, init_integration.entry_id)
 
     used: set[tuple[str, str | None]] = {(entry.domain, entry.translation_key) for entry in entries}
     defined: set[tuple[str, str | None]] = {(platform, key) for platform, keys in icons.items() for key in keys}

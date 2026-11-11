@@ -8,7 +8,7 @@ from typing import Any
 from typing import Final
 from zoneinfo import ZoneInfo
 
-from tests import options
+from custom_components.netzooe_eservice.const import CONF_FREQUENT_UPDATES
 from tests.const import SEVEN_ENERGY
 from tests.const import ProfileRequestKey
 
@@ -27,8 +27,8 @@ TOTAL_EXPORT_ENTITY_ID: Final[str] = (
 SUPPLIER_ENTITY_ID: Final[str] = "sensor.netzooe_eservice_at0000000000000000000000011111112_supplier"
 INACTIVE_METER_POINT: Final[str] = "AT0000000000000000000000011111113"
 
-FREQUENT_UPDATES_ENABLED: Final[dict[str, Any]] = options(frequent_updates=True)
-FREQUENT_UPDATES_DISABLED: Final[dict[str, Any]] = options(frequent_updates=False)
+FREQUENT_UPDATES_ENABLED: Final[dict[str, Any]] = {CONF_FREQUENT_UPDATES: True}
+FREQUENT_UPDATES_DISABLED: Final[dict[str, Any]] = {CONF_FREQUENT_UPDATES: False}
 
 # Start of the tests with several full updates, so that they all run on the day of `tests.const.NOW`.
 MORNING: Final[datetime] = datetime(2026, 6, 28, 9, 0, tzinfo=VIENNA)

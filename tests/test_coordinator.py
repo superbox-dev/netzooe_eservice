@@ -12,6 +12,7 @@ from datetime import timedelta
 from http import HTTPStatus
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Final
 
 import pytest
 from homeassistant.config_entries import SOURCE_REAUTH
@@ -21,10 +22,12 @@ from homeassistant.const import STATE_UNAVAILABLE
 from homeassistant.setup import async_setup_component
 from pytest_homeassistant.test_util.aiohttp import AiohttpClientMockResponse
 
+from custom_components.netzooe_eservice.const import CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
+from custom_components.netzooe_eservice.const import CONF_SHOW_INACTIVE_METER_POINTS
+from custom_components.netzooe_eservice.const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
 from custom_components.netzooe_eservice.const import SCAN_INTERVAL
 from custom_components.netzooe_eservice.const import SCAN_INTERVAL_FULL
 from tests import next_update
-from tests import options
 from tests import setup_integration
 from tests.conftest import profile_request_keys
 from tests.const import CONTRIBUTION_FACTOR_ENTITY_ID
@@ -58,6 +61,9 @@ if TYPE_CHECKING:
 
     from tests.conftest import FakeNetzOOEeServiceAPI
     from tests.conftest import ProfileRequestKey
+
+
+pytestmark: Final = pytest.mark.freeze_time(NOW)
 
 
 def _contract_account_requested(aioclient_mock: AiohttpClientMocker) -> bool:
@@ -191,9 +197,7 @@ async def test_first_update_authentication_error_starts_reauth(
     ]
 
 
-@pytest.mark.parametrize(
-    "mock_config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["mock_config_entry"], ids=["frequent_updates_disabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_full_update_api_error_keeps_data(
     hass: HomeAssistant,
@@ -209,9 +213,7 @@ async def test_full_update_api_error_keeps_data(
     assert "Update failed, using cached data" in caplog.text
 
 
-@pytest.mark.parametrize(
-    "mock_config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["mock_config_entry"], ids=["frequent_updates_enabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_ENABLED], ids=["frequent_updates_enabled"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_frequent_updates_only_refresh_energy_community_data(
     hass: HomeAssistant,
@@ -236,9 +238,7 @@ async def test_frequent_updates_only_refresh_energy_community_data(
     assert not _contract_account_requested(fake_api.aioclient_mock)
 
 
-@pytest.mark.parametrize(
-    "mock_config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["mock_config_entry"], ids=["frequent_updates_enabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_ENABLED], ids=["frequent_updates_enabled"])
 @pytest.mark.usefixtures("init_integration")
 async def test_frequent_updates_full_update_after_full_scan_interval(
     hass: HomeAssistant,
@@ -258,9 +258,7 @@ async def test_frequent_updates_full_update_after_full_scan_interval(
     assert _contract_account_requested(fake_api.aioclient_mock)
 
 
-@pytest.mark.parametrize(
-    "mock_config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["mock_config_entry"], ids=["frequent_updates_disabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_without_frequent_updates_always_full_update(
     hass: HomeAssistant,
@@ -280,9 +278,7 @@ async def test_without_frequent_updates_always_full_update(
     assert _contract_account_requested(fake_api.aioclient_mock)
 
 
-@pytest.mark.parametrize(
-    "mock_config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["mock_config_entry"], ids=["frequent_updates_enabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_ENABLED], ids=["frequent_updates_enabled"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_energy_community_update_api_error_keeps_data(
     hass: HomeAssistant,
@@ -299,12 +295,11 @@ async def test_energy_community_update_api_error_keeps_data(
 
 
 @pytest.mark.parametrize(
-    ("mock_config_entry", "update_interval"),
+    ("entry_options", "update_interval"),
     [
         (FREQUENT_UPDATES_ENABLED, SCAN_INTERVAL),
         (FREQUENT_UPDATES_DISABLED, SCAN_INTERVAL_FULL),
     ],
-    indirect=["mock_config_entry"],
     ids=["frequent_updates_enabled", "frequent_updates_disabled"],
 )
 @pytest.mark.usefixtures("init_integration")
@@ -327,15 +322,14 @@ async def test_update_interval(
 
 
 @pytest.mark.parametrize(
-    "mock_config_entry",
+    "entry_options",
     [
-        options(
-            show_revoked_energy_communities=True,
-            include_inactive_contract_account_data=True,
-            show_inactive_meter_points=True,
-        ),
+        {
+            CONF_SHOW_REVOKED_ENERGY_COMMUNITIES: True,
+            CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True,
+            CONF_SHOW_INACTIVE_METER_POINTS: True,
+        },
     ],
-    indirect=["mock_config_entry"],
     ids=["revoked_inactive_contracts_inactive_meter_points"],
 )
 @pytest.mark.usefixtures("init_integration")
@@ -347,72 +341,70 @@ async def test_profile_requests(
 
 
 @pytest.mark.parametrize(
-    "mock_config_entry",
-    [options(show_revoked_energy_communities=True, include_inactive_contract_account_data=True)],
-    indirect=["mock_config_entry"],
+    "entry_options",
+    [{CONF_SHOW_REVOKED_ENERGY_COMMUNITIES: True, CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True}],
     ids=["revoked_inactive_contracts"],
 )
 @pytest.mark.parametrize(
-    ("frozen_time", "expected"),
+    "expected",
     [
         # Timeslice 2026-01-26 to 2026-06-28: L1/L2 up to the cutoff, complete profile and previous month.
-        (
-            NOW,
+        pytest.param(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-12"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
                 ("001", SEVEN_ENERGY, "2026-05-01", "2026-05-31"),
             ],
+            marks=pytest.mark.freeze_time(NOW),
         ),
         # Cutoff in the previous month: only the L1/L2 profile of the previous month ends at the cutoff.
-        (
-            datetime(2026, 7, 5, 12, 0, tzinfo=VIENNA),
+        pytest.param(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-19"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-19"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-28"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 7, 5, 12, 0, tzinfo=VIENNA)),
         ),
         # Cutoff one day before the end of the timeslice.
-        (
-            datetime(2026, 7, 13, 12, 0, tzinfo=VIENNA),
+        pytest.param(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-27"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-27"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-28"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 7, 13, 12, 0, tzinfo=VIENNA)),
         ),
         # Cutoff on the last day of the timeslice: the L1/L2 profiles are also the complete profiles.
-        (
-            datetime(2026, 7, 14, 12, 0, tzinfo=VIENNA),
+        pytest.param(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-28"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 7, 14, 12, 0, tzinfo=VIENNA)),
         ),
         # Cutoff on the first day of the timeslice.
-        (
-            datetime(2026, 2, 11, 12, 0, tzinfo=VIENNA),
+        pytest.param(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-26"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-26"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-31"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 2, 11, 12, 0, tzinfo=VIENNA)),
         ),
         # Cutoff one day before the timeslice: only the complete profiles.
-        (
-            datetime(2026, 2, 10, 12, 0, tzinfo=VIENNA),
+        pytest.param(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-31"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 2, 10, 12, 0, tzinfo=VIENNA)),
         ),
         # Previous month in the previous year (both WSEG timeslices of the contract account).
-        (
-            datetime(2025, 1, 10, 12, 0, tzinfo=VIENNA),
+        pytest.param(
             [
                 ("003", WSEG, "2024-05-06", "2024-05-07"),
                 ("003", WSEG, "2024-09-10", "2024-12-25"),
@@ -420,9 +412,9 @@ async def test_profile_requests(
                 ("003", WSEG, "2024-12-01", "2024-12-25"),
                 ("003", WSEG, "2024-12-01", "2024-12-31"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2025, 1, 10, 12, 0, tzinfo=VIENNA)),
         ),
     ],
-    indirect=["frozen_time"],
     ids=[
         "cutoff_in_timeslice",
         "cutoff_in_previous_month",
@@ -433,6 +425,7 @@ async def test_profile_requests(
         "previous_month_in_previous_year",
     ],
 )
+@pytest.mark.usefixtures("mock_portal")
 async def test_profile_request_time_ranges(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,
@@ -442,8 +435,6 @@ async def test_profile_request_time_ranges(
     """Test the time ranges of the consumption profile requests of an energy community."""
     # Other dates request other time ranges than the consumption profiles in the responses.
     fake_api.allow_unknown_profile_requests = True
-    fake_api.register_auth_request()
-    fake_api.register_requests()
 
     await setup_integration(hass, mock_config_entry)
 
@@ -466,7 +457,8 @@ async def test_profile_request_time_ranges(
     ],
     ids=["energy_community_l2", "supplier_l2", "energy_community_l3", "supplier_l3"],
 )
-@pytest.mark.parametrize("frozen_time", [LAST_MONTH_CUTOFF_NOW], indirect=True, ids=["cutoff_in_previous_month"])
+@pytest.mark.freeze_time(LAST_MONTH_CUTOFF_NOW)
+@pytest.mark.usefixtures("mock_portal")
 async def test_last_month_profiles_with_cutoff_in_previous_month(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,
@@ -478,8 +470,6 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
     # The other requests of this date are not in the responses.
     fake_api.allow_unknown_profile_requests = True
     fake_api.profile_responses.update(LAST_MONTH_PROFILE_RESPONSES)
-    fake_api.register_auth_request()
-    fake_api.register_requests()
 
     await setup_integration(hass, mock_config_entry)
 
@@ -487,12 +477,11 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
 
 
 @pytest.mark.parametrize(
-    ("mock_config_entry", "frozen_time", "expected"),
+    ("entry_options", "expected"),
     [
         # All contracts of a meter point, each limited to its own time range, the last day only once.
-        (
-            options(include_inactive_contract_account_data=True),
-            NOW,
+        pytest.param(
+            {CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True},
             [
                 ("001", "", "2023-10-18", "2026-06-27"),
                 ("001", "", "2026-05-01", "2026-05-31"),
@@ -502,11 +491,11 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
                 ("003", "", "2023-10-18", "2026-06-16"),
                 ("003", "", "2026-05-01", "2026-05-31"),
             ],
+            marks=pytest.mark.freeze_time(NOW),
         ),
         # Without the data of inactive contract accounts only the active contracts.
-        (
-            options(include_inactive_contract_account_data=False),
-            NOW,
+        pytest.param(
+            {CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: False},
             [
                 ("001", "", "2023-10-18", "2026-06-27"),
                 ("001", "", "2026-05-01", "2026-05-31"),
@@ -514,11 +503,11 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
                 ("002", "", "2026-06-17", "2026-06-27"),
                 ("002", "", "2026-06-27", "2026-06-27"),
             ],
+            marks=pytest.mark.freeze_time(NOW),
         ),
         # Contract change within the previous month: both contracts request their part of the month.
-        (
-            options(include_inactive_contract_account_data=True),
-            datetime(2026, 7, 5, 12, 0, tzinfo=VIENNA),
+        pytest.param(
+            {CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True},
             [
                 ("001", "", "2023-10-18", "2026-06-27"),
                 ("001", "", "2026-06-01", "2026-06-27"),
@@ -529,11 +518,11 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
                 ("003", "", "2023-10-18", "2026-06-16"),
                 ("003", "", "2026-06-01", "2026-06-16"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 7, 5, 12, 0, tzinfo=VIENNA)),
         ),
         # Previous month after the last day with data: no request for the previous month.
-        (
-            options(include_inactive_contract_account_data=True),
-            datetime(2026, 9, 1, 12, 0, tzinfo=VIENNA),
+        pytest.param(
+            {CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True},
             [
                 ("001", "", "2023-10-18", "2026-06-27"),
                 ("001", "", "2026-06-27", "2026-06-27"),
@@ -541,11 +530,11 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
                 ("002", "", "2026-06-27", "2026-06-27"),
                 ("003", "", "2023-10-18", "2026-06-16"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 9, 1, 12, 0, tzinfo=VIENNA)),
         ),
         # Meter points without an active contract, contract account 004 has no profile data.
-        (
-            options(show_inactive_meter_points=True, include_inactive_contract_account_data=True),
-            NOW,
+        pytest.param(
+            {CONF_SHOW_INACTIVE_METER_POINTS: True, CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True},
             [
                 ("001", "", "2023-10-18", "2026-06-27"),
                 ("001", "", "2026-05-01", "2026-05-31"),
@@ -561,9 +550,9 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
                 ("006", "", "2026-05-01", "2026-05-31"),
                 ("006", "", "2026-06-01", "2026-06-01"),
             ],
+            marks=pytest.mark.freeze_time(NOW),
         ),
     ],
-    indirect=["mock_config_entry", "frozen_time"],
     ids=[
         "inactive_contracts",
         "active_contracts_only",
@@ -572,6 +561,7 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
         "inactive_meter_points",
     ],
 )
+@pytest.mark.usefixtures("mock_portal")
 async def test_meter_point_profile_request_time_ranges(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,
@@ -581,8 +571,6 @@ async def test_meter_point_profile_request_time_ranges(
     """Test the time ranges of the L1 profile requests of the meter points."""
     # Other dates request other time ranges than the consumption profiles in the responses.
     fake_api.allow_unknown_profile_requests = True
-    fake_api.register_auth_request()
-    fake_api.register_requests()
 
     await setup_integration(hass, mock_config_entry)
 
@@ -631,6 +619,7 @@ async def test_meter_point_profile_request_time_ranges_of_contract(
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.usefixtures("mock_portal")
 async def test_integer_profile_values(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,
@@ -641,9 +630,6 @@ async def test_integer_profile_values(
         item | {"sum": item["sum"] | {"value": int(item["sum"]["value"])}}
         for item in fake_api.account.profile_responses[("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28")]
     ]
-
-    fake_api.register_auth_request()
-    fake_api.register_requests()
 
     await setup_integration(hass, mock_config_entry)
 
@@ -672,9 +658,7 @@ async def test_energy_community_without_consent(
     assert "No consent found for energy community" in caplog.text
 
 
-@pytest.mark.parametrize(
-    "mock_config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["mock_config_entry"], ids=["frequent_updates_disabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_removed_energy_community_sensors_update_without_errors(
     hass: HomeAssistant,
@@ -692,9 +676,7 @@ async def test_removed_energy_community_sensors_update_without_errors(
     assert not [record for record in caplog.records if record.levelno >= logging.ERROR]
 
 
-@pytest.mark.parametrize(
-    "mock_config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["mock_config_entry"], ids=["frequent_updates_disabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_full_update_removes_revoked_energy_community(
     hass: HomeAssistant,
@@ -753,13 +735,12 @@ async def test_only_most_recent_consent_is_used(
 
 
 @pytest.mark.parametrize(
-    ("mock_config_entry", "status"),
+    ("entry_options", "status"),
     [
         (FREQUENT_UPDATES_ENABLED, "revoked"),
         # Only active energy communities count, even if the status is similar.
         (FREQUENT_UPDATES_ENABLED, "active_unchangeable"),
     ],
-    indirect=["mock_config_entry"],
     ids=["revoked", "active_unchangeable"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
@@ -781,9 +762,7 @@ async def test_totals_only_include_active_energy_communities(
     assert float(_state(hass, TOTAL_EXPORT_ENTITY_ID)) == pytest.approx(total_before - energy_community_export)
 
 
-@pytest.mark.parametrize(
-    "mock_config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["mock_config_entry"], ids=["frequent_updates_enabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_ENABLED], ids=["frequent_updates_enabled"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_frequent_updates_keep_data_of_energy_community_without_consent(
     hass: HomeAssistant,
@@ -801,9 +780,7 @@ async def test_frequent_updates_keep_data_of_energy_community_without_consent(
     assert _state(hass, TOTAL_EXPORT_ENTITY_ID) == total_before
 
 
-@pytest.mark.parametrize(
-    "mock_config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["mock_config_entry"], ids=["frequent_updates_disabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
 @pytest.mark.usefixtures("init_integration")
 async def test_api_error_logged_once_until_available_again(
     hass: HomeAssistant,
@@ -826,9 +803,7 @@ async def test_api_error_logged_once_until_available_again(
     assert "The eService portal is available again" in caplog.text
 
 
-@pytest.mark.parametrize(
-    "mock_config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["mock_config_entry"], ids=["frequent_updates_disabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_new_energy_community_sensors_added_without_reload(
     hass: HomeAssistant,
@@ -912,24 +887,15 @@ async def test_failed_request_cancels_remaining_requests(
     assert cancelled == waiting
 
 
-@pytest.mark.parametrize(
-    ("mock_config_entry", "frozen_time"),
-    [(FREQUENT_UPDATES_ENABLED, DST_END)],
-    indirect=True,
-    ids=["frequent_updates_enabled"],
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_ENABLED], ids=["frequent_updates_enabled"])
+@pytest.mark.freeze_time(DST_END)
+@pytest.mark.usefixtures("init_integration")
 async def test_frequent_updates_full_update_across_dst_change(
     hass: HomeAssistant,
-    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that the full scan interval is measured in real time when DST ends."""
-    fake_api.register_auth_request()
-    fake_api.register_requests()
-
-    await setup_integration(hass, mock_config_entry)
-
     # 3.5 hours later, but only 2.5 hours on the wall clock, because DST ends at 03:00.
     _register_full_update(fake_api)
     await next_update(hass, freezer, interval=timedelta(hours=3, minutes=30))
@@ -938,10 +904,10 @@ async def test_frequent_updates_full_update_across_dst_change(
 
 
 # The four updates end on the same day, the responses only contain the consumption profiles of this day.
-@pytest.mark.parametrize("frozen_time", [MORNING], indirect=True, ids=["morning"])
+@pytest.mark.freeze_time(MORNING)
+@pytest.mark.usefixtures("init_integration")
 async def test_missing_consent_logged_once(
     hass: HomeAssistant,
-    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     freezer: FrozenDateTimeFactory,
     caplog: pytest.LogCaptureFixture,
@@ -957,11 +923,6 @@ async def test_missing_consent_logged_once(
         _register_full_update(fake_api, consents=consents)
         await next_update(hass, freezer)
 
-    fake_api.register_auth_request()
-    fake_api.register_requests()
-
-    await setup_integration(hass, mock_config_entry)
-
     with caplog.at_level(logging.WARNING, logger="custom_components.netzooe_eservice.coordinator"):
         await refresh_with([])
         logged: int = warnings()
@@ -975,6 +936,7 @@ async def test_missing_consent_logged_once(
         assert warnings() == 2 * logged
 
 
+@pytest.mark.usefixtures("mock_portal")
 async def test_meter_point_without_active_contract_logged_once(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,
@@ -992,8 +954,6 @@ async def test_meter_point_without_active_contract_logged_once(
         )
 
     with caplog.at_level(logging.WARNING, logger="custom_components.netzooe_eservice.coordinator"):
-        fake_api.register_auth_request()
-        fake_api.register_requests()
         await setup_integration(hass, mock_config_entry)
 
         assert warnings() == 1
@@ -1022,9 +982,8 @@ async def test_meter_point_without_active_contract_logged_once(
 
 
 @pytest.mark.parametrize(
-    "mock_config_entry",
-    [options(show_inactive_meter_points=True)],
-    indirect=["mock_config_entry"],
+    "entry_options",
+    [{CONF_SHOW_INACTIVE_METER_POINTS: True}],
     ids=["inactive_meter_points"],
 )
 @pytest.mark.parametrize(
@@ -1076,10 +1035,10 @@ async def test_inactive_meter_point_uses_most_recently_ended_contract(
 
 
 @pytest.mark.parametrize(
-    ("mock_config_entry", "expected"),
+    ("entry_options", "expected"),
     [
         (
-            options(show_inactive_meter_points=True, include_inactive_contract_account_data=False),
+            {CONF_SHOW_INACTIVE_METER_POINTS: True, CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: False},
             {
                 # Active contract: only its own energy communities.
                 "11111112_cc100087_energy_community_import_l3": "10.0",
@@ -1091,7 +1050,7 @@ async def test_inactive_meter_point_uses_most_recently_ended_contract(
             },
         ),
         (
-            options(show_inactive_meter_points=True, include_inactive_contract_account_data=True),
+            {CONF_SHOW_INACTIVE_METER_POINTS: True, CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True},
             {
                 # Active contract: also the energy communities of the ended contract (003).
                 "11111112_cc100087_energy_community_import_l3": "610.0",
@@ -1102,7 +1061,6 @@ async def test_inactive_meter_point_uses_most_recently_ended_contract(
             },
         ),
     ],
-    indirect=["mock_config_entry"],
     ids=["active_contracts_only", "inactive_contracts"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")

@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from typing import Any
 
 from homeassistant.helpers.translation import async_get_translations
 from pytest_homeassistant.common import async_fire_time_changed
@@ -18,11 +17,6 @@ if TYPE_CHECKING:
     from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant.common import MockConfigEntry
-
-
-def options(**overrides: bool) -> dict[str, Any]:
-    """Return the indirect `mock_config_entry` parameter with the given options, the others keep their defaults."""
-    return {"options": overrides}
 
 
 async def setup_integration(hass: HomeAssistant, mock_config_entry: MockConfigEntry, /) -> None:
