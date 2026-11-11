@@ -21,7 +21,7 @@
   - trigger updates with `next_update()` (`freezer`, `async_fire_time_changed()`), never through `runtime_data`
   - assert entity states, `ConfigEntryState`, the device registry or the requested URLs
 - `pytest.mark.parametrize` with `ids=` naming each case
-  - variants as fixtures with a default value, overridden by `parametrize` (`entry_options`), never `indirect`
+  - variants as fixtures with a default value, overridden by `parametrize` (`entry_options`)
 - Registries with the `entity_registry` and `device_registry` fixtures, never `er.async_get()` or `dr.async_get()`
 - Constants of a test module in a module with its name and `_data.py` (`test_api.py` → `test_api_data.py`)
   - shared by several test modules: `tests/const.py`
