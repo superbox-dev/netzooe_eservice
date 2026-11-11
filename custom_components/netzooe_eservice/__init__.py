@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from typing import Any
 
 from homeassistant.const import CONF_PASSWORD
 from homeassistant.const import CONF_USERNAME
@@ -20,8 +21,6 @@ if TYPE_CHECKING:
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.device_registry import DeviceRegistry
-
-    from .coordinator import CoordinatorData
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: NetzOOEeServiceConfigEntry) -> bool:
@@ -57,7 +56,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: NetzOOEeServiceConfigEnt
 def _async_remove_stale_devices(
     hass: HomeAssistant,
     entry: NetzOOEeServiceConfigEntry,
-    data: CoordinatorData,
+    data: dict[str, Any],
 ) -> None:
     """Remove the devices of the config entry that are no longer in the coordinator data."""
     device_registry: DeviceRegistry = dr.async_get(hass)

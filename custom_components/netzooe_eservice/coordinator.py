@@ -16,7 +16,6 @@ from typing import TYPE_CHECKING
 from typing import Any
 from typing import Final
 from typing import NamedTuple
-from typing import TypedDict
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import ConfigEntryAuthFailed
@@ -56,7 +55,6 @@ if TYPE_CHECKING:
     from collections.abc import Awaitable
     from collections.abc import Callable
     from collections.abc import Iterable
-    from typing import TypeIs
 
     from aiohttp import ClientSession
     from homeassistant.core import HomeAssistant
@@ -65,46 +63,6 @@ _LOGGER: Final[logging.Logger] = logging.getLogger(__name__)
 
 type NetzOOEeServiceConfigEntry = ConfigEntry[NetzOOEeServiceDataUpdateCoordinator]
 type ConsentsMap = dict[str, list[dict[str, Any]]]
-# The device data per device identifier.
-type CoordinatorData = dict[str, DeviceData]
-# The device data of a meter point or an energy community.
-type DeviceData = MeterPointData | EnergyCommunityData
-
-
-class MeterPointData(TypedDict):
-    """Device data of a meter point, the values as returned by the portal."""
-
-    deviceName: str
-    deviceType: str
-    scaleType: str
-    monthlyTrend: dict[str, Any]
-    yearlyTrend: dict[str, Any]
-    supplier: dict[str, Any]
-    contractStart: str | None
-    meterNumber: str
-    profileDataAvailableTo: str | None
-    meterReading: dict[str, Any]
-    lastMonthPeakPower: dict[str, Any]
-    totalL1: list[dict[str, Any]]
-    monthlyL1: list[dict[str, Any]]
-    dailyL1: list[dict[str, Any]]
-
-
-class EnergyCommunityData(TypedDict):
-    """Device data of an energy community at a meter point, the values as returned by the portal."""
-
-    synthProfile: str
-    meterPointAdministrationNumber: str
-    deviceId: str
-    deviceName: str
-    deviceType: str
-    totalL2: list[dict[str, Any]]
-    monthlyL2: list[dict[str, Any]]
-    totalL3: list[dict[str, Any]]
-    monthlyL3: list[dict[str, Any]]
-    contributionPercentage: str | None
-    status: str | None
-    validFrom: str
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -181,7 +139,7 @@ class MeterPointProfileRequest(ProfileRequest):
     meter_point_administration_number: str
 
 
-class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData]):
+class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Coordinator to fetch the data of all meter points and energy communities from the eService portal."""
 
     config_entry: NetzOOEeServiceConfigEntry
@@ -228,28 +186,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
             update_interval=SCAN_INTERVAL if self.frequent_updates else SCAN_INTERVAL_FULL,
         )
 
-    @property
-    def meter_points(self) -> dict[str, MeterPointData]:
-        """Return the device data of the meter points per device identifier."""
-        return {
-            device_identifier: data
-            for device_identifier, data in self.data.items()
-            if not self._is_energy_community(data)
-        }
-
-    @staticmethod
-    def _is_energy_community(data: DeviceData, /) -> TypeIs[EnergyCommunityData]:
-        """Return whether the device data is the one of an energy community."""
-        return data["deviceType"] in ENERGY_COMMUNITY_DEVICE_TYPES.values()
-
-    @property
-    def energy_communities(self) -> dict[str, EnergyCommunityData]:
-        """Return the device data of the energy communities per device identifier."""
-        return {
-            device_identifier: data for device_identifier, data in self.data.items() if self._is_energy_community(data)
-        }
-
-    async def _async_update_data(self) -> CoordinatorData:
+    async def _async_update_data(self) -> dict[str, Any]:
         """Fetch all data, or with frequent updates only the energy community data in between full updates."""
         now: datetime = dt_util.now()
         # Compare in UTC, the difference of two local times ignores a DST change in between.
@@ -265,7 +202,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
 
         try:
             if full_update:
-                data: CoordinatorData = await self._async_fetch_all_data(ProfilePeriods.from_today(now.date()))
+                data: dict[str, Any] = await self._async_fetch_all_data(ProfilePeriods.from_today(now.date()))
                 self._last_full_update = now_utc
             else:
                 data = await self._async_fetch_energy_community_data()
@@ -290,7 +227,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
 
         return data
 
-    async def _async_fetch_all_data(self, periods: ProfilePeriods, /) -> CoordinatorData:
+    async def _async_fetch_all_data(self, periods: ProfilePeriods, /) -> dict[str, Any]:
         """Fetch the data of all meter points and their energy communities."""
         consents_map: ConsentsMap
         contracts_by_mpan: dict[str, list[dict[str, Any]]]
@@ -298,7 +235,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
             [self._async_fetch_consents_map, self._async_fetch_contracts_by_mpan],
         )
 
-        data: CoordinatorData = {}
+        data: dict[str, Any] = {}
         energy_community_requests: list[EnergyCommunityProfileRequest] = []
         meter_point_requests: list[MeterPointProfileRequest] = []
 
@@ -308,7 +245,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
             if active_contract_data is None:
                 continue
 
-            meter_point: MeterPointData = self._append_meter_point_data(
+            meter_point: dict[str, Any] = self._append_meter_point_data(
                 data,
                 contract=active_contract_data.active_contract["contract"],
             )
@@ -483,7 +420,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
         return True
 
     @staticmethod
-    def _append_meter_point_data(data: CoordinatorData, /, *, contract: dict[str, Any]) -> MeterPointData:
+    def _append_meter_point_data(data: dict[str, Any], /, *, contract: dict[str, Any]) -> dict[str, Any]:
         """Add the device data of the meter point of a contract and return it."""
         point_of_delivery: dict[str, Any] = contract["pointOfDelivery"]
         meter_number: str = point_of_delivery["meter"]["meterNumber"]
@@ -500,7 +437,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
                 {},
             )
 
-        meter_point: MeterPointData = {
+        meter_point: dict[str, Any] = {
             "deviceName": contract["synthProfile"],
             "deviceType": METER_POINT_DEVICE_TYPES[contract["synthProfile"]],
             "scaleType": contract["scaleType"],
@@ -522,7 +459,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
     @classmethod
     def _get_meter_point_profile_requests(
         cls,
-        meter_point: MeterPointData,
+        meter_point: dict[str, Any],
         active_contract_data: ActiveContractData,
         /,
         *,
@@ -591,7 +528,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
 
     def _append_energy_communities(
         self,
-        data: CoordinatorData,
+        data: dict[str, Any],
         active_contract_data: ActiveContractData,
         /,
         *,
@@ -610,7 +547,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
             for timeslice in item["contract"].get("energyCommunityData", {}).get("timeslices", []):
                 _LOGGER.debug("  %s", timeslice["energyCommunityName"])
 
-                energy_community: EnergyCommunityData | None = self._get_or_create_energy_community(
+                energy_community: dict[str, Any] | None = self._get_or_create_energy_community(
                     data,
                     contract=active_contract,
                     consents_map=consents_map,
@@ -632,13 +569,13 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
 
     def _get_or_create_energy_community(
         self,
-        data: CoordinatorData,
+        data: dict[str, Any],
         /,
         *,
         contract: dict[str, Any],
         consents_map: ConsentsMap,
         timeslice: dict[str, Any],
-    ) -> EnergyCommunityData | None:
+    ) -> dict[str, Any] | None:
         """Return the device data of the energy community of a timeslice, or `None` if it is not shown."""
         mpan: str = contract["pointOfDelivery"]["meterPointAdministrationNumber"]
         consent: dict[str, Any] = self._get_consent(consents_map, mpan, timeslice["energyCommunityId"])
@@ -657,28 +594,23 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
             _LOGGER.debug("  Skipping revoked energy community %s", timeslice["energyCommunityName"])
             return None
 
-        device_identifier: str = f"{mpan}_{consent['serviceProvider']}"
-        existing: DeviceData | None = data.get(device_identifier)
-
-        # Further timeslices of the energy community add their profiles to the same device data.
-        if existing is not None and self._is_energy_community(existing):
-            return existing
-
-        energy_community: EnergyCommunityData = {
-            "synthProfile": contract["synthProfile"],
-            "meterPointAdministrationNumber": mpan,
-            "deviceId": timeslice["energyCommunityId"],
-            "deviceName": timeslice["energyCommunityName"],
-            "deviceType": ENERGY_COMMUNITY_DEVICE_TYPES[contract["synthProfile"]],
-            "totalL2": [],
-            "monthlyL2": [],
-            "totalL3": [],
-            "monthlyL3": [],
-            "contributionPercentage": consent.get("contributionPercentage"),
-            "status": consent.get("status"),
-            "validFrom": consent["validThrough"]["from"],
-        }
-        data[device_identifier] = energy_community
+        energy_community: dict[str, Any] = data.setdefault(
+            f"{mpan}_{consent['serviceProvider']}",
+            {
+                "synthProfile": contract["synthProfile"],
+                "meterPointAdministrationNumber": mpan,
+                "deviceId": timeslice["energyCommunityId"],
+                "deviceName": timeslice["energyCommunityName"],
+                "deviceType": ENERGY_COMMUNITY_DEVICE_TYPES[contract["synthProfile"]],
+                "totalL2": [],
+                "monthlyL2": [],
+                "totalL3": [],
+                "monthlyL3": [],
+                "contributionPercentage": consent.get("contributionPercentage"),
+                "status": consent.get("status"),
+                "validFrom": consent["validThrough"]["from"],
+            },
+        )
         return energy_community
 
     @staticmethod
@@ -697,7 +629,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
 
     @staticmethod
     def _get_energy_community_profile_requests(
-        energy_community: EnergyCommunityData,
+        energy_community: dict[str, Any],
         timeslice: Timeslice,
         /,
         *,
@@ -825,12 +757,15 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
         # The single values of the profile are not used and would make the data large.
         return [{key: value for key, value in item.items() if key != "profileValues"} for item in consumptions_profile]
 
-    async def _async_fetch_energy_community_data(self) -> CoordinatorData:
+    async def _async_fetch_energy_community_data(self) -> dict[str, Any]:
         """Return the previous data with the current contribution factors and statuses of the energy communities."""
         consents_map: ConsentsMap = await self._async_fetch_consents_map()
-        data: CoordinatorData = dict(self.data)
+        data: dict[str, Any] = dict(self.data)
 
-        for device_identifier, device_data in self.energy_communities.items():
+        for device_identifier, device_data in self.data.items():
+            if device_data["deviceType"] not in ENERGY_COMMUNITY_DEVICE_TYPES.values():
+                continue
+
             consent: dict[str, Any] = self._get_consent(
                 consents_map,
                 device_data["meterPointAdministrationNumber"],
@@ -841,11 +776,11 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
             if not consent:
                 continue
 
-            energy_community: EnergyCommunityData = device_data.copy()
-            energy_community["contributionPercentage"] = consent.get("contributionPercentage")
-            energy_community["status"] = consent.get("status")
-            energy_community["validFrom"] = consent["validThrough"]["from"]
-            data[device_identifier] = energy_community
+            data[device_identifier] = device_data | {
+                "contributionPercentage": consent.get("contributionPercentage"),
+                "status": consent.get("status"),
+                "validFrom": consent["validThrough"]["from"],
+            }
 
         _LOGGER.debug("Updated energy community data")
         return data
