@@ -1,0 +1,120 @@
+{
+  "contractAccountNumber": "006",
+  "businessPartnerNumber": "200",
+  "active": false,
+  "branch": "STROM",
+  "contracts": [
+    {
+      "branch": "STROM",
+      "scaleType": "Gem.Erz. / Erzeugung",
+      "active": false,
+      "moveInDate": "2025-01-01",
+      "moveOutDate": "2026-06-01",
+      "pointOfDelivery": {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111114",
+        "meter": {
+          "meterNumber": "6000000"
+        },
+        "monthlyTrend": {
+          "consumptionOld": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "consumptionNew": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "timerangeOld": {
+            "from": "2026-06-28T17:11:06.851202621",
+            "to": "2026-06-29T17:11:06.851203478"
+          },
+          "timerangeNew": {
+            "from": "2026-06-28T17:11:06.85120513",
+            "to": "2026-06-29T17:11:06.851205241"
+          }
+        },
+        "yearlyTrend": {
+          "consumptionOld": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "consumptionNew": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "timerangeOld": {
+            "from": "2026-06-28T17:11:06.851202621",
+            "to": "2026-06-29T17:11:06.851203478"
+          },
+          "timerangeNew": {
+            "from": "2026-06-28T17:11:06.85120513",
+            "to": "2026-06-29T17:11:06.851205241"
+          }
+        },
+        "availableTimeRange": {
+          "from": "2025-01-01",
+          "to": "2026-06-01"
+        },
+        "lastReadings": {
+          "values": [
+            {
+              "meternumber": "6000000",
+              "referenceNumber": "2.8.1",
+              "newResult": {
+                "timestamp": "2026-06-01T00:00:00",
+                "readingValue": 2500.0
+              }
+            },
+            {
+              "meternumber": "6000000",
+              "referenceNumber": "2.6.0",
+              "newResult": {
+                "timestamp": "2026-05-01T00:00:00",
+                "readingValue": 4.2
+              }
+            }
+          ]
+        }
+      },
+      "powerGenerationUnit": true,
+      "energyCommunityData": {
+        "status": "HISTORICAL",
+        "timeslices": [
+          {
+            "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+            "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+            "from": "2026-02-01",
+            "to": "2026-06-01",
+            "status": "ACTIVE",
+            "profiles": [
+              {
+                "from": "2026-02-01",
+                "to": "2026-06-01",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR"
+              },
+              {
+                "from": "2026-02-01",
+                "to": "2026-06-01",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR"
+              }
+            ],
+            "profileDataAvailableFrom": "2026-02-01",
+            "profileDataAvailableTo": "2026-06-01"
+          }
+        ],
+        "energyCommunityActive": true
+      },
+      "supplier": {
+        "id": "AT113820",
+        "name": "OeMAG Abwicklungsstelle für Ökostrom AG"
+      },
+      "synthProfile": "Photovoltaik"
+    }
+  ]
+}

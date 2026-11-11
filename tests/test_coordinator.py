@@ -12,30 +12,32 @@ from datetime import timedelta
 from http import HTTPStatus
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Final
 
 import pytest
 from homeassistant.config_entries import SOURCE_REAUTH
 from homeassistant.config_entries import ConfigEntryState
+from homeassistant.const import ATTR_ENTITY_ID
+from homeassistant.const import STATE_UNAVAILABLE
+from homeassistant.setup import async_setup_component
 from pytest_homeassistant.test_util.aiohttp import AiohttpClientMockResponse
 
+from custom_components.netzooe_eservice.const import CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
+from custom_components.netzooe_eservice.const import CONF_SHOW_INACTIVE_METER_POINTS
+from custom_components.netzooe_eservice.const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
+from custom_components.netzooe_eservice.const import DOMAIN
 from custom_components.netzooe_eservice.const import SCAN_INTERVAL
 from custom_components.netzooe_eservice.const import SCAN_INTERVAL_FULL
-from tests import options
-from tests import refresh
+from tests import next_update
 from tests import setup_integration
-from tests.api_data import CONSENTS_DATA
-from tests.api_data import CONTRACT_ACCOUNT_DATA_1
-from tests.api_data import CONTRACT_ACCOUNT_DATA_2
-from tests.api_data import CONTRACT_ACCOUNT_DATA_4
-from tests.api_data import CONTRIBUTION_FACTOR_ENTITY_ID
-from tests.api_data import MPAN_1
-from tests.api_data import NOW
-from tests.api_data import PROFILE_RESPONSES
-from tests.api_data import PROFILE_URL
-from tests.api_data import SEVEN_ENERGY
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2
-from tests.api_data import WSEG
 from tests.conftest import profile_request_keys
+from tests.const import CONTRIBUTION_FACTOR_ENTITY_ID
+from tests.const import MPAN_1
+from tests.const import NOW
+from tests.const import PROFILE_URL
+from tests.const import SEVEN_ENERGY
+from tests.const import WSEG
+from tests.test_coordinator_data import DST_END
 from tests.test_coordinator_data import ENERGY_COMMUNITY_EXPORT_ENTITY_ID
 from tests.test_coordinator_data import FREQUENT_UPDATES_DISABLED
 from tests.test_coordinator_data import FREQUENT_UPDATES_ENABLED
@@ -43,6 +45,7 @@ from tests.test_coordinator_data import INACTIVE_METER_POINT
 from tests.test_coordinator_data import LAST_MONTH_CUTOFF_NOW
 from tests.test_coordinator_data import LAST_MONTH_ENTITY_ID
 from tests.test_coordinator_data import LAST_MONTH_PROFILE_RESPONSES
+from tests.test_coordinator_data import MORNING
 from tests.test_coordinator_data import OTHER_ENERGY_COMMUNITY_EXPORT_ENTITY_ID
 from tests.test_coordinator_data import STATUS_ENTITY_ID
 from tests.test_coordinator_data import SUPPLIER_ENTITY_ID
@@ -50,6 +53,7 @@ from tests.test_coordinator_data import TOTAL_EXPORT_ENTITY_ID
 from tests.test_coordinator_data import VIENNA
 
 if TYPE_CHECKING:
+    from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
     from pytest_homeassistant.common import MockConfigEntry
@@ -58,6 +62,9 @@ if TYPE_CHECKING:
 
     from tests.conftest import FakeNetzOOEeServiceAPI
     from tests.conftest import ProfileRequestKey
+
+
+pytestmark: Final = pytest.mark.freeze_time(NOW)
 
 
 def _contract_account_requested(aioclient_mock: AiohttpClientMocker) -> bool:
@@ -84,9 +91,12 @@ def _status_valid_from(hass: HomeAssistant) -> str:
     return state.attributes["valid_from"]
 
 
-def _consents_with(changes: dict[str, Any]) -> list[dict[str, Any]]:
+def _consents_with(fake_api: FakeNetzOOEeServiceAPI, changes: dict[str, Any]) -> list[dict[str, Any]]:
     """Return the consents with the given changes to the consent of the energy community CC100087."""
-    return [consent | changes if consent["contributionPercentage"] == "93" else consent for consent in CONSENTS_DATA]
+    return [
+        consent | changes if consent["contributionPercentage"] == "93" else consent
+        for consent in fake_api.account.consents
+    ]
 
 
 def _contract_account_with(
@@ -104,26 +114,15 @@ def _contract_account_with(
     return changed
 
 
-async def _setup(hass: HomeAssistant, config_entry: MockConfigEntry, fake_api: FakeNetzOOEeServiceAPI) -> None:
-    """Set up the integration with the default API responses."""
-    fake_api.register_auth_request()
-    fake_api.register_requests()
-
-    await setup_integration(hass, config_entry)
-
-    assert config_entry.state is ConfigEntryState.LOADED
-
-
 def _register_consents_update(
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
     /,
     *,
     consents: list[dict[str, Any]] | None = None,
     status: int = 200,
 ) -> None:
     """Replace the registered requests with the ones of an update that only fetches the consents."""
-    aioclient_mock.clear_requests()
+    fake_api.aioclient_mock.clear_requests()
     fake_api.register_auth_request()
     fake_api.register_session_request()
     fake_api.register_consents_request(consents=consents, status=status)
@@ -131,39 +130,40 @@ def _register_consents_update(
 
 def _register_full_update(
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
     /,
     *,
     consents: list[dict[str, Any]] | None = None,
     contract_accounts: dict[str, dict[str, Any]] | None = None,
 ) -> None:
     """Replace the registered requests with the ones of a full update."""
-    aioclient_mock.clear_requests()
+    fake_api.aioclient_mock.clear_requests()
     fake_api.register_auth_request()
     fake_api.register_requests(consents=consents, contract_accounts=contract_accounts)
 
 
 async def test_setup_api_error_retries_setup(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that an API error on the dashboard request retries the setup."""
     fake_api.register_auth_request()
     fake_api.register_session_request()
+    fake_api.register_consents_request()
     fake_api.register_dashboard_request(status=500)
 
-    config_entry.add_to_hass(hass)
+    mock_config_entry.add_to_hass(hass)
 
-    assert not await hass.config_entries.async_setup(config_entry.entry_id)
+    assert not await hass.config_entries.async_setup(mock_config_entry.entry_id)
     await hass.async_block_till_done()
 
-    assert config_entry.state is ConfigEntryState.SETUP_RETRY
+    assert mock_config_entry.state is ConfigEntryState.SETUP_RETRY
+    assert mock_config_entry.error_reason_translation_key == "update_failed"
 
 
 async def test_first_update_api_error_retries_setup(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that an API error on the first update retries the setup."""
@@ -172,262 +172,245 @@ async def test_first_update_api_error_retries_setup(
     fake_api.register_dashboard_request()
     fake_api.register_consents_request(status=500)
 
-    config_entry.add_to_hass(hass)
+    mock_config_entry.add_to_hass(hass)
 
-    assert not await hass.config_entries.async_setup(config_entry.entry_id)
+    assert not await hass.config_entries.async_setup(mock_config_entry.entry_id)
     await hass.async_block_till_done()
 
-    assert config_entry.state is ConfigEntryState.SETUP_RETRY
+    assert mock_config_entry.state is ConfigEntryState.SETUP_RETRY
+    assert mock_config_entry.error_reason_translation_key == "update_failed"
 
 
 async def test_first_update_authentication_error_starts_reauth(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that rejected credentials on the first update fail the setup and start the reauth flow."""
     fake_api.register_auth_request(status=HTTPStatus.UNAUTHORIZED)
     fake_api.register_requests()
 
-    config_entry.add_to_hass(hass)
+    mock_config_entry.add_to_hass(hass)
 
-    assert not await hass.config_entries.async_setup(config_entry.entry_id)
+    assert not await hass.config_entries.async_setup(mock_config_entry.entry_id)
     await hass.async_block_till_done()
 
-    assert config_entry.state is ConfigEntryState.SETUP_ERROR
-    assert [flow["context"]["source"] for flow in config_entry.async_get_active_flows(hass, {SOURCE_REAUTH})] == [
-        SOURCE_REAUTH,
-    ]
+    assert mock_config_entry.state is ConfigEntryState.SETUP_ERROR
+    assert mock_config_entry.error_reason_translation_key == "authentication_error"
+    assert [
+        (flow["step_id"], flow["handler"], flow["context"].get("source"), flow["context"].get("entry_id"))
+        for flow in hass.config_entries.flow.async_progress()
+    ] == [("reauth_confirm", DOMAIN, SOURCE_REAUTH, mock_config_entry.entry_id)]
 
 
-@pytest.mark.parametrize(
-    "config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"], ids=["frequent_updates_disabled"]
-)
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_full_update_api_error_keeps_data(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test that an API error on a full update keeps the previous data."""
-    await _setup(hass, config_entry, fake_api)
+    _register_consents_update(fake_api, status=500)
+    await next_update(hass, freezer)
 
-    _register_consents_update(fake_api, aioclient_mock, status=500)
-    await refresh(hass, config_entry)
-
-    assert config_entry.runtime_data.last_update_success is True
     assert _contribution_factor(hass) == "93"
     assert "Update failed, using cached data" in caplog.text
 
 
-@pytest.mark.parametrize(
-    "config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"], ids=["frequent_updates_enabled"]
-)
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_ENABLED], ids=["frequent_updates_enabled"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_frequent_updates_only_refresh_energy_community_data(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that frequent updates only refresh the consents."""
-    await _setup(hass, config_entry, fake_api)
-
     assert _contribution_factor(hass) == "93"
     assert _status_valid_from(hass) == "2026-01-26"
 
     _register_consents_update(
         fake_api,
-        aioclient_mock,
         consents=_consents_with(
+            fake_api,
             {"contributionPercentage": "50", "validThrough": {"from": "2026-06-01", "to": "9999-12-31"}},
         ),
     )
-    await refresh(hass, config_entry)
+    await next_update(hass, freezer, interval=SCAN_INTERVAL)
 
     assert _contribution_factor(hass) == "50"
     assert _status_valid_from(hass) == "2026-06-01"
-    assert not _contract_account_requested(aioclient_mock)
+    assert not _contract_account_requested(fake_api.aioclient_mock)
 
 
-@pytest.mark.parametrize(
-    "config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"], ids=["frequent_updates_enabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_ENABLED], ids=["frequent_updates_enabled"])
+@pytest.mark.usefixtures("init_integration")
 async def test_frequent_updates_full_update_after_full_scan_interval(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that frequent updates do a full update after the full scan interval, but not before."""
-    await _setup(hass, config_entry, fake_api)
+    _register_full_update(fake_api)
+    # The last update before the full scan interval only fetches the consents.
+    await next_update(hass, freezer, interval=SCAN_INTERVAL_FULL - SCAN_INTERVAL)
 
-    _register_full_update(fake_api, aioclient_mock)
-    await refresh(hass, config_entry, now=NOW + SCAN_INTERVAL_FULL - timedelta(seconds=1))
+    assert not _contract_account_requested(fake_api.aioclient_mock)
 
-    assert not _contract_account_requested(aioclient_mock)
+    _register_full_update(fake_api)
+    await next_update(hass, freezer, interval=SCAN_INTERVAL)
 
-    _register_full_update(fake_api, aioclient_mock)
-    await refresh(hass, config_entry, now=NOW + SCAN_INTERVAL_FULL)
-
-    assert _contract_account_requested(aioclient_mock)
+    assert _contract_account_requested(fake_api.aioclient_mock)
 
 
-@pytest.mark.parametrize(
-    "config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"], ids=["frequent_updates_disabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_without_frequent_updates_always_full_update(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
 ) -> None:
-    """Test that without frequent updates every update is a full update."""
-    await _setup(hass, config_entry, fake_api)
+    """Test that without frequent updates every update is a full update, also a requested one."""
+    # The last full update was just now, with frequent updates this update would only fetch the consents.
+    _register_full_update(fake_api)
+    await async_setup_component(hass, "homeassistant", {})
+    await hass.services.async_call(
+        "homeassistant",
+        "update_entity",
+        {ATTR_ENTITY_ID: TOTAL_EXPORT_ENTITY_ID},
+        blocking=True,
+    )
 
-    # Last full update was just now: with frequent updates this would only refresh the consents.
-    _register_full_update(fake_api, aioclient_mock)
-    await refresh(hass, config_entry)
-
-    assert _contract_account_requested(aioclient_mock)
+    assert _contract_account_requested(fake_api.aioclient_mock)
 
 
-@pytest.mark.parametrize(
-    "config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"], ids=["frequent_updates_enabled"]
-)
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_ENABLED], ids=["frequent_updates_enabled"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_energy_community_update_api_error_keeps_data(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test that an API error on a frequent update keeps the previous data."""
-    await _setup(hass, config_entry, fake_api)
+    _register_consents_update(fake_api, status=500)
+    await next_update(hass, freezer, interval=SCAN_INTERVAL)
 
-    _register_consents_update(fake_api, aioclient_mock, status=500)
-    await refresh(hass, config_entry)
-
-    assert config_entry.runtime_data.last_update_success is True
     assert _contribution_factor(hass) == "93"
     assert "Update failed, using cached data" in caplog.text
 
 
 @pytest.mark.parametrize(
-    ("config_entry", "update_interval"),
+    ("entry_options", "update_interval"),
     [
         (FREQUENT_UPDATES_ENABLED, SCAN_INTERVAL),
         (FREQUENT_UPDATES_DISABLED, SCAN_INTERVAL_FULL),
     ],
-    indirect=["config_entry"],
     ids=["frequent_updates_enabled", "frequent_updates_disabled"],
 )
+@pytest.mark.usefixtures("init_integration")
 async def test_update_interval(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
+    freezer: FrozenDateTimeFactory,
     update_interval: timedelta,
 ) -> None:
-    """Test the update interval with and without frequent updates."""
-    await _setup(hass, config_entry, fake_api)
+    """Test that the next update runs after the update interval with and without frequent updates."""
+    _register_full_update(fake_api)
 
-    assert config_entry.runtime_data.update_interval == update_interval
+    await next_update(hass, freezer, interval=update_interval - timedelta(seconds=1))
+
+    assert fake_api.aioclient_mock.call_count == 0
+
+    await next_update(hass, freezer, interval=timedelta(seconds=1))
+
+    assert fake_api.aioclient_mock.call_count > 0
 
 
 @pytest.mark.parametrize(
-    "config_entry",
+    "entry_options",
     [
-        options(
-            show_revoked_energy_communities=True,
-            include_inactive_contract_account_data=True,
-            show_inactive_meter_points=True,
-        ),
+        {
+            CONF_SHOW_REVOKED_ENERGY_COMMUNITIES: True,
+            CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True,
+            CONF_SHOW_INACTIVE_METER_POINTS: True,
+        },
     ],
-    indirect=["config_entry"],
     ids=["revoked_inactive_contracts_inactive_meter_points"],
 )
+@pytest.mark.usefixtures("init_integration")
 async def test_profile_requests(
-    hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
 ) -> None:
     """Test that every consumption profile is requested once for the right contract account and time range."""
-    await _setup(hass, config_entry, fake_api)
-
-    assert sorted(profile_request_keys(aioclient_mock)) == sorted(PROFILE_RESPONSES)
+    assert sorted(profile_request_keys(fake_api.aioclient_mock)) == sorted(fake_api.account.profile_responses)
 
 
 @pytest.mark.parametrize(
-    "config_entry",
-    [options(show_revoked_energy_communities=True, include_inactive_contract_account_data=True)],
-    indirect=["config_entry"],
+    "entry_options",
+    [{CONF_SHOW_REVOKED_ENERGY_COMMUNITIES: True, CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True}],
     ids=["revoked_inactive_contracts"],
 )
 @pytest.mark.parametrize(
-    ("now", "expected"),
+    "expected",
     [
         # Timeslice 2026-01-26 to 2026-06-28: L1/L2 up to the cutoff, complete profile and previous month.
-        (
-            NOW,
+        pytest.param(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-12"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
                 ("001", SEVEN_ENERGY, "2026-05-01", "2026-05-31"),
             ],
+            marks=pytest.mark.freeze_time(NOW),
         ),
         # Cutoff in the previous month: only the L1/L2 profile of the previous month ends at the cutoff.
-        (
-            datetime(2026, 7, 5, 12, 0, tzinfo=VIENNA),
+        pytest.param(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-19"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-19"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-28"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 7, 5, 12, 0, tzinfo=VIENNA)),
         ),
         # Cutoff one day before the end of the timeslice.
-        (
-            datetime(2026, 7, 13, 12, 0, tzinfo=VIENNA),
+        pytest.param(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-27"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-27"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-28"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 7, 13, 12, 0, tzinfo=VIENNA)),
         ),
         # Cutoff on the last day of the timeslice: the L1/L2 profiles are also the complete profiles.
-        (
-            datetime(2026, 7, 14, 12, 0, tzinfo=VIENNA),
+        pytest.param(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
                 ("001", SEVEN_ENERGY, "2026-06-01", "2026-06-28"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 7, 14, 12, 0, tzinfo=VIENNA)),
         ),
         # Cutoff on the first day of the timeslice.
-        (
-            datetime(2026, 2, 11, 12, 0, tzinfo=VIENNA),
+        pytest.param(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-26"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-26"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-31"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 2, 11, 12, 0, tzinfo=VIENNA)),
         ),
         # Cutoff one day before the timeslice: only the complete profiles.
-        (
-            datetime(2026, 2, 10, 12, 0, tzinfo=VIENNA),
+        pytest.param(
             [
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-01-31"),
                 ("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 2, 10, 12, 0, tzinfo=VIENNA)),
         ),
         # Previous month in the previous year (both WSEG timeslices of the contract account).
-        (
-            datetime(2025, 1, 10, 12, 0, tzinfo=VIENNA),
+        pytest.param(
             [
                 ("003", WSEG, "2024-05-06", "2024-05-07"),
                 ("003", WSEG, "2024-09-10", "2024-12-25"),
@@ -435,6 +418,7 @@ async def test_profile_requests(
                 ("003", WSEG, "2024-12-01", "2024-12-25"),
                 ("003", WSEG, "2024-12-01", "2024-12-31"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2025, 1, 10, 12, 0, tzinfo=VIENNA)),
         ),
     ],
     ids=[
@@ -447,20 +431,18 @@ async def test_profile_requests(
         "previous_month_in_previous_year",
     ],
 )
+@pytest.mark.usefixtures("mock_portal")
 async def test_profile_request_time_ranges(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    now: datetime,
     expected: list[ProfileRequestKey],
 ) -> None:
     """Test the time ranges of the consumption profile requests of an energy community."""
     # Other dates request other time ranges than the consumption profiles in the responses.
     fake_api.allow_unknown_profile_requests = True
-    fake_api.register_auth_request()
-    fake_api.register_requests()
 
-    await setup_integration(hass, config_entry, now=now)
+    await setup_integration(hass, mock_config_entry)
 
     energy_communities: set[tuple[str, str]] = {
         (number, energy_community_id) for number, energy_community_id, *_ in expected
@@ -481,9 +463,11 @@ async def test_profile_request_time_ranges(
     ],
     ids=["energy_community_l2", "supplier_l2", "energy_community_l3", "supplier_l3"],
 )
+@pytest.mark.freeze_time(LAST_MONTH_CUTOFF_NOW)
+@pytest.mark.usefixtures("mock_portal")
 async def test_last_month_profiles_with_cutoff_in_previous_month(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     key: str,
     expected: str,
@@ -492,21 +476,18 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
     # The other requests of this date are not in the responses.
     fake_api.allow_unknown_profile_requests = True
     fake_api.profile_responses.update(LAST_MONTH_PROFILE_RESPONSES)
-    fake_api.register_auth_request()
-    fake_api.register_requests()
 
-    await setup_integration(hass, config_entry, now=LAST_MONTH_CUTOFF_NOW)
+    await setup_integration(hass, mock_config_entry)
 
     assert _state(hass, LAST_MONTH_ENTITY_ID.format(key)) == expected
 
 
 @pytest.mark.parametrize(
-    ("config_entry", "now", "expected"),
+    ("entry_options", "expected"),
     [
         # All contracts of a meter point, each limited to its own time range, the last day only once.
-        (
-            options(include_inactive_contract_account_data=True),
-            NOW,
+        pytest.param(
+            {CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True},
             [
                 ("001", "", "2023-10-18", "2026-06-27"),
                 ("001", "", "2026-05-01", "2026-05-31"),
@@ -516,11 +497,11 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
                 ("003", "", "2023-10-18", "2026-06-16"),
                 ("003", "", "2026-05-01", "2026-05-31"),
             ],
+            marks=pytest.mark.freeze_time(NOW),
         ),
         # Without the data of inactive contract accounts only the active contracts.
-        (
-            options(include_inactive_contract_account_data=False),
-            NOW,
+        pytest.param(
+            {CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: False},
             [
                 ("001", "", "2023-10-18", "2026-06-27"),
                 ("001", "", "2026-05-01", "2026-05-31"),
@@ -528,11 +509,11 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
                 ("002", "", "2026-06-17", "2026-06-27"),
                 ("002", "", "2026-06-27", "2026-06-27"),
             ],
+            marks=pytest.mark.freeze_time(NOW),
         ),
         # Contract change within the previous month: both contracts request their part of the month.
-        (
-            options(include_inactive_contract_account_data=True),
-            datetime(2026, 7, 5, 12, 0, tzinfo=VIENNA),
+        pytest.param(
+            {CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True},
             [
                 ("001", "", "2023-10-18", "2026-06-27"),
                 ("001", "", "2026-06-01", "2026-06-27"),
@@ -543,11 +524,11 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
                 ("003", "", "2023-10-18", "2026-06-16"),
                 ("003", "", "2026-06-01", "2026-06-16"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 7, 5, 12, 0, tzinfo=VIENNA)),
         ),
         # Previous month after the last day with data: no request for the previous month.
-        (
-            options(include_inactive_contract_account_data=True),
-            datetime(2026, 9, 1, 12, 0, tzinfo=VIENNA),
+        pytest.param(
+            {CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True},
             [
                 ("001", "", "2023-10-18", "2026-06-27"),
                 ("001", "", "2026-06-27", "2026-06-27"),
@@ -555,11 +536,11 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
                 ("002", "", "2026-06-27", "2026-06-27"),
                 ("003", "", "2023-10-18", "2026-06-16"),
             ],
+            marks=pytest.mark.freeze_time(datetime(2026, 9, 1, 12, 0, tzinfo=VIENNA)),
         ),
         # Meter points without an active contract, contract account 004 has no profile data.
-        (
-            options(show_inactive_meter_points=True, include_inactive_contract_account_data=True),
-            NOW,
+        pytest.param(
+            {CONF_SHOW_INACTIVE_METER_POINTS: True, CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True},
             [
                 ("001", "", "2023-10-18", "2026-06-27"),
                 ("001", "", "2026-05-01", "2026-05-31"),
@@ -575,9 +556,9 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
                 ("006", "", "2026-05-01", "2026-05-31"),
                 ("006", "", "2026-06-01", "2026-06-01"),
             ],
+            marks=pytest.mark.freeze_time(NOW),
         ),
     ],
-    indirect=["config_entry"],
     ids=[
         "inactive_contracts",
         "active_contracts_only",
@@ -586,20 +567,18 @@ async def test_last_month_profiles_with_cutoff_in_previous_month(
         "inactive_meter_points",
     ],
 )
+@pytest.mark.usefixtures("mock_portal")
 async def test_meter_point_profile_request_time_ranges(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    now: datetime,
     expected: list[ProfileRequestKey],
 ) -> None:
     """Test the time ranges of the L1 profile requests of the meter points."""
     # Other dates request other time ranges than the consumption profiles in the responses.
     fake_api.allow_unknown_profile_requests = True
-    fake_api.register_auth_request()
-    fake_api.register_requests()
 
-    await setup_integration(hass, config_entry, now=now)
+    await setup_integration(hass, mock_config_entry)
 
     assert sorted(key for key in profile_request_keys(fake_api.aioclient_mock) if not key[1]) == expected
 
@@ -623,7 +602,7 @@ async def test_meter_point_profile_request_time_ranges(
 )
 async def test_meter_point_profile_request_time_ranges_of_contract(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     changes: dict[str, Any],
     expected: list[ProfileRequestKey],
@@ -633,11 +612,11 @@ async def test_meter_point_profile_request_time_ranges_of_contract(
     fake_api.register_auth_request()
     fake_api.register_requests(
         contract_accounts={
-            "001": _contract_account_with(CONTRACT_ACCOUNT_DATA_1, MPAN_1, changes),
+            "001": _contract_account_with(fake_api.account.contract_accounts["001"], MPAN_1, changes),
         },
     )
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
     assert (
         sorted(key for key in profile_request_keys(fake_api.aioclient_mock) if key[0] == "001" and not key[1])
@@ -646,18 +625,19 @@ async def test_meter_point_profile_request_time_ranges_of_contract(
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.usefixtures("mock_portal")
 async def test_integer_profile_values(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that profile values returned as integers are summed as floats and included in the totals."""
     fake_api.profile_responses[("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28")] = [
         item | {"sum": item["sum"] | {"value": int(item["sum"]["value"])}}
-        for item in SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2
+        for item in fake_api.account.profile_responses[("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28")]
     ]
 
-    await _setup(hass, config_entry, fake_api)
+    await setup_integration(hass, mock_config_entry)
 
     assert _state(hass, ENERGY_COMMUNITY_EXPORT_ENTITY_ID) == "600.0"
     assert float(_state(hass, TOTAL_EXPORT_ENTITY_ID)) == pytest.approx(
@@ -668,7 +648,7 @@ async def test_integer_profile_values(
 
 async def test_energy_community_without_consent(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
@@ -677,202 +657,177 @@ async def test_energy_community_without_consent(
     fake_api.register_requests(consents=[])
 
     with caplog.at_level(logging.WARNING, logger="custom_components.netzooe_eservice.coordinator"):
-        await setup_integration(hass, config_entry)
+        await setup_integration(hass, mock_config_entry)
 
-    assert config_entry.state is ConfigEntryState.LOADED
+    assert mock_config_entry.state is ConfigEntryState.LOADED
     assert hass.states.get(CONTRIBUTION_FACTOR_ENTITY_ID) is None
     assert "No consent found for energy community" in caplog.text
 
 
-@pytest.mark.parametrize(
-    "config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"], ids=["frequent_updates_disabled"]
-)
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_removed_energy_community_sensors_update_without_errors(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test that removed energy communities are removed without errors."""
-    await _setup(hass, config_entry, fake_api)
-
     assert hass.states.get(CONTRIBUTION_FACTOR_ENTITY_ID) is not None
 
-    _register_full_update(fake_api, aioclient_mock, consents=[])
-    await refresh(hass, config_entry)
+    _register_full_update(fake_api, consents=[])
+    await next_update(hass, freezer)
 
     assert hass.states.get(CONTRIBUTION_FACTOR_ENTITY_ID) is None
     assert not [record for record in caplog.records if record.levelno >= logging.ERROR]
 
 
-@pytest.mark.parametrize(
-    "config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"], ids=["frequent_updates_disabled"]
-)
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_full_update_removes_revoked_energy_community(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that a full update removes an energy community that was revoked, if revoked ones are not shown."""
-    await _setup(hass, config_entry, fake_api)
-
     assert _state(hass, STATUS_ENTITY_ID) == "active"
 
-    _register_full_update(fake_api, aioclient_mock, consents=_consents_with({"status": "REVOKED"}))
-    await refresh(hass, config_entry)
+    _register_full_update(fake_api, consents=_consents_with(fake_api, {"status": "REVOKED"}))
+    await next_update(hass, freezer)
 
     assert hass.states.get(STATUS_ENTITY_ID) is None
 
 
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_authentication_error_starts_reauth(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that an authentication error starts the reauth flow."""
-    await _setup(hass, config_entry, fake_api)
-
-    aioclient_mock.clear_requests()
+    fake_api.aioclient_mock.clear_requests()
     fake_api.register_dashboard_request(status=HTTPStatus.UNAUTHORIZED)
     fake_api.register_consents_request(status=HTTPStatus.UNAUTHORIZED)
     fake_api.register_auth_request(status=HTTPStatus.UNAUTHORIZED)
 
-    await refresh(hass, config_entry)
+    await next_update(hass, freezer)
 
-    assert config_entry.runtime_data.last_update_success is False
-    assert [flow["context"]["source"] for flow in config_entry.async_get_active_flows(hass, {SOURCE_REAUTH})] == [
-        SOURCE_REAUTH,
-    ]
+    assert _state(hass, TOTAL_EXPORT_ENTITY_ID) == STATE_UNAVAILABLE
+    assert [
+        (flow["step_id"], flow["handler"], flow["context"].get("source"), flow["context"].get("entry_id"))
+        for flow in hass.config_entries.flow.async_progress()
+    ] == [("reauth_confirm", DOMAIN, SOURCE_REAUTH, mock_config_entry.entry_id)]
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_only_most_recent_consent_is_used(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that only the most recent consent of the consent history is used."""
     older_consent: dict[str, Any] = next(
         consent | {"validThrough": {"from": "2020-01-01", "to": "2020-12-31"}, "contributionPercentage": "10"}
-        for consent in CONSENTS_DATA
+        for consent in fake_api.account.consents
         if consent["contributionPercentage"] == "93"
     )
 
     fake_api.register_auth_request()
-    fake_api.register_requests(consents=[*CONSENTS_DATA, older_consent])
+    fake_api.register_requests(consents=[*fake_api.account.consents, older_consent])
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
     assert _contribution_factor(hass) == "93"
 
 
 @pytest.mark.parametrize(
-    ("config_entry", "status"),
+    ("entry_options", "status"),
     [
         (FREQUENT_UPDATES_ENABLED, "revoked"),
         # Only active energy communities count, even if the status is similar.
         (FREQUENT_UPDATES_ENABLED, "active_unchangeable"),
     ],
-    indirect=["config_entry"],
     ids=["revoked", "active_unchangeable"],
 )
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_totals_only_include_active_energy_communities(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
     status: str,
 ) -> None:
     """Test that an energy community that is no longer active is removed from the totals by a frequent update."""
-    await _setup(hass, config_entry, fake_api)
-
     total_before: float = float(_state(hass, TOTAL_EXPORT_ENTITY_ID))
     energy_community_export: float = float(_state(hass, ENERGY_COMMUNITY_EXPORT_ENTITY_ID))
     assert energy_community_export > 0
 
-    _register_consents_update(fake_api, aioclient_mock, consents=_consents_with({"status": status.upper()}))
-    await refresh(hass, config_entry)
+    _register_consents_update(fake_api, consents=_consents_with(fake_api, {"status": status.upper()}))
+    await next_update(hass, freezer, interval=SCAN_INTERVAL)
 
     assert _state(hass, STATUS_ENTITY_ID) == status
     assert float(_state(hass, TOTAL_EXPORT_ENTITY_ID)) == pytest.approx(total_before - energy_community_export)
 
 
-@pytest.mark.parametrize(
-    "config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"], ids=["frequent_updates_enabled"]
-)
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_ENABLED], ids=["frequent_updates_enabled"])
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_frequent_updates_keep_data_of_energy_community_without_consent(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that a frequent update keeps the previous data if the consent of an energy community is missing."""
-    await _setup(hass, config_entry, fake_api)
-
     total_before: str = _state(hass, TOTAL_EXPORT_ENTITY_ID)
 
-    _register_consents_update(fake_api, aioclient_mock, consents=[])
-    await refresh(hass, config_entry)
+    _register_consents_update(fake_api, consents=[])
+    await next_update(hass, freezer, interval=SCAN_INTERVAL)
 
     assert _contribution_factor(hass) == "93"
     assert _state(hass, STATUS_ENTITY_ID) == "active"
     assert _state(hass, TOTAL_EXPORT_ENTITY_ID) == total_before
 
 
-@pytest.mark.parametrize(
-    "config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"], ids=["frequent_updates_disabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
+@pytest.mark.usefixtures("init_integration")
 async def test_api_error_logged_once_until_available_again(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test that API errors are logged once and the recovery is logged."""
-    await _setup(hass, config_entry, fake_api)
-
     for _ in range(2):
-        _register_consents_update(fake_api, aioclient_mock, status=500)
-        await refresh(hass, config_entry)
+        _register_consents_update(fake_api, status=500)
+        await next_update(hass, freezer)
 
     assert caplog.text.count("Update failed, using cached data") == 1
 
-    _register_full_update(fake_api, aioclient_mock)
+    _register_full_update(fake_api)
 
     with caplog.at_level(logging.INFO, logger="custom_components.netzooe_eservice.coordinator"):
-        await refresh(hass, config_entry)
+        await next_update(hass, freezer)
 
     assert "The eService portal is available again" in caplog.text
 
 
-@pytest.mark.parametrize(
-    "config_entry", [FREQUENT_UPDATES_DISABLED], indirect=["config_entry"], ids=["frequent_updates_disabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_new_energy_community_sensors_added_without_reload(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that the sensors of a new energy community are added after an update."""
     fake_api.register_auth_request()
     fake_api.register_requests(consents=[])
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
     assert hass.states.get(CONTRIBUTION_FACTOR_ENTITY_ID) is None
 
-    _register_full_update(fake_api, aioclient_mock)
-    await refresh(hass, config_entry)
+    _register_full_update(fake_api)
+    await next_update(hass, freezer)
 
     assert _contribution_factor(hass) == "93"
 
@@ -883,29 +838,28 @@ async def test_new_energy_community_sensors_added_without_reload(
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_unknown_status(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     status: str | None,
     expected: str,
 ) -> None:
     """Test that an unknown or missing consent status is shown as unknown."""
     fake_api.register_auth_request()
-    fake_api.register_requests(consents=_consents_with({"status": status}))
+    fake_api.register_requests(consents=_consents_with(fake_api, {"status": status}))
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
     assert _state(hass, STATUS_ENTITY_ID) == expected
 
 
+@pytest.mark.usefixtures("init_integration")
 async def test_failed_request_cancels_remaining_requests(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test that a failed consumption profile request cancels the remaining requests."""
-    await _setup(hass, config_entry, fake_api)
-
     failed: bool = False
     waiting: int = 0
     cancelled: int = 0
@@ -927,50 +881,42 @@ async def test_failed_request_cancels_remaining_requests(
         finally:
             cancelled += 1
 
-    aioclient_mock.clear_requests()
+    fake_api.aioclient_mock.clear_requests()
     fake_api.register_auth_request()
     # Registered first, so it takes precedence over the profile response of register_requests().
-    aioclient_mock.post(PROFILE_URL, side_effect=profile_side_effect)
+    fake_api.aioclient_mock.post(PROFILE_URL, side_effect=profile_side_effect)
     fake_api.register_requests()
 
-    await refresh(hass, config_entry)
+    await next_update(hass, freezer)
 
-    assert config_entry.runtime_data.last_update_success
+    assert "Update failed, using cached data" in caplog.text
     assert waiting > 0
     assert cancelled == waiting
 
 
-@pytest.mark.parametrize(
-    "config_entry", [FREQUENT_UPDATES_ENABLED], indirect=["config_entry"], ids=["frequent_updates_enabled"]
-)
+@pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_ENABLED], ids=["frequent_updates_enabled"])
+@pytest.mark.freeze_time(DST_END)
+@pytest.mark.usefixtures("init_integration")
 async def test_frequent_updates_full_update_across_dst_change(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that the full scan interval is measured in real time when DST ends."""
-    await _setup(hass, config_entry, fake_api)
+    # 3.5 hours later, but only 2.5 hours on the wall clock, because DST ends at 03:00.
+    _register_full_update(fake_api)
+    await next_update(hass, freezer, interval=timedelta(hours=3, minutes=30))
 
-    # 3.5 hours apart, but only 2.5 hours on the wall clock, because DST ends at 03:00.
-    last_full_update: datetime = datetime(2026, 10, 25, 1, 0, tzinfo=VIENNA)
-    now: datetime = datetime(2026, 10, 25, 3, 30, tzinfo=VIENNA)
-
-    _register_full_update(fake_api, aioclient_mock)
-    await refresh(hass, config_entry, now=last_full_update)
-    assert _contract_account_requested(aioclient_mock)
-
-    _register_full_update(fake_api, aioclient_mock)
-    await refresh(hass, config_entry, now=now)
-
-    assert _contract_account_requested(aioclient_mock)
+    assert _contract_account_requested(fake_api.aioclient_mock)
 
 
+# The four updates end on the same day, the responses only contain the consumption profiles of this day.
+@pytest.mark.freeze_time(MORNING)
+@pytest.mark.usefixtures("init_integration")
 async def test_missing_consent_logged_once(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test that a missing consent is logged only once until the consent is returned again."""
@@ -981,10 +927,8 @@ async def test_missing_consent_logged_once(
 
     async def refresh_with(consents: list[dict[str, Any]] | None) -> None:
         """Refresh the coordinator with the given consents."""
-        _register_full_update(fake_api, aioclient_mock, consents=consents)
-        await refresh(hass, config_entry)
-
-    await _setup(hass, config_entry, fake_api)
+        _register_full_update(fake_api, consents=consents)
+        await next_update(hass, freezer)
 
     with caplog.at_level(logging.WARNING, logger="custom_components.netzooe_eservice.coordinator"):
         await refresh_with([])
@@ -999,11 +943,12 @@ async def test_missing_consent_logged_once(
         assert warnings() == 2 * logged
 
 
+@pytest.mark.usefixtures("mock_portal")
 async def test_meter_point_without_active_contract_logged_once(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Test that a meter point without an active contract is logged once, and again after it was active again."""
@@ -1016,33 +961,37 @@ async def test_meter_point_without_active_contract_logged_once(
         )
 
     with caplog.at_level(logging.WARNING, logger="custom_components.netzooe_eservice.coordinator"):
-        await _setup(hass, config_entry, fake_api)
+        await setup_integration(hass, mock_config_entry)
+
         assert warnings() == 1
 
-        _register_full_update(fake_api, aioclient_mock)
-        await refresh(hass, config_entry)
+        _register_full_update(fake_api)
+        await next_update(hass, freezer)
 
-        assert _contract_account_requested(aioclient_mock)
+        assert _contract_account_requested(fake_api.aioclient_mock)
         assert warnings() == 1
 
         _register_full_update(
             fake_api,
-            aioclient_mock,
             contract_accounts={
-                "004": _contract_account_with(CONTRACT_ACCOUNT_DATA_4, INACTIVE_METER_POINT, {"active": True}),
+                "004": _contract_account_with(
+                    fake_api.account.contract_accounts["004"], INACTIVE_METER_POINT, {"active": True}
+                ),
             },
         )
-        await refresh(hass, config_entry)
+        await next_update(hass, freezer)
         logged: int = warnings()
         assert logged == 1
 
-        _register_full_update(fake_api, aioclient_mock)
-        await refresh(hass, config_entry)
+        _register_full_update(fake_api)
+        await next_update(hass, freezer)
         assert warnings() == logged + 1
 
 
 @pytest.mark.parametrize(
-    "config_entry", [options(show_inactive_meter_points=True)], indirect=["config_entry"], ids=["inactive_meter_points"]
+    "entry_options",
+    [{CONF_SHOW_INACTIVE_METER_POINTS: True}],
+    ids=["inactive_meter_points"],
 )
 @pytest.mark.parametrize(
     ("changes", "supplier"),
@@ -1068,7 +1017,7 @@ async def test_meter_point_without_active_contract_logged_once(
 )
 async def test_inactive_meter_point_uses_most_recently_ended_contract(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     changes: dict[str, Any],
     supplier: str,
@@ -1079,7 +1028,7 @@ async def test_inactive_meter_point_uses_most_recently_ended_contract(
     # Both contracts of the meter point have ended, the one of contract account 003 on 2026-06-16.
     # The portal returns contract account 002 before 003.
     contract_account: dict[str, Any] = _contract_account_with(
-        CONTRACT_ACCOUNT_DATA_2,
+        fake_api.account.contract_accounts["002"],
         "AT0000000000000000000000011111112",
         {"active": False} | changes,
     )
@@ -1087,16 +1036,16 @@ async def test_inactive_meter_point_uses_most_recently_ended_contract(
     fake_api.register_auth_request()
     fake_api.register_requests(contract_accounts={"002": contract_account})
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
     assert _state(hass, SUPPLIER_ENTITY_ID) == supplier
 
 
 @pytest.mark.parametrize(
-    ("config_entry", "expected"),
+    ("entry_options", "expected"),
     [
         (
-            options(show_inactive_meter_points=True, include_inactive_contract_account_data=False),
+            {CONF_SHOW_INACTIVE_METER_POINTS: True, CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: False},
             {
                 # Active contract: only its own energy communities.
                 "11111112_cc100087_energy_community_import_l3": "10.0",
@@ -1108,7 +1057,7 @@ async def test_inactive_meter_point_uses_most_recently_ended_contract(
             },
         ),
         (
-            options(show_inactive_meter_points=True, include_inactive_contract_account_data=True),
+            {CONF_SHOW_INACTIVE_METER_POINTS: True, CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: True},
             {
                 # Active contract: also the energy communities of the ended contract (003).
                 "11111112_cc100087_energy_community_import_l3": "610.0",
@@ -1119,22 +1068,17 @@ async def test_inactive_meter_point_uses_most_recently_ended_contract(
             },
         ),
     ],
-    indirect=["config_entry"],
     ids=["active_contracts_only", "inactive_contracts"],
 )
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "init_integration")
 async def test_energy_community_data_of_inactive_contract_accounts(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeNetzOOEeServiceAPI,
     expected: dict[str, str | None],
 ) -> None:
     """Test that ended contracts are only included if the data of inactive contract accounts is included.
 
     This also applies to a meter point without an active contract, which uses the most recently ended contract.
     """
-    await _setup(hass, config_entry, fake_api)
-
     states: dict[str, str | None] = {}
 
     for key in expected:
@@ -1147,20 +1091,20 @@ async def test_energy_community_data_of_inactive_contract_accounts(
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_consent_matched_by_service_provider_position(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that a service provider code elsewhere in the energy community ID does not match the consent."""
     # "9999DYNA" is part of the ID "ATCC9999DYNAMCC100087000000000002", but not at the service provider position.
     other_consent: dict[str, Any] = next(
         consent | {"serviceProvider": "9999DYNA", "contributionPercentage": "1"}
-        for consent in CONSENTS_DATA
+        for consent in fake_api.account.consents
         if consent["contributionPercentage"] == "93"
     )
 
     fake_api.register_auth_request()
-    fake_api.register_requests(consents=[other_consent, *CONSENTS_DATA])
+    fake_api.register_requests(consents=[other_consent, *fake_api.account.consents])
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
     assert _contribution_factor(hass) == "93"

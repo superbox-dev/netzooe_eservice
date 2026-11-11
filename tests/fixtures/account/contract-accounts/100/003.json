@@ -1,0 +1,170 @@
+{
+  "contractAccountNumber": "003",
+  "businessPartnerNumber": "200",
+  "active": false,
+  "branch": "STROM",
+  "contracts": [
+    {
+      "branch": "STROM",
+      "scaleType": "EEG 7ngem",
+      "active": false,
+      "moveInDate": "2020-06-08",
+      "moveOutDate": "2026-06-16",
+      "pointOfDelivery": {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
+        "meter": {
+          "meterNumber": "3000000"
+        },
+        "monthlyTrend": {
+          "consumptionOld": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "consumptionNew": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "timerangeOld": {
+            "from": "2026-06-28T17:11:06.851202621",
+            "to": "2026-06-29T17:11:06.851203478"
+          },
+          "timerangeNew": {
+            "from": "2026-06-28T17:11:06.85120513",
+            "to": "2026-06-29T17:11:06.851205241"
+          }
+        },
+        "yearlyTrend": {
+          "consumptionOld": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "consumptionNew": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "timerangeOld": {
+            "from": "2026-06-28T17:11:06.851206116",
+            "to": "2026-06-29T17:11:06.85120623"
+          },
+          "timerangeNew": {
+            "from": "2026-06-28T17:11:06.851206505",
+            "to": "2026-06-29T17:11:06.85120663"
+          }
+        },
+        "availableTimeRange": {
+          "from": "2023-10-18",
+          "to": "2026-06-16"
+        },
+        "lastReadings": {}
+      },
+      "powerGenerationUnit": false,
+      "energyCommunityData": {
+        "status": "HISTORICAL",
+        "timeslices": [
+          {
+            "energyCommunityId": "AT00300000000RC100930000000965743",
+            "energyCommunityName": "wseg 07614 0523 UW Partenstein",
+            "from": "2024-05-06",
+            "to": "2024-05-07",
+            "status": "ACTIVE",
+            "profiles": [
+              {
+                "from": "2024-05-06",
+                "to": "2024-05-07",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR"
+              },
+              {
+                "from": "2024-05-06",
+                "to": "2024-05-07",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_OWN_COVERAGE"
+              }
+            ],
+            "profileDataAvailableFrom": "2024-05-06",
+            "profileDataAvailableTo": "2024-05-07"
+          },
+          {
+            "energyCommunityId": "AT00300000000RC100930000000965743",
+            "energyCommunityName": "wseg 07614 0523 UW Partenstein",
+            "from": "2024-09-10",
+            "to": "2025-09-30",
+            "status": "ACTIVE",
+            "profiles": [
+              {
+                "from": "2024-09-10",
+                "to": "2025-09-30",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR"
+              },
+              {
+                "from": "2024-09-10",
+                "to": "2025-09-30",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_OWN_COVERAGE"
+              }
+            ],
+            "profileDataAvailableFrom": "2024-09-10",
+            "profileDataAvailableTo": "2025-09-30"
+          },
+          {
+            "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+            "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+            "from": "2026-01-26",
+            "to": "2026-06-16",
+            "status": "ACTIVE",
+            "profiles": [
+              {
+                "from": "2026-01-26",
+                "to": "2026-06-16",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR"
+              },
+              {
+                "from": "2026-01-26",
+                "to": "2026-06-16",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_OWN_COVERAGE"
+              }
+            ],
+            "profileDataAvailableFrom": "2026-01-26",
+            "profileDataAvailableTo": "2026-06-16"
+          },
+          {
+            "energyCommunityId": "AT00300000000RC103550000000985681",
+            "energyCommunityName": "EEG Oberösterreich RID-11",
+            "from": "2026-05-21",
+            "to": "2026-06-16",
+            "status": "ACTIVE",
+            "profiles": [
+              {
+                "from": "2026-05-21",
+                "to": "2026-06-16",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR"
+              },
+              {
+                "from": "2026-05-21",
+                "to": "2026-06-16",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_OWN_COVERAGE"
+              }
+            ],
+            "profileDataAvailableFrom": "2026-05-21",
+            "profileDataAvailableTo": "2026-06-16"
+          }
+        ],
+        "energyCommunityActive": true
+      },
+      "supplier": {
+        "id": "AT113021",
+        "name": "easy green energy GmbH & Co KG"
+      },
+      "synthProfile": "Haushalt"
+    }
+  ]
+}

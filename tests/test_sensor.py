@@ -5,11 +5,17 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from typing import Final
 
 import pytest
+from homeassistant.helpers import entity_registry as er
+from pytest_homeassistant.common import snapshot_platform
 
-from tests import options
+from custom_components.netzooe_eservice.const import CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
+from custom_components.netzooe_eservice.const import CONF_SHOW_INACTIVE_METER_POINTS
+from custom_components.netzooe_eservice.const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
 from tests import setup_integration
+from tests.const import NOW
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -17,51 +23,44 @@ if TYPE_CHECKING:
     from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
-    from tests.conftest import FakeNetzOOEeServiceAPI
+
+pytestmark: Final = pytest.mark.freeze_time(NOW)
 
 
 @pytest.mark.parametrize("language", ["de", "en"], ids=["de", "en"])
 @pytest.mark.parametrize(
-    "config_entry",
+    "entry_options",
     [
-        options(
-            show_revoked_energy_communities=show_revoked,
-            include_inactive_contract_account_data=include_inactive,
-            show_inactive_meter_points=show_inactive,
-        )
+        {
+            CONF_SHOW_REVOKED_ENERGY_COMMUNITIES: show_revoked,
+            CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA: include_inactive,
+            CONF_SHOW_INACTIVE_METER_POINTS: show_inactive,
+        }
         for show_inactive in (False, True)
         for show_revoked, include_inactive in ((True, True), (True, False), (False, False), (False, True))
     ],
-    indirect=["config_entry"],
     ids=[
         f"{meter_points}-{options}"
         for meter_points in ("active_meter_points", "inactive_meter_points")
         for options in ("revoked_inactive_contracts", "revoked", "default", "inactive_contracts")
     ],
 )
-@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+@pytest.mark.usefixtures("entity_registry_enabled_by_default", "mock_portal")
 async def test_sensors(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeNetzOOEeServiceAPI,
+    entity_registry: er.EntityRegistry,
+    mock_config_entry: MockConfigEntry,
     snapshot: SnapshotAssertion,
     language: str,
 ) -> None:
-    """Test the states of all sensors."""
-    fake_api.register_auth_request()
-    fake_api.register_requests()
-
+    """Test the entity registry entries and states of all sensors."""
     hass.config.language = language
     # The portal returns the maximum and minimum in UTC, the timelines show them in the local time of Austria.
     await hass.config.async_set_time_zone("Europe/Vienna")
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
-    states: dict[str, State | None] = {
-        entity_id: hass.states.get(entity_id) for entity_id in sorted(hass.states.async_entity_ids("sensor"))
-    }
-
-    assert states == snapshot
+    await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
 
 
 @pytest.mark.parametrize(
@@ -72,22 +71,39 @@ async def test_sensors(
     ],
     ids=["meter_point_l1", "energy_community"],
 )
+@pytest.mark.usefixtures("init_integration")
 async def test_sensor_timeline_recorded(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeNetzOOEeServiceAPI,
     entity_id: str,
     *,
     unrecorded: bool,
 ) -> None:
     """Test that only the small timeline of the L1 sensors is recorded, not the growing one of energy communities."""
-    fake_api.register_auth_request()
-    fake_api.register_requests()
-
-    await setup_integration(hass, config_entry)
-
     state: State | None = hass.states.get(entity_id)
 
     assert state is not None
     assert state.state_info is not None
     assert ("timeline" in state.state_info["unrecorded_attributes"]) is unrecorded
+
+
+@pytest.mark.parametrize(
+    "entity_id",
+    [
+        "sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3",
+        "sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2",
+        "sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l3",
+    ],
+    ids=["energy_community_export_l3", "last_month_energy_community_export_l2", "supplier_export_l3"],
+)
+@pytest.mark.usefixtures("init_integration")
+async def test_sensors_disabled_by_default(
+    hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
+    entity_id: str,
+) -> None:
+    """Test that the totals of a meter point are disabled by default, its energy community sensors show them."""
+    assert hass.states.get(entity_id) is None
+
+    entry: er.RegistryEntry | None = entity_registry.async_get(entity_id)
+    assert entry is not None
+    assert entry.disabled_by is er.RegistryEntryDisabler.INTEGRATION

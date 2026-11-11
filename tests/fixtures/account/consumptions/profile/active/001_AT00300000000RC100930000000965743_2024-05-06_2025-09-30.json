@@ -1,0 +1,82 @@
+[
+  {
+    "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
+    "from": "2024-10-07T00:00:00",
+    "to": "2025-09-30T23:59:59",
+    "type": "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+    "energyDirection": "GENERATION",
+    "sum": {
+      "value": 8000.0,
+      "unit": "KWH"
+    },
+    "energyCommunityId": "AT00300000000RC100930000000965743",
+    "energyCommunityName": "wseg 07614 0523 UW Partenstein",
+    "granularity": "YEAR",
+    "average": {
+      "value": 4000.0,
+      "unit": "KWH"
+    },
+    "maximum": {
+      "value": 4500.0,
+      "unit": "KWH",
+      "dateTime": "2024-12-31T23:00:00Z"
+    },
+    "minimum": {
+      "value": 3500.0,
+      "unit": "KWH",
+      "dateTime": "2024-10-06T22:00:00Z"
+    },
+    "profileValues": [
+      {
+        "datetime": "2024-10-06T22:00:00Z",
+        "value": 3500.0,
+        "status": "VALID"
+      },
+      {
+        "datetime": "2024-12-31T23:00:00Z",
+        "value": 4500.0,
+        "status": "VALID"
+      }
+    ]
+  },
+  {
+    "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
+    "from": "2024-10-07T00:00:00",
+    "to": "2025-09-30T23:59:59",
+    "type": "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+    "energyDirection": "GENERATION",
+    "sum": {
+      "value": 7000.0,
+      "unit": "KWH"
+    },
+    "energyCommunityId": "AT00300000000RC100930000000965743",
+    "energyCommunityName": "wseg 07614 0523 UW Partenstein",
+    "granularity": "YEAR",
+    "average": {
+      "value": 3500.0,
+      "unit": "KWH"
+    },
+    "maximum": {
+      "value": 4000.0,
+      "unit": "KWH",
+      "dateTime": "2024-12-31T23:00:00Z"
+    },
+    "minimum": {
+      "value": 3000.0,
+      "unit": "KWH",
+      "dateTime": "2024-10-06T22:00:00Z"
+    },
+    "profileValues": [
+      {
+        "datetime": "2024-10-06T22:00:00Z",
+        "value": 3000.0,
+        "status": "VALID"
+      },
+      {
+        "datetime": "2024-12-31T23:00:00Z",
+        "value": 4000.0,
+        "status": "VALID"
+      }
+    ]
+  }
+]

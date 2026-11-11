@@ -1,0 +1,102 @@
+{
+  "contractAccountNumber": "004",
+  "businessPartnerNumber": "200",
+  "active": false,
+  "branch": "STROM",
+  "contracts": [
+    {
+      "branch": "STROM",
+      "scaleType": "EEG 7ngem",
+      "active": false,
+      "moveInDate": "2021-03-01",
+      "moveOutDate": "2026-05-15",
+      "pointOfDelivery": {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111113",
+        "meter": {
+          "meterNumber": "3000000"
+        },
+        "monthlyTrend": {
+          "consumptionOld": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "consumptionNew": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "timerangeOld": {
+            "from": "2026-06-28T17:11:06.851202621",
+            "to": "2026-06-29T17:11:06.851203478"
+          },
+          "timerangeNew": {
+            "from": "2026-06-28T17:11:06.85120513",
+            "to": "2026-06-29T17:11:06.851205241"
+          }
+        },
+        "yearlyTrend": {
+          "consumptionOld": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "consumptionNew": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "timerangeOld": {
+            "from": "2026-06-28T17:11:06.851206116",
+            "to": "2026-06-29T17:11:06.85120623"
+          },
+          "timerangeNew": {
+            "from": "2026-06-28T17:11:06.851206505",
+            "to": "2026-06-29T17:11:06.85120663"
+          }
+        },
+        "lastReadings": {}
+      },
+      "powerGenerationUnit": false,
+      "energyCommunityData": {
+        "status": "HISTORICAL",
+        "timeslices": [
+          {
+            "energyCommunityId": "AT00300000000RC103550000000985681",
+            "energyCommunityName": "EEG Oberösterreich RID-11",
+            "from": "2026-03-01",
+            "to": "2026-05-15",
+            "status": "ACTIVE",
+            "profiles": [
+              {
+                "from": "2026-03-01",
+                "to": "2026-05-15",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR"
+              },
+              {
+                "from": "2026-03-01",
+                "to": "2026-05-15",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_OWN_COVERAGE"
+              }
+            ],
+            "profileDataAvailableFrom": "2026-03-01",
+            "profileDataAvailableTo": "2026-05-15"
+          }
+        ],
+        "energyCommunityActive": true
+      },
+      "supplier": {
+        "id": "AT113021",
+        "name": "easy green energy GmbH & Co KG"
+      },
+      "synthProfile": "Haushalt"
+    },
+    {
+      "branch": "GAS",
+      "active": true,
+      "synthProfile": "Haushalt"
+    }
+  ]
+}
