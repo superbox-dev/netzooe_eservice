@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 
 @pytest.mark.parametrize("language", ["de", "en"], ids=["de", "en"])
 @pytest.mark.parametrize(
-    "config_entry",
+    "mock_config_entry",
     [
         options(
             show_revoked_energy_communities=show_revoked,
@@ -34,7 +34,7 @@ if TYPE_CHECKING:
         for show_inactive in (False, True)
         for show_revoked, include_inactive in ((True, True), (True, False), (False, False), (False, True))
     ],
-    indirect=["config_entry"],
+    indirect=["mock_config_entry"],
     ids=[
         f"{meter_points}-{options}"
         for meter_points in ("active_meter_points", "inactive_meter_points")
@@ -44,7 +44,7 @@ if TYPE_CHECKING:
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_sensors(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     snapshot: SnapshotAssertion,
     language: str,
@@ -57,9 +57,9 @@ async def test_sensors(
     # The portal returns the maximum and minimum in UTC, the timelines show them in the local time of Austria.
     await hass.config.async_set_time_zone("Europe/Vienna")
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
-    await snapshot_platform(hass, er.async_get(hass), snapshot, config_entry.entry_id)
+    await snapshot_platform(hass, er.async_get(hass), snapshot, mock_config_entry.entry_id)
 
 
 @pytest.mark.parametrize(
@@ -72,7 +72,7 @@ async def test_sensors(
 )
 async def test_sensor_timeline_recorded(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     entity_id: str,
     *,
@@ -82,7 +82,7 @@ async def test_sensor_timeline_recorded(
     fake_api.register_auth_request()
     fake_api.register_requests()
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
     state: State | None = hass.states.get(entity_id)
 

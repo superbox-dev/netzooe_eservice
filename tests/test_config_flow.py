@@ -8,7 +8,6 @@ from http import HTTPStatus
 from typing import TYPE_CHECKING
 
 import pytest
-from homeassistant import setup
 from homeassistant.config_entries import SOURCE_USER
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import CONF_PASSWORD
@@ -17,9 +16,10 @@ from homeassistant.data_entry_flow import FlowResultType
 from netzooe_eservice_api.error import APIError
 
 from custom_components.netzooe_eservice.const import DOMAIN
-from tests import setup_integration
 
 if TYPE_CHECKING:
+    from unittest.mock import AsyncMock
+
     from homeassistant.config_entries import ConfigFlowResult
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant.common import MockConfigEntry
@@ -31,12 +31,11 @@ if TYPE_CHECKING:
 async def test_user_flow(
     hass: HomeAssistant,
     fake_api: FakeNetzOOEeServiceAPI,
+    mock_setup_entry: AsyncMock,
 ) -> None:
     """Test that the user flow creates a config entry."""
     fake_api.register_auth_request()
     fake_api.register_requests()
-
-    assert await setup.async_setup_component(hass, DOMAIN, {})
 
     result_user_step: ConfigFlowResult = await hass.config_entries.flow.async_init(
         DOMAIN,
@@ -54,14 +53,15 @@ async def test_user_flow(
         },
     )
 
-    assert result_create_entry["type"] == FlowResultType.CREATE_ENTRY
+    assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
     assert result_create_entry["result"].title == "Netz OÖ eService (test)"
     assert result_create_entry["data"] == {
         "username": "test",
         "password": "test",
     }
 
-    assert hass.config_entries.async_entry_for_domain_unique_id(DOMAIN, "test")
+    assert result_create_entry["result"].unique_id == "test"
+    assert len(mock_setup_entry.mock_calls) == 1
 
 
 @pytest.mark.parametrize(
@@ -73,6 +73,7 @@ async def test_user_flow(
     ],
     ids=["cannot_connect", "invalid_auth", "unknown"],
 )
+@pytest.mark.usefixtures("mock_setup_entry")
 async def test_user_flow_failed(
     hass: HomeAssistant,
     fake_api: FakeNetzOOEeServiceAPI,
@@ -83,8 +84,6 @@ async def test_user_flow_failed(
     """Test that the user flow shows an error if the login fails and creates the entry after a successful retry."""
     fake_api.register_auth_request(exc=side_effect)
     fake_api.register_requests()
-
-    assert await setup.async_setup_component(hass, DOMAIN, {})
 
     result_user_step: ConfigFlowResult = await hass.config_entries.flow.async_init(
         DOMAIN,
@@ -102,7 +101,7 @@ async def test_user_flow_failed(
         },
     )
 
-    assert result_create_entry["type"] == FlowResultType.FORM
+    assert result_create_entry["type"] is FlowResultType.FORM
     assert result_create_entry["errors"] == {
         "base": expected_error,
     }
@@ -119,15 +118,15 @@ async def test_user_flow_failed(
         },
     )
 
-    assert result_retry["type"] == FlowResultType.CREATE_ENTRY
+    assert result_retry["type"] is FlowResultType.CREATE_ENTRY
 
 
 async def test_user_flow_already_configured(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
 ) -> None:
     """Test that the user flow aborts if the account is already configured."""
-    config_entry.add_to_hass(hass)
+    mock_config_entry.add_to_hass(hass)
 
     result_user_step: ConfigFlowResult = await hass.config_entries.flow.async_init(
         DOMAIN,
@@ -142,24 +141,25 @@ async def test_user_flow_already_configured(
         },
     )
 
-    assert result_abort["type"] == FlowResultType.ABORT
+    assert result_abort["type"] is FlowResultType.ABORT
     assert result_abort["reason"] == "already_configured"
 
 
+@pytest.mark.usefixtures("mock_setup_entry")
 async def test_reconfigure_flow(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that the reconfigure flow updates the credentials."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
-    config_entry.add_to_hass(hass)
+    mock_config_entry.add_to_hass(hass)
 
-    result: ConfigFlowResult = await config_entry.start_reconfigure_flow(hass)
+    result: ConfigFlowResult = await mock_config_entry.start_reconfigure_flow(hass)
 
-    assert result["type"] == FlowResultType.FORM
+    assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "reconfigure"
 
     result_user_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
@@ -172,14 +172,15 @@ async def test_reconfigure_flow(
 
     await hass.async_block_till_done()
 
-    assert result_user_step["type"] == FlowResultType.ABORT
+    assert result_user_step["type"] is FlowResultType.ABORT
     assert result_user_step["reason"] == "reconfigure_successful"
-    assert config_entry.data == {CONF_USERNAME: "test", CONF_PASSWORD: "new-password"}
+    assert mock_config_entry.data == {CONF_USERNAME: "test", CONF_PASSWORD: "new-password"}
 
 
+@pytest.mark.usefixtures("mock_setup_entry")
 async def test_reconfigure_flow_failed(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     aioclient_mock: AiohttpClientMocker,
 ) -> None:
@@ -187,9 +188,9 @@ async def test_reconfigure_flow_failed(
     fake_api.register_auth_request(exc=APIError("mocked api error"))
     fake_api.register_requests()
 
-    config_entry.add_to_hass(hass)
+    mock_config_entry.add_to_hass(hass)
 
-    result: ConfigFlowResult = await config_entry.start_reconfigure_flow(hass)
+    result: ConfigFlowResult = await mock_config_entry.start_reconfigure_flow(hass)
 
     result_reconfigure_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
         result["flow_id"],
@@ -199,7 +200,7 @@ async def test_reconfigure_flow_failed(
         },
     )
 
-    assert result_reconfigure_step["type"] == FlowResultType.FORM
+    assert result_reconfigure_step["type"] is FlowResultType.FORM
     assert result_reconfigure_step["step_id"] == "reconfigure"
     assert result_reconfigure_step["errors"] == {"base": "cannot_connect"}
 
@@ -216,22 +217,23 @@ async def test_reconfigure_flow_failed(
     )
     await hass.async_block_till_done()
 
-    assert result_retry["type"] == FlowResultType.ABORT
+    assert result_retry["type"] is FlowResultType.ABORT
     assert result_retry["reason"] == "reconfigure_successful"
 
 
+@pytest.mark.usefixtures("mock_setup_entry")
 async def test_reconfigure_flow_wrong_account(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that the reconfigure flow aborts for another account."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
-    config_entry.add_to_hass(hass)
+    mock_config_entry.add_to_hass(hass)
 
-    result: ConfigFlowResult = await config_entry.start_reconfigure_flow(hass)
+    result: ConfigFlowResult = await mock_config_entry.start_reconfigure_flow(hass)
 
     result_user_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
         result["flow_id"],
@@ -241,24 +243,25 @@ async def test_reconfigure_flow_wrong_account(
         },
     )
 
-    assert result_user_step["type"] == FlowResultType.ABORT
+    assert result_user_step["type"] is FlowResultType.ABORT
     assert result_user_step["reason"] == "wrong_account"
 
 
+@pytest.mark.usefixtures("mock_setup_entry")
 async def test_reauth_flow(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that the reauth flow only asks for the new password and updates it."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
-    config_entry.add_to_hass(hass)
+    mock_config_entry.add_to_hass(hass)
 
-    result: ConfigFlowResult = await config_entry.start_reauth_flow(hass)
+    result: ConfigFlowResult = await mock_config_entry.start_reauth_flow(hass)
 
-    assert result["type"] == FlowResultType.FORM
+    assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "reauth_confirm"
     assert result["data_schema"]
     assert list(result["data_schema"].schema.keys()) == ["password"]
@@ -273,14 +276,15 @@ async def test_reauth_flow(
 
     await hass.async_block_till_done()
 
-    assert result_confirm_step["type"] == FlowResultType.ABORT
+    assert result_confirm_step["type"] is FlowResultType.ABORT
     assert result_confirm_step["reason"] == "reauth_successful"
-    assert config_entry.data == {CONF_USERNAME: "test", CONF_PASSWORD: "new-password"}
+    assert mock_config_entry.data == {CONF_USERNAME: "test", CONF_PASSWORD: "new-password"}
 
 
+@pytest.mark.usefixtures("mock_setup_entry")
 async def test_reauth_flow_failed(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     aioclient_mock: AiohttpClientMocker,
 ) -> None:
@@ -288,9 +292,9 @@ async def test_reauth_flow_failed(
     fake_api.register_auth_request(exc=APIError("mocked api error", status=HTTPStatus.UNAUTHORIZED))
     fake_api.register_requests()
 
-    config_entry.add_to_hass(hass)
+    mock_config_entry.add_to_hass(hass)
 
-    result: ConfigFlowResult = await config_entry.start_reauth_flow(hass)
+    result: ConfigFlowResult = await mock_config_entry.start_reauth_flow(hass)
 
     result_confirm_step: ConfigFlowResult = await hass.config_entries.flow.async_configure(
         result["flow_id"],
@@ -299,10 +303,10 @@ async def test_reauth_flow_failed(
         },
     )
 
-    assert result_confirm_step["type"] == FlowResultType.FORM
+    assert result_confirm_step["type"] is FlowResultType.FORM
     assert result_confirm_step["step_id"] == "reauth_confirm"
     assert result_confirm_step["errors"] == {"base": "invalid_auth"}
-    assert config_entry.data == {CONF_USERNAME: "test", CONF_PASSWORD: "test"}
+    assert mock_config_entry.data == {CONF_USERNAME: "test", CONF_PASSWORD: "test"}
 
     aioclient_mock.clear_requests()
     fake_api.register_auth_request()
@@ -316,24 +320,19 @@ async def test_reauth_flow_failed(
     )
     await hass.async_block_till_done()
 
-    assert result_retry["type"] == FlowResultType.ABORT
+    assert result_retry["type"] is FlowResultType.ABORT
     assert result_retry["reason"] == "reauth_successful"
-    assert config_entry.data == {CONF_USERNAME: "test", CONF_PASSWORD: "new-password"}
+    assert mock_config_entry.data == {CONF_USERNAME: "test", CONF_PASSWORD: "new-password"}
 
 
+@pytest.mark.usefixtures("init_integration")
 async def test_option_flow(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeNetzOOEeServiceAPI,
+    mock_config_entry: MockConfigEntry,
 ) -> None:
     """Test that the options flow saves all options."""
-    fake_api.register_auth_request()
-    fake_api.register_requests()
-
-    await setup_integration(hass, config_entry)
-
     result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
-        config_entry.entry_id,
+        mock_config_entry.entry_id,
         data=None,
     )
 
@@ -366,22 +365,17 @@ async def test_option_flow(
         "include_inactive_contract_account_data": False,
         "show_inactive_meter_points": True,
     }
-    assert config_entry.state is ConfigEntryState.LOADED
+    assert mock_config_entry.state is ConfigEntryState.LOADED
 
 
+@pytest.mark.usefixtures("init_integration")
 async def test_option_flow_defaults(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
-    fake_api: FakeNetzOOEeServiceAPI,
+    mock_config_entry: MockConfigEntry,
 ) -> None:
     """Test that the options flow uses the default values."""
-    fake_api.register_auth_request()
-    fake_api.register_requests()
-
-    await setup_integration(hass, config_entry)
-
     result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
-        config_entry.entry_id,
+        mock_config_entry.entry_id,
         data=None,
     )
 
@@ -398,12 +392,12 @@ async def test_option_flow_defaults(
         "include_inactive_contract_account_data": True,
         "show_inactive_meter_points": False,
     }
-    assert config_entry.state is ConfigEntryState.LOADED
+    assert mock_config_entry.state is ConfigEntryState.LOADED
 
 
 async def test_option_flow_when_integration_not_loaded(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that the options flow also works if the integration is not loaded."""
@@ -411,10 +405,10 @@ async def test_option_flow_when_integration_not_loaded(
     fake_api.register_auth_request()
     fake_api.register_requests()
 
-    config_entry.add_to_hass(hass)
+    mock_config_entry.add_to_hass(hass)
 
     result_init: ConfigFlowResult = await hass.config_entries.options.async_init(
-        config_entry.entry_id,
+        mock_config_entry.entry_id,
         data=None,
     )
 
@@ -429,4 +423,4 @@ async def test_option_flow_when_integration_not_loaded(
 
     assert result_create_entry["type"] is FlowResultType.CREATE_ENTRY
     assert result_create_entry["data"]["show_inactive_meter_points"] is True
-    assert config_entry.state is ConfigEntryState.LOADED
+    assert mock_config_entry.state is ConfigEntryState.LOADED

@@ -24,17 +24,17 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.parametrize(
-    "config_entry",
+    "mock_config_entry",
     [
         options(show_revoked_energy_communities=True, include_inactive_contract_account_data=True),
     ],
-    indirect=["config_entry"],
+    indirect=["mock_config_entry"],
     ids=["revoked_inactive_contracts"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_icons(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -42,10 +42,10 @@ async def test_icons(
     fake_api.register_auth_request()
     fake_api.register_requests()
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
     icons: dict[str, dict[str, Any]] = (await async_get_icons(hass, "entity", [DOMAIN]))[DOMAIN]
-    entries: list[er.RegistryEntry] = er.async_entries_for_config_entry(er.async_get(hass), config_entry.entry_id)
+    entries: list[er.RegistryEntry] = er.async_entries_for_config_entry(er.async_get(hass), mock_config_entry.entry_id)
 
     used: set[tuple[str, str | None]] = {(entry.domain, entry.translation_key) for entry in entries}
     defined: set[tuple[str, str | None]] = {(platform, key) for platform, keys in icons.items() for key in keys}

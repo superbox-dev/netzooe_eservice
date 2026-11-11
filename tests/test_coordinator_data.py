@@ -30,6 +30,11 @@ INACTIVE_METER_POINT: Final[str] = "AT0000000000000000000000011111113"
 FREQUENT_UPDATES_ENABLED: Final[dict[str, Any]] = options(frequent_updates=True)
 FREQUENT_UPDATES_DISABLED: Final[dict[str, Any]] = options(frequent_updates=False)
 
+# Start of the tests with several full updates, so that they all run on the day of `tests.const.NOW`.
+MORNING: Final[datetime] = datetime(2026, 6, 28, 9, 0, tzinfo=VIENNA)
+# One hour before DST ends at 03:00.
+DST_END: Final[datetime] = datetime(2026, 10, 25, 1, 0, tzinfo=VIENNA)
+
 LAST_MONTH_ENTITY_ID: Final[str] = "sensor.netzooe_eservice_at0000000000000000000000011111111_cc100087_last_month_{}"
 
 

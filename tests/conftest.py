@@ -8,6 +8,7 @@ import json
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 from typing import Any
+from unittest.mock import AsyncMock
 from unittest.mock import patch
 
 import pytest
@@ -21,7 +22,9 @@ from pytest_homeassistant.test_util.aiohttp import AiohttpClientMocker
 from pytest_homeassistant.test_util.aiohttp import AiohttpClientMockResponse
 
 from custom_components.netzooe_eservice.const import DOMAIN
+from tests import setup_integration
 from tests.const import API_URL
+from tests.const import NOW
 from tests.const import PROFILE_URL
 from tests.const import ProfileRequestKey
 
@@ -31,6 +34,8 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from _pytest.fixtures import SubRequest
+    from freezegun.api import FrozenDateTimeFactory
+    from homeassistant.core import HomeAssistant
     from yarl import URL
 
 """Contract account number, energy community ID, first and last day of a consumption profile request."""
@@ -204,8 +209,17 @@ async def fake_api(
         assert api.unknown_profile_requests == []
 
 
+@pytest.fixture(autouse=True)
+def frozen_time(freezer: FrozenDateTimeFactory, request: SubRequest) -> None:
+    """Freeze the time at `NOW`, or at the indirect parameter.
+
+    The consumption profiles of the account are requested for `NOW`.
+    """
+    freezer.move_to(getattr(request, "param", NOW))
+
+
 @pytest.fixture
-def config_entry(request: SubRequest) -> MockConfigEntry:
+def mock_config_entry(request: SubRequest) -> MockConfigEntry:
     """Return a config entry, optionally updated with the indirect parameter."""
     mock_config_entry_data: dict[str, Any] = {
         "title": "Netz OÖ eService (test)",
@@ -227,6 +241,28 @@ def config_entry(request: SubRequest) -> MockConfigEntry:
         domain=DOMAIN,
         **mock_config_entry_data,
     )
+
+
+@pytest.fixture
+async def init_integration(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    fake_api: FakeNetzOOEeServiceAPI,
+) -> MockConfigEntry:
+    """Set up the integration with the responses of the account and return its config entry."""
+    fake_api.register_auth_request()
+    fake_api.register_requests()
+
+    await setup_integration(hass, mock_config_entry)
+
+    return mock_config_entry
+
+
+@pytest.fixture
+def mock_setup_entry() -> Generator[AsyncMock]:
+    """Replace the setup of the config entry, the config flow tests only test the flow."""
+    with patch("custom_components.netzooe_eservice.async_setup_entry", return_value=True) as setup_entry:
+        yield setup_entry
 
 
 @pytest.fixture

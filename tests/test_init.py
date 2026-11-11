@@ -16,27 +16,27 @@ from homeassistant.config_entries import ConfigEntryState
 from homeassistant.helpers import device_registry as dr
 
 from custom_components.netzooe_eservice.const import DOMAIN
+from tests import next_update
 from tests import options
-from tests import refresh
 from tests import setup_integration
 from tests.const import CONTRIBUTION_FACTOR_ENTITY_ID
 from tests.test_init_data import ENERGY_COMMUNITY_DEVICE_IDENTIFIER
 
 if TYPE_CHECKING:
+    from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import HomeAssistant
     from pytest_homeassistant.common import MockConfigEntry
-    from pytest_homeassistant.test_util.aiohttp import AiohttpClientMocker
     from syrupy.assertion import SnapshotAssertion
 
     from tests.conftest import FakeNetzOOEeServiceAPI
 
 
-def _device(hass: HomeAssistant, config_entry: MockConfigEntry, identifier: str) -> dr.DeviceEntry | None:
+def _device(hass: HomeAssistant, mock_config_entry: MockConfigEntry, identifier: str) -> dr.DeviceEntry | None:
     """Return the device of the config entry with the given identifier."""
     return next(
         (
             device
-            for device in dr.async_entries_for_config_entry(dr.async_get(hass), config_entry.entry_id)
+            for device in dr.async_entries_for_config_entry(dr.async_get(hass), mock_config_entry.entry_id)
             if (DOMAIN, identifier) in device.identifiers
         ),
         None,
@@ -44,20 +44,20 @@ def _device(hass: HomeAssistant, config_entry: MockConfigEntry, identifier: str)
 
 
 @pytest.mark.parametrize(
-    "config_entry",
+    "mock_config_entry",
     [
         options(show_revoked_energy_communities=True, include_inactive_contract_account_data=True),
         options(show_revoked_energy_communities=True, include_inactive_contract_account_data=False),
         options(show_revoked_energy_communities=False, include_inactive_contract_account_data=False),
         options(show_revoked_energy_communities=False, include_inactive_contract_account_data=True),
     ],
-    indirect=["config_entry"],
+    indirect=["mock_config_entry"],
     ids=["revoked_inactive_contracts", "revoked", "default", "inactive_contracts"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_load_entry_with_disabled_inactive_meter_points(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     snapshot: SnapshotAssertion,
     caplog: pytest.LogCaptureFixture,
@@ -67,9 +67,9 @@ async def test_load_entry_with_disabled_inactive_meter_points(
     fake_api.register_requests()
 
     with caplog.at_level(logging.WARNING, logger="custom_components.netzooe_eservice.coordinator"):
-        await setup_integration(hass, config_entry)
+        await setup_integration(hass, mock_config_entry)
 
-    assert config_entry.state is ConfigEntryState.LOADED
+    assert mock_config_entry.state is ConfigEntryState.LOADED
     assert hass.states.async_entity_ids_count() == snapshot
 
     assert set(hass.states.async_entity_ids()) == snapshot
@@ -85,7 +85,7 @@ async def test_load_entry_with_disabled_inactive_meter_points(
 
 
 @pytest.mark.parametrize(
-    "config_entry",
+    "mock_config_entry",
     [
         options(
             show_revoked_energy_communities=show_revoked,
@@ -94,13 +94,13 @@ async def test_load_entry_with_disabled_inactive_meter_points(
         )
         for show_revoked, include_inactive in ((True, True), (True, False), (False, False), (False, True))
     ],
-    indirect=["config_entry"],
+    indirect=["mock_config_entry"],
     ids=["revoked_inactive_contracts", "revoked", "default", "inactive_contracts"],
 )
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_load_entry_with_enabled_inactive_meter_points(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -108,9 +108,9 @@ async def test_load_entry_with_enabled_inactive_meter_points(
     fake_api.register_auth_request()
     fake_api.register_requests()
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
-    assert config_entry.state is ConfigEntryState.LOADED
+    assert mock_config_entry.state is ConfigEntryState.LOADED
     assert hass.states.async_entity_ids_count() == snapshot
 
     assert set(hass.states.async_entity_ids()) == snapshot
@@ -118,30 +118,30 @@ async def test_load_entry_with_enabled_inactive_meter_points(
 
 async def test_stale_device_removed_on_setup(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that devices that are no longer returned by the API are removed, devices of other domains are kept."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
-    config_entry.add_to_hass(hass)
+    mock_config_entry.add_to_hass(hass)
 
     device_registry: dr.DeviceRegistry = dr.async_get(hass)
     stale_device: dr.DeviceEntry = device_registry.async_get_or_create(
-        config_entry_id=config_entry.entry_id,
+        config_entry_id=mock_config_entry.entry_id,
         identifiers={(DOMAIN, "stale_identifier_not_in_api_data")},
         name="Stale device",
     )
     other_device: dr.DeviceEntry = device_registry.async_get_or_create(
-        config_entry_id=config_entry.entry_id,
+        config_entry_id=mock_config_entry.entry_id,
         identifiers={("other_domain", "stale_identifier_not_in_api_data")},
         name="Device of another domain",
     )
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
-    assert config_entry.state is ConfigEntryState.LOADED
+    assert mock_config_entry.state is ConfigEntryState.LOADED
     assert device_registry.async_get(stale_device.id) is None
     assert device_registry.async_get(other_device.id) is not None
 
@@ -149,42 +149,45 @@ async def test_stale_device_removed_on_setup(
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")
 async def test_removed_energy_community_device_comes_back(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
-    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that the device of a removed energy community is removed and added again with its sensors."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
-    assert _device(hass, config_entry, ENERGY_COMMUNITY_DEVICE_IDENTIFIER) is not None
+    assert _device(hass, mock_config_entry, ENERGY_COMMUNITY_DEVICE_IDENTIFIER) is not None
     assert hass.states.get(CONTRIBUTION_FACTOR_ENTITY_ID) is not None
 
-    aioclient_mock.clear_requests()
+    fake_api.aioclient_mock.clear_requests()
     fake_api.register_auth_request()
     fake_api.register_requests(consents=[])
-    await refresh(hass, config_entry)
+    await next_update(hass, freezer)
 
-    assert _device(hass, config_entry, ENERGY_COMMUNITY_DEVICE_IDENTIFIER) is None
+    assert _device(hass, mock_config_entry, ENERGY_COMMUNITY_DEVICE_IDENTIFIER) is None
     assert hass.states.get(CONTRIBUTION_FACTOR_ENTITY_ID) is None
 
-    aioclient_mock.clear_requests()
+    fake_api.aioclient_mock.clear_requests()
     fake_api.register_auth_request()
     fake_api.register_requests()
-    await refresh(hass, config_entry)
+    await next_update(hass, freezer)
 
-    assert _device(hass, config_entry, ENERGY_COMMUNITY_DEVICE_IDENTIFIER) is not None
+    assert _device(hass, mock_config_entry, ENERGY_COMMUNITY_DEVICE_IDENTIFIER) is not None
     assert hass.states.get(CONTRIBUTION_FACTOR_ENTITY_ID) is not None
 
 
 @pytest.mark.parametrize(
-    "config_entry", [options(show_inactive_meter_points=True)], indirect=["config_entry"], ids=["inactive_meter_points"]
+    "mock_config_entry",
+    [options(show_inactive_meter_points=True)],
+    indirect=["mock_config_entry"],
+    ids=["inactive_meter_points"],
 )
 async def test_device_name_with_unknown_meter_point_format(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that the device name contains the whole meter point number if it cannot be shortened."""
@@ -200,16 +203,16 @@ async def test_device_name_with_unknown_meter_point_format(
     fake_api.register_auth_request()
     fake_api.register_requests(contract_accounts={"004": contract_account})
 
-    await setup_integration(hass, config_entry)
+    await setup_integration(hass, mock_config_entry)
 
-    device: dr.DeviceEntry | None = _device(hass, config_entry, "XX-11111113")
+    device: dr.DeviceEntry | None = _device(hass, mock_config_entry, "XX-11111113")
     assert device is not None
     assert device.name == "Haushalt (XX-11111113)"
 
 
 async def test_session_not_closed_on_unload(
     hass: HomeAssistant,
-    config_entry: MockConfigEntry,
+    mock_config_entry: MockConfigEntry,
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that the session of the config entry is not closed on unload.
@@ -220,10 +223,10 @@ async def test_session_not_closed_on_unload(
     fake_api.register_requests()
 
     with patch.object(ClientSession, "close", autospec=True) as close:
-        await setup_integration(hass, config_entry)
+        await setup_integration(hass, mock_config_entry)
 
-        assert await hass.config_entries.async_unload(config_entry.entry_id)
+        assert await hass.config_entries.async_unload(mock_config_entry.entry_id)
         await hass.async_block_till_done()
 
-    assert config_entry.state is ConfigEntryState.NOT_LOADED
+    assert mock_config_entry.state is ConfigEntryState.NOT_LOADED
     close.assert_not_called()
