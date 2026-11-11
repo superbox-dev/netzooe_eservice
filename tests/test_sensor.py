@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 from typing import Final
 
 import pytest
+from homeassistant.helpers import entity_registry as er
 from pytest_homeassistant.common import snapshot_platform
 
 from custom_components.netzooe_eservice.const import CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
@@ -19,7 +20,6 @@ from tests.const import NOW
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.core import State
-    from homeassistant.helpers import entity_registry as er
     from pytest_homeassistant.common import MockConfigEntry
     from syrupy.assertion import SnapshotAssertion
 
@@ -84,3 +84,26 @@ async def test_sensor_timeline_recorded(
     assert state is not None
     assert state.state_info is not None
     assert ("timeline" in state.state_info["unrecorded_attributes"]) is unrecorded
+
+
+@pytest.mark.parametrize(
+    "entity_id",
+    [
+        "sensor.netzooe_eservice_at0000000000000000000000011111111_energy_community_export_l3",
+        "sensor.netzooe_eservice_at0000000000000000000000011111111_last_month_energy_community_export_l2",
+        "sensor.netzooe_eservice_at0000000000000000000000011111111_supplier_export_l3",
+    ],
+    ids=["energy_community_export_l3", "last_month_energy_community_export_l2", "supplier_export_l3"],
+)
+@pytest.mark.usefixtures("init_integration")
+async def test_sensors_disabled_by_default(
+    hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
+    entity_id: str,
+) -> None:
+    """Test that the totals of a meter point are disabled by default, its energy community sensors show them."""
+    assert hass.states.get(entity_id) is None
+
+    entry: er.RegistryEntry | None = entity_registry.async_get(entity_id)
+    assert entry is not None
+    assert entry.disabled_by is er.RegistryEntryDisabler.INTEGRATION

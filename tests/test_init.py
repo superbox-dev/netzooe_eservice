@@ -15,6 +15,7 @@ import pytest
 from aiohttp import ClientSession
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import entity_registry as er
 
 from custom_components.netzooe_eservice.const import CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
 from custom_components.netzooe_eservice.const import CONF_SHOW_INACTIVE_METER_POINTS
@@ -220,3 +221,34 @@ async def test_session_not_closed_on_unload(
 
     assert mock_config_entry.state is ConfigEntryState.NOT_LOADED
     close.assert_not_called()
+
+
+async def test_load_unload_config_entry(
+    hass: HomeAssistant,
+    init_integration: MockConfigEntry,
+) -> None:
+    """Test that the config entry is loaded and unloaded."""
+    assert init_integration.state is ConfigEntryState.LOADED
+
+    assert await hass.config_entries.async_unload(init_integration.entry_id)
+    await hass.async_block_till_done()
+
+    assert init_integration.state is ConfigEntryState.NOT_LOADED
+
+
+async def test_devices(
+    device_registry: dr.DeviceRegistry,
+    entity_registry: er.EntityRegistry,
+    init_integration: MockConfigEntry,
+    snapshot: SnapshotAssertion,
+) -> None:
+    """Test the devices of the meter points and energy communities, every entity belongs to one of them."""
+    devices: list[dr.DeviceEntry] = sorted(
+        dr.async_entries_for_config_entry(device_registry, init_integration.entry_id),
+        key=lambda device: sorted(device.identifiers),
+    )
+
+    assert devices == snapshot
+    assert {
+        entry.device_id for entry in er.async_entries_for_config_entry(entity_registry, init_integration.entry_id)
+    } == {device.id for device in devices}

@@ -25,6 +25,7 @@ from pytest_homeassistant.test_util.aiohttp import AiohttpClientMockResponse
 from custom_components.netzooe_eservice.const import CONF_INCLUDE_INACTIVE_CONTRACT_ACCOUNT_DATA
 from custom_components.netzooe_eservice.const import CONF_SHOW_INACTIVE_METER_POINTS
 from custom_components.netzooe_eservice.const import CONF_SHOW_REVOKED_ENERGY_COMMUNITIES
+from custom_components.netzooe_eservice.const import DOMAIN
 from custom_components.netzooe_eservice.const import SCAN_INTERVAL
 from custom_components.netzooe_eservice.const import SCAN_INTERVAL_FULL
 from tests import next_update
@@ -148,6 +149,7 @@ async def test_setup_api_error_retries_setup(
     """Test that an API error on the dashboard request retries the setup."""
     fake_api.register_auth_request()
     fake_api.register_session_request()
+    fake_api.register_consents_request()
     fake_api.register_dashboard_request(status=500)
 
     mock_config_entry.add_to_hass(hass)
@@ -156,6 +158,7 @@ async def test_setup_api_error_retries_setup(
     await hass.async_block_till_done()
 
     assert mock_config_entry.state is ConfigEntryState.SETUP_RETRY
+    assert mock_config_entry.error_reason_translation_key == "update_failed"
 
 
 async def test_first_update_api_error_retries_setup(
@@ -175,6 +178,7 @@ async def test_first_update_api_error_retries_setup(
     await hass.async_block_till_done()
 
     assert mock_config_entry.state is ConfigEntryState.SETUP_RETRY
+    assert mock_config_entry.error_reason_translation_key == "update_failed"
 
 
 async def test_first_update_authentication_error_starts_reauth(
@@ -192,9 +196,11 @@ async def test_first_update_authentication_error_starts_reauth(
     await hass.async_block_till_done()
 
     assert mock_config_entry.state is ConfigEntryState.SETUP_ERROR
-    assert [flow["context"]["source"] for flow in mock_config_entry.async_get_active_flows(hass, {SOURCE_REAUTH})] == [
-        SOURCE_REAUTH,
-    ]
+    assert mock_config_entry.error_reason_translation_key == "authentication_error"
+    assert [
+        (flow["step_id"], flow["handler"], flow["context"].get("source"), flow["context"].get("entry_id"))
+        for flow in hass.config_entries.flow.async_progress()
+    ] == [("reauth_confirm", DOMAIN, SOURCE_REAUTH, mock_config_entry.entry_id)]
 
 
 @pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
@@ -708,9 +714,10 @@ async def test_authentication_error_starts_reauth(
     await next_update(hass, freezer)
 
     assert _state(hass, TOTAL_EXPORT_ENTITY_ID) == STATE_UNAVAILABLE
-    assert [flow["context"]["source"] for flow in mock_config_entry.async_get_active_flows(hass, {SOURCE_REAUTH})] == [
-        SOURCE_REAUTH,
-    ]
+    assert [
+        (flow["step_id"], flow["handler"], flow["context"].get("source"), flow["context"].get("entry_id"))
+        for flow in hass.config_entries.flow.async_progress()
+    ] == [("reauth_confirm", DOMAIN, SOURCE_REAUTH, mock_config_entry.entry_id)]
 
 
 @pytest.mark.usefixtures("entity_registry_enabled_by_default")

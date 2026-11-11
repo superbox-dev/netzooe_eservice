@@ -1,4 +1,176 @@
 # serializer version: 1
+# name: test_devices
+  list([
+    DeviceRegistryEntrySnapshot({
+      'area_id': None,
+      'config_entry_id': <ANY>,
+      'config_subentry_id': None,
+      'configuration_url': None,
+      'connections': set({
+      }),
+      'disabled_by': None,
+      'entry_type': None,
+      'hw_version': None,
+      'id': <ANY>,
+      'identifiers': set({
+        tuple(
+          'netzooe_eservice',
+          'AT0000000000000000000000011111111',
+        ),
+      }),
+      'labels': set({
+      }),
+      'manufacturer': 'Netz OÖ',
+      'model': 'eService',
+      'model_id': None,
+      'name': 'Photovoltaik (11111111)',
+      'name_by_user': None,
+      'serial_number': None,
+      'sw_version': None,
+      'via_device_id': None,
+    }),
+    DeviceRegistryEntrySnapshot({
+      'area_id': None,
+      'config_entry_id': <ANY>,
+      'config_subentry_id': None,
+      'configuration_url': None,
+      'connections': set({
+      }),
+      'disabled_by': None,
+      'entry_type': None,
+      'hw_version': None,
+      'id': <ANY>,
+      'identifiers': set({
+        tuple(
+          'netzooe_eservice',
+          'AT0000000000000000000000011111111_CC100087',
+        ),
+      }),
+      'labels': set({
+      }),
+      'manufacturer': 'Netz OÖ',
+      'model': 'eService',
+      'model_id': None,
+      'name': 'Photovoltaik: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111111)',
+      'name_by_user': None,
+      'serial_number': None,
+      'sw_version': None,
+      'via_device_id': <DeviceEntry identifiers=[('netzooe_eservice', 'AT0000000000000000000000011111111')]>,
+    }),
+    DeviceRegistryEntrySnapshot({
+      'area_id': None,
+      'config_entry_id': <ANY>,
+      'config_subentry_id': None,
+      'configuration_url': None,
+      'connections': set({
+      }),
+      'disabled_by': None,
+      'entry_type': None,
+      'hw_version': None,
+      'id': <ANY>,
+      'identifiers': set({
+        tuple(
+          'netzooe_eservice',
+          'AT0000000000000000000000011111111_RC103550',
+        ),
+      }),
+      'labels': set({
+      }),
+      'manufacturer': 'Netz OÖ',
+      'model': 'eService',
+      'model_id': None,
+      'name': 'Photovoltaik: EEG Oberösterreich RID-11 (11111111)',
+      'name_by_user': None,
+      'serial_number': None,
+      'sw_version': None,
+      'via_device_id': <DeviceEntry identifiers=[('netzooe_eservice', 'AT0000000000000000000000011111111')]>,
+    }),
+    DeviceRegistryEntrySnapshot({
+      'area_id': None,
+      'config_entry_id': <ANY>,
+      'config_subentry_id': None,
+      'configuration_url': None,
+      'connections': set({
+      }),
+      'disabled_by': None,
+      'entry_type': None,
+      'hw_version': None,
+      'id': <ANY>,
+      'identifiers': set({
+        tuple(
+          'netzooe_eservice',
+          'AT0000000000000000000000011111112',
+        ),
+      }),
+      'labels': set({
+      }),
+      'manufacturer': 'Netz OÖ',
+      'model': 'eService',
+      'model_id': None,
+      'name': 'Haushalt (11111112)',
+      'name_by_user': None,
+      'serial_number': None,
+      'sw_version': None,
+      'via_device_id': None,
+    }),
+    DeviceRegistryEntrySnapshot({
+      'area_id': None,
+      'config_entry_id': <ANY>,
+      'config_subentry_id': None,
+      'configuration_url': None,
+      'connections': set({
+      }),
+      'disabled_by': None,
+      'entry_type': None,
+      'hw_version': None,
+      'id': <ANY>,
+      'identifiers': set({
+        tuple(
+          'netzooe_eservice',
+          'AT0000000000000000000000011111112_CC100087',
+        ),
+      }),
+      'labels': set({
+      }),
+      'manufacturer': 'Netz OÖ',
+      'model': 'eService',
+      'model_id': None,
+      'name': 'Haushalt: 7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom (11111112)',
+      'name_by_user': None,
+      'serial_number': None,
+      'sw_version': None,
+      'via_device_id': <DeviceEntry identifiers=[('netzooe_eservice', 'AT0000000000000000000000011111112')]>,
+    }),
+    DeviceRegistryEntrySnapshot({
+      'area_id': None,
+      'config_entry_id': <ANY>,
+      'config_subentry_id': None,
+      'configuration_url': None,
+      'connections': set({
+      }),
+      'disabled_by': None,
+      'entry_type': None,
+      'hw_version': None,
+      'id': <ANY>,
+      'identifiers': set({
+        tuple(
+          'netzooe_eservice',
+          'AT0000000000000000000000011111112_RC103550',
+        ),
+      }),
+      'labels': set({
+      }),
+      'manufacturer': 'Netz OÖ',
+      'model': 'eService',
+      'model_id': None,
+      'name': 'Haushalt: EEG Oberösterreich RID-11 (11111112)',
+      'name_by_user': None,
+      'serial_number': None,
+      'sw_version': None,
+      'via_device_id': <DeviceEntry identifiers=[('netzooe_eservice', 'AT0000000000000000000000011111112')]>,
+    }),
+  ])
+# ---
 # name: test_load_entry_with_disabled_inactive_meter_points[default]
   84
 # ---
