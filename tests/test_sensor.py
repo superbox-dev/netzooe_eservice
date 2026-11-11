@@ -7,6 +7,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
+from homeassistant.helpers import entity_registry as er
+from pytest_homeassistant.common import snapshot_platform
 
 from tests import options
 from tests import setup_integration
@@ -47,7 +49,7 @@ async def test_sensors(
     snapshot: SnapshotAssertion,
     language: str,
 ) -> None:
-    """Test the states of all sensors."""
+    """Test the entity registry entries and states of all sensors."""
     fake_api.register_auth_request()
     fake_api.register_requests()
 
@@ -57,11 +59,7 @@ async def test_sensors(
 
     await setup_integration(hass, config_entry)
 
-    states: dict[str, State | None] = {
-        entity_id: hass.states.get(entity_id) for entity_id in sorted(hass.states.async_entity_ids("sensor"))
-    }
-
-    assert states == snapshot
+    await snapshot_platform(hass, er.async_get(hass), snapshot, config_entry.entry_id)
 
 
 @pytest.mark.parametrize(
