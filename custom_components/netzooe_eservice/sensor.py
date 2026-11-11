@@ -22,7 +22,6 @@ from homeassistant.const import EntityCategory
 from homeassistant.const import UnitOfEnergy
 from homeassistant.const import UnitOfPower
 from homeassistant.core import callback
-from homeassistant.helpers import device_registry as dr
 from homeassistant.util import dt as dt_util
 from netzooe_eservice_api.constants import ConsentsStatus
 from netzooe_eservice_api.constants import Granularity
@@ -41,10 +40,11 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
     from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.device_registry import DeviceInfo
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
     from homeassistant.helpers.typing import StateType
 
+    from .coordinator import EnergyCommunityData
+    from .coordinator import MeterPointData
     from .coordinator import NetzOOEeServiceConfigEntry
     from .coordinator import NetzOOEeServiceDataUpdateCoordinator
 
@@ -52,20 +52,21 @@ PARALLEL_UPDATES: Final[int] = 0
 
 
 type Direction = Literal["import", "export"]
+# The profile lists of the device data of a meter point and of an energy community.
+type MeterPointProfile = Literal["totalL1", "monthlyL1", "dailyL1"]
+type EnergyCommunityProfile = Literal["totalL2", "totalL3", "monthlyL2", "monthlyL3"]
 
 
 class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
     """Netz OÖ eService sensor entity."""
 
-    entity_description: NetzOOEeServiceSensorEntityDescription
     # The timeline grows with every timeslice, so it is not stored in the database.
     _unrecorded_attributes: frozenset[str] = frozenset({"timeline"})
 
     def __init__(
         self,
         coordinator: NetzOOEeServiceDataUpdateCoordinator,
-        description: NetzOOEeServiceSensorEntityDescription,
-        entry: NetzOOEeServiceConfigEntry,
+        description: SensorEntityDescription,
         device_identifier: str,
     ) -> None:
         """Initialize the entity."""
@@ -73,68 +74,35 @@ class NetzOOEeServiceSensorEntity(NetzOOEeServiceEntity, SensorEntity):
 
         super().__init__(
             coordinator,
-            entry=entry,
             device_identifier=device_identifier,
         )
 
         self._attr_unique_id = f"{self.device_identifier}_{self.entity_description.key}".lower()
         self.entity_id: str = f"{SENSOR_DOMAIN}.{DOMAIN}_{self._attr_unique_id}"
 
+
+class NetzOOEeServiceMeterPointSensorEntity(NetzOOEeServiceSensorEntity):
+    """Netz OÖ eService sensor entity of a meter point."""
+
+    entity_description: NetzOOEeServiceMeterPointSensorEntityDescription
+
     @property
     def native_value(self) -> StateType | date:
         """Return the state of the sensor."""
-        return self.entity_description.value_fn(self.data)
+        return self.entity_description.value_fn(self._data)
+
+    @property
+    def _data(self) -> MeterPointData:
+        """Return the device data of the meter point."""
+        return self.coordinator.meter_points[self.device_identifier]
 
     @property
     def extra_state_attributes(self) -> Mapping[str, Any] | None:
         """Return extra state attributes."""
-        return self.entity_description.extra_state_attributes_fn(self.data)
+        return self.entity_description.extra_state_attributes_fn(self._data)
 
 
-class NetzOOEeServiceEnergyCommunitySensorEntity(NetzOOEeServiceSensorEntity):
-    """Netz OÖ eService energy community sensor entity."""
-
-    @property
-    def device_name(self) -> str:
-        """Return the name of the device."""
-        return (
-            f"{self.data['synthProfile']}: {self.data['deviceName']} "
-            f"({self._short_device_id(self.data['meterPointAdministrationNumber'])})"
-        )
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return the device info, linked to the device of the meter point."""
-        device_info: DeviceInfo = super().device_info
-        device_info["via_device_id"] = dr.async_get_device_id_by_identifier(
-            self.hass,
-            (DOMAIN, self.data["meterPointAdministrationNumber"]),
-            config_entry_id=self.entry.entry_id,
-        )
-        return device_info
-
-
-class NetzOOEeServiceAggregatedSensorEntity(NetzOOEeServiceSensorEntity):
-    """Meter point sensor entity with the total of all energy communities of the meter point."""
-
-    @property
-    def native_value(self) -> float:
-        """Return the sum of the values of all active (or, if shown, all) energy communities of the meter point."""
-        prefix: str = f"{self.device_identifier}_"
-
-        return sum(
-            (
-                value
-                for device_identifier, data in self.coordinator.data.items()
-                if device_identifier.startswith(prefix)
-                and (data["status"] == ConsentsStatus.ACTIVE.value or self.coordinator.show_revoked_energy_communities)
-                and isinstance(value := self.entity_description.value_fn(data), float)
-            ),
-            start=0.0,
-        )
-
-
-class NetzOOEeServiceMeterPointProfileSensorEntity(NetzOOEeServiceSensorEntity):
+class NetzOOEeServiceMeterPointProfileSensorEntity(NetzOOEeServiceMeterPointSensorEntity):
     """Meter point sensor entity with the L1 profile of a time range."""
 
     # The timeline has one entry per section of the profile, so it stays small and is recorded.
@@ -146,23 +114,85 @@ class NetzOOEeServiceMeterPointProfileSensorEntity(NetzOOEeServiceSensorEntity):
         return super().available and self.native_value is not None
 
 
-def _no_attributes(_data: Mapping[str, Any]) -> Mapping[str, Any] | None:
+class NetzOOEeServiceEnergyCommunitySensorEntity(NetzOOEeServiceSensorEntity):
+    """Netz OÖ eService sensor entity of an energy community."""
+
+    entity_description: NetzOOEeServiceEnergyCommunitySensorEntityDescription
+
+    @property
+    def native_value(self) -> StateType | date:
+        """Return the state of the sensor."""
+        return self.entity_description.value_fn(self._data)
+
+    @property
+    def _data(self) -> EnergyCommunityData:
+        """Return the device data of the energy community."""
+        return self.coordinator.energy_communities[self.device_identifier]
+
+    @property
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
+        """Return extra state attributes."""
+        return self.entity_description.extra_state_attributes_fn(self._data)
+
+
+class NetzOOEeServiceAggregatedSensorEntity(NetzOOEeServiceSensorEntity):
+    """Meter point sensor entity with the total of all energy communities of the meter point."""
+
+    entity_description: NetzOOEeServiceEnergyCommunitySensorEntityDescription
+
+    @property
+    def native_value(self) -> float:
+        """Return the sum of the values of all active (or, if shown, all) energy communities of the meter point."""
+        prefix: str = f"{self.device_identifier}_"
+
+        return sum(
+            (
+                value
+                for device_identifier, data in self.coordinator.energy_communities.items()
+                if device_identifier.startswith(prefix)
+                and (data["status"] == ConsentsStatus.ACTIVE.value or self.coordinator.show_revoked_energy_communities)
+                and isinstance(value := self.entity_description.value_fn(data), float)
+            ),
+            start=0.0,
+        )
+
+
+def _no_attributes(_data: object) -> Mapping[str, Any] | None:
     """Return no extra state attributes."""
     return None
 
 
 @dataclass(frozen=True, kw_only=True)
-class NetzOOEeServiceSensorEntityDescription(SensorEntityDescription):
-    """Class describing Netz OÖ eService sensor entities."""
+class NetzOOEeServiceMeterPointSensorEntityDescription(SensorEntityDescription):
+    """Class describing Netz OÖ eService sensor entities of a meter point."""
 
-    entity_class: type[NetzOOEeServiceSensorEntity] = NetzOOEeServiceSensorEntity
-    value_fn: Callable[[Mapping[str, Any]], StateType | date]
-    """Return the state from the device data."""
-    extra_state_attributes_fn: Callable[[Mapping[str, Any]], Mapping[str, Any] | None] = _no_attributes
-    """Return the extra state attributes from the device data."""
+    entity_class: type[NetzOOEeServiceMeterPointSensorEntity] = NetzOOEeServiceMeterPointSensorEntity
+    # Returns the state from the device data.
+    value_fn: Callable[[MeterPointData], StateType | date]
+    # Returns the extra state attributes from the device data.
+    extra_state_attributes_fn: Callable[[MeterPointData], Mapping[str, Any] | None] = _no_attributes
 
 
-def _status(data: Mapping[str, Any]) -> str | None:
+@dataclass(frozen=True, kw_only=True)
+class NetzOOEeServiceEnergyCommunitySensorEntityDescription(SensorEntityDescription):
+    """Class describing Netz OÖ eService sensor entities of an energy community, or their totals at a meter point."""
+
+    entity_class: type[NetzOOEeServiceAggregatedSensorEntity | NetzOOEeServiceEnergyCommunitySensorEntity] = (
+        NetzOOEeServiceEnergyCommunitySensorEntity
+    )
+    # Returns the state from the device data.
+    value_fn: Callable[[EnergyCommunityData], StateType | date]
+    # Returns the extra state attributes from the device data.
+    extra_state_attributes_fn: Callable[[EnergyCommunityData], Mapping[str, Any] | None] = _no_attributes
+
+
+# The description of a sensor of a meter point or of an energy community.
+type NetzOOEeServiceSensorEntityDescription = (
+    NetzOOEeServiceEnergyCommunitySensorEntityDescription | NetzOOEeServiceMeterPointSensorEntityDescription
+)
+
+
+def _status(data: EnergyCommunityData) -> str | None:
     """Return the status of the consent, or `None` if it is missing or unknown."""
     status: str = (data["status"] or "").lower()
     return status if status in STATUS_OPTIONS else None
@@ -234,13 +264,15 @@ def _profile_statistics(item: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-def _meter_point_profile_descriptions(direction: Direction, /) -> list[NetzOOEeServiceSensorEntityDescription]:
+def _meter_point_profile_descriptions(
+    direction: Direction, /
+) -> list[NetzOOEeServiceMeterPointSensorEntityDescription]:
     """Return the sensors with the L1 profile of all data, the previous month and the last day of a meter point."""
 
-    def description(key: str, profile: str, /) -> NetzOOEeServiceSensorEntityDescription:
+    def description(key: str, profile: MeterPointProfile, /) -> NetzOOEeServiceMeterPointSensorEntityDescription:
         """Return the sensor with the sum of all sections of a profile."""
 
-        def value(data: Mapping[str, Any]) -> float | None:
+        def value(data: MeterPointData) -> float | None:
             """Return the sum of all sections, or `None` without profile data."""
             items: list[dict[str, Any]] = data[profile]
 
@@ -251,7 +283,7 @@ def _meter_point_profile_descriptions(direction: Direction, /) -> list[NetzOOEeS
             total: float = sum((item["sum"]["value"] for item in items), start=0.0)
             return total
 
-        def attributes(data: Mapping[str, Any]) -> Mapping[str, Any]:
+        def attributes(data: MeterPointData) -> Mapping[str, Any]:
             """Return the timeline with one entry per section of the profile."""
             timeline: list[dict[str, Any]] = sorted(
                 (_timeline_entry(item) for item in data[profile]),
@@ -259,7 +291,7 @@ def _meter_point_profile_descriptions(direction: Direction, /) -> list[NetzOOEeS
             )
             return {"timeline": timeline}
 
-        return NetzOOEeServiceSensorEntityDescription(
+        return NetzOOEeServiceMeterPointSensorEntityDescription(
             entity_class=NetzOOEeServiceMeterPointProfileSensorEntity,
             device_class=SensorDeviceClass.ENERGY,
             key=key,
@@ -277,13 +309,13 @@ def _meter_point_profile_descriptions(direction: Direction, /) -> list[NetzOOEeS
     ]
 
 
-def _trend_descriptions(key: Literal["monthly", "yearly"], /) -> list[NetzOOEeServiceSensorEntityDescription]:
+def _trend_descriptions(key: Literal["monthly", "yearly"], /) -> list[NetzOOEeServiceMeterPointSensorEntityDescription]:
     """Return the sensors of the monthly or yearly consumption trend of a meter point."""
-    trend: str = f"{key}Trend"
+    trend: Literal["monthlyTrend", "yearlyTrend"] = "monthlyTrend" if key == "monthly" else "yearlyTrend"
 
-    def period(name: str, consumption: str, timerange: str) -> NetzOOEeServiceSensorEntityDescription:
+    def period(name: str, consumption: str, timerange: str) -> NetzOOEeServiceMeterPointSensorEntityDescription:
         """Return the consumption sensor of one period of the trend."""
-        return NetzOOEeServiceSensorEntityDescription(
+        return NetzOOEeServiceMeterPointSensorEntityDescription(
             device_class=SensorDeviceClass.ENERGY,
             key=f"{key}_trend_{name}",
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -298,7 +330,7 @@ def _trend_descriptions(key: Literal["monthly", "yearly"], /) -> list[NetzOOEeSe
             },
         )
 
-    def change(data: Mapping[str, Any]) -> float:
+    def change(data: MeterPointData) -> float:
         """Return the change of the new period compared to the old one in percent."""
         new: float = data[trend]["consumptionNew"]["sum"]
         old: float = data[trend]["consumptionOld"]["sum"]
@@ -307,7 +339,7 @@ def _trend_descriptions(key: Literal["monthly", "yearly"], /) -> list[NetzOOEeSe
     return [
         period("new", "consumptionNew", "timerangeNew"),
         period("old", "consumptionOld", "timerangeOld"),
-        NetzOOEeServiceSensorEntityDescription(
+        NetzOOEeServiceMeterPointSensorEntityDescription(
             key=f"{key}_trend",
             native_unit_of_measurement=PERCENTAGE,
             suggested_display_precision=2,
@@ -323,7 +355,7 @@ def _energy_community_descriptions(
     *,
     energy_community: tuple[str, str | None],
     supplier: tuple[str, str | None],
-) -> list[NetzOOEeServiceSensorEntityDescription]:
+) -> list[NetzOOEeServiceEnergyCommunitySensorEntityDescription]:
     """Return the energy community and supplier sensors of an energy community.
 
     ``energy_community`` and ``supplier`` are the profile types whose values are added and subtracted.
@@ -332,21 +364,21 @@ def _energy_community_descriptions(
 
     def description(
         key: str,
-        profile: str,
+        profile: EnergyCommunityProfile,
         types: tuple[str, str | None],
         /,
         *,
         with_name: bool,
-    ) -> NetzOOEeServiceSensorEntityDescription:
+    ) -> NetzOOEeServiceEnergyCommunitySensorEntityDescription:
         """Return the sensor with the sum of the given profile types of a profile."""
         positive_type, negative_type = types
 
-        def value(data: Mapping[str, Any]) -> float:
+        def value(data: EnergyCommunityData) -> float:
             """Return the sum of the positive profile type minus the negative one."""
             total: float = _sum_by_type(data[profile], positive_type)
             return total - _sum_by_type(data[profile], negative_type) if negative_type else total
 
-        def attributes(data: Mapping[str, Any]) -> Mapping[str, Any]:
+        def attributes(data: EnergyCommunityData) -> Mapping[str, Any]:
             """Return the timeline and, for energy community sensors, the name and ID of the energy community."""
             items: list[dict[str, Any]] = data[profile]
 
@@ -361,8 +393,7 @@ def _energy_community_descriptions(
                 "timeline": _timeline_by_type(items, positive_type, with_statistics=negative_type is None),
             }
 
-        return NetzOOEeServiceSensorEntityDescription(
-            entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
+        return NetzOOEeServiceEnergyCommunitySensorEntityDescription(
             device_class=SensorDeviceClass.ENERGY,
             key=key,
             native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -372,22 +403,25 @@ def _energy_community_descriptions(
             extra_state_attributes_fn=attributes,
         )
 
+    # Prefix of the key, profile and level of the sensors.
+    profiles: tuple[tuple[str, EnergyCommunityProfile, str], ...] = (
+        ("", "totalL2", "l2"),
+        ("", "totalL3", "l3"),
+        ("last_month_", "monthlyL2", "l2"),
+        ("last_month_", "monthlyL3", "l3"),
+    )
+
     return [
         description(f"{prefix}{kind}_{direction}_{level}", profile, types, with_name=kind == "energy_community")
-        for prefix, profile, level in (
-            ("", "totalL2", "l2"),
-            ("", "totalL3", "l3"),
-            ("last_month_", "monthlyL2", "l2"),
-            ("last_month_", "monthlyL3", "l3"),
-        )
+        for prefix, profile, level in profiles
         for kind, types in (("energy_community", energy_community), ("supplier", supplier))
     ]
 
 
 def _aggregated_descriptions(
-    descriptions: list[NetzOOEeServiceSensorEntityDescription],
+    descriptions: list[NetzOOEeServiceEnergyCommunitySensorEntityDescription],
     /,
-) -> list[NetzOOEeServiceSensorEntityDescription]:
+) -> list[NetzOOEeServiceEnergyCommunitySensorEntityDescription]:
     """Return the meter point sensors with the totals of the given energy community sensors."""
     return [
         replace(
@@ -400,9 +434,9 @@ def _aggregated_descriptions(
     ]
 
 
-def _peak_power_description(direction: Direction, /) -> NetzOOEeServiceSensorEntityDescription:
+def _peak_power_description(direction: Direction, /) -> NetzOOEeServiceMeterPointSensorEntityDescription:
     """Return the sensor with the maximum power of the previous month of a meter point."""
-    return NetzOOEeServiceSensorEntityDescription(
+    return NetzOOEeServiceMeterPointSensorEntityDescription(
         device_class=SensorDeviceClass.POWER,
         key=f"last_month_peak_{direction}_power",
         native_unit_of_measurement=UnitOfPower.KILO_WATT,
@@ -416,13 +450,13 @@ def _peak_power_description(direction: Direction, /) -> NetzOOEeServiceSensorEnt
     )
 
 
-SENSOR_DEFAULT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
-    NetzOOEeServiceSensorEntityDescription(
+SENSOR_DEFAULT_TYPES: Final[list[NetzOOEeServiceMeterPointSensorEntityDescription]] = [
+    NetzOOEeServiceMeterPointSensorEntityDescription(
         key="scale_type",
         translation_key="scale_type",
         value_fn=lambda data: data["scaleType"],
     ),
-    NetzOOEeServiceSensorEntityDescription(
+    NetzOOEeServiceMeterPointSensorEntityDescription(
         device_class=SensorDeviceClass.ENERGY,
         key="meter_reading",
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
@@ -434,7 +468,7 @@ SENSOR_DEFAULT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
             "meter_number": data["meterNumber"],
         },
     ),
-    NetzOOEeServiceSensorEntityDescription(
+    NetzOOEeServiceMeterPointSensorEntityDescription(
         key="supplier",
         translation_key="supplier",
         value_fn=lambda data: data["supplier"]["name"],
@@ -443,7 +477,7 @@ SENSOR_DEFAULT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
             "contract_start": data["contractStart"],
         },
     ),
-    NetzOOEeServiceSensorEntityDescription(
+    NetzOOEeServiceMeterPointSensorEntityDescription(
         device_class=SensorDeviceClass.DATE,
         entity_category=EntityCategory.DIAGNOSTIC,
         key="profile_data_available_to",
@@ -454,9 +488,8 @@ SENSOR_DEFAULT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
     *_trend_descriptions("yearly"),
 ]
 
-SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = [
-    NetzOOEeServiceSensorEntityDescription(
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
+SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES: Final[list[NetzOOEeServiceEnergyCommunitySensorEntityDescription]] = [
+    NetzOOEeServiceEnergyCommunitySensorEntityDescription(
         device_class=SensorDeviceClass.ENUM,
         entity_category=EntityCategory.DIAGNOSTIC,
         key="status",
@@ -465,8 +498,7 @@ SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES: Final[list[NetzOOEeServiceSensorEntityDes
         value_fn=_status,
         extra_state_attributes_fn=lambda data: {"valid_from": data["validFrom"]},
     ),
-    NetzOOEeServiceSensorEntityDescription(
-        entity_class=NetzOOEeServiceEnergyCommunitySensorEntity,
+    NetzOOEeServiceEnergyCommunitySensorEntityDescription(
         entity_category=EntityCategory.DIAGNOSTIC,
         key="contribution_factor",
         native_unit_of_measurement=PERCENTAGE,
@@ -476,7 +508,7 @@ SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES: Final[list[NetzOOEeServiceSensorEntityDes
     ),
 ]
 
-SENSOR_ENERGY_COMMUNITY_IMPORT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = (
+SENSOR_ENERGY_COMMUNITY_IMPORT_TYPES: Final[list[NetzOOEeServiceEnergyCommunitySensorEntityDescription]] = (
     _energy_community_descriptions(
         "import",
         energy_community=(ENERGY_COMMUNITY_OWN_COVERAGE, None),
@@ -484,7 +516,7 @@ SENSOR_ENERGY_COMMUNITY_IMPORT_TYPES: Final[list[NetzOOEeServiceSensorEntityDesc
     )
 )
 
-SENSOR_ENERGY_COMMUNITY_EXPORT_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] = (
+SENSOR_ENERGY_COMMUNITY_EXPORT_TYPES: Final[list[NetzOOEeServiceEnergyCommunitySensorEntityDescription]] = (
     _energy_community_descriptions(
         "export",
         energy_community=(ENERGY_COMMUNITY_GENERATION, ENERGY_COMMUNITY_OVER_COVERAGE),
@@ -505,19 +537,23 @@ SENSOR_PHOTOVOLTAICS_TYPES: Final[list[NetzOOEeServiceSensorEntityDescription]] 
 ]
 
 SENSOR_TYPES: Final[dict[str, list[NetzOOEeServiceSensorEntityDescription]]] = {
-    DeviceType.HOUSEHOLD.value: SENSOR_DEFAULT_TYPES + SENSOR_HOUSEHOLD_TYPES,
-    DeviceType.PHOTOVOLTAICS.value: SENSOR_DEFAULT_TYPES + SENSOR_PHOTOVOLTAICS_TYPES,
-    DeviceType.ENERGY_COMMUNITY_IMPORT.value: SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES
-    + SENSOR_ENERGY_COMMUNITY_IMPORT_TYPES,
-    DeviceType.ENERGY_COMMUNITY_EXPORT.value: SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES
-    + SENSOR_ENERGY_COMMUNITY_EXPORT_TYPES,
+    DeviceType.HOUSEHOLD.value: [*SENSOR_DEFAULT_TYPES, *SENSOR_HOUSEHOLD_TYPES],
+    DeviceType.PHOTOVOLTAICS.value: [*SENSOR_DEFAULT_TYPES, *SENSOR_PHOTOVOLTAICS_TYPES],
+    DeviceType.ENERGY_COMMUNITY_IMPORT.value: [
+        *SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES,
+        *SENSOR_ENERGY_COMMUNITY_IMPORT_TYPES,
+    ],
+    DeviceType.ENERGY_COMMUNITY_EXPORT.value: [
+        *SENSOR_ENERGY_COMMUNITY_DEFAULT_TYPES,
+        *SENSOR_ENERGY_COMMUNITY_EXPORT_TYPES,
+    ],
 }
 
 
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
     entry: NetzOOEeServiceConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up the sensors of all devices from a config entry and add the sensors of new devices after updates."""
     coordinator: NetzOOEeServiceDataUpdateCoordinator = entry.runtime_data
@@ -540,7 +576,6 @@ async def async_setup_entry(
             description.entity_class(
                 coordinator,
                 description=description,
-                entry=entry,
                 device_identifier=device_identifier,
             )
             for device_identifier, data in coordinator.data.items()

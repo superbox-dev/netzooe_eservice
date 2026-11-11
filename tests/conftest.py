@@ -37,8 +37,6 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from yarl import URL
 
-"""Contract account number, energy community ID, first and last day of a consumption profile request."""
-
 
 def profile_request_key(data: dict[str, Any]) -> ProfileRequestKey:
     """Return the key of a consumption profile request body, an L1 profile has an empty energy community ID."""
