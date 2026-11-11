@@ -23,19 +23,13 @@ from custom_components.netzooe_eservice.const import SCAN_INTERVAL_FULL
 from tests import options
 from tests import refresh
 from tests import setup_integration
-from tests.api_data import CONSENTS_DATA
-from tests.api_data import CONTRACT_ACCOUNT_DATA_1
-from tests.api_data import CONTRACT_ACCOUNT_DATA_2
-from tests.api_data import CONTRACT_ACCOUNT_DATA_4
-from tests.api_data import CONTRIBUTION_FACTOR_ENTITY_ID
-from tests.api_data import MPAN_1
-from tests.api_data import NOW
-from tests.api_data import PROFILE_RESPONSES
-from tests.api_data import PROFILE_URL
-from tests.api_data import SEVEN_ENERGY
-from tests.api_data import SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2
-from tests.api_data import WSEG
 from tests.conftest import profile_request_keys
+from tests.const import CONTRIBUTION_FACTOR_ENTITY_ID
+from tests.const import MPAN_1
+from tests.const import NOW
+from tests.const import PROFILE_URL
+from tests.const import SEVEN_ENERGY
+from tests.const import WSEG
 from tests.test_coordinator_data import ENERGY_COMMUNITY_EXPORT_ENTITY_ID
 from tests.test_coordinator_data import FREQUENT_UPDATES_DISABLED
 from tests.test_coordinator_data import FREQUENT_UPDATES_ENABLED
@@ -84,9 +78,12 @@ def _status_valid_from(hass: HomeAssistant) -> str:
     return state.attributes["valid_from"]
 
 
-def _consents_with(changes: dict[str, Any]) -> list[dict[str, Any]]:
+def _consents_with(fake_api: FakeNetzOOEeServiceAPI, changes: dict[str, Any]) -> list[dict[str, Any]]:
     """Return the consents with the given changes to the consent of the energy community CC100087."""
-    return [consent | changes if consent["contributionPercentage"] == "93" else consent for consent in CONSENTS_DATA]
+    return [
+        consent | changes if consent["contributionPercentage"] == "93" else consent
+        for consent in fake_api.account.consents
+    ]
 
 
 def _contract_account_with(
@@ -242,6 +239,7 @@ async def test_frequent_updates_only_refresh_energy_community_data(
         fake_api,
         aioclient_mock,
         consents=_consents_with(
+            fake_api,
             {"contributionPercentage": "50", "validThrough": {"from": "2026-06-01", "to": "9999-12-31"}},
         ),
     )
@@ -358,7 +356,7 @@ async def test_profile_requests(
     """Test that every consumption profile is requested once for the right contract account and time range."""
     await _setup(hass, config_entry, fake_api)
 
-    assert sorted(profile_request_keys(aioclient_mock)) == sorted(PROFILE_RESPONSES)
+    assert sorted(profile_request_keys(aioclient_mock)) == sorted(fake_api.account.profile_responses)
 
 
 @pytest.mark.parametrize(
@@ -633,7 +631,7 @@ async def test_meter_point_profile_request_time_ranges_of_contract(
     fake_api.register_auth_request()
     fake_api.register_requests(
         contract_accounts={
-            "001": _contract_account_with(CONTRACT_ACCOUNT_DATA_1, MPAN_1, changes),
+            "001": _contract_account_with(fake_api.account.contract_accounts["001"], MPAN_1, changes),
         },
     )
 
@@ -654,7 +652,7 @@ async def test_integer_profile_values(
     """Test that profile values returned as integers are summed as floats and included in the totals."""
     fake_api.profile_responses[("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28")] = [
         item | {"sum": item["sum"] | {"value": int(item["sum"]["value"])}}
-        for item in SEVEN_ENERGY_PROFILE_DATA_TOTAL_L3_001_2
+        for item in fake_api.account.profile_responses[("001", SEVEN_ENERGY, "2026-01-26", "2026-06-28")]
     ]
 
     await _setup(hass, config_entry, fake_api)
@@ -722,7 +720,7 @@ async def test_full_update_removes_revoked_energy_community(
 
     assert _state(hass, STATUS_ENTITY_ID) == "active"
 
-    _register_full_update(fake_api, aioclient_mock, consents=_consents_with({"status": "REVOKED"}))
+    _register_full_update(fake_api, aioclient_mock, consents=_consents_with(fake_api, {"status": "REVOKED"}))
     await refresh(hass, config_entry)
 
     assert hass.states.get(STATUS_ENTITY_ID) is None
@@ -759,12 +757,12 @@ async def test_only_most_recent_consent_is_used(
     """Test that only the most recent consent of the consent history is used."""
     older_consent: dict[str, Any] = next(
         consent | {"validThrough": {"from": "2020-01-01", "to": "2020-12-31"}, "contributionPercentage": "10"}
-        for consent in CONSENTS_DATA
+        for consent in fake_api.account.consents
         if consent["contributionPercentage"] == "93"
     )
 
     fake_api.register_auth_request()
-    fake_api.register_requests(consents=[*CONSENTS_DATA, older_consent])
+    fake_api.register_requests(consents=[*fake_api.account.consents, older_consent])
 
     await setup_integration(hass, config_entry)
 
@@ -796,7 +794,7 @@ async def test_totals_only_include_active_energy_communities(
     energy_community_export: float = float(_state(hass, ENERGY_COMMUNITY_EXPORT_ENTITY_ID))
     assert energy_community_export > 0
 
-    _register_consents_update(fake_api, aioclient_mock, consents=_consents_with({"status": status.upper()}))
+    _register_consents_update(fake_api, aioclient_mock, consents=_consents_with(fake_api, {"status": status.upper()}))
     await refresh(hass, config_entry)
 
     assert _state(hass, STATUS_ENTITY_ID) == status
@@ -890,7 +888,7 @@ async def test_unknown_status(
 ) -> None:
     """Test that an unknown or missing consent status is shown as unknown."""
     fake_api.register_auth_request()
-    fake_api.register_requests(consents=_consents_with({"status": status}))
+    fake_api.register_requests(consents=_consents_with(fake_api, {"status": status}))
 
     await setup_integration(hass, config_entry)
 
@@ -1029,7 +1027,9 @@ async def test_meter_point_without_active_contract_logged_once(
             fake_api,
             aioclient_mock,
             contract_accounts={
-                "004": _contract_account_with(CONTRACT_ACCOUNT_DATA_4, INACTIVE_METER_POINT, {"active": True}),
+                "004": _contract_account_with(
+                    fake_api.account.contract_accounts["004"], INACTIVE_METER_POINT, {"active": True}
+                ),
             },
         )
         await refresh(hass, config_entry)
@@ -1079,7 +1079,7 @@ async def test_inactive_meter_point_uses_most_recently_ended_contract(
     # Both contracts of the meter point have ended, the one of contract account 003 on 2026-06-16.
     # The portal returns contract account 002 before 003.
     contract_account: dict[str, Any] = _contract_account_with(
-        CONTRACT_ACCOUNT_DATA_2,
+        fake_api.account.contract_accounts["002"],
         "AT0000000000000000000000011111112",
         {"active": False} | changes,
     )
@@ -1154,12 +1154,12 @@ async def test_consent_matched_by_service_provider_position(
     # "9999DYNA" is part of the ID "ATCC9999DYNAMCC100087000000000002", but not at the service provider position.
     other_consent: dict[str, Any] = next(
         consent | {"serviceProvider": "9999DYNA", "contributionPercentage": "1"}
-        for consent in CONSENTS_DATA
+        for consent in fake_api.account.consents
         if consent["contributionPercentage"] == "93"
     )
 
     fake_api.register_auth_request()
-    fake_api.register_requests(consents=[other_consent, *CONSENTS_DATA])
+    fake_api.register_requests(consents=[other_consent, *fake_api.account.consents])
 
     await setup_integration(hass, config_entry)
 

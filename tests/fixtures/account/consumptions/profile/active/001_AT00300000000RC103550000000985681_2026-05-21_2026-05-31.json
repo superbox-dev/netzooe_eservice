@@ -1,0 +1,28 @@
+[
+  {
+    "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
+    "from": "2026-05-21T00:00:00",
+    "to": "2026-05-31T23:59:59",
+    "type": "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+    "energyDirection": "GENERATION",
+    "sum": {
+      "value": 15.0,
+      "unit": "KWH"
+    },
+    "energyCommunityId": "AT00300000000RC103550000000985681",
+    "energyCommunityName": "EEG Oberösterreich RID-11"
+  },
+  {
+    "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
+    "from": "2026-05-21T00:00:00",
+    "to": "2026-05-31T23:59:59",
+    "type": "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+    "energyDirection": "GENERATION",
+    "sum": {
+      "value": 12.0,
+      "unit": "KWH"
+    },
+    "energyCommunityId": "AT00300000000RC103550000000985681",
+    "energyCommunityName": "EEG Oberösterreich RID-11"
+  }
+]

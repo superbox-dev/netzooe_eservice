@@ -19,8 +19,7 @@ from custom_components.netzooe_eservice.const import DOMAIN
 from tests import options
 from tests import refresh
 from tests import setup_integration
-from tests.api_data import CONTRACT_ACCOUNT_DATA_4
-from tests.api_data import CONTRIBUTION_FACTOR_ENTITY_ID
+from tests.const import CONTRIBUTION_FACTOR_ENTITY_ID
 from tests.test_init_data import ENERGY_COMMUNITY_DEVICE_IDENTIFIER
 
 if TYPE_CHECKING:
@@ -189,7 +188,7 @@ async def test_device_name_with_unknown_meter_point_format(
     fake_api: FakeNetzOOEeServiceAPI,
 ) -> None:
     """Test that the device name contains the whole meter point number if it cannot be shortened."""
-    contract_account: dict[str, Any] = deepcopy(CONTRACT_ACCOUNT_DATA_4)
+    contract_account: dict[str, Any] = deepcopy(fake_api.account.contract_accounts["004"])
 
     for contract in contract_account["contracts"]:
         if (

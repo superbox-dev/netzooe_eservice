@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 from homeassistant.helpers.translation import async_get_translations
 
-from tests.api_data import NOW
+from tests.const import NOW
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
     from custom_components.netzooe_eservice.coordinator import NetzOOEeServiceDataUpdateCoordinator
 
-"""Time of the updates, the consumption profiles in `tests.api_data.PROFILE_RESPONSES` are requested for it."""
+"""Time of the updates, the consumption profiles in `tests/fixtures/account/` are requested for it."""
 
 
 def options(**overrides: bool) -> dict[str, Any]:

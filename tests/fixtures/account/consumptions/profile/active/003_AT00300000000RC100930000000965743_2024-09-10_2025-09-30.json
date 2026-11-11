@@ -1,0 +1,28 @@
+[
+  {
+    "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
+    "from": "2024-10-07T00:00:00",
+    "to": "2025-09-30T23:59:59",
+    "type": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR",
+    "energyDirection": "CONSUMPTION",
+    "sum": {
+      "value": 4000.0,
+      "unit": "KWH"
+    },
+    "energyCommunityId": "AT00300000000RC100930000000965743",
+    "energyCommunityName": "wseg 07614 0523 UW Partenstein"
+  },
+  {
+    "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
+    "from": "2024-10-07T00:00:00",
+    "to": "2025-09-30T23:59:59",
+    "type": "ENERGY_COMMUNITY_OWN_COVERAGE",
+    "energyDirection": "CONSUMPTION",
+    "sum": {
+      "value": 350.0,
+      "unit": "KWH"
+    },
+    "energyCommunityId": "AT00300000000RC100930000000965743",
+    "energyCommunityName": "wseg 07614 0523 UW Partenstein"
+  }
+]

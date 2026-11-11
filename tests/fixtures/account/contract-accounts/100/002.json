@@ -1,0 +1,143 @@
+{
+  "contractAccountNumber": "002",
+  "businessPartnerNumber": "200",
+  "active": true,
+  "branch": "STROM",
+  "contracts": [
+    {
+      "branch": "STROM",
+      "scaleType": "EEG 7ngem",
+      "active": true,
+      "moveInDate": "2026-06-17",
+      "moveOutDate": "9999-12-31",
+      "pointOfDelivery": {
+        "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
+        "meter": {
+          "meterNumber": "3000000"
+        },
+        "monthlyTrend": {
+          "consumptionOld": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "consumptionNew": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "timerangeOld": {
+            "from": "2026-06-28T17:07:11.908037756",
+            "to": "2026-06-29T17:07:11.908038675"
+          },
+          "timerangeNew": {
+            "from": "2026-06-28T17:07:11.908040171",
+            "to": "2026-06-29T17:07:11.908040275"
+          }
+        },
+        "yearlyTrend": {
+          "consumptionOld": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "consumptionNew": {
+            "sum": 0.0,
+            "perDay": 0.0,
+            "days": 0
+          },
+          "timerangeOld": {
+            "from": "2026-06-28T17:07:11.908041155",
+            "to": "2026-06-29T17:07:11.908041266"
+          },
+          "timerangeNew": {
+            "from": "2026-06-28T17:07:11.908041578",
+            "to": "2026-06-29T17:07:11.908041679"
+          }
+        },
+        "availableTimeRange": {
+          "from": "2023-10-18",
+          "to": "2026-06-27"
+        },
+        "lastReadings": {
+          "values": [
+            {
+              "meternumber": "3000000",
+              "referenceNumber": "2.6.0",
+              "newResult": {
+                "timestamp": "2026-09-01T00:00:00",
+                "readingValue": 3.998
+              }
+            },
+            {
+              "meternumber": "3000000",
+              "referenceNumber": "2.8.1",
+              "newResult": {
+                "timestamp": "2026-06-28T00:15:00",
+                "readingValue": 44000.0
+              }
+            }
+          ]
+        }
+      },
+      "powerGenerationUnit": false,
+      "energyCommunityData": {
+        "status": "HISTORICAL",
+        "timeslices": [
+          {
+            "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+            "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+            "from": "2026-06-17",
+            "to": "2026-06-28",
+            "status": "ACTIVE",
+            "profiles": [
+              {
+                "from": "2026-06-17",
+                "to": "2026-06-28",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR"
+              },
+              {
+                "from": "2026-06-17",
+                "to": "2026-06-28",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_OWN_COVERAGE"
+              }
+            ],
+            "profileDataAvailableFrom": "2026-06-17",
+            "profileDataAvailableTo": "2026-06-28"
+          },
+          {
+            "energyCommunityId": "AT00300000000RC103550000000985681",
+            "energyCommunityName": "EEG Oberösterreich RID-11",
+            "from": "2026-06-17",
+            "to": "2026-06-28",
+            "status": "ACTIVE",
+            "profiles": [
+              {
+                "from": "2026-06-17",
+                "to": "2026-06-28",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR"
+              },
+              {
+                "from": "2026-06-17",
+                "to": "2026-06-28",
+                "granularity": "QUARTER_OF_AN_HOUR",
+                "profileType": "ENERGY_COMMUNITY_OWN_COVERAGE"
+              }
+            ],
+            "profileDataAvailableFrom": "2026-06-17",
+            "profileDataAvailableTo": "2026-06-28"
+          }
+        ],
+        "energyCommunityActive": true
+      },
+      "supplier": {
+        "id": "AT110191",
+        "name": "EP Energie Plus GmbH"
+      },
+      "synthProfile": "Haushalt"
+    }
+  ]
+}

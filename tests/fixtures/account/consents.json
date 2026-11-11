@@ -1,0 +1,169 @@
+[
+  {
+    "validThrough": {
+      "from": "2024-05-04",
+      "to": "2024-05-07"
+    },
+    "serviceProvider": "RC100930",
+    "serviceProviderName": "wseg 07614 0523 UW Partenstein",
+    "pod": "AT0000000000000000000000011111112",
+    "status": "REVOKED",
+    "contributionPercentage": "100",
+    "energyDirection": "CONSUMPTION",
+    "energyCommunityConsent": true
+  },
+  {
+    "validThrough": {
+      "from": "2024-05-04",
+      "to": "2025-09-30"
+    },
+    "serviceProvider": "RC100930",
+    "serviceProviderName": "wseg 07614 0523 UW Partenstein",
+    "pod": "AT0000000000000000000000011111111",
+    "status": "REVOKED",
+    "contributionPercentage": "100",
+    "energyDirection": "GENERATION",
+    "energyCommunityConsent": true
+  },
+  {
+    "validThrough": {
+      "from": "2024-05-29",
+      "to": "2024-05-29"
+    },
+    "serviceProvider": "RC100930",
+    "serviceProviderName": "wseg 07614 0523 UW Partenstein",
+    "pod": "AT0000000000000000000000011111112",
+    "status": "REVOKED",
+    "contributionPercentage": "100",
+    "energyDirection": "CONSUMPTION",
+    "energyCommunityConsent": true
+  },
+  {
+    "validThrough": {
+      "from": "2024-09-10",
+      "to": "2025-09-30"
+    },
+    "serviceProvider": "RC100930",
+    "serviceProviderName": "wseg 07614 0523 UW Partenstein",
+    "pod": "AT0000000000000000000000011111112",
+    "status": "REVOKED",
+    "contributionPercentage": "100",
+    "energyDirection": "CONSUMPTION",
+    "energyCommunityConsent": true
+  },
+  {
+    "validThrough": {
+      "from": "2026-01-26",
+      "to": "9999-12-31"
+    },
+    "serviceProvider": "CC100087",
+    "serviceProviderName": "7Energy - Bürgerenergiegemeinschaft für",
+    "pod": "AT0000000000000000000000011111112",
+    "status": "ACTIVE",
+    "contributionPercentage": "95",
+    "energyDirection": "CONSUMPTION",
+    "energyCommunityConsent": true
+  },
+  {
+    "validThrough": {
+      "from": "2026-01-26",
+      "to": "9999-12-31"
+    },
+    "serviceProvider": "CC100087",
+    "serviceProviderName": "7Energy - Bürgerenergiegemeinschaft für",
+    "pod": "AT0000000000000000000000011111111",
+    "status": "ACTIVE",
+    "contributionPercentage": "93",
+    "energyDirection": "GENERATION",
+    "energyCommunityConsent": true
+  },
+  {
+    "validThrough": {
+      "from": "2026-05-21",
+      "to": "9999-12-31"
+    },
+    "serviceProvider": "RC103550",
+    "serviceProviderName": "EEG Oberösterreich RID-11",
+    "pod": "AT0000000000000000000000011111111",
+    "status": "ACTIVE",
+    "contributionPercentage": "7",
+    "energyDirection": "GENERATION",
+    "energyCommunityConsent": true
+  },
+  {
+    "validThrough": {
+      "from": "2026-05-21",
+      "to": "9999-12-31"
+    },
+    "serviceProvider": "RC103550",
+    "serviceProviderName": "EEG Oberösterreich RID-11",
+    "pod": "AT0000000000000000000000011111112",
+    "status": "ACTIVE",
+    "contributionPercentage": "5",
+    "energyDirection": "CONSUMPTION",
+    "energyCommunityConsent": true
+  },
+  {
+    "validThrough": {
+      "from": "2026-05-21",
+      "to": "9999-12-31"
+    },
+    "serviceProvider": "AT113820",
+    "serviceProviderName": "OeMAG Abwicklungsstelle für Ökostrom AG",
+    "pod": "AT0000000000000000000000011111111",
+    "status": "ACTIVE_UNCHANGEABLE",
+    "contributionPercentage": "0",
+    "energyCommunityConsent": false
+  },
+  {
+    "validThrough": {
+      "from": "2026-06-17",
+      "to": "9999-12-31"
+    },
+    "serviceProvider": "AT110191",
+    "serviceProviderName": "EP Energie Plus GmbH",
+    "pod": "AT0000000000000000000000011111112",
+    "status": "ACTIVE_UNCHANGEABLE",
+    "contributionPercentage": "0",
+    "energyCommunityConsent": false
+  },
+  {
+    "validThrough": {
+      "from": "2026-03-01",
+      "to": "9999-12-31"
+    },
+    "serviceProvider": "RC103550",
+    "serviceProviderName": "EEG Oberösterreich RID-11",
+    "pod": "AT0000000000000000000000011111113",
+    "status": "ACTIVE",
+    "contributionPercentage": "40",
+    "energyDirection": "CONSUMPTION",
+    "energyCommunityConsent": true
+  },
+  {
+    "validThrough": {
+      "from": "2026-05-16",
+      "to": "9999-12-31"
+    },
+    "serviceProvider": "CC100087",
+    "serviceProviderName": "7Energy - Bürgerenergiegemeinschaft für",
+    "pod": "AT0000000000000000000000011111113",
+    "status": "ACTIVE",
+    "contributionPercentage": "60",
+    "energyDirection": "CONSUMPTION",
+    "energyCommunityConsent": true
+  },
+  {
+    "validThrough": {
+      "from": "2026-02-01",
+      "to": "9999-12-31"
+    },
+    "serviceProvider": "CC100087",
+    "serviceProviderName": "7Energy - Bürgerenergiegemeinschaft für",
+    "pod": "AT0000000000000000000000011111114",
+    "status": "ACTIVE",
+    "contributionPercentage": "80",
+    "energyDirection": "GENERATION",
+    "energyCommunityConsent": true
+  }
+]

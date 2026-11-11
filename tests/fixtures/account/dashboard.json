@@ -1,0 +1,28 @@
+{
+  "contractAccounts": [
+    {
+      "contractAccountNumber": "001",
+      "businessPartnerNumber": "100"
+    },
+    {
+      "contractAccountNumber": "002",
+      "businessPartnerNumber": "100"
+    },
+    {
+      "contractAccountNumber": "003",
+      "businessPartnerNumber": "100"
+    },
+    {
+      "contractAccountNumber": "004",
+      "businessPartnerNumber": "100"
+    },
+    {
+      "contractAccountNumber": "005",
+      "businessPartnerNumber": "100"
+    },
+    {
+      "contractAccountNumber": "006",
+      "businessPartnerNumber": "100"
+    }
+  ]
+}

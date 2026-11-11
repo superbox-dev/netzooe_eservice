@@ -1,0 +1,46 @@
+[
+  {
+    "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
+    "from": "2026-06-17T00:00:00",
+    "to": "2026-06-27T23:59:59",
+    "type": "ACTIVE_CURRENT",
+    "unit": "KWH",
+    "granularity": "DAY",
+    "contractPower": 4.0,
+    "profileTypeContent": {
+      "header": "Wirkenergie",
+      "body": "Bezogene oder eingespeiste Wirkenergie des Zählpunkts.",
+      "bodyText": "Bezogene oder eingespeiste Wirkenergie des Zählpunkts."
+    },
+    "sum": {
+      "value": 110.0,
+      "unit": "KWH"
+    },
+    "profileValues": [
+      {
+        "datetime": "2026-06-16T22:00:00Z",
+        "value": 5.0,
+        "status": "VALID"
+      },
+      {
+        "datetime": "2026-06-20T22:00:00Z",
+        "value": 20.0,
+        "status": "VALID"
+      }
+    ],
+    "average": {
+      "value": 10.0,
+      "unit": "KWH"
+    },
+    "maximum": {
+      "value": 20.0,
+      "unit": "KWH",
+      "dateTime": "2026-06-20T22:00:00Z"
+    },
+    "minimum": {
+      "value": 5.0,
+      "unit": "KWH",
+      "dateTime": "2026-06-16T22:00:00Z"
+    }
+  }
+]

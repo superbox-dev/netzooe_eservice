@@ -1,0 +1,90 @@
+[
+  {
+    "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
+    "from": "2026-05-13T00:00:00",
+    "to": "2026-05-31T23:59:59",
+    "type": "ACTIVE_CURRENT",
+    "unit": "KWH",
+    "granularity": "DAY",
+    "contractPower": 4.0,
+    "profileTypeContent": {
+      "header": "Wirkenergie",
+      "body": "Bezogene oder eingespeiste Wirkenergie des Zählpunkts.",
+      "bodyText": "Bezogene oder eingespeiste Wirkenergie des Zählpunkts."
+    },
+    "sum": {
+      "value": 190.0,
+      "unit": "KWH"
+    },
+    "profileValues": [
+      {
+        "datetime": "2026-05-30T22:00:00Z",
+        "value": 7.0,
+        "status": "VALID"
+      },
+      {
+        "datetime": "2026-05-20T22:00:00Z",
+        "value": 14.0,
+        "status": "VALID"
+      }
+    ],
+    "average": {
+      "value": 10.0,
+      "unit": "KWH"
+    },
+    "maximum": {
+      "value": 14.0,
+      "unit": "KWH",
+      "dateTime": "2026-05-20T22:00:00Z"
+    },
+    "minimum": {
+      "value": 7.0,
+      "unit": "KWH",
+      "dateTime": "2026-05-30T22:00:00Z"
+    }
+  },
+  {
+    "meterPointAdministrationNumber": "AT0000000000000000000000011111112",
+    "from": "2026-05-01T00:00:00",
+    "to": "2026-05-12T23:59:59",
+    "type": "ACTIVE_CURRENT",
+    "unit": "KWH",
+    "granularity": "DAY",
+    "contractPower": 4.0,
+    "profileTypeContent": {
+      "header": "Wirkenergie",
+      "body": "Bezogene oder eingespeiste Wirkenergie des Zählpunkts.",
+      "bodyText": "Bezogene oder eingespeiste Wirkenergie des Zählpunkts."
+    },
+    "sum": {
+      "value": 120.0,
+      "unit": "KWH"
+    },
+    "profileValues": [
+      {
+        "datetime": "2026-05-05T22:00:00Z",
+        "value": 8.0,
+        "status": "VALID"
+      },
+      {
+        "datetime": "2026-05-01T22:00:00Z",
+        "value": 12.0,
+        "status": "VALID"
+      }
+    ],
+    "average": {
+      "value": 10.0,
+      "unit": "KWH"
+    },
+    "maximum": {
+      "value": 12.0,
+      "unit": "KWH",
+      "dateTime": "2026-05-01T22:00:00Z"
+    },
+    "minimum": {
+      "value": 8.0,
+      "unit": "KWH",
+      "dateTime": "2026-05-05T22:00:00Z"
+    }
+  }
+]

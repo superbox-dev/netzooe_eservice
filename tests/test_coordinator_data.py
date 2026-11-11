@@ -9,8 +9,8 @@ from typing import Final
 from zoneinfo import ZoneInfo
 
 from tests import options
-from tests.api_data import SEVEN_ENERGY
-from tests.api_data import ProfileRequestKey
+from tests.const import SEVEN_ENERGY
+from tests.const import ProfileRequestKey
 
 VIENNA: Final[ZoneInfo] = ZoneInfo("Europe/Vienna")
 

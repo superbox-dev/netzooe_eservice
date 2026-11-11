@@ -1,10 +1,13 @@
 # Tests
 
 - Every new code path needs a test
-- Mock HTTP with the `fake_api` fixture (`tests/conftest.py`), responses in `tests/api_data.py`
+- Mock HTTP with the `fake_api` fixture (`tests/conftest.py`)
+  - responses of a complete account in `tests/fixtures/account/`, one JSON file per response at the path of the
+    request URL, exactly as the portal returns it
+  - loaded by the `portal_account` fixture, another account in `tests/fixtures/` as its indirect parameter
 - Assert entities with snapshots in `tests/snapshots/`
 - New entity:
-  - add the values to the responses in `tests/api_data.py`
+  - add the values to the responses in `tests/fixtures/account/`
   - regenerate the snapshots and review the new entities
 - Patch `dt_util.now` in the module under test for date-dependent values
 - Test only through Home Assistant:
@@ -16,7 +19,7 @@
   - assert entity states, `ConfigEntryState`, the device registry or the requested URLs
 - `pytest.mark.parametrize` with `ids=` naming each case
 - Constants of a test module in a module with its name and `_data.py` (`test_api.py` → `test_api_data.py`)
-  - shared by several test modules: `tests/api_data.py`
+  - shared by several test modules: `tests/const.py`
 - Helper functions that only check (no return value) start with `assert_`
   - helpers that return a value and only assert to narrow types keep their name
   - shared by several test modules: `tests/asserts.py`, registered with `pytest.register_assert_rewrite()` in

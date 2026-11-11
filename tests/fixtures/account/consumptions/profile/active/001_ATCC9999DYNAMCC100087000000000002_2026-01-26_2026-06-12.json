@@ -1,0 +1,55 @@
+[
+  {
+    "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
+    "from": "2026-01-26T00:00:00",
+    "to": "2026-06-13T23:59:59",
+    "type": "ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR",
+    "energyDirection": "GENERATION",
+    "sum": {
+      "value": 2000.0,
+      "unit": "KWH"
+    },
+    "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+    "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom"
+  },
+  {
+    "meterPointAdministrationNumber": "AT0000000000000000000000011111111",
+    "from": "2026-01-26T00:00:00",
+    "to": "2026-06-13T23:59:59",
+    "type": "ENERGY_COMMUNITY_OVER_COVERAGE_PER_CONTRIBUTION_FACTOR",
+    "energyDirection": "GENERATION",
+    "sum": {
+      "value": 1000.0,
+      "unit": "KWH"
+    },
+    "energyCommunityId": "ATCC9999DYNAMCC100087000000000002",
+    "energyCommunityName": "7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom",
+    "granularity": "MONTH",
+    "average": {
+      "value": 166.67,
+      "unit": "KWH"
+    },
+    "maximum": {
+      "value": 300.0,
+      "unit": "KWH",
+      "dateTime": "2026-04-30T22:00:00Z"
+    },
+    "minimum": {
+      "value": 20.0,
+      "unit": "KWH",
+      "dateTime": "2026-01-25T23:00:00Z"
+    },
+    "profileValues": [
+      {
+        "datetime": "2026-01-25T23:00:00Z",
+        "value": 20.0,
+        "status": "VALID"
+      },
+      {
+        "datetime": "2026-04-30T22:00:00Z",
+        "value": 300.0,
+        "status": "VALID"
+      }
+    ]
+  }
+]
