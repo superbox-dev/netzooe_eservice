@@ -20,8 +20,6 @@ from typing import TypedDict
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import ConfigEntryAuthFailed
-from homeassistant.helpers import device_registry as dr
-from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 from homeassistant.util import dt as dt_util
@@ -46,19 +44,15 @@ from .const import DOMAIN
 from .const import ELECTRICITY_SYNTH_PROFILES
 from .const import ENERGY_COMMUNITY_DEVICE_TYPES
 from .const import ENERGY_COMMUNITY_ID_SERVICE_PROVIDER
-from .const import MANUFACTURER
 from .const import MAX_PARALLEL_REQUESTS
 from .const import METER_POINT_DEVICE_TYPES
 from .const import METER_READING_REFERENCE_NUMBERS
-from .const import NAME
 from .const import PEAK_POWER_REFERENCE_NUMBERS
 from .const import PROFILE_DATA_DELAY
 from .const import SCAN_INTERVAL
 from .const import SCAN_INTERVAL_FULL
-from .const import SHORT_DEVICE_ID_PATTERN
 
 if TYPE_CHECKING:
-    import re
     from collections.abc import Awaitable
     from collections.abc import Callable
     from collections.abc import Iterable
@@ -855,38 +849,3 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[CoordinatorData
 
         _LOGGER.debug("Updated energy community data")
         return data
-
-    def device_info(self, device_identifier: str, /) -> DeviceInfo:
-        """Return the device info of a meter point, or of an energy community linked to its meter point."""
-        data: DeviceData = self.data[device_identifier]
-
-        if not self._is_energy_community(data):
-            return DeviceInfo(
-                identifiers={(DOMAIN, device_identifier)},
-                name=f"{data['deviceName']} ({self._short_device_id(device_identifier)})",
-                model=NAME,
-                manufacturer=MANUFACTURER,
-            )
-
-        meter_point_administration_number: str = data["meterPointAdministrationNumber"]
-
-        return DeviceInfo(
-            identifiers={(DOMAIN, device_identifier)},
-            name=(
-                f"{data['synthProfile']}: {data['deviceName']} "
-                f"({self._short_device_id(meter_point_administration_number)})"
-            ),
-            model=NAME,
-            manufacturer=MANUFACTURER,
-            via_device_id=dr.async_get_device_id_by_identifier(
-                self.hass,
-                (DOMAIN, meter_point_administration_number),
-                config_entry_id=self.config_entry.entry_id,
-            ),
-        )
-
-    @staticmethod
-    def _short_device_id(device_id: str, /) -> str:
-        """Return the short form of a meter point or energy community ID, e.g. for device names."""
-        match: re.Match[str] | None = SHORT_DEVICE_ID_PATTERN.search(device_id)
-        return match.group(1) if match else device_id

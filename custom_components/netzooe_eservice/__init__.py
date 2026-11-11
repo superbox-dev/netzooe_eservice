@@ -21,6 +21,8 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.device_registry import DeviceRegistry
 
+    from .coordinator import CoordinatorData
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: NetzOOEeServiceConfigEntry) -> bool:
     """Set up Netz OÖ eService from a config entry."""
@@ -42,30 +44,24 @@ async def async_setup_entry(hass: HomeAssistant, entry: NetzOOEeServiceConfigEnt
     await coordinator.async_config_entry_first_refresh()
     entry.runtime_data = coordinator
 
-    _async_update_devices(hass, entry, coordinator)
-    entry.async_on_unload(coordinator.async_add_listener(lambda: _async_update_devices(hass, entry, coordinator)))
+    _async_remove_stale_devices(hass, entry, coordinator.data)
+    entry.async_on_unload(
+        coordinator.async_add_listener(lambda: _async_remove_stale_devices(hass, entry, coordinator.data)),
+    )
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     return True
 
 
-def _async_update_devices(
+def _async_remove_stale_devices(
     hass: HomeAssistant,
     entry: NetzOOEeServiceConfigEntry,
-    coordinator: NetzOOEeServiceDataUpdateCoordinator,
+    data: CoordinatorData,
 ) -> None:
-    """Register the meter point devices and remove the devices that are no longer in the coordinator data.
-
-    The meter point devices are registered before the sensors are added, so the energy communities can link to them.
-    """
+    """Remove the devices of the config entry that are no longer in the coordinator data."""
     device_registry: DeviceRegistry = dr.async_get(hass)
-    valid_identifiers: set[str] = set(coordinator.data)
-
-    for device_identifier in coordinator.meter_points:
-        device_registry.async_get_or_create(
-            config_entry_id=entry.entry_id, **coordinator.device_info(device_identifier)
-        )
+    valid_identifiers: set[str] = set(data)
 
     for device_entry in dr.async_entries_for_config_entry(device_registry, entry.entry_id):
         our_identifiers: set[str] = {i[1] for i in device_entry.identifiers if i[0] == DOMAIN}

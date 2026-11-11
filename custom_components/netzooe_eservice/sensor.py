@@ -22,6 +22,7 @@ from homeassistant.const import EntityCategory
 from homeassistant.const import UnitOfEnergy
 from homeassistant.const import UnitOfPower
 from homeassistant.core import callback
+from homeassistant.helpers import device_registry as dr
 from homeassistant.util import dt as dt_util
 from netzooe_eservice_api.constants import ConsentsStatus
 from netzooe_eservice_api.constants import Granularity
@@ -40,6 +41,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
     from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.device_registry import DeviceInfo
     from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
     from homeassistant.helpers.typing import StateType
 
@@ -133,6 +135,25 @@ class NetzOOEeServiceEnergyCommunitySensorEntity(NetzOOEeServiceSensorEntity):
     def extra_state_attributes(self) -> Mapping[str, Any] | None:
         """Return extra state attributes."""
         return self.entity_description.extra_state_attributes_fn(self._data)
+
+    @property
+    def device_name(self) -> str:
+        """Return the name of the device."""
+        return (
+            f"{self._data['synthProfile']}: {self._data['deviceName']} "
+            f"({self._short_device_id(self._data['meterPointAdministrationNumber'])})"
+        )
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device info, linked to the device of the meter point."""
+        device_info: DeviceInfo = super().device_info
+        device_info["via_device_id"] = dr.async_get_device_id_by_identifier(
+            self.hass,
+            (DOMAIN, self._data["meterPointAdministrationNumber"]),
+            config_entry_id=self.coordinator.config_entry.entry_id,
+        )
+        return device_info
 
 
 class NetzOOEeServiceAggregatedSensorEntity(NetzOOEeServiceSensorEntity):
