@@ -542,8 +542,6 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
             contract_account_number: str = item["contractAccounts"]["contractAccountNumber"]
 
             for timeslice in item["contract"].get("energyCommunityData", {}).get("timeslices", []):
-                _LOGGER.debug("Energy community %s", timeslice["energyCommunityName"])
-
                 energy_community: dict[str, Any] | None = self._get_or_create_energy_community(
                     data,
                     contract=active_contract,
@@ -578,17 +576,17 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         consent: dict[str, Any] = self._get_consent(consents_map, mpan, timeslice["energyCommunityId"])
 
         if not consent:
+            # The ID and the name of the energy community are customer data, so they are not logged.
             self._warn_once(
                 f"missing_consent_{timeslice['energyCommunityId']}",
-                "No consent found for energy community %s",
-                timeslice["energyCommunityId"],
+                "No consent found for an energy community, skipping it",
             )
             return None
 
         self._warning_resolved(f"missing_consent_{timeslice['energyCommunityId']}")
 
         if consent["status"] == ConsentsStatus.REVOKED.value and not self.show_revoked_energy_communities:
-            _LOGGER.debug("Skipping revoked energy community %s", timeslice["energyCommunityName"])
+            _LOGGER.debug("Skipping a revoked energy community")
             return None
 
         energy_community: dict[str, Any] = data.setdefault(
