@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Changed the names of the sensors "Maximum import/export power (previous month)" to sentence case.
+
 ### Security
 
+- Removed the meter point number and the contract account number from the log messages.
 - Added a `SECURITY.md` that describes how to report a vulnerability
 
 <!--start-->

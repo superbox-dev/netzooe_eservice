@@ -363,20 +363,18 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
         if active_contract is None:
             if not self.show_inactive_meter_points:
+                # The meter point number is customer data, so it is not logged.
                 self._warn_once(
                     f"inactive_meter_point_{mpan}",
-                    "Skipping %d contract(s) because no active contract for meter point %s was returned by the API",
+                    "Skipping %d contract(s) because no active contract for a meter point was returned by the API",
                     len(contracts),
-                    mpan,
                 )
                 return None
 
             active_contract = max(contracts, key=self._contract_end)
 
             _LOGGER.debug(
-                "No active contract for meter point %s, "
-                "using most recently ended contract (moveOutDate=%s) as fallback",
-                mpan,
+                "No active contract for a meter point, using most recently ended contract (moveOutDate=%s) as fallback",
                 active_contract["contract"].get("moveOutDate"),
             )
         else:
@@ -542,10 +540,9 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
         for item in active_contract_data.contracts_to_use:
             contract_account_number: str = item["contractAccounts"]["contractAccountNumber"]
-            _LOGGER.debug("Contract %s", contract_account_number)
 
             for timeslice in item["contract"].get("energyCommunityData", {}).get("timeslices", []):
-                _LOGGER.debug("  %s", timeslice["energyCommunityName"])
+                _LOGGER.debug("Energy community %s", timeslice["energyCommunityName"])
 
                 energy_community: dict[str, Any] | None = self._get_or_create_energy_community(
                     data,
@@ -591,7 +588,7 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         self._warning_resolved(f"missing_consent_{timeslice['energyCommunityId']}")
 
         if consent["status"] == ConsentsStatus.REVOKED.value and not self.show_revoked_energy_communities:
-            _LOGGER.debug("  Skipping revoked energy community %s", timeslice["energyCommunityName"])
+            _LOGGER.debug("Skipping revoked energy community %s", timeslice["energyCommunityName"])
             return None
 
         energy_community: dict[str, Any] = data.setdefault(

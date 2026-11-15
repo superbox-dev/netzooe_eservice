@@ -955,8 +955,9 @@ async def test_meter_point_without_active_contract_logged_once(
 
     def warnings() -> int:
         """Return the number of logged warnings for the meter point."""
+        # The meter point number is not logged, the inactive meter point is the only one with two contracts.
         return sum(
-            f"no active contract for meter point {INACTIVE_METER_POINT}" in record.getMessage()
+            "Skipping 2 contract(s) because no active contract for a meter point" in record.getMessage()
             for record in caplog.records
         )
 
