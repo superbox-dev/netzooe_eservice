@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed the meter point number and the contract account number from the log messages.
 - Removed the ID and the name of the energy communities from the log messages.
 - Redacted the ID and the name of the energy communities in the diagnostics.
-- Added a `SECURITY.md` that describes how to report a vulnerability
+- Added a `SECURITY.md` that describes how to report a vulnerability.
 
 <!--start-->
 
