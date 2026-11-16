@@ -99,7 +99,7 @@ Without **Frequent updates**, all data is refreshed every 3 hours.
 | Sensor                                            | Description                                                         |
 |---------------------------------------------------|---------------------------------------------------------------------|
 | Meter reading                                     | Last meter reading in kWh                                           |
-| Maximum Import/Export Power (previous month)      | Peak power of the previous month in kW                              |
+| Maximum import/export power (previous month)      | Peak power of the previous month in kW                              |
 | Monthly/Yearly trend (current/previous period)    | Energy of the current and previous period in kWh                    |
 | Monthly/Yearly trend                              | Change between the current and previous period in %                 |
 | Supplier                                          | Supplier name, market partner ID in `id`, start in `contract_start` |

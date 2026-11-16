@@ -17,7 +17,6 @@ from typing import Any
 from typing import Final
 from typing import NamedTuple
 
-from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
@@ -51,7 +50,6 @@ from .const import PEAK_POWER_REFERENCE_NUMBERS
 from .const import PROFILE_DATA_DELAY
 from .const import SCAN_INTERVAL
 from .const import SCAN_INTERVAL_FULL
-from .const import TO_REDACT
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable
@@ -65,8 +63,6 @@ _LOGGER: Final[logging.Logger] = logging.getLogger(__name__)
 
 type NetzOOEeServiceConfigEntry = ConfigEntry[NetzOOEeServiceDataUpdateCoordinator]
 type ConsentsMap = dict[str, list[dict[str, Any]]]
-
-"""Position of the service provider code in the energy community ID, e.g. `AT00300000000RC100930000000965743`."""
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -94,10 +90,10 @@ class DateRange(NamedTuple):
 class ProfilePeriods:
     """Date ranges of the consumption profiles that are requested in a full update."""
 
+    # Last day with L1/L2 profile data of the energy communities.
     cutoff: date
-    """Last day with L1/L2 profile data of the energy communities."""
+    # All days of the previous month.
     last_month: DateRange
-    """All days of the previous month."""
 
     @classmethod
     def from_today(cls, today: date, /) -> ProfilePeriods:
@@ -123,8 +119,8 @@ class Timeslice:
 class ProfileRequest:
     """Consumption profile request of a time range."""
 
+    # Lists of the device data the profile is appended to.
     targets: tuple[list[dict[str, Any]], ...]
-    """Lists of the device data the profile is appended to."""
     date_range: DateRange
 
 
@@ -229,7 +225,6 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         if self._warning_resolved("api_error"):
             _LOGGER.info("The eService portal is available again")
 
-        _LOGGER.debug("Data: %s", async_redact_data(data, TO_REDACT))
         return data
 
     async def _async_fetch_all_data(self, periods: ProfilePeriods, /) -> dict[str, Any]:
@@ -330,7 +325,6 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
     async def _async_fetch_contracts_by_mpan(self) -> dict[str, list[dict[str, Any]]]:
         """Fetch all contract accounts and group their electricity contracts by meter point."""
         dashboard: dict[str, Any] = await self.api.dashboard()
-        _LOGGER.debug("Dashboard: %s", async_redact_data(dashboard, TO_REDACT))
 
         all_contract_accounts: list[dict[str, Any]] = await self._async_gather(
             partial(
@@ -344,8 +338,6 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         contracts_by_mpan: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
         for contract_accounts in all_contract_accounts:
-            _LOGGER.debug("Contract accounts: %s", async_redact_data(contract_accounts, TO_REDACT))
-
             for contract in contract_accounts["contracts"]:
                 if (
                     contract["branch"] == ConsumptionsProfilesBranch.ELECTRICITY.value
@@ -371,20 +363,18 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
         if active_contract is None:
             if not self.show_inactive_meter_points:
+                # The meter point number is customer data, so it is not logged.
                 self._warn_once(
                     f"inactive_meter_point_{mpan}",
-                    "Skipping %d contract(s) because no active contract for meter point %s was returned by the API",
+                    "Skipping %d contract(s) because no active contract for a meter point was returned by the API",
                     len(contracts),
-                    mpan,
                 )
                 return None
 
             active_contract = max(contracts, key=self._contract_end)
 
             _LOGGER.debug(
-                "No active contract for meter point %s, "
-                "using most recently ended contract (moveOutDate=%s) as fallback",
-                mpan,
+                "No active contract for a meter point, using most recently ended contract (moveOutDate=%s) as fallback",
                 active_contract["contract"].get("moveOutDate"),
             )
         else:
@@ -550,11 +540,8 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
 
         for item in active_contract_data.contracts_to_use:
             contract_account_number: str = item["contractAccounts"]["contractAccountNumber"]
-            _LOGGER.debug("Contract %s", contract_account_number)
 
             for timeslice in item["contract"].get("energyCommunityData", {}).get("timeslices", []):
-                _LOGGER.debug("  %s", timeslice["energyCommunityName"])
-
                 energy_community: dict[str, Any] | None = self._get_or_create_energy_community(
                     data,
                     contract=active_contract,
@@ -589,17 +576,17 @@ class NetzOOEeServiceDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]
         consent: dict[str, Any] = self._get_consent(consents_map, mpan, timeslice["energyCommunityId"])
 
         if not consent:
+            # The ID and the name of the energy community are customer data, so they are not logged.
             self._warn_once(
                 f"missing_consent_{timeslice['energyCommunityId']}",
-                "No consent found for energy community %s",
-                timeslice["energyCommunityId"],
+                "No consent found for an energy community, skipping it",
             )
             return None
 
         self._warning_resolved(f"missing_consent_{timeslice['energyCommunityId']}")
 
         if consent["status"] == ConsentsStatus.REVOKED.value and not self.show_revoked_energy_communities:
-            _LOGGER.debug("  Skipping revoked energy community %s", timeslice["energyCommunityName"])
+            _LOGGER.debug("Skipping a revoked energy community")
             return None
 
         energy_community: dict[str, Any] = data.setdefault(

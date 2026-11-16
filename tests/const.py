@@ -24,8 +24,8 @@ from datetime import datetime
 from typing import Final
 from zoneinfo import ZoneInfo
 
+# Contract account number, energy community ID, first and last day of a consumption profile request.
 type ProfileRequestKey = tuple[str, str, str, str]
-"""Contract account number, energy community ID, first and last day of a consumption profile request."""
 
 API_URL: Final[str] = "https://eservice.netzooe.at/service"
 PROFILE_URL: Final[str] = f"{API_URL}/v1.0/consumptions/profile/active"

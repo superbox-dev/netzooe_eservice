@@ -42,7 +42,7 @@ if TYPE_CHECKING:
 
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.device_registry import DeviceInfo
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
     from homeassistant.helpers.typing import StateType
 
     from .coordinator import NetzOOEeServiceConfigEntry
@@ -156,10 +156,10 @@ class NetzOOEeServiceSensorEntityDescription(SensorEntityDescription):
     """Class describing Netz OÖ eService sensor entities."""
 
     entity_class: type[NetzOOEeServiceSensorEntity] = NetzOOEeServiceSensorEntity
+    # Returns the state from the device data.
     value_fn: Callable[[Mapping[str, Any]], StateType | date]
-    """Return the state from the device data."""
+    # Returns the extra state attributes from the device data.
     extra_state_attributes_fn: Callable[[Mapping[str, Any]], Mapping[str, Any] | None] = _no_attributes
-    """Return the extra state attributes from the device data."""
 
 
 def _status(data: Mapping[str, Any]) -> str | None:
@@ -517,7 +517,7 @@ SENSOR_TYPES: Final[dict[str, list[NetzOOEeServiceSensorEntityDescription]]] = {
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
     entry: NetzOOEeServiceConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up the sensors of all devices from a config entry and add the sensors of new devices after updates."""
     coordinator: NetzOOEeServiceDataUpdateCoordinator = entry.runtime_data

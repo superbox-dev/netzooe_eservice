@@ -6336,7 +6336,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Export Power (previous month)',
+    'original_name': 'Maximum export power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power',
@@ -6350,7 +6350,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum Export Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum export power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -8912,7 +8912,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Import Power (previous month)',
+    'original_name': 'Maximum import power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power',
@@ -8926,7 +8926,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum Import Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum import power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -16879,7 +16879,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Export Power (previous month)',
+    'original_name': 'Maximum export power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power',
@@ -16893,7 +16893,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum Export Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum export power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -19568,7 +19568,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Import Power (previous month)',
+    'original_name': 'Maximum import power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power',
@@ -19582,7 +19582,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum Import Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum import power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -28053,7 +28053,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Export Power (previous month)',
+    'original_name': 'Maximum export power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power',
@@ -28067,7 +28067,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum Export Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum export power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -31260,7 +31260,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Import Power (previous month)',
+    'original_name': 'Maximum import power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power',
@@ -31274,7 +31274,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum Import Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum import power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -40519,7 +40519,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Export Power (previous month)',
+    'original_name': 'Maximum export power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power',
@@ -40533,7 +40533,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum Export Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum export power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -43839,7 +43839,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Import Power (previous month)',
+    'original_name': 'Maximum import power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power',
@@ -43853,7 +43853,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum Import Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum import power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -56299,7 +56299,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Export Power (previous month)',
+    'original_name': 'Maximum export power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power',
@@ -56313,7 +56313,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum Export Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum export power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -58875,7 +58875,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Import Power (previous month)',
+    'original_name': 'Maximum import power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power',
@@ -58889,7 +58889,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum Import Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum import power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -61464,7 +61464,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Import Power (previous month)',
+    'original_name': 'Maximum import power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111113_last_month_peak_import_power',
@@ -61478,7 +61478,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111113) Maximum Import Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111113) Maximum import power (previous month)',
       'meter_number': '5000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-06-01T00:00:00',
@@ -63430,7 +63430,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Export Power (previous month)',
+    'original_name': 'Maximum export power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111114_last_month_peak_export_power',
@@ -63444,7 +63444,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111114) Maximum Export Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111114) Maximum export power (previous month)',
       'meter_number': '6000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-05-01T00:00:00',
@@ -75405,7 +75405,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Export Power (previous month)',
+    'original_name': 'Maximum export power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power',
@@ -75419,7 +75419,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum Export Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum export power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -78094,7 +78094,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Import Power (previous month)',
+    'original_name': 'Maximum import power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power',
@@ -78108,7 +78108,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum Import Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum import power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -80761,7 +80761,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Import Power (previous month)',
+    'original_name': 'Maximum import power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111113_last_month_peak_import_power',
@@ -80775,7 +80775,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111113) Maximum Import Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111113) Maximum import power (previous month)',
       'meter_number': '5000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-06-01T00:00:00',
@@ -83400,7 +83400,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Export Power (previous month)',
+    'original_name': 'Maximum export power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111114_last_month_peak_export_power',
@@ -83414,7 +83414,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111114) Maximum Export Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111114) Maximum export power (previous month)',
       'meter_number': '6000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-05-01T00:00:00',
@@ -95142,7 +95142,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Export Power (previous month)',
+    'original_name': 'Maximum export power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power',
@@ -95156,7 +95156,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum Export Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum export power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -98349,7 +98349,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Import Power (previous month)',
+    'original_name': 'Maximum import power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power',
@@ -98363,7 +98363,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum Import Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum import power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -100938,7 +100938,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Import Power (previous month)',
+    'original_name': 'Maximum import power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111113_last_month_peak_import_power',
@@ -100952,7 +100952,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111113) Maximum Import Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111113) Maximum import power (previous month)',
       'meter_number': '5000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-06-01T00:00:00',
@@ -102904,7 +102904,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Export Power (previous month)',
+    'original_name': 'Maximum export power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111114_last_month_peak_export_power',
@@ -102918,7 +102918,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111114) Maximum Export Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111114) Maximum export power (previous month)',
       'meter_number': '6000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-05-01T00:00:00',
@@ -116171,7 +116171,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Export Power (previous month)',
+    'original_name': 'Maximum export power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111111_last_month_peak_export_power',
@@ -116185,7 +116185,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum Export Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111111) Maximum export power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -119491,7 +119491,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Import Power (previous month)',
+    'original_name': 'Maximum import power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111112_last_month_peak_import_power',
@@ -119505,7 +119505,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum Import Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111112) Maximum import power (previous month)',
       'meter_number': '3000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-09-01T00:00:00',
@@ -122819,7 +122819,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Import Power (previous month)',
+    'original_name': 'Maximum import power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111113_last_month_peak_import_power',
@@ -122833,7 +122833,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111113) Maximum Import Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Haushalt (11111113) Maximum import power (previous month)',
       'meter_number': '5000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-06-01T00:00:00',
@@ -125458,7 +125458,7 @@
     }),
     'original_device_class': <SensorDeviceClass.POWER: 'power'>,
     'original_icon': None,
-    'original_name': 'Maximum Export Power (previous month)',
+    'original_name': 'Maximum export power (previous month)',
     'platform': 'netzooe_eservice',
     'previous_unique_id': None,
     'suggested_object_id': 'netzooe_eservice_at0000000000000000000000011111114_last_month_peak_export_power',
@@ -125472,7 +125472,7 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'power',
-      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111114) Maximum Export Power (previous month)',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Photovoltaik (11111114) Maximum export power (previous month)',
       'meter_number': '6000000',
       <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
       'timestamp': '2026-05-01T00:00:00',

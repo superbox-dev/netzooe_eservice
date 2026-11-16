@@ -38,7 +38,7 @@
             'unit': 'KWH',
           }),
         ]),
-        'deviceName': 'Photovoltaik',
+        'deviceName': '**REDACTED**',
         'deviceType': 'PHOTOVOLTAICS',
         'lastMonthPeakPower': dict({
           'meternumber': '**REDACTED**',
@@ -206,14 +206,14 @@
       }),
       dict({
         'contributionPercentage': '93',
-        'deviceId': 'ATCC9999DYNAMCC100087000000000002',
-        'deviceName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+        'deviceId': '**REDACTED**',
+        'deviceName': '**REDACTED**',
         'deviceType': 'ENERGY_COMMUNITY_EXPORT',
         'meterPointAdministrationNumber': '**REDACTED**',
         'monthlyL2': list([
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-05-01',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -229,8 +229,8 @@
               'unit': 'KWH',
               'value': 16.13,
             }),
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-05-01',
             'granularity': 'DAY',
@@ -267,8 +267,8 @@
         ]),
         'monthlyL3': list([
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-05-01',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -284,8 +284,8 @@
               'unit': 'KWH',
               'value': 16.13,
             }),
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-05-01',
             'granularity': 'DAY',
@@ -324,8 +324,8 @@
         'synthProfile': 'Photovoltaik',
         'totalL2': list([
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-01-26',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -341,8 +341,8 @@
               'unit': 'KWH',
               'value': 166.67,
             }),
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-01-26',
             'granularity': 'MONTH',
@@ -379,8 +379,8 @@
         ]),
         'totalL3': list([
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-01-26',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -392,8 +392,8 @@
             'type': 'ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-01-26',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -409,14 +409,14 @@
       }),
       dict({
         'contributionPercentage': '7',
-        'deviceId': 'AT00300000000RC103550000000985681',
-        'deviceName': 'EEG Oberösterreich RID-11',
+        'deviceId': '**REDACTED**',
+        'deviceName': '**REDACTED**',
         'deviceType': 'ENERGY_COMMUNITY_EXPORT',
         'meterPointAdministrationNumber': '**REDACTED**',
         'monthlyL2': list([
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-05-21',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -428,8 +428,8 @@
             'type': 'ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-05-21',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -443,8 +443,8 @@
         ]),
         'monthlyL3': list([
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-05-21',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -456,8 +456,8 @@
             'type': 'ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-05-21',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -473,8 +473,8 @@
         'synthProfile': 'Photovoltaik',
         'totalL2': list([
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-05-21',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -486,8 +486,8 @@
             'type': 'ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-05-21',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -501,8 +501,8 @@
         ]),
         'totalL3': list([
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-05-21',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -514,8 +514,8 @@
             'type': 'ENERGY_COMMUNITY_GENERATION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'GENERATION',
             'from': '2026-05-21',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -565,7 +565,7 @@
             'unit': 'KWH',
           }),
         ]),
-        'deviceName': 'Haushalt',
+        'deviceName': '**REDACTED**',
         'deviceType': 'HOUSEHOLD',
         'lastMonthPeakPower': dict({
           'meternumber': '**REDACTED**',
@@ -765,14 +765,14 @@
       }),
       dict({
         'contributionPercentage': '95',
-        'deviceId': 'ATCC9999DYNAMCC100087000000000002',
-        'deviceName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+        'deviceId': '**REDACTED**',
+        'deviceName': '**REDACTED**',
         'deviceType': 'ENERGY_COMMUNITY_IMPORT',
         'meterPointAdministrationNumber': '**REDACTED**',
         'monthlyL2': list([
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-05-01',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -784,8 +784,8 @@
             'type': 'ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-05-01',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -799,8 +799,8 @@
         ]),
         'monthlyL3': list([
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-05-01',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -812,8 +812,8 @@
             'type': 'ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-05-01',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -829,8 +829,8 @@
         'synthProfile': 'Haushalt',
         'totalL2': list([
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-01-26',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -842,8 +842,8 @@
             'type': 'ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'from': '2026-01-26',
             'meterPointAdministrationNumber': '**REDACTED**',
             'sum': dict({
@@ -856,8 +856,8 @@
         ]),
         'totalL3': list([
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-06-17',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -869,8 +869,8 @@
             'type': 'ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-06-17',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -882,8 +882,8 @@
             'type': 'ENERGY_COMMUNITY_OWN_COVERAGE',
           }),
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-01-26',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -895,8 +895,8 @@
             'type': 'ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
-            'energyCommunityId': 'ATCC9999DYNAMCC100087000000000002',
-            'energyCommunityName': '7Energy - Bürgerenergiegemeinschaft für erneuerbaren Strom',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-01-26',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -912,14 +912,14 @@
       }),
       dict({
         'contributionPercentage': '5',
-        'deviceId': 'AT00300000000RC103550000000985681',
-        'deviceName': 'EEG Oberösterreich RID-11',
+        'deviceId': '**REDACTED**',
+        'deviceName': '**REDACTED**',
         'deviceType': 'ENERGY_COMMUNITY_IMPORT',
         'meterPointAdministrationNumber': '**REDACTED**',
         'monthlyL2': list([
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-05-21',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -935,8 +935,8 @@
               'unit': 'KWH',
               'value': 0.09,
             }),
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-05-21',
             'granularity': 'DAY',
@@ -973,8 +973,8 @@
         ]),
         'monthlyL3': list([
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-05-21',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -990,8 +990,8 @@
               'unit': 'KWH',
               'value': 0.09,
             }),
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-05-21',
             'granularity': 'DAY',
@@ -1030,8 +1030,8 @@
         'synthProfile': 'Haushalt',
         'totalL2': list([
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-05-21',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -1043,8 +1043,8 @@
             'type': 'ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-05-21',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -1058,8 +1058,8 @@
         ]),
         'totalL3': list([
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-06-17',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -1071,8 +1071,8 @@
             'type': 'ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-06-17',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -1084,8 +1084,8 @@
             'type': 'ENERGY_COMMUNITY_OWN_COVERAGE',
           }),
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-05-21',
             'meterPointAdministrationNumber': '**REDACTED**',
@@ -1097,8 +1097,8 @@
             'type': 'ENERGY_COMMUNITY_CONSUMPTION_PER_CONTRIBUTION_FACTOR',
           }),
           dict({
-            'energyCommunityId': 'AT00300000000RC103550000000985681',
-            'energyCommunityName': 'EEG Oberösterreich RID-11',
+            'energyCommunityId': '**REDACTED**',
+            'energyCommunityName': '**REDACTED**',
             'energyDirection': 'CONSUMPTION',
             'from': '2026-05-21',
             'granularity': 'DAY',

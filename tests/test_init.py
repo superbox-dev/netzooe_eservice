@@ -81,14 +81,10 @@ async def test_load_entry_with_disabled_inactive_meter_points(
 
     assert set(hass.states.async_entity_ids()) == snapshot
 
-    assert (
-        "Skipping 2 contract(s) because no active contract for meter point "
-        "AT0000000000000000000000011111113 was returned by the API" in caplog.text
-    )
-    assert (
-        "Skipping 1 contract(s) because no active contract for meter point "
-        "AT0000000000000000000000011111114 was returned by the API" in caplog.text
-    )
+    assert "Skipping 2 contract(s) because no active contract for a meter point was returned by the API" in caplog.text
+    assert "Skipping 1 contract(s) because no active contract for a meter point was returned by the API" in caplog.text
+    assert "AT0000000000000000000000011111113" not in caplog.text
+    assert "AT0000000000000000000000011111114" not in caplog.text
 
 
 @pytest.mark.parametrize(

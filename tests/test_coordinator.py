@@ -661,7 +661,7 @@ async def test_energy_community_without_consent(
 
     assert mock_config_entry.state is ConfigEntryState.LOADED
     assert hass.states.get(CONTRIBUTION_FACTOR_ENTITY_ID) is None
-    assert "No consent found for energy community" in caplog.text
+    assert "No consent found for an energy community" in caplog.text
 
 
 @pytest.mark.parametrize("entry_options", [FREQUENT_UPDATES_DISABLED], ids=["frequent_updates_disabled"])
@@ -923,7 +923,7 @@ async def test_missing_consent_logged_once(
 
     def warnings() -> int:
         """Return the number of logged warnings."""
-        return sum("No consent found for energy community" in record.getMessage() for record in caplog.records)
+        return sum("No consent found for an energy community" in record.getMessage() for record in caplog.records)
 
     async def refresh_with(consents: list[dict[str, Any]] | None) -> None:
         """Refresh the coordinator with the given consents."""
@@ -955,8 +955,9 @@ async def test_meter_point_without_active_contract_logged_once(
 
     def warnings() -> int:
         """Return the number of logged warnings for the meter point."""
+        # The meter point number is not logged, the inactive meter point is the only one with two contracts.
         return sum(
-            f"no active contract for meter point {INACTIVE_METER_POINT}" in record.getMessage()
+            "Skipping 2 contract(s) because no active contract for a meter point" in record.getMessage()
             for record in caplog.records
         )
 

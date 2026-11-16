@@ -96,10 +96,10 @@
         "name": "Import L1 (previous month)"
       },
       "last_month_peak_export_power": {
-        "name": "Maximum Export Power (previous month)"
+        "name": "Maximum export power (previous month)"
       },
       "last_month_peak_import_power": {
-        "name": "Maximum Import Power (previous month)"
+        "name": "Maximum import power (previous month)"
       },
       "last_month_supplier_export_l2": {
         "name": "Supplier export L1/L2 (previous month, 16-day delay)"
