@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
+<!--start-->
 
-- Changed the names of the sensors "Maximum import/export power (previous month)" to sentence case.
+## [1.3.1] - 2026-11-16
+
+### Fixed
+
+- Fixed the names of the sensors "Maximum import/export power (previous month)" to use sentence case.
 
 ### Security
 
@@ -17,8 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed the ID and the name of the energy communities from the log messages.
 - Redacted the ID and the name of the energy communities in the diagnostics.
 - Added a `SECURITY.md` that describes how to report a vulnerability.
-
-<!--start-->
 
 ## [1.3.0] - 2026-11-08
 
@@ -188,7 +190,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added English and German translations.
 - Added the data update every 3 hours.
 
-[Unreleased]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/superbox-dev/netzooe_eservice/compare/v1.1.1...v1.2.0
