@@ -5,15 +5,15 @@
 Special cases of the consumption profiles in `tests/fixtures/account/consumptions/profile/active/`:
 
 - `001_AT00300000000RC100930000000965743_2024-05-06_2025-09-30.json`: the portal returns the average, maximum and
-  minimum of each profile type, the energy community sensors only show them for a single profile type, not for a
-  difference of two types.
+    minimum of each profile type, the energy community sensors only show them for a single profile type, not for a
+    difference of two types.
 - `001_2023-10-18_2026-06-27.json`: two sections, e.g. after a change from daily to quarter-hourly values, minimum and
-  maximum across DST changes, maximum and minimum are at the start of their interval, e.g. of a year.
+    maximum across DST changes, maximum and minimum are at the start of their interval, e.g. of a year.
 - `003_2026-05-01_2026-05-31.json`: section change within the month.
-- `005_2026-06-10_2026-06-10.json`: not returned by the portal so far, a section without average, maximum, minimum and
-  a known resolution.
+- `005_2026-06-10_2026-06-10.json`: not returned by the portal so far, a section without average, maximum, minimum and a
+    known resolution.
 - `006_2025-01-01_2026-06-01.json`: monthly values, the portal uses them for a total that is too short for yearly
-  values.
+    values.
 - `006_2026-06-01_2026-06-01.json`: no data for the last day.
 - Contract account 004 has no L1 profile data.
 """

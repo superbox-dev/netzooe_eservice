@@ -83,7 +83,8 @@ class PortalAccount:
             dashboard=dashboard,
             contract_accounts={
                 account["contractAccountNumber"]: load_json_object_fixture(
-                    f"{name}/contract-accounts/{account['businessPartnerNumber']}/{account['contractAccountNumber']}.json",
+                    f"{name}/contract-accounts/{account['businessPartnerNumber']}/"
+                    f"{account['contractAccountNumber']}.json",
                 )
                 for account in dashboard["contractAccounts"]
             },

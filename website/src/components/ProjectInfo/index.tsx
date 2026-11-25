@@ -60,11 +60,12 @@ export default function ProjectInfo(): ReactNode {
                     Home Assistant {hacs.homeassistant} or newer.
                 </p>
                 <p className={styles.section}>
-                    A community project, not affiliated with or endorsed by Netz Oberösterreich GmbH. Netz OÖ is a trademark of its
-                    owner.
+                    A community project, not affiliated with or endorsed by Netz Oberösterreich GmbH. Netz OÖ is a
+                    trademark of its owner.
                 </p>
                 <p className={styles.section}>
-                    <CloudDownload className={styles.icon} aria-hidden="true" /> Its IoT class is <Link href={`${iotClasses}#${anchor}`}>{label}</Link>.
+                    <CloudDownload className={styles.icon} aria-hidden="true" /> Its IoT class is{' '}
+                    <Link href={`${iotClasses}#${anchor}`}>{label}</Link>.
                 </p>
                 <p className={styles.section}>
                     <Link href={repository}>
